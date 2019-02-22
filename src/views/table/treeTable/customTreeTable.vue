@@ -47,7 +47,7 @@ import treeToArray from './customEval'
 export default {
   name: 'CustomTreeTableDemo',
   components: { treeTable },
-  data() {
+  data: function() {
     return {
       func: treeToArray,
       expandAll: false,

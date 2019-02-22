@@ -63,7 +63,7 @@ export default {
       default: ''
     }
   },
-  data() {
+  data: function() {
     return {
       onlyOneChild: null
     }

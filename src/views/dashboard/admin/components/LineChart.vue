@@ -30,7 +30,7 @@ export default {
       required: true
     }
   },
-  data() {
+  data: function() {
     return {
       chart: null,
       sidebarElm: null

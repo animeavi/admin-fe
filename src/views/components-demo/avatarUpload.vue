@@ -29,7 +29,7 @@ import PanThumb from '@/components/PanThumb'
 export default {
   name: 'AvatarUploadDemo',
   components: { ImageCropper, PanThumb },
-  data() {
+  data: function() {
     return {
       imagecropperShow: false,
       imagecropperKey: 0,

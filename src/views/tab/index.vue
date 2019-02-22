@@ -18,7 +18,7 @@ import tabPane from './components/tabPane'
 export default {
   name: 'Tab',
   components: { tabPane },
-  data() {
+  data: function() {
     return {
       tabMapOptions: [
         { label: 'China', key: 'CN' },

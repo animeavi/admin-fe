@@ -107,7 +107,7 @@ export default {
       default: false
     }
   },
-  data() {
+  data: function() {
     const validateRequire = (rule, value, callback) => {
       if (value === '') {
         this.$message({

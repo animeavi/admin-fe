@@ -12,7 +12,7 @@ import editorDashboard from './editor'
 export default {
   name: 'Dashboard',
   components: { adminDashboard, editorDashboard },
-  data() {
+  data: function() {
     return {
       currentRole: 'adminDashboard'
     }

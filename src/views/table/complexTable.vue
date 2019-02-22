@@ -163,7 +163,7 @@ export default {
       return calendarTypeKeyValue[type]
     }
   },
-  data() {
+  data: function() {
     return {
       tableKey: 0,
       list: null,

@@ -40,7 +40,7 @@
 <script>
 export default {
   name: 'ErrorLog',
-  data() {
+  data: function() {
     return {
       dialogTableVisible: false
     }

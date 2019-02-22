@@ -20,7 +20,7 @@ import elDragDialog from '@/directive/el-dragDialog' // base on element-ui
 export default {
   name: 'DragDialogDemo',
   directives: { elDragDialog },
-  data() {
+  data: function() {
     return {
       dialogTableVisible: false,
       options: [

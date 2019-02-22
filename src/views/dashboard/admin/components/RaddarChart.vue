@@ -24,7 +24,7 @@ export default {
       default: '300px'
     }
   },
-  data() {
+  data: function() {
     return {
       chart: null
     }

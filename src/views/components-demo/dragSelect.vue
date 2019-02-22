@@ -18,7 +18,7 @@ import ElDragSelect from '@/components/DragSelect' // base on element-ui
 export default {
   name: 'DragSelectDemo',
   components: { ElDragSelect },
-  data() {
+  data: function() {
     return {
       value: ['Apple', 'Banana', 'Orange'],
       options: [{

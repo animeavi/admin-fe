@@ -16,7 +16,7 @@ import { fetchList } from '@/api/article'
 export default {
   name: 'DndListDemo',
   components: { DndList },
-  data() {
+  data: function() {
     return {
       list1: [],
       list2: []

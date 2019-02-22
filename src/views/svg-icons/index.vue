@@ -26,7 +26,7 @@ import clipboard from '@/utils/clipboard'
 
 export default {
   name: 'Icons',
-  data() {
+  data: function() {
     return {
       iconsMap: icons
     }

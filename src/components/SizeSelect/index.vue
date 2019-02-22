@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  data() {
+  data: function() {
     return {
       sizeOptions: [
         { label: 'Default', value: 'default' },

@@ -55,7 +55,7 @@ const viewName = 'i18nView'
 
 export default {
   name: 'I18n',
-  data() {
+  data: function() {
     return {
       date: '',
       tableData: [{

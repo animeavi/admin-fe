@@ -18,7 +18,7 @@ export default {
   name: 'JsonEditor',
   /* eslint-disable vue/require-prop-types */
   props: ['value'],
-  data() {
+  data: function() {
     return {
       jsonEditor: false
     }

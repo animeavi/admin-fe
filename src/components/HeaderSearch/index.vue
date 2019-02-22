@@ -23,7 +23,7 @@ import i18n from '@/lang'
 
 export default {
   name: 'HeaderSearch',
-  data() {
+  data: function() {
     return {
       search: '',
       options: [],

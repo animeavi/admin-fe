@@ -20,7 +20,7 @@ import treeTable from '@/components/TreeTable'
 export default {
   name: 'TreeTableDemo',
   components: { treeTable },
-  data() {
+  data: function() {
     return {
       columns: [
         {

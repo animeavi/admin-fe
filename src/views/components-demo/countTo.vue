@@ -52,7 +52,7 @@ import countTo from 'vue-count-to'
 export default {
   name: 'CountToDemo',
   components: { countTo },
-  data() {
+  data: function() {
     return {
       setStartVal: 0,
       setEndVal: 2017,

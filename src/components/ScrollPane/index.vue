@@ -9,7 +9,7 @@ const tagAndTagSpacing = 4 // tagAndTagSpacing
 
 export default {
   name: 'ScrollPane',
-  data() {
+  data: function() {
     return {
       left: 0
     }

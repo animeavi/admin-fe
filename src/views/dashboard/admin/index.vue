@@ -85,7 +85,7 @@ export default {
     TodoList,
     BoxCard
   },
-  data() {
+  data: function() {
     return {
       lineChartData: lineChartData.newVisitis
     }

@@ -42,7 +42,7 @@ export default {
       default: 'fade'
     }
   },
-  data() {
+  data: function() {
     return {
       visible: false,
       interval: null,

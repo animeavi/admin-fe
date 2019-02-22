@@ -34,7 +34,7 @@ export default {
       return str.substring(0, 30)
     }
   },
-  data() {
+  data: function() {
     return {
       list: null
     }

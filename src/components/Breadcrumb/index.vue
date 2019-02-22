@@ -15,7 +15,7 @@ import { generateTitle } from '@/utils/i18n'
 import pathToRegexp from 'path-to-regexp'
 
 export default {
-  data() {
+  data: function() {
     return {
       levelList: null
     }

@@ -72,7 +72,7 @@ export default {
       default: 'CN'
     }
   },
-  data() {
+  data: function() {
     return {
       list: null,
       listQuery: {

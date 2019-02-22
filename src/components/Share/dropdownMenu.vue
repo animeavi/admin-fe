@@ -24,7 +24,7 @@ export default {
       default: 'vue'
     }
   },
-  data() {
+  data: function() {
     return {
       isActive: false
     }

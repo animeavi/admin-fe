@@ -59,7 +59,7 @@ import '@/assets/custom-theme/index.css' // the theme changed version element-ui
 
 export default {
   name: 'Theme',
-  data() {
+  data: function() {
     return {
       theme: false,
       tags: [

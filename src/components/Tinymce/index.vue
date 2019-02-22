@@ -43,7 +43,7 @@ export default {
       default: 360
     }
   },
-  data() {
+  data: function() {
     return {
       hasChange: false,
       hasInit: false,

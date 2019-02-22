@@ -69,7 +69,7 @@ export default {
       return statusMap[status]
     }
   },
-  data() {
+  data: function() {
     return {
       list: null,
       listLoading: true,

@@ -1,7 +1,7 @@
 import { debounce } from '@/utils'
 
 export default {
-  data() {
+  data: function() {
     return {
       sidebarElm: null
     }

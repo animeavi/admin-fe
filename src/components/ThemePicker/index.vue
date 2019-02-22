@@ -11,7 +11,7 @@ const version = require('element-ui/package.json').version // element-ui version
 const ORIGINAL_THEME = '#409EFF' // default color
 
 export default {
-  data() {
+  data: function() {
     return {
       chalk: '', // content of theme-chalk css
       theme: ORIGINAL_THEME

@@ -127,7 +127,7 @@ import BackToTop from '@/components/BackToTop'
 export default {
   name: 'BackToTopDemo',
   components: { BackToTop },
-  data() {
+  data: function() {
     return {
       myBackToTopStyle: {
         right: '50px',

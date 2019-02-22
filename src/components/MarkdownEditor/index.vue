@@ -46,7 +46,7 @@ export default {
       default: 'en_US' // https://github.com/nhnent/tui.editor/tree/master/src/js/langs
     }
   },
-  data() {
+  data: function() {
     return {
       editor: null
     }

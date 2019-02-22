@@ -13,7 +13,7 @@ export default {
   components: {
     Kanban
   },
-  data() {
+  data: function() {
     return {
       options: {
         group: 'mission'

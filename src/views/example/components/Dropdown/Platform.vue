@@ -23,7 +23,7 @@ export default {
       type: Array
     }
   },
-  data() {
+  data: function() {
     return {
       platformsOptions: [
         { key: 'a-platform', name: 'a-platform' },

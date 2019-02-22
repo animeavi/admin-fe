@@ -97,7 +97,7 @@ import Sticky from '@/components/Sticky'
 export default {
   name: 'StickyDemo',
   components: { Sticky },
-  data() {
+  data: function() {
     return {
       time: '',
       url: '',

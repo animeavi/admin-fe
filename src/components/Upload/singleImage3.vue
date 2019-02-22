@@ -41,7 +41,7 @@ export default {
       default: ''
     }
   },
-  data() {
+  data: function() {
     return {
       tempUrl: '',
       dataObj: { token: '', key: '' }

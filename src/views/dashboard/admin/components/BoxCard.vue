@@ -43,7 +43,7 @@ export default {
       return statusMap[status]
     }
   },
-  data() {
+  data: function() {
     return {
       statisticsData: {
         article_count: 1024,

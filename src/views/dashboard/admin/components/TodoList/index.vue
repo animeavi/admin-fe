@@ -61,7 +61,7 @@ export default {
     pluralize: (n, w) => n === 1 ? w : w + 's',
     capitalize: s => s.charAt(0).toUpperCase() + s.slice(1)
   },
-  data() {
+  data: function() {
     return {
       visibility: 'all',
       filters,

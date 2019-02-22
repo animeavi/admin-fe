@@ -51,7 +51,7 @@ import { fetchList } from '@/api/article'
 
 export default {
   name: 'SelectExcel',
-  data() {
+  data: function() {
     return {
       list: null,
       listLoading: true,

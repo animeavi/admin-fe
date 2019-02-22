@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  data() {
+  data: function() {
     return {
       tableData: [
         {

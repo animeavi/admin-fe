@@ -25,7 +25,7 @@
 const defaultFormThead = ['apple', 'banana']
 
 export default {
-  data() {
+  data: function() {
     return {
       tableData: [
         {

@@ -195,7 +195,7 @@ export default {
       'default': false
     }
   },
-  data() {
+  data: function() {
     const that = this
     const {
       imgFormat,

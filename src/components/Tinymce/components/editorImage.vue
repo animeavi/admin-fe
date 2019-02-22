@@ -32,7 +32,7 @@ export default {
       default: '#1890ff'
     }
   },
-  data() {
+  data: function() {
     return {
       dialogVisible: false,
       listObj: {},

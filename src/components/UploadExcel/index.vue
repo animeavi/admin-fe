@@ -16,7 +16,7 @@ export default {
     beforeUpload: Function, // eslint-disable-line
     onSuccess: Function// eslint-disable-line
   },
-  data() {
+  data: function() {
     return {
       loading: false,
       excelData: {

@@ -25,7 +25,7 @@ export default {
       default: ''
     }
   },
-  data() {
+  data: function() {
     return {
       active: false,
       position: '',

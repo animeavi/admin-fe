@@ -13,7 +13,7 @@ import UploadExcelComponent from '@/components/UploadExcel/index.vue'
 export default {
   name: 'UploadExcel',
   components: { UploadExcelComponent },
-  data() {
+  data: function() {
     return {
       tableData: [],
       tableHeader: []

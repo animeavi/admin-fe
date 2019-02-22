@@ -52,7 +52,7 @@ const content = `
 export default {
   name: 'MarkdownDemo',
   components: { MarkdownEditor },
-  data() {
+  data: function() {
     return {
       content: content,
       html: '',

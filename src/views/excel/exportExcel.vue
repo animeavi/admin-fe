@@ -55,7 +55,7 @@ import BookTypeOption from './components/BookTypeOption'
 export default {
   name: 'ExportExcel',
   components: { FilenameOption, AutoWidthOption, BookTypeOption },
-  data() {
+  data: function() {
     return {
       list: null,
       listLoading: true,

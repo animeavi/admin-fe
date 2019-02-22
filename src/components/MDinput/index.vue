@@ -138,7 +138,7 @@ export default {
       default: true
     }
   },
-  data() {
+  data: function() {
     return {
       currentValue: this.value,
       focus: false,

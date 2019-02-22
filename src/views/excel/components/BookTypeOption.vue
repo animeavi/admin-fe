@@ -19,7 +19,7 @@ export default {
       default: 'xlsx'
     }
   },
-  data() {
+  data: function() {
     return {
       options: ['xlsx', 'csv', 'txt']
     }

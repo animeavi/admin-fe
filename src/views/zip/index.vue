@@ -39,7 +39,7 @@ import { fetchList } from '@/api/article'
 
 export default {
   name: 'ExportZip',
-  data() {
+  data: function() {
     return {
       list: null,
       listLoading: true,

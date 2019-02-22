@@ -22,7 +22,7 @@ export default {
   directives: {
     clipboard
   },
-  data() {
+  data: function() {
     return {
       activeName: 'directly',
       inputData: 'https://github.com/PanJiaChen/vue-element-admin'

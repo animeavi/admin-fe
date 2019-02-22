@@ -16,7 +16,7 @@ import steps from './defineSteps'
 
 export default {
   name: 'Guide',
-  data() {
+  data: function() {
     return {
       driver: null
     }

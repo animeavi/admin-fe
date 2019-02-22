@@ -32,7 +32,7 @@ import path from 'path'
 
 export default {
   components: { ScrollPane },
-  data() {
+  data: function() {
     return {
       visible: false,
       top: 0,
