@@ -5,13 +5,18 @@
 </template>
 
 <script>
+
 export default {
   name: 'Users',
   data: function() {
     return {
       users: []
     }
+  },
+  mounted: function() {
+    this.$store.dispatch('FetchUsers')
   }
 }
+
 </script>
 

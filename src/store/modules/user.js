@@ -61,15 +61,14 @@ const user = {
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
-          if (!response.data) {
-            reject('Verification failed, please login again.')
-          }
           const data = response.data
 
-          if (data.rights) {
-            if (data.rights.admin) {
-              commit('SET_ROLES', ['admin'])
-            }
+          if (!data) {
+            reject('Verification failed, please login again.')
+          }
+
+          if (data.rights && data.rights.admin) {
+            commit('SET_ROLES', ['admin'])
           } else {
             reject('getInfo: roles must be a non-null array!')
           }
