@@ -2,11 +2,15 @@ import { fetchUsers } from '@/api/users'
 
 const user = {
   state: {
-    fetchedUsers: []
+    fetchedUsers: [],
+    loading: true
   },
   mutations: {
     SET_USERS: (state, users) => {
       state.fetchedUsers = users
+    },
+    SET_LOADING: (state, status) => {
+      state.loading = status
     }
   },
   actions: {
@@ -14,6 +18,7 @@ const user = {
       const response = await fetchUsers()
 
       commit('SET_USERS', response.data)
+      commit('SET_LOADING', false)
     }
   }
 }
