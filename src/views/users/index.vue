@@ -10,14 +10,22 @@
         label="ID"
         width="100" />
       <el-table-column
-        prop="fullname"
+        prop="nickname"
         label="Name" />
       <el-table-column
+        label="Status">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.deactivated ? 'danger' : 'success'">
+            {{ scope.row.deactivated ? 'deactivated' : 'active' }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
         fixed="right"
-        label="Operations"
-        width="120">
-        <template>
-          <el-button type="text" size="small" @click="handleRevoke">Disable user</el-button>
+        label="Actions">
+        <template slot-scope="scope">
+          <el-button v-if="scope.row.deactivated" type="text" size="small" @click="handleDeactivate(scope.row)">Activate</el-button>
+          <el-button v-else type="text" size="small" @click="handleDeactivate(scope.row)">Deactivate</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -40,8 +48,8 @@ export default {
     this.$store.dispatch('FetchUsers')
   },
   methods: {
-    handleRevoke() {
-
+    handleDeactivate({ nickname }) {
+      this.$store.dispatch('ToggleUserActivation', nickname)
     }
   }
 }

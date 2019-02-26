@@ -7,4 +7,11 @@ export async function fetchUsers() {
   })
 }
 
-export default { fetchUsers }
+export async function toggleUserActivation(nickname) {
+  return await request({
+    url: `/api/pleroma/admin/users/${nickname}/toggle_activation`,
+    method: 'patch'
+  })
+}
+
+export default { fetchUsers, toggleUserActivation }
