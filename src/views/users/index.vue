@@ -29,6 +29,14 @@
         </template>
       </el-table-column>
     </el-table>
+    <div v-if="!loading" class="pagination">
+      <el-pagination
+        :total="usersCount"
+        :page-size="pageSize"
+        background
+        layout="prev, pager, next"
+        @current-change="handlePageChange" />
+    </div>
   </div>
 </template>
 
@@ -42,6 +50,12 @@ export default {
     },
     users() {
       return this.$store.state.users.fetchedUsers
+    },
+    usersCount() {
+      return this.$store.state.users.totalUsersCount
+    },
+    pageSize() {
+      return this.$store.state.users.pageSize
     }
   },
   mounted: function() {
@@ -50,6 +64,9 @@ export default {
   methods: {
     handleDeactivate({ nickname }) {
       this.$store.dispatch('ToggleUserActivation', nickname)
+    },
+    handlePageChange(page) {
+      this.$store.dispatch('FetchUsers', page)
     }
   }
 }
@@ -61,6 +78,11 @@ export default {
 .users-container {
   h1 {
     margin-left: 15px;
+  }
+
+  .pagination {
+    margin: 25px 0 0;
+    text-align: center;
   }
 }
 

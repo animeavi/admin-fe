@@ -18,13 +18,21 @@ const user = {
       })
 
       state.fetchedUsers = [...usersWithoutSwapped, user].sort((a, b) => a.id.localeCompare(b.id))
+    },
+    SET_COUNT: (state, count) => {
+      state.totalUsersCount = count
+    },
+    SET_PAGE_SIZE: (state, pageSize) => {
+      state.pageSize = pageSize
     }
   },
   actions: {
-    async FetchUsers({ commit }) {
-      const response = await fetchUsers()
+    async FetchUsers({ commit }, page = 1) {
+      const response = await fetchUsers(page)
 
-      commit('SET_USERS', response.data)
+      commit('SET_USERS', response.data.users)
+      commit('SET_COUNT', response.data.count)
+      commit('SET_PAGE_SIZE', response.data.page_size)
       commit('SET_LOADING', false)
     },
     async ToggleUserActivation({ commit }, nickname) {

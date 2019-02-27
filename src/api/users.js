@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export async function fetchUsers() {
+export async function fetchUsers(page = 1) {
   return await request({
-    url: '/api/pleroma/admin/users',
+    url: `/api/pleroma/admin/users?page=${page}`,
     method: 'get'
   })
 }
