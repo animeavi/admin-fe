@@ -14,4 +14,11 @@ export async function toggleUserActivation(nickname) {
   })
 }
 
+export async function searchUsers(query) {
+  return await request({
+    url: `/api/pleroma/admin/users/search?query=${query}`,
+    method: 'get'
+  })
+}
+
 export default { fetchUsers, toggleUserActivation }
