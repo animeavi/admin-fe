@@ -6,7 +6,6 @@ const user = {
     loading: true,
     searchQuery: '',
     totalUsersCount: 0,
-    pageSize: 2,
     currentPage: 1
   },
   mutations: {
@@ -39,8 +38,8 @@ const user = {
     }
   },
   actions: {
-    async FetchUsers({ commit }, { page, page_size }) {
-      const response = await fetchUsers(page, page_size)
+    async FetchUsers({ commit }, { page }) {
+      const response = await fetchUsers(page)
 
       commit('SET_LOADING', true)
 
@@ -51,15 +50,15 @@ const user = {
 
       commit('SWAP_USER', response.data)
     },
-    async SearchUsers({ commit, dispatch }, { query, page, page_size }) {
+    async SearchUsers({ commit, dispatch }, { query, page }) {
       if (query.length === 0) {
         commit('SET_SEARCH_QUERY', query)
-        dispatch('FetchUsers', { page, page_size: 2 })
+        dispatch('FetchUsers', page)
       } else {
         commit('SET_LOADING', true)
         commit('SET_SEARCH_QUERY', query)
 
-        const response = await searchUsers(query, page, page_size)
+        const response = await searchUsers(query, page)
 
         loadUsers(commit, page, response.data)
       }

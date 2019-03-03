@@ -60,11 +60,11 @@ export default {
   },
   created() {
     this.handleDebounceSearchInput = debounce((query) => {
-      this.$store.dispatch('SearchUsers', { query, page: 1, page_size: 2 })
+      this.$store.dispatch('SearchUsers', { query, page: 1 })
     }, 500)
   },
   mounted: function() {
-    this.$store.dispatch('FetchUsers', { page: 1, page_size: 2 })
+    this.$store.dispatch('FetchUsers', { page: 1 })
   },
   methods: {
     handleDeactivate({ nickname }) {
@@ -73,9 +73,9 @@ export default {
     handlePageChange(page) {
       const searchQuery = this.$store.state.users.searchQuery
       if (searchQuery === '') {
-        this.$store.dispatch('FetchUsers', { page, page_size: 2 })
+        this.$store.dispatch('FetchUsers', { page })
       } else {
-        this.$store.dispatch('SearchUsers', { query: searchQuery, page, page_size: 2 })
+        this.$store.dispatch('SearchUsers', { query: searchQuery, page })
       }
     },
     showDeactivatedButton(id) {
