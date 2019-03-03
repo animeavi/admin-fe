@@ -3,7 +3,10 @@ import { fetchUsers, toggleUserActivation, searchUsers } from '@/api/users'
 const user = {
   state: {
     fetchedUsers: [],
-    loading: true
+    loading: true,
+    searchQuery: '',
+    totalUsersCount: 0,
+    pageSize: 2
   },
   mutations: {
     SET_USERS: (state, users) => {
@@ -26,31 +29,48 @@ const user = {
     },
     SET_PAGE_SIZE: (state, pageSize) => {
       state.pageSize = pageSize
+    },
+    SET_SEARCH_QUERY: (state, query) => {
+      state.searchQuery = query
     }
   },
   actions: {
-    async FetchUsers({ commit }, page = 1) {
-      const response = await fetchUsers(page)
+    async FetchUsers({ commit }, { page, page_size }) {
+      const response = await fetchUsers(page, page_size)
 
-      commit('SET_USERS', response.data.users)
-      commit('SET_COUNT', response.data.count)
-      commit('SET_PAGE_SIZE', response.data.page_size)
-      commit('SET_LOADING', false)
+      commit('SET_LOADING', true)
+
+      loadUsers(commit, response.data)
     },
     async ToggleUserActivation({ commit }, nickname) {
       const response = await toggleUserActivation(nickname)
 
       commit('SWAP_USER', response.data)
     },
-    async SearchUsers({ commit, dispatch }, searchValue) {
-      if (searchValue.length === 0) {
-        dispatch('FetchUsers')
+    async SearchUsers({ commit, dispatch }, { query, page, page_size }) {
+      if (query.length === 0) {
+        // console.log(page)
+        // console.log(query)
+        // console.log(page_size)
+        commit('SET_SEARCH_QUERY', query)
+        dispatch('FetchUsers', { page, page_size: 2 })
       } else {
-        const response = await searchUsers(searchValue)
-        commit('SET_USERS', response.data.users)
+        commit('SET_LOADING', true)
+        commit('SET_SEARCH_QUERY', query)
+
+        const response = await searchUsers(query, page, page_size)
+
+        loadUsers(commit, response.data)
       }
     }
   }
+}
+
+const loadUsers = (commit, { users, count, page_size }) => {
+  commit('SET_USERS', users)
+  commit('SET_COUNT', count)
+  commit('SET_PAGE_SIZE', page_size)
+  commit('SET_LOADING', false)
 }
 
 export default user

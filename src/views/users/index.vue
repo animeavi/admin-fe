@@ -3,7 +3,7 @@
     <h1>Users</h1>
     <el-input placeholder="Search" class="search" @input="handleDebounceSearchInput"/>
     <el-table v-loading="loading" :data="users" style="width: 100%">
-      <el-table-column prop="id" label="ID" width="100"/>
+      <el-table-column prop="id" label="ID" width="180"/>
       <el-table-column prop="nickname" label="Name"/>
       <el-table-column label="Status">
         <template slot-scope="scope">
@@ -15,19 +15,18 @@
       <el-table-column fixed="right" label="Actions">
         <template slot-scope="scope">
           <el-button
-            v-if="scope.row.deactivated"
+            v-if="showDeactivatedButton(scope.row.id)"
             type="text"
             size="small"
             @click="handleDeactivate(scope.row)"
-          >Activate</el-button>
-          <el-button v-else type="text" size="small" @click="handleDeactivate(scope.row)">Deactivate</el-button>
+          >{{ scope.row.deactivated ? 'Activate' : 'Deactivate' }}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <div v-if="!loading" class="pagination">
       <el-pagination
         :total="usersCount"
-        :page-size="pageSize"
+        :page-size.sync="pageSize"
         background
         layout="prev, pager, next"
         @current-change="handlePageChange"
@@ -57,18 +56,28 @@ export default {
   },
   created() {
     this.handleDebounceSearchInput = debounce((query) => {
-      this.$store.dispatch('SearchUsers', query)
+      this.$store.dispatch('SearchUsers', { query, page: 1, page_size: 2 })
     }, 500)
   },
   mounted: function() {
-    this.$store.dispatch('FetchUsers')
+    this.$store.dispatch('FetchUsers', { page: 1, page_size: 2 })
   },
   methods: {
     handleDeactivate({ nickname }) {
       this.$store.dispatch('ToggleUserActivation', nickname)
     },
     handlePageChange(page) {
-      this.$store.dispatch('FetchUsers', page)
+      const searchQuery = this.$store.state.users.searchQuery
+      if (searchQuery === '') {
+        this.$store.dispatch('FetchUsers', { page, page_size: 2 })
+      } else {
+        console.log(searchQuery)
+        console.log(page)
+        this.$store.dispatch('SearchUsers', { query: searchQuery, page, page_size: 2 })
+      }
+    },
+    showDeactivatedButton(id) {
+      return this.$store.state.user.id !== id
     }
   }
 }
@@ -81,7 +90,7 @@ export default {
   }
 
   .pagination {
-    margin: 25px 0 0;
+    margin: 25px 0;
     text-align: center;
   }
 
