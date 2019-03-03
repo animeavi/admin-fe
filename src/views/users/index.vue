@@ -26,7 +26,8 @@
     <div v-if="!loading" class="pagination">
       <el-pagination
         :total="usersCount"
-        :page-size.sync="pageSize"
+        :current-page="currentPage"
+        :page-size="pageSize"
         background
         layout="prev, pager, next"
         @current-change="handlePageChange"
@@ -52,6 +53,9 @@ export default {
     },
     pageSize() {
       return this.$store.state.users.pageSize
+    },
+    currentPage() {
+      return this.$store.state.users.currentPage
     }
   },
   created() {
@@ -71,8 +75,6 @@ export default {
       if (searchQuery === '') {
         this.$store.dispatch('FetchUsers', { page, page_size: 2 })
       } else {
-        console.log(searchQuery)
-        console.log(page)
         this.$store.dispatch('SearchUsers', { query: searchQuery, page, page_size: 2 })
       }
     },

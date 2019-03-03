@@ -6,7 +6,8 @@ const user = {
     loading: true,
     searchQuery: '',
     totalUsersCount: 0,
-    pageSize: 2
+    pageSize: 2,
+    currentPage: 1
   },
   mutations: {
     SET_USERS: (state, users) => {
@@ -27,6 +28,9 @@ const user = {
     SET_COUNT: (state, count) => {
       state.totalUsersCount = count
     },
+    SET_PAGE: (state, page) => {
+      state.currentPage = page
+    },
     SET_PAGE_SIZE: (state, pageSize) => {
       state.pageSize = pageSize
     },
@@ -40,7 +44,7 @@ const user = {
 
       commit('SET_LOADING', true)
 
-      loadUsers(commit, response.data)
+      loadUsers(commit, page, response.data)
     },
     async ToggleUserActivation({ commit }, nickname) {
       const response = await toggleUserActivation(nickname)
@@ -49,9 +53,6 @@ const user = {
     },
     async SearchUsers({ commit, dispatch }, { query, page, page_size }) {
       if (query.length === 0) {
-        // console.log(page)
-        // console.log(query)
-        // console.log(page_size)
         commit('SET_SEARCH_QUERY', query)
         dispatch('FetchUsers', { page, page_size: 2 })
       } else {
@@ -60,15 +61,16 @@ const user = {
 
         const response = await searchUsers(query, page, page_size)
 
-        loadUsers(commit, response.data)
+        loadUsers(commit, page, response.data)
       }
     }
   }
 }
 
-const loadUsers = (commit, { users, count, page_size }) => {
+const loadUsers = (commit, page, { users, count, page_size }) => {
   commit('SET_USERS', users)
   commit('SET_COUNT', count)
+  commit('SET_PAGE', page)
   commit('SET_PAGE_SIZE', page_size)
   commit('SET_LOADING', false)
 }
