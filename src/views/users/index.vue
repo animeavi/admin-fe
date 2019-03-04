@@ -1,7 +1,10 @@
 <template>
   <div class="users-container">
     <h1>Users</h1>
-    <el-input placeholder="Search" class="search" @input="handleDebounceSearchInput"/>
+    <div class="searchContainer">
+      <el-checkbox :value="showLocalUsers" @change="handleLocalUsersCheckbox">Show local users only</el-checkbox>
+      <el-input placeholder="Search" class="search" @input="handleDebounceSearchInput"/>
+    </div>
     <el-table v-loading="loading" :data="users" style="width: 100%">
       <el-table-column prop="id" label="ID" width="180"/>
       <el-table-column prop="nickname" label="Name"/>
@@ -56,6 +59,9 @@ export default {
     },
     currentPage() {
       return this.$store.state.users.currentPage
+    },
+    showLocalUsers() {
+      return this.$store.state.users.showLocalUsers
     }
   },
   created() {
@@ -80,6 +86,9 @@ export default {
     },
     showDeactivatedButton(id) {
       return this.$store.state.user.id !== id
+    },
+    handleLocalUsersCheckbox(e) {
+      this.$store.dispatch('ToggleLocalUsersFilter', e)
     }
   }
 }
@@ -101,6 +110,12 @@ export default {
     margin-bottom: 21.5px;
     margin-right: 15px;
     float: right;
+  }
+  .searchContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-left: 15px;
   }
 }
 </style>

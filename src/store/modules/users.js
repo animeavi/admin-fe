@@ -1,4 +1,4 @@
-import { fetchUsers, toggleUserActivation, searchUsers } from '@/api/users'
+import { fetchUsers, toggleUserActivation, searchUsers, fetchLocalUsers } from '@/api/users'
 
 const user = {
   state: {
@@ -6,7 +6,8 @@ const user = {
     loading: true,
     searchQuery: '',
     totalUsersCount: 0,
-    currentPage: 1
+    currentPage: 1,
+    showLocalUsers: false
   },
   mutations: {
     SET_USERS: (state, users) => {
@@ -35,6 +36,9 @@ const user = {
     },
     SET_SEARCH_QUERY: (state, query) => {
       state.searchQuery = query
+    },
+    SET_LOCAL_USERS_FILTER: (state, value) => {
+      state.showLocalUsers = value
     }
   },
   actions: {
@@ -61,6 +65,16 @@ const user = {
         const response = await searchUsers(query, page)
 
         loadUsers(commit, page, response.data)
+      }
+    },
+    async ToggleLocalUsersFilter({ commit, dispatch }, value) {
+      commit('SET_LOCAL_USERS_FILTER', value)
+
+      if (value) {
+        const response = await fetchLocalUsers()
+        loadUsers(commit, 1, response.data)
+      } else {
+        dispatch('FetchUsers', 1)
       }
     }
   }
