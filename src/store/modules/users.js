@@ -1,4 +1,4 @@
-import { fetchUsers, toggleUserActivation, searchUsers, fetchLocalUsers } from '@/api/users'
+import { fetchUsers, toggleUserActivation, searchUsers } from '@/api/users'
 
 const user = {
   state: {
@@ -42,8 +42,8 @@ const user = {
     }
   },
   actions: {
-    async FetchUsers({ commit }, { page }) {
-      const response = await fetchUsers(page)
+    async FetchUsers({ commit, state }, { page }) {
+      const response = await fetchUsers(page, state.showLocalUsers)
 
       commit('SET_LOADING', true)
 
@@ -54,7 +54,7 @@ const user = {
 
       commit('SWAP_USER', response.data)
     },
-    async SearchUsers({ commit, dispatch }, { query, page }) {
+    async SearchUsers({ commit, dispatch, state }, { query, page }) {
       if (query.length === 0) {
         commit('SET_SEARCH_QUERY', query)
         dispatch('FetchUsers', page)
@@ -62,20 +62,14 @@ const user = {
         commit('SET_LOADING', true)
         commit('SET_SEARCH_QUERY', query)
 
-        const response = await searchUsers(query, page)
+        const response = await searchUsers(query, page, state.showLocalUsers)
 
         loadUsers(commit, page, response.data)
       }
     },
-    async ToggleLocalUsersFilter({ commit, dispatch }, value) {
+    async ToggleLocalUsersFilter({ commit, dispatch, state }, value) {
       commit('SET_LOCAL_USERS_FILTER', value)
-
-      if (value) {
-        const response = await fetchLocalUsers()
-        loadUsers(commit, 1, response.data)
-      } else {
-        dispatch('FetchUsers', 1)
-      }
+      dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
     }
   }
 }

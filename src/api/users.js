@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export async function fetchUsers(page = 1) {
+export async function fetchUsers(page = 1, showLocalUsers) {
   return await request({
-    url: `/api/pleroma/admin/users?page=${page}`,
+    url: `/api/pleroma/admin/users?page=${page}&local_only=${showLocalUsers}`,
     method: 'get'
   })
 }
@@ -14,16 +14,9 @@ export async function toggleUserActivation(nickname) {
   })
 }
 
-export async function searchUsers(query, page = 1) {
+export async function searchUsers(query, page = 1, showLocalUsers) {
   return await request({
-    url: `/api/pleroma/admin/users?query=${query}&page=${page}`,
-    method: 'get'
-  })
-}
-
-export async function fetchLocalUsers(page = 1) {
-  return await request({
-    url: `/api/pleroma/admin/users?page=${page}&local_only=true`,
+    url: `/api/pleroma/admin/users?query=${query}&page=${page}&local_only=${showLocalUsers}`,
     method: 'get'
   })
 }
