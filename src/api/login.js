@@ -33,10 +33,6 @@ export function getUserInfo() {
   })
 }
 
-export function logout() {
-
-}
-
-const oauth = { loginByUsername, getUserInfo, logout }
+const oauth = { loginByUsername, getUserInfo }
 
 export default oauth
