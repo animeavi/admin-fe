@@ -4,6 +4,7 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 const user = {
   state: {
     user: '',
+    id: '',
     status: '',
     code: '',
     token: getToken(),
@@ -40,6 +41,9 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_ID: (state, id) => {
+      state.id = id
     }
   },
 
@@ -74,6 +78,7 @@ const user = {
           }
 
           commit('SET_NAME', data.name)
+          commit('SET_ID', data.id)
           commit('SET_AVATAR', data.profile_image_url)
           commit('SET_INTRODUCTION', '')
           resolve(response)
@@ -129,6 +134,7 @@ const user = {
           const data = response.data
           commit('SET_ROLES', data.roles)
           commit('SET_NAME', data.name)
+          commit('SET_ID', data.id)
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)
           dispatch('GenerateRoutes', data) // 动态修改权限后 重绘侧边菜单
