@@ -1,18 +1,19 @@
 <template>
   <div class="users-container">
     <h1>Users</h1>
-    <div class="searchContainer">
-      <el-checkbox :value="showLocalUsers" @change="handleLocalUsersCheckbox">Show local users only</el-checkbox>
+    <div class="search-container">
+      <el-checkbox :value="showLocalUsers" @change="handleLocalUsersCheckbox">Local users only</el-checkbox>
       <el-input placeholder="Search" class="search" @input="handleDebounceSearchInput"/>
     </div>
     <el-table v-loading="loading" :data="users" style="width: 100%">
-      <el-table-column prop="id" label="ID" width="180"/>
+      <el-table-column :min-width="width" prop="id" label="ID"/>
       <el-table-column prop="nickname" label="Name"/>
-      <el-table-column label="Status">
+      <el-table-column :min-width="width" label="Status">
         <template slot-scope="scope">
-          <el-tag
-            :type="scope.row.deactivated ? 'danger' : 'success'"
-          >{{ scope.row.deactivated ? 'deactivated' : 'active' }}</el-tag>
+          <el-tag :type="scope.row.deactivated ? 'danger' : 'success'">
+            <span v-if="isDesktop">{{ scope.row.deactivated ? 'deactivated' : 'active' }}</span>
+            <i v-else :class="activationIcon(scope.row.deactivated)"/>
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="Actions">
@@ -62,6 +63,15 @@ export default {
     },
     showLocalUsers() {
       return this.$store.state.users.showLocalUsers
+    },
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
+    isMobile() {
+      return this.$store.state.app.device === 'mobile'
+    },
+    width() {
+      return this.isMobile ? 60 : false
     }
   },
   created() {
@@ -89,6 +99,9 @@ export default {
     },
     handleLocalUsersCheckbox(e) {
       this.$store.dispatch('ToggleLocalUsersFilter', e)
+    },
+    activationIcon(status) {
+      return status ? 'el-icon-error' : 'el-icon-success'
     }
   }
 }
@@ -111,11 +124,33 @@ export default {
     margin-right: 15px;
     float: right;
   }
-  .searchContainer {
+  .search-container {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     margin-left: 15px;
+  }
+}
+@media
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+  .users-container {
+    h1 {
+      margin-left: 7px;
+    }
+    .search {
+      width: 50%;
+      margin-bottom: 21.5px;
+      margin-right: 7px;
+      float: right;
+    }
+
+    .search-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-left: 7px;
+    }
   }
 }
 </style>
