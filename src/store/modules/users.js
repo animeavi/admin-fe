@@ -6,7 +6,8 @@ const user = {
     loading: true,
     searchQuery: '',
     totalUsersCount: 0,
-    currentPage: 1
+    currentPage: 1,
+    showLocalUsers: false
   },
   mutations: {
     SET_USERS: (state, users) => {
@@ -35,11 +36,14 @@ const user = {
     },
     SET_SEARCH_QUERY: (state, query) => {
       state.searchQuery = query
+    },
+    SET_LOCAL_USERS_FILTER: (state, value) => {
+      state.showLocalUsers = value
     }
   },
   actions: {
-    async FetchUsers({ commit }, { page }) {
-      const response = await fetchUsers(page)
+    async FetchUsers({ commit, state }, { page }) {
+      const response = await fetchUsers(page, state.showLocalUsers)
 
       commit('SET_LOADING', true)
 
@@ -50,7 +54,7 @@ const user = {
 
       commit('SWAP_USER', response.data)
     },
-    async SearchUsers({ commit, dispatch }, { query, page }) {
+    async SearchUsers({ commit, dispatch, state }, { query, page }) {
       if (query.length === 0) {
         commit('SET_SEARCH_QUERY', query)
         dispatch('FetchUsers', page)
@@ -58,10 +62,14 @@ const user = {
         commit('SET_LOADING', true)
         commit('SET_SEARCH_QUERY', query)
 
-        const response = await searchUsers(query, page)
+        const response = await searchUsers(query, page, state.showLocalUsers)
 
         loadUsers(commit, page, response.data)
       }
+    },
+    async ToggleLocalUsersFilter({ commit, dispatch, state }, value) {
+      commit('SET_LOCAL_USERS_FILTER', value)
+      dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
     }
   }
 }
