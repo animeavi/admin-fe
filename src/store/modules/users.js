@@ -1,4 +1,4 @@
-import { fetchUsers, toggleUserActivation, searchUsers } from '@/api/users'
+import { addRight, fetchUsers, deleteRight, deleteUser, searchUsers, tagUser, toggleUserActivation, untagUser } from '@/api/users'
 
 const users = {
   state: {
@@ -22,7 +22,7 @@ const users = {
       })
 
       state.fetchedUsers = [...usersWithoutSwapped, user].sort((a, b) =>
-        a.id.localeCompare(b.id)
+        a.nickname.localeCompare(b.nickname)
       )
     },
     SET_COUNT: (state, count) => {
@@ -70,6 +70,30 @@ const users = {
     async ToggleLocalUsersFilter({ commit, dispatch, state }, value) {
       commit('SET_LOCAL_USERS_FILTER', value)
       dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
+    },
+    async ToggleRight({ commit, getters }, { user, right }) {
+      user.roles[right]
+        ? await deleteRight(user.nickname, right, getters.token)
+        : await addRight(user.nickname, right, getters.token)
+
+      const updatedUser = { ...user, roles: { ...user.roles, [right]: !user.roles[right] }}
+      commit('SWAP_USER', updatedUser)
+    },
+    async DeleteUser({ commit, getters }, user) {
+      await deleteUser(user.nickname, getters.token)
+      const updatedUser = { ...user, deactivated: true }
+      commit('SWAP_USER', updatedUser)
+    },
+    async ToggleTag({ commit, getters }, { user, tag }) {
+      if (user.tags.includes(tag)) {
+        await untagUser(user.nickname, tag, getters.token)
+        const updatedUser = { ...user, tags: user.tags.filter(userTag => userTag !== tag) }
+        commit('SWAP_USER', updatedUser)
+      } else {
+        await tagUser(user.nickname, tag, getters.token)
+        const updatedUser = { ...user, tags: [...user.tags, tag] }
+        commit('SWAP_USER', updatedUser)
+      }
     }
   }
 }
