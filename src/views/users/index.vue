@@ -2,7 +2,7 @@
   <div class="users-container">
     <h1>Users</h1>
     <div class="search-container">
-      <el-checkbox :value="showLocalUsers" @change="handleLocalUsersCheckbox">Local users only</el-checkbox>
+      <el-checkbox :value="showLocalUsersOnly" @change="handleLocalUsersCheckbox">Local users only</el-checkbox>
       <el-input placeholder="Search" class="search" @input="handleDebounceSearchInput"/>
     </div>
     <el-table v-loading="loading" :data="users" style="width: 100%">
@@ -20,6 +20,7 @@
         <template slot-scope="scope">
           <el-button
             v-if="showDeactivatedButton(scope.row.id)"
+            class="toggle-activation"
             type="text"
             size="small"
             @click="handleDeactivate(scope.row)"
@@ -61,8 +62,8 @@ export default {
     currentPage() {
       return this.$store.state.users.currentPage
     },
-    showLocalUsers() {
-      return this.$store.state.users.showLocalUsers
+    showLocalUsersOnly() {
+      return this.$store.state.users.showLocalUsersOnly
     },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
@@ -72,6 +73,11 @@ export default {
     },
     width() {
       return this.isMobile ? 60 : false
+    },
+    rowStyle(id) {
+      return {
+        'data-user-id': id
+      }
     }
   },
   created() {
@@ -144,7 +150,6 @@ only screen and (max-width: 760px),
       margin-right: 7px;
       float: right;
     }
-
     .search-container {
       display: flex;
       justify-content: space-between;

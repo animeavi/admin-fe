@@ -1,17 +1,25 @@
 {
   "presets": [
-    ["env", {
-      "modules": false,
-      "targets": {
-        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+    [
+      "@babel/preset-env", {
+        "modules": "auto",
+        "targets": {
+          "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+        }
       }
-    }],
-    "stage-2"
+    ],
+    "@vue/babel-preset-jsx"
   ],
-  "plugins": ["transform-vue-jsx", "transform-runtime"],
+  "plugins": [
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-syntax-dynamic-import"
+  ],
   "env": {
     "development":{
-      "plugins": ["dynamic-import-node"]
+      "plugins": ["dynamic-import-node-babel-7"]
+    },
+    "test":{
+      "plugins": ["dynamic-import-node-babel-7"]
     }
   }
 }
