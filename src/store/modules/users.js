@@ -1,13 +1,13 @@
 import { fetchUsers, toggleUserActivation, searchUsers } from '@/api/users'
 
-const user = {
+const users = {
   state: {
     fetchedUsers: [],
     loading: true,
     searchQuery: '',
     totalUsersCount: 0,
     currentPage: 1,
-    showLocalUsers: false
+    showLocalUsersOnly: false
   },
   mutations: {
     SET_USERS: (state, users) => {
@@ -38,23 +38,23 @@ const user = {
       state.searchQuery = query
     },
     SET_LOCAL_USERS_FILTER: (state, value) => {
-      state.showLocalUsers = value
+      state.showLocalUsersOnly = value
     }
   },
   actions: {
-    async FetchUsers({ commit, state }, { page }) {
-      const response = await fetchUsers(page, state.showLocalUsers)
+    async FetchUsers({ commit, state, getters }, { page }) {
+      const response = await fetchUsers(state.showLocalUsersOnly, getters.token, page)
 
       commit('SET_LOADING', true)
 
       loadUsers(commit, page, response.data)
     },
-    async ToggleUserActivation({ commit }, nickname) {
-      const response = await toggleUserActivation(nickname)
+    async ToggleUserActivation({ commit, getters }, nickname) {
+      const response = await toggleUserActivation(nickname, getters.token)
 
       commit('SWAP_USER', response.data)
     },
-    async SearchUsers({ commit, dispatch, state }, { query, page }) {
+    async SearchUsers({ commit, dispatch, state, getters }, { query, page }) {
       if (query.length === 0) {
         commit('SET_SEARCH_QUERY', query)
         dispatch('FetchUsers', page)
@@ -62,7 +62,7 @@ const user = {
         commit('SET_LOADING', true)
         commit('SET_SEARCH_QUERY', query)
 
-        const response = await searchUsers(query, page, state.showLocalUsers)
+        const response = await searchUsers(query, state.showLocalUsersOnly, getters.token, page)
 
         loadUsers(commit, page, response.data)
       }
@@ -82,4 +82,4 @@ const loadUsers = (commit, page, { users, count, page_size }) => {
   commit('SET_LOADING', false)
 }
 
-export default user
+export default users

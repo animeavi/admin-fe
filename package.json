@@ -9,7 +9,8 @@
     "build:prod": "cross-env NODE_ENV=production env_config=prod node build/build.js",
     "build:sit": "cross-env NODE_ENV=production env_config=sit node build/build.js",
     "lint": "eslint --ext .js,.vue src",
-    "test": "npm run lint",
+    "test": "jest",
+    "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "precommit": "lint-staged",
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },
@@ -34,6 +35,7 @@
     "url": "https://github.com/PanJiaChen/vue-element-admin/issues"
   },
   "dependencies": {
+    "@babel/runtime": "^7.3.4",
     "axios": "0.18.0",
     "clipboard": "1.7.1",
     "codemirror": "5.39.2",
@@ -46,6 +48,7 @@
     "js-cookie": "2.2.0",
     "jsonlint": "1.6.3",
     "jszip": "3.1.5",
+    "lodash": "^4.17.11",
     "lodash.debounce": "^4.0.8",
     "mockjs": "1.0.1-beta3",
     "normalize.css": "7.0.0",
@@ -54,7 +57,7 @@
     "showdown": "1.8.6",
     "sortablejs": "1.7.0",
     "tui-editor": "1.2.7",
-    "vue": "2.5.17",
+    "vue": "^2.6.8",
     "vue-count-to": "1.0.13",
     "vue-i18n": "7.3.2",
     "vue-router": "3.0.2",
@@ -64,17 +67,20 @@
     "xlsx": "^0.11.16"
   },
   "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0-beta.2",
+    "@vue/babel-preset-jsx": "^1.0.0-beta.2",
+    "@vue/test-utils": "^1.0.0-beta.29",
     "autoprefixer": "8.5.0",
-    "babel-core": "6.26.3",
     "babel-eslint": "8.2.6",
     "babel-helper-vue-jsx-merge-props": "2.0.3",
-    "babel-loader": "7.1.5",
-    "babel-plugin-dynamic-import-node": "2.0.0",
-    "babel-plugin-syntax-jsx": "6.18.0",
-    "babel-plugin-transform-runtime": "6.23.0",
-    "babel-plugin-transform-vue-jsx": "3.7.0",
-    "babel-preset-env": "1.7.0",
-    "babel-preset-stage-2": "6.24.1",
+    "babel-jest": "^24.1.0",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-dynamic-import-node-babel-7": "^2.0.7",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "chalk": "2.4.1",
     "compression-webpack-plugin": "2.0.0",
     "connect": "3.6.6",
@@ -88,8 +94,10 @@
     "file-loader": "1.1.11",
     "friendly-errors-webpack-plugin": "1.7.0",
     "hash-sum": "1.0.2",
-    "html-webpack-plugin": "4.0.0-alpha",
+    "html-webpack-plugin": "^3.2.0",
     "husky": "0.14.3",
+    "jest": "^24.1.0",
+    "jest-transform-stub": "^2.0.0",
     "lint-staged": "7.2.2",
     "mini-css-extract-plugin": "0.4.1",
     "node-notifier": "5.2.1",
@@ -112,12 +120,13 @@
     "svgo": "1.0.5",
     "uglifyjs-webpack-plugin": "1.2.7",
     "url-loader": "1.0.1",
+    "vue-jest": "4.0.0-beta.2",
     "vue-loader": "15.3.0",
     "vue-style-loader": "4.1.2",
-    "vue-template-compiler": "2.5.17",
-    "webpack": "4.16.5",
+    "vue-template-compiler": "^2.6.8",
+    "webpack": "^4.29.6",
     "webpack-bundle-analyzer": "2.13.1",
-    "webpack-cli": "3.1.0",
+    "webpack-cli": "^3.2.3",
     "webpack-dev-server": "3.1.14",
     "webpack-merge": "4.1.4"
   },
@@ -129,5 +138,25 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
+    "transform": {
+      "^.+\\.vue$": "vue-jest",
+      "^.+\\.js$": "babel-jest",
+      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$'": "jest-transform-stub"
+    },
+    "moduleNameMapper": {
+      "^.+.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
+  }
 }
