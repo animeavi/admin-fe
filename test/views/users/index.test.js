@@ -1,9 +1,11 @@
 import Vuex from 'vuex'
-import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue, config } from '@vue/test-utils'
 import Element from 'element-ui'
 import Users from '@/views/users/index'
 import storeConfig from './store.conf'
 import { cloneDeep } from 'lodash'
+
+config.mocks["$t"] = () => {}
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -155,8 +157,10 @@ describe('Users actions', () => {
     })
     await wrapper.vm.$nextTick()
 
-    const dropdownMenuItem = wrapper.find(htmlElement(2, 1))
-    expect(dropdownMenuItem.text()).toBe('Deactivate account')
+    const dropdownMenuItems = wrapper.findAll(
+      `.el-table__fixed-body-wrapper table tr:nth-child(2) ul.el-dropdown-menu li`
+    )
+    expect(dropdownMenuItems.length).toBe(6)
     done()
   })
 
