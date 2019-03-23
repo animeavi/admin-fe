@@ -1,5 +1,5 @@
 import { loginByUsername, getUserInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, getAuthHost, setAuthHost, removeAuthHost } from '@/utils/auth'
 
 const user = {
   state: {
@@ -8,6 +8,7 @@ const user = {
     status: '',
     code: '',
     token: getToken(),
+    authHost: getAuthHost(),
     name: '',
     avatar: '',
     introduction: '',
@@ -44,19 +45,24 @@ const user = {
     },
     SET_ID: (state, id) => {
       state.id = id
+    },
+    SET_AUTH_HOST: (state, authHost) => {
+      state.authHost = authHost
     }
   },
 
   actions: {
-    LoginByUsername({ commit }, userInfo) {
-      const username = userInfo.username.trim()
+    LoginByUsername({ commit, dispatch }, { username, authHost, password }) {
       return new Promise((resolve, reject) => {
-        loginByUsername(username, userInfo.password).then(response => {
+        loginByUsername(username, password, authHost).then(response => {
           const data = response.data
           commit('SET_TOKEN', data.access_token)
+          commit('SET_AUTH_HOST', authHost)
           setToken(data.access_token)
+          setAuthHost(authHost)
           resolve()
         }).catch(error => {
+          dispatch('addErrorLog', { message: error.message })
           reject(error)
         })
       })
@@ -64,7 +70,7 @@ const user = {
 
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getUserInfo(state.token).then(response => {
+        getUserInfo(state.token, state.authHost).then(response => {
           const data = response.data
 
           if (!data) {
@@ -91,11 +97,13 @@ const user = {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
       removeToken()
+      removeAuthHost()
     },
     FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         removeToken()
+        removeAuthHost()
         resolve()
       })
     }

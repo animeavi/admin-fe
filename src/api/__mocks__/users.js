@@ -4,7 +4,7 @@ const users = [
   { deactivated: true, id: 'abc', nickname: 'john', local: true, roles: { admin: false, moderator: false }, tags: ['strip_media'] }
 ]
 
-export async function fetchUsers(showLocalUsersOnly, token, page = 1) {
+export async function fetchUsers(showLocalUsersOnly, authHost, token, page = 1) {
   const filteredUsers = showLocalUsersOnly ? users.filter(user => user.local) : users
   return Promise.resolve({ data: {
     users: filteredUsers,
@@ -13,12 +13,12 @@ export async function fetchUsers(showLocalUsersOnly, token, page = 1) {
   }})
 }
 
-export async function toggleUserActivation(nickname, token) {
+export async function toggleUserActivation(nickname, authHost, token) {
   const response = users.find(user => user.nickname === nickname)
   return Promise.resolve({ data: { ...response, deactivated: !response.deactivated }})
 }
 
-export async function searchUsers(query, showLocalUsersOnly, token, page = 1) {
+export async function searchUsers(query, showLocalUsersOnly, authHost, token, page = 1) {
   const filteredUsers = showLocalUsersOnly ? users.filter(user => user.local) : users
   const response = filteredUsers.filter(user => user.nickname === query)
   return Promise.resolve({ data: {
@@ -28,28 +28,28 @@ export async function searchUsers(query, showLocalUsersOnly, token, page = 1) {
   }})
 }
 
-export async function addRight(nickname, right, token) {
+export async function addRight(nickname, right, authHost, token) {
   return Promise.resolve({ data:
     { [`is_${right}`]: true }
   })
 }
 
-export async function deleteRight(nickname, right, token) {
+export async function deleteRight(nickname, right, authHost, token) {
   return Promise.resolve({ data:
     { [`is_${right}`]: false }
   })
 }
 
-export async function deleteUser(nickname, token) {
+export async function deleteUser(nickname, authHost, token) {
   return Promise.resolve({ data:
     nickname
   })
 }
 
-export async function tagUser(nickname, tag, token) {
+export async function tagUser(nickname, tag, authHost, token) {
   return Promise.resolve()
 }
 
-export async function untagUser(nickname, tag, token) {
+export async function untagUser(nickname, tag, authHost, token) {
   return Promise.resolve()
 }
