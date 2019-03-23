@@ -3,7 +3,6 @@
     <h1>{{ $t('users.users') }}</h1>
     <div class="search-container">
       <users-filter/>
-      <!-- <el-checkbox :value="showLocalUsersOnly" @change="handleLocalUsersCheckbox">{{ $t('users.localUsersOnly') }}</el-checkbox> -->
       <el-input :placeholder="$t('users.search')" class="search" @input="handleDebounceSearchInput"/>
     </div>
     <el-table v-loading="loading" :data="users" style="width: 100%">
@@ -117,9 +116,6 @@ export default {
     currentPage() {
       return this.$store.state.users.currentPage
     },
-    showLocalUsersOnly() {
-      return this.$store.state.users.showLocalUsersOnly
-    },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
     },
@@ -156,9 +152,6 @@ export default {
     showAdminAction({ local, id }) {
       return local && this.showDeactivatedButton(id)
     },
-    handleLocalUsersCheckbox(e) {
-      this.$store.dispatch('ToggleLocalUsersFilter', e)
-    },
     activationIcon(status) {
       return status ? 'el-icon-error' : 'el-icon-success'
     },
@@ -191,15 +184,14 @@ export default {
 
   .search {
     width: 300px;
-    margin-bottom: 21.5px;
-    margin-right: 15px;
     float: right;
   }
   .search-container {
     display: flex;
+    height: 36px;
     justify-content: space-between;
     align-items: baseline;
-    margin-left: 15px;
+    margin: 0 15px 21px 15px
   }
 }
 @media
@@ -217,16 +209,14 @@ only screen and (max-width: 760px),
       font-size: 12px;
     }
     .search {
-      width: 50%;
-      margin-bottom: 21.5px;
-      margin-right: 7px;
+      width: 48%;
       float: right;
     }
     .search-container {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-left: 7px;
+      margin: 0 7px 10px 7px
     }
     .el-tag {
       width: 30px;
