@@ -1,7 +1,9 @@
 import request from '@/utils/request'
+import { baseName } from './utils'
 
-export async function loginByUsername(username, password) {
+export async function loginByUsername(username, password, authHost) {
   const appsRequest = await request({
+    baseURL: baseName(authHost),
     url: '/api/v1/apps',
     method: 'post',
     data: {
@@ -14,6 +16,7 @@ export async function loginByUsername(username, password) {
   const app = appsRequest.data
 
   return request({
+    baseURL: baseName(authHost),
     url: '/oauth/token',
     method: 'post',
     data: {
@@ -26,8 +29,9 @@ export async function loginByUsername(username, password) {
   })
 }
 
-export function getUserInfo(token) {
+export function getUserInfo(token, authHost) {
   return request({
+    baseURL: baseName(authHost),
     url: '/api/account/verify_credentials',
     method: 'post',
     headers: token ? { 'Authorization': `Bearer ${token}` } : {}

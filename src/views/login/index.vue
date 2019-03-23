@@ -45,8 +45,13 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
+import SvgIcon from '@/components/SvgIcon'
+import i18n from '@/lang'
+
 export default {
   name: 'Login',
+  components: { 'svg-icon': SvgIcon },
   data: function() {
     return {
       loginForm: {
@@ -77,12 +82,35 @@ export default {
     },
     handleLogin() {
       this.loading = true
-      this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+      if (this.checkUsername()) {
+        const loginData = this.getLoginData()
+        this.$store.dispatch('LoginByUsername', loginData).then(() => {
+          this.loading = false
+          this.$router.push({ path: this.redirect || '/users/index' })
+        }).catch(() => {
+          this.loading = false
+        })
+      } else {
+        Message({
+          message: i18n.t('login.errorMessage'),
+          type: 'error',
+          duration: 7000
+        })
+        this.$store.dispatch('addErrorLog', { message: i18n.t('login.errorMessage') })
         this.loading = false
-        this.$router.push({ path: this.redirect || '/users/index' })
-      }).catch(() => {
-        this.loading = false
-      })
+      }
+    },
+    checkUsername() {
+      return this.loginForm.username.includes('@')
+    },
+    getLoginData() {
+      const [username, authHost] = this.loginForm.username.split('@')
+
+      return {
+        username: username.trim(),
+        authHost: authHost.trim(),
+        password: this.loginForm.password
+      }
     }
   }
 }

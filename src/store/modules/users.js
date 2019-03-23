@@ -43,14 +43,14 @@ const users = {
   },
   actions: {
     async FetchUsers({ commit, state, getters }, { page }) {
-      const response = await fetchUsers(state.showLocalUsersOnly, getters.token, page)
+      const response = await fetchUsers(state.showLocalUsersOnly, getters.authHost, getters.token, page)
 
       commit('SET_LOADING', true)
 
       loadUsers(commit, page, response.data)
     },
     async ToggleUserActivation({ commit, getters }, nickname) {
-      const response = await toggleUserActivation(nickname, getters.token)
+      const response = await toggleUserActivation(nickname, getters.authHost, getters.token)
 
       commit('SWAP_USER', response.data)
     },
@@ -62,7 +62,7 @@ const users = {
         commit('SET_LOADING', true)
         commit('SET_SEARCH_QUERY', query)
 
-        const response = await searchUsers(query, state.showLocalUsersOnly, getters.token, page)
+        const response = await searchUsers(query, state.showLocalUsersOnly, getters.authHost, getters.token, page)
 
         loadUsers(commit, page, response.data)
       }
@@ -73,24 +73,24 @@ const users = {
     },
     async ToggleRight({ commit, getters }, { user, right }) {
       user.roles[right]
-        ? await deleteRight(user.nickname, right, getters.token)
-        : await addRight(user.nickname, right, getters.token)
+        ? await deleteRight(user.nickname, right, getters.authHost, getters.token)
+        : await addRight(user.nickname, right, getters.authHost, getters.token)
 
       const updatedUser = { ...user, roles: { ...user.roles, [right]: !user.roles[right] }}
       commit('SWAP_USER', updatedUser)
     },
     async DeleteUser({ commit, getters }, user) {
-      await deleteUser(user.nickname, getters.token)
+      await deleteUser(user.nickname, getters.authHost, getters.token)
       const updatedUser = { ...user, deactivated: true }
       commit('SWAP_USER', updatedUser)
     },
     async ToggleTag({ commit, getters }, { user, tag }) {
       if (user.tags.includes(tag)) {
-        await untagUser(user.nickname, tag, getters.token)
+        await untagUser(user.nickname, tag, getters.authHost, getters.token)
         const updatedUser = { ...user, tags: user.tags.filter(userTag => userTag !== tag) }
         commit('SWAP_USER', updatedUser)
       } else {
-        await tagUser(user.nickname, tag, getters.token)
+        await tagUser(user.nickname, tag, getters.authHost, getters.token)
         const updatedUser = { ...user, tags: [...user.tags, tag] }
         commit('SWAP_USER', updatedUser)
       }
