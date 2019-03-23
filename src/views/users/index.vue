@@ -2,7 +2,8 @@
   <div class="users-container">
     <h1>{{ $t('users.users') }}</h1>
     <div class="search-container">
-      <el-checkbox :value="showLocalUsersOnly" @change="handleLocalUsersCheckbox">{{ $t('users.localUsersOnly') }}</el-checkbox>
+      <users-filter/>
+      <!-- <el-checkbox :value="showLocalUsersOnly" @change="handleLocalUsersCheckbox">{{ $t('users.localUsersOnly') }}</el-checkbox> -->
       <el-input :placeholder="$t('users.search')" class="search" @input="handleDebounceSearchInput"/>
     </div>
     <el-table v-loading="loading" :data="users" style="width: 100%">
@@ -93,9 +94,13 @@
 
 <script>
 import debounce from 'lodash.debounce'
+import UsersFilter from './components/UsersFilter'
 
 export default {
   name: 'Users',
+  components: {
+    UsersFilter
+  },
   computed: {
     loading() {
       return this.$store.state.users.loading
