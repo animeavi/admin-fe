@@ -1,5 +1,12 @@
 <template>
-  <el-select v-model="value" placeholder="Select filter">
+  <el-select
+    v-model="value"
+    :collapse-tags="isMobile"
+    multiple
+    placeholder="Select filter"
+    class="select-field"
+    @change="handleFilterToggle"
+    @remove-tag="handleFilterToggle">
     <el-option-group
       v-for="group in filters"
       :key="group.label"
@@ -20,24 +27,57 @@ export default {
       filters: [{
         label: 'By user type',
         options: [{
-          label: 'Show local',
-          value: 'showLocal'
+          label: 'Local',
+          value: 'userType/showLocalUsersOnly'
         }, {
-          label: 'Show external',
-          value: 'showExternal'
+          label: 'External',
+          value: 'userType/showExternalUsersOnly'
         }]
       }, {
         label: 'By status',
         options: [{
-          label: 'Show Active',
-          value: 'showActive'
+          label: 'Active',
+          value: 'userStatus/showActiveUsersOnly'
         }, {
-          label: 'Show Deactivated',
-          value: 'showDeactivated'
+          label: 'Deactivated',
+          value: 'userStatus/showDeactivatedUsersOnly'
         }]
       }],
-      value: ''
+      value: []
+    }
+  },
+  computed: {
+    isMobile() {
+      return this.$store.state.app.device === 'mobile'
+    }
+  },
+  methods: {
+    handleFilterToggle(value) {
+      const reversed = value.reverse()
+      const userTypeFilter = reversed.find(filter => filter.includes('userType'))
+      const userStatusFilter = reversed.find(filter => filter.includes('userStatus'))
+      const filters = [userTypeFilter, userStatusFilter].filter(item => item)
+      this.$data.value = filters
+      const filtersWithoutGroupnames = filters.reduce((acc, item) => {
+        const filter = item.split('/')[1]
+        acc.push(filter)
+        return acc
+      }, [])
+      this.$store.dispatch('ToggleUsersFilter', filtersWithoutGroupnames)
     }
   }
 }
 </script>
+
+<style rel='stylesheet/scss' lang='scss' scoped>
+.select-field {
+  width: 350px;
+}
+@media
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+  .select-field {
+    width: 48%;
+  }
+}
+</style>
