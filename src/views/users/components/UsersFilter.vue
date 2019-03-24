@@ -28,19 +28,19 @@ export default {
         label: 'By user type',
         options: [{
           label: 'Local',
-          value: 'userType/showLocalUsersOnly'
+          value: 'showLocalUsersOnly'
         }, {
           label: 'External',
-          value: 'userType/showExternalUsersOnly'
+          value: 'showExternalUsersOnly'
         }]
       }, {
         label: 'By status',
         options: [{
           label: 'Active',
-          value: 'userStatus/showActiveUsersOnly'
+          value: 'showActiveUsersOnly'
         }, {
           label: 'Deactivated',
-          value: 'userStatus/showDeactivatedUsersOnly'
+          value: 'showDeactivatedUsersOnly'
         }]
       }],
       value: []
@@ -52,18 +52,9 @@ export default {
     }
   },
   methods: {
-    handleFilterToggle(value) {
-      const reversed = value.reverse()
-      const userTypeFilter = reversed.find(filter => filter.includes('userType'))
-      const userStatusFilter = reversed.find(filter => filter.includes('userStatus'))
-      const filters = [userTypeFilter, userStatusFilter].filter(item => item)
-      this.$data.value = filters
-      const filtersWithoutGroupnames = filters.reduce((acc, item) => {
-        const filter = item.split('/')[1]
-        acc.push(filter)
-        return acc
-      }, [])
-      this.$store.dispatch('ToggleUsersFilter', filtersWithoutGroupnames)
+    handleFilterToggle(filters) {
+      const currentFilter = filters[filters.length - 1]
+      this.$store.dispatch('ToggleUsersFilter', currentFilter)
     }
   }
 }

@@ -42,8 +42,8 @@ const users = {
     SET_SEARCH_QUERY: (state, query) => {
       state.searchQuery = query
     },
-    SET_USERS_FILTER: (state, filters) => {
-      state.filters = filters
+    SET_USERS_FILTER: (state, filter) => {
+      state.filters[filter] = !state.filters[filter]
     }
   },
   actions: {
@@ -72,15 +72,8 @@ const users = {
         loadUsers(commit, page, response.data)
       }
     },
-    async ToggleUsersFilter({ commit, dispatch, state }, filters) {
-      const newFilters = Object.keys(state.filters).reduce((acc, filter) => {
-        if (filters.includes(filter)) {
-          return { ...acc, [filter]: true }
-        } else {
-          return { ...acc, [filter]: false }
-        }
-      }, {})
-      commit('SET_USERS_FILTER', newFilters)
+    async ToggleUsersFilter({ commit, dispatch, state }, filter) {
+      commit('SET_USERS_FILTER', filter)
       // dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
     },
     async ToggleRight({ commit, getters }, { user, right }) {
