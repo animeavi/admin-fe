@@ -183,7 +183,7 @@ export default {
   }
 
   .search {
-    width: 300px;
+    width: 350px;
     float: right;
   }
   .search-container {
