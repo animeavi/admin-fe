@@ -3,8 +3,8 @@
     v-model="value"
     :collapse-tags="isMobile"
     :clearable="isDesktop"
+    :placeholder="$t('usersFilter.inputPlaceholder')"
     multiple
-    placeholder="Select filter"
     class="select-field"
     @change="toggleFilters">
     <el-option-group
@@ -25,21 +25,21 @@ export default {
   data() {
     return {
       filters: [{
-        label: 'By user type',
+        label: this.$i18n.t('usersFilter.byUserType'),
         options: [{
-          label: 'Local',
+          label: this.$i18n.t('usersFilter.local'),
           value: 'localUsersOnly'
         }, {
-          label: 'External',
+          label: this.$i18n.t('usersFilter.external'),
           value: 'externalUsersOnly'
         }]
       }, {
-        label: 'By status',
+        label: this.$i18n.t('usersFilter.byStatus'),
         options: [{
-          label: 'Active',
+          label: this.$i18n.t('usersFilter.active'),
           value: 'activeUsersOnly'
         }, {
-          label: 'Deactivated',
+          label: this.$i18n.t('usersFilter.deactivated'),
           value: 'deactivatedUsersOnly'
         }]
       }],

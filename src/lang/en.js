@@ -189,5 +189,14 @@ export default {
     sandbox: 'Force posts to be followers-only',
     disableRemoteSubscription: 'Disallow following user from remote instances',
     disableAnySubscription: 'Disallow following user at all'
+  },
+  usersFilter: {
+    inputPlaceholder: 'Select filter',
+    byUserType: 'By user type',
+    local: 'Local',
+    external: 'External',
+    byStatus: 'By status',
+    active: 'Active',
+    deactivated: 'Deactivated'
   }
 }
