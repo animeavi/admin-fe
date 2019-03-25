@@ -44,11 +44,19 @@ const users = {
     },
     SET_USERS_FILTER: (state, filter) => {
       state.filters[filter] = !state.filters[filter]
+    },
+    CLEAR_USERS_FILTERS: (state) => {
+      state.filters = {
+        showLocalUsersOnly: false,
+        showExternalUsersOnly: false,
+        showActiveUsersOnly: false,
+        showDeactivatedUsersOnly: false
+      }
     }
   },
   actions: {
     async FetchUsers({ commit, state, getters }, { page }) {
-      const response = await fetchUsers(state.filters.showLocalUsersOnly, getters.authHost, getters.token, page)
+      const response = await fetchUsers(state.filters, getters.authHost, getters.token, page)
 
       commit('SET_LOADING', true)
 
@@ -67,14 +75,18 @@ const users = {
         commit('SET_LOADING', true)
         commit('SET_SEARCH_QUERY', query)
 
-        const response = await searchUsers(query, state.filters.showLocalUsersOnly, getters.authHost, getters.token, page)
+        const response = await searchUsers(query, state.filters, getters.authHost, getters.token, page)
 
         loadUsers(commit, page, response.data)
       }
     },
     async ToggleUsersFilter({ commit, dispatch, state }, filter) {
       commit('SET_USERS_FILTER', filter)
-      // dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
+      dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
+    },
+    async ClearFilters({ commit, dispatch, state }) {
+      commit('CLEAR_USERS_FILTERS')
+      dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
     },
     async ToggleRight({ commit, getters }, { user, right }) {
       user.roles[right]

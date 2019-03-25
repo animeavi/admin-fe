@@ -3,9 +3,11 @@
     v-model="value"
     :collapse-tags="isMobile"
     multiple
+    clearable
     placeholder="Select filter"
     class="select-field"
     @change="handleFilterToggle"
+    @clear="clearFilters"
     @remove-tag="handleFilterToggle">
     <el-option-group
       v-for="group in filters"
@@ -55,6 +57,9 @@ export default {
     handleFilterToggle(filters) {
       const currentFilter = filters[filters.length - 1]
       this.$store.dispatch('ToggleUsersFilter', currentFilter)
+    },
+    clearFilters() {
+      this.$store.dispatch('ClearFilters')
     }
   }
 }
