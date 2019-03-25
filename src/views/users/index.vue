@@ -174,7 +174,7 @@ export default {
 <style rel='stylesheet/scss' lang='scss' scoped>
 .users-container {
   h1 {
-    margin-left: 15px;
+    margin: 22px 0 0 15px;
   }
 
   .pagination {
@@ -190,8 +190,8 @@ export default {
     display: flex;
     height: 36px;
     justify-content: space-between;
-    align-items: baseline;
-    margin: 0 15px 21px 15px
+    align-items: center;
+    margin: 22px 15px 22px 15px
   }
 }
 @media
@@ -199,7 +199,7 @@ only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px) {
   .users-container {
     h1 {
-      margin-left: 7px;
+      margin: 7px 10px 7px 10px;
     }
     .el-dropdown-link {
       cursor: pointer;
@@ -209,14 +209,13 @@ only screen and (max-width: 760px),
       font-size: 12px;
     }
     .search {
-      width: 48%;
-      float: right;
+      width: 100%;
     }
     .search-container {
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin: 0 7px 10px 7px
+      height: 82px;
+      flex-direction: column;
+      margin: 0 10px 7px 10px
     }
     .el-tag {
       width: 30px;

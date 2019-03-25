@@ -2,8 +2,8 @@
   <el-select
     v-model="value"
     :collapse-tags="isMobile"
+    :clearable="isDesktop"
     multiple
-    clearable
     placeholder="Select filter"
     class="select-field"
     @change="toggleFilters">
@@ -47,6 +47,9 @@ export default {
     }
   },
   computed: {
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     }
@@ -68,7 +71,8 @@ export default {
 only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px) {
   .select-field {
-    width: 48%;
+    width: 100%;
+    margin-bottom: 5px;
   }
 }
 </style>
