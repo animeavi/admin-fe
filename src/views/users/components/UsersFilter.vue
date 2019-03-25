@@ -6,9 +6,7 @@
     clearable
     placeholder="Select filter"
     class="select-field"
-    @change="handleFilterToggle"
-    @clear="clearFilters"
-    @remove-tag="handleFilterToggle">
+    @change="toggleFilters">
     <el-option-group
       v-for="group in filters"
       :key="group.label"
@@ -30,19 +28,19 @@ export default {
         label: 'By user type',
         options: [{
           label: 'Local',
-          value: 'showLocalUsersOnly'
+          value: 'localUsersOnly'
         }, {
           label: 'External',
-          value: 'showExternalUsersOnly'
+          value: 'externalUsersOnly'
         }]
       }, {
         label: 'By status',
         options: [{
           label: 'Active',
-          value: 'showActiveUsersOnly'
+          value: 'activeUsersOnly'
         }, {
           label: 'Deactivated',
-          value: 'showDeactivatedUsersOnly'
+          value: 'deactivatedUsersOnly'
         }]
       }],
       value: []
@@ -54,12 +52,9 @@ export default {
     }
   },
   methods: {
-    handleFilterToggle(filters) {
-      const currentFilter = filters[filters.length - 1]
-      this.$store.dispatch('ToggleUsersFilter', currentFilter)
-    },
-    clearFilters() {
-      this.$store.dispatch('ClearFilters')
+    toggleFilters() {
+      const currentFilters = this.$data.value.reduce((acc, filter) => ({ ...acc, [filter]: true }), {})
+      this.$store.dispatch('ToggleUsersFilter', currentFilters)
     }
   }
 }

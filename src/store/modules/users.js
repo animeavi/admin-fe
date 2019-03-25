@@ -8,10 +8,10 @@ const users = {
     totalUsersCount: 0,
     currentPage: 1,
     filters: {
-      showLocalUsersOnly: false,
-      showExternalUsersOnly: false,
-      showActiveUsersOnly: false,
-      showDeactivatedUsersOnly: false
+      localUsersOnly: false,
+      externalUsersOnly: false,
+      activeUsersOnly: false,
+      deactivatedUsersOnly: false
     }
   },
   mutations: {
@@ -42,16 +42,8 @@ const users = {
     SET_SEARCH_QUERY: (state, query) => {
       state.searchQuery = query
     },
-    SET_USERS_FILTER: (state, filter) => {
-      state.filters[filter] = !state.filters[filter]
-    },
-    CLEAR_USERS_FILTERS: (state) => {
-      state.filters = {
-        showLocalUsersOnly: false,
-        showExternalUsersOnly: false,
-        showActiveUsersOnly: false,
-        showDeactivatedUsersOnly: false
-      }
+    SET_USERS_FILTERS: (state, filters) => {
+      state.filters = filters
     }
   },
   actions: {
@@ -80,8 +72,15 @@ const users = {
         loadUsers(commit, page, response.data)
       }
     },
-    async ToggleUsersFilter({ commit, dispatch, state }, filter) {
-      commit('SET_USERS_FILTER', filter)
+    async ToggleUsersFilter({ commit, dispatch, state }, filters) {
+      const defaultFilters = {
+        localUsersOnly: false,
+        externalUsersOnly: false,
+        activeUsersOnly: false,
+        deactivatedUsersOnly: false
+      }
+      const currentFilters = { ...defaultFilters, ...filters }
+      commit('SET_USERS_FILTERS', currentFilters)
       dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
     },
     async ClearFilters({ commit, dispatch, state }) {
