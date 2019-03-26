@@ -28,19 +28,19 @@ export default {
         label: this.$i18n.t('usersFilter.byUserType'),
         options: [{
           label: this.$i18n.t('usersFilter.local'),
-          value: 'localUsersOnly'
+          value: 'local'
         }, {
           label: this.$i18n.t('usersFilter.external'),
-          value: 'externalUsersOnly'
+          value: 'external'
         }]
       }, {
         label: this.$i18n.t('usersFilter.byStatus'),
         options: [{
           label: this.$i18n.t('usersFilter.active'),
-          value: 'activeUsersOnly'
+          value: 'active'
         }, {
           label: this.$i18n.t('usersFilter.deactivated'),
-          value: 'deactivatedUsersOnly'
+          value: 'deactivated'
         }]
       }],
       value: []

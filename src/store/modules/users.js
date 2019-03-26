@@ -8,10 +8,10 @@ const users = {
     totalUsersCount: 0,
     currentPage: 1,
     filters: {
-      localUsersOnly: false,
-      externalUsersOnly: false,
-      activeUsersOnly: false,
-      deactivatedUsersOnly: false
+      local: false,
+      external: false,
+      active: false,
+      deactivated: false
     }
   },
   mutations: {
@@ -48,7 +48,8 @@ const users = {
   },
   actions: {
     async FetchUsers({ commit, state, getters }, { page }) {
-      const response = await fetchUsers(state.filters, getters.authHost, getters.token, page)
+      const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
+      const response = await fetchUsers(filters, getters.authHost, getters.token, page)
 
       commit('SET_LOADING', true)
 
@@ -67,7 +68,8 @@ const users = {
         commit('SET_LOADING', true)
         commit('SET_SEARCH_QUERY', query)
 
-        const response = await searchUsers(query, state.filters, getters.authHost, getters.token, page)
+        const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
+        const response = await searchUsers(query, filters, getters.authHost, getters.token, page)
 
         loadUsers(commit, page, response.data)
       }
