@@ -6,6 +6,9 @@ import storeConfig from './store.conf'
 import { cloneDeep } from 'lodash'
 
 config.mocks["$t"] = () => {}
+config.mocks["$i18n"] = {
+  t: () => {}
+}
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -23,7 +26,10 @@ describe('Search and filter users', () => {
   it('fetches initial list of users', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      stubs: {
+        transition: false
+      }
     })
 
     await wrapper.vm.$nextTick()
@@ -34,7 +40,10 @@ describe('Search and filter users', () => {
   it('starts a search on input change', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      stubs: {
+        transition: false
+      }
     })
 
     wrapper.vm.handleDebounceSearchInput = (query) => {
@@ -44,7 +53,7 @@ describe('Search and filter users', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.usersCount).toEqual(3)
 
-    const input = wrapper.find('input.el-input__inner')
+    const input = wrapper.find('.search input.el-input__inner')
     input.element.value = 'bob'
     input.trigger('input')
     await wrapper.vm.$nextTick()
@@ -61,7 +70,10 @@ describe('Search and filter users', () => {
   it('shows local users on checkbox click', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      stubs: {
+        transition: false
+      }
     })
 
     await wrapper.vm.$nextTick()
@@ -82,7 +94,10 @@ describe('Search and filter users', () => {
   it('shows local users with search query', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      stubs: {
+        transition: false
+      }
     })
 
     wrapper.vm.handleDebounceSearchInput = (query) => {
@@ -131,7 +146,10 @@ describe('Users actions', () => {
   it('grants admin and moderator rights to a local user', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      stubs: {
+        transition: false
+      }
     })
     await wrapper.vm.$nextTick()
 
@@ -153,7 +171,10 @@ describe('Users actions', () => {
   it('does not show actions that grant admin and moderator rights to external users', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      stubs: {
+        transition: false
+      }
     })
     await wrapper.vm.$nextTick()
 
@@ -167,7 +188,10 @@ describe('Users actions', () => {
   it('toggles activation status', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      stubs: {
+        transition: false
+      }
     })
     await wrapper.vm.$nextTick()
 
@@ -185,7 +209,10 @@ describe('Users actions', () => {
   it('deactivates user when Delete action is called', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      stubs: {
+        transition: false
+      }
     })
     await wrapper.vm.$nextTick()
 
@@ -203,7 +230,10 @@ describe('Users actions', () => {
   it('adds tags', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      stubs: {
+        transition: false
+      }
     })
     await wrapper.vm.$nextTick()
 
@@ -227,7 +257,10 @@ describe('Users actions', () => {
   it('deletes tags', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      stubs: {
+        transition: false
+      }
     })
     await wrapper.vm.$nextTick()
 
@@ -245,7 +278,10 @@ describe('Users actions', () => {
   it('shows check icon when tag is added', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      stubs: {
+        transition: false
+      }
     })
     await wrapper.vm.$nextTick()
 
@@ -261,7 +297,10 @@ describe('Users actions', () => {
   it('does not change user index in array when tag is added', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      stubs: {
+        transition: false
+      }
     })
     await wrapper.vm.$nextTick()
 
