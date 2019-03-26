@@ -7,15 +7,13 @@
     multiple
     class="select-field"
     @change="toggleFilters">
-    <el-option-group
-      v-for="group in filters"
-      :key="group.label"
-      :label="group.label">
-      <el-option
-        v-for="item in group.options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"/>
+    <el-option-group :label="$t('usersFilter.byUserType')">
+      <el-option value="local">{{ $t('usersFilter.local') }}</el-option>
+      <el-option value="external">{{ $t('usersFilter.external') }}</el-option>
+    </el-option-group>
+    <el-option-group :label="$t('usersFilter.byStatus')">
+      <el-option value="active">{{ $t('usersFilter.active') }}</el-option>
+      <el-option value="deactivated">{{ $t('usersFilter.deactivated') }}</el-option>
     </el-option-group>
   </el-select>
 </template>
@@ -24,25 +22,6 @@
 export default {
   data() {
     return {
-      filters: [{
-        label: this.$i18n.t('usersFilter.byUserType'),
-        options: [{
-          label: this.$i18n.t('usersFilter.local'),
-          value: 'local'
-        }, {
-          label: this.$i18n.t('usersFilter.external'),
-          value: 'external'
-        }]
-      }, {
-        label: this.$i18n.t('usersFilter.byStatus'),
-        options: [{
-          label: this.$i18n.t('usersFilter.active'),
-          value: 'active'
-        }, {
-          label: this.$i18n.t('usersFilter.deactivated'),
-          value: 'deactivated'
-        }]
-      }],
       value: []
     }
   },
