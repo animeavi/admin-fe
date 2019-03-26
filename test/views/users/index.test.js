@@ -6,9 +6,6 @@ import storeConfig from './store.conf'
 import { cloneDeep } from 'lodash'
 
 config.mocks["$t"] = () => {}
-config.mocks["$i18n"] = {
-  t: () => {}
-}
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -27,9 +24,7 @@ describe('Search and filter users', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      stubs: {
-        transition: false
-      }
+      stubs: ['users-filter']
     })
 
     await wrapper.vm.$nextTick()
@@ -41,9 +36,7 @@ describe('Search and filter users', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      stubs: {
-        transition: false
-      }
+      stubs: ['users-filter']
     })
 
     wrapper.vm.handleDebounceSearchInput = (query) => {
@@ -52,7 +45,6 @@ describe('Search and filter users', () => {
 
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.usersCount).toEqual(3)
-
     const input = wrapper.find('.search input.el-input__inner')
     input.element.value = 'bob'
     input.trigger('input')
@@ -61,72 +53,6 @@ describe('Search and filter users', () => {
 
     input.element.value = ''
     input.trigger('input')
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.usersCount).toEqual(3)
-
-    done()
-  })
-
-  it('shows local users on checkbox click', async (done) => {
-    const wrapper = mount(Users, {
-      store,
-      localVue,
-      stubs: {
-        transition: false
-      }
-    })
-
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.usersCount).toEqual(3)
-
-    const input = wrapper.find('input.el-checkbox__original')
-    input.trigger('click')
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.usersCount).toEqual(2)
-
-    input.trigger('click')
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.usersCount).toEqual(3)
-
-    done()
-  })
-
-  it('shows local users with search query', async (done) => {
-    const wrapper = mount(Users, {
-      store,
-      localVue,
-      stubs: {
-        transition: false
-      }
-    })
-
-    wrapper.vm.handleDebounceSearchInput = (query) => {
-      store.dispatch('SearchUsers', { query, page: 1 })
-    }
-
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.usersCount).toEqual(3)
-
-    const checkboxInput = wrapper.find('input.el-checkbox__original')
-    checkboxInput.trigger('click')
-    await wrapper.vm.$nextTick()
-    const searchInput = wrapper.find('input.el-input__inner')
-    searchInput.element.value = 'bob'
-    searchInput.trigger('input')
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.usersCount).toEqual(0)
-
-    searchInput.element.value = 'allis'
-    searchInput.trigger('input')
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.usersCount).toEqual(1)
-
-    searchInput.element.value = ''
-    searchInput.trigger('input')
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.usersCount).toEqual(2)
-
-    checkboxInput.trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.usersCount).toEqual(3)
 
@@ -147,9 +73,7 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      stubs: {
-        transition: false
-      }
+      stubs: ['users-filter']
     })
     await wrapper.vm.$nextTick()
 
@@ -172,9 +96,7 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      stubs: {
-        transition: false
-      }
+      stubs: ['users-filter']
     })
     await wrapper.vm.$nextTick()
 
@@ -189,9 +111,7 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      stubs: {
-        transition: false
-      }
+      stubs: ['users-filter']
     })
     await wrapper.vm.$nextTick()
 
@@ -210,9 +130,7 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      stubs: {
-        transition: false
-      }
+      stubs: ['users-filter']
     })
     await wrapper.vm.$nextTick()
 
@@ -231,9 +149,7 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      stubs: {
-        transition: false
-      }
+      stubs: ['users-filter']
     })
     await wrapper.vm.$nextTick()
 
@@ -258,9 +174,7 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      stubs: {
-        transition: false
-      }
+      stubs: ['users-filter']
     })
     await wrapper.vm.$nextTick()
 
@@ -279,9 +193,7 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      stubs: {
-        transition: false
-      }
+      stubs: ['users-filter']
     })
     await wrapper.vm.$nextTick()
 
@@ -298,9 +210,7 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      stubs: {
-        transition: false
-      }
+      stubs: ['users-filter']
     })
     await wrapper.vm.$nextTick()
 
