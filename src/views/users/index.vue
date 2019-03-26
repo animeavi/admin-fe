@@ -37,41 +37,65 @@
               <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-if="showAdminAction(scope.row)" @click.native="toggleUserRight(scope.row, 'admin')">
+              <el-dropdown-item
+                v-if="showAdminAction(scope.row)"
+                @click.native="toggleUserRight(scope.row, 'admin')">
                 {{ scope.row.roles.admin ? $t('users.revokeAdmin') : $t('users.grantAdmin') }}
               </el-dropdown-item>
-              <el-dropdown-item v-if="showAdminAction(scope.row)" @click.native="toggleUserRight(scope.row, 'moderator')">
+              <el-dropdown-item
+                v-if="showAdminAction(scope.row)"
+                @click.native="toggleUserRight(scope.row, 'moderator')">
                 {{ scope.row.roles.moderator ? $t('users.revokeModerator') : $t('users.grantModerator') }}
               </el-dropdown-item>
-              <el-dropdown-item v-if="showDeactivatedButton(scope.row.id)" :divided="showAdminAction(scope.row)" @click.native="handleDeactivation(scope.row)">
+              <el-dropdown-item
+                v-if="showDeactivatedButton(scope.row.id)"
+                :divided="showAdminAction(scope.row)"
+                @click.native="handleDeactivation(scope.row)">
                 {{ scope.row.deactivated ? $t('users.activateAccount') : $t('users.deactivateAccount') }}
               </el-dropdown-item>
-              <el-dropdown-item v-if="showDeactivatedButton(scope.row.id)" @click.native="handleDeletion(scope.row)">
+              <el-dropdown-item
+                v-if="showDeactivatedButton(scope.row.id)"
+                @click.native="handleDeletion(scope.row)">
                 {{ $t('users.deleteAccount') }}
               </el-dropdown-item>
-              <el-dropdown-item :divided="showAdminAction(scope.row)" @click.native="toggleTag(scope.row, 'force_nsfw')">
+              <el-dropdown-item
+                :divided="showAdminAction(scope.row)"
+                :class="{ 'active-tag': scope.row.tags.includes('force_nsfw') }"
+                @click.native="toggleTag(scope.row, 'force_nsfw')">
                 {{ $t('users.forceNsfw') }}
-                <i v-if="scope.row.tags.includes('force_nsfw')" class="el-icon-circle-check"/>
+                <i v-if="scope.row.tags.includes('force_nsfw')" class="el-icon-check"/>
               </el-dropdown-item>
-              <el-dropdown-item @click.native="toggleTag(scope.row, 'strip_media')">
+              <el-dropdown-item
+                :class="{ 'active-tag': scope.row.tags.includes('strip_media') }"
+                @click.native="toggleTag(scope.row, 'strip_media')">
                 {{ $t('users.stripMedia') }}
-                <i v-if="scope.row.tags.includes('strip_media')" class="el-icon-circle-check"/>
+                <i v-if="scope.row.tags.includes('strip_media')" class="el-icon-check"/>
               </el-dropdown-item>
-              <el-dropdown-item @click.native="toggleTag(scope.row, 'force_unlisted')">
+              <el-dropdown-item
+                :class="{ 'active-tag': scope.row.tags.includes('force_unlisted') }"
+                @click.native="toggleTag(scope.row, 'force_unlisted')">
                 {{ $t('users.forceUnlisted') }}
-                <i v-if="scope.row.tags.includes('force_unlisted')" class="el-icon-circle-check"/>
+                <i v-if="scope.row.tags.includes('force_unlisted')" class="el-icon-check"/>
               </el-dropdown-item>
-              <el-dropdown-item @click.native="toggleTag(scope.row, 'sandbox')">
+              <el-dropdown-item
+                :class="{ 'active-tag': scope.row.tags.includes('sandbox') }"
+                @click.native="toggleTag(scope.row, 'sandbox')">
                 {{ $t('users.sandbox') }}
-                <i v-if="scope.row.tags.includes('sandbox')" class="el-icon-circle-check"/>
+                <i v-if="scope.row.tags.includes('sandbox')" class="el-icon-check"/>
               </el-dropdown-item>
-              <el-dropdown-item v-if="scope.row.local" @click.native="toggleTag(scope.row, 'disable_remote_subscription')">
+              <el-dropdown-item
+                v-if="scope.row.local"
+                :class="{ 'active-tag': scope.row.tags.includes('disable_remote_subscription') }"
+                @click.native="toggleTag(scope.row, 'disable_remote_subscription')">
                 {{ $t('users.disableRemoteSubscription') }}
-                <i v-if="scope.row.tags.includes('disable_remote_subscription')" class="el-icon-circle-check"/>
+                <i v-if="scope.row.tags.includes('disable_remote_subscription')" class="el-icon-check"/>
               </el-dropdown-item>
-              <el-dropdown-item v-if="scope.row.local" @click.native="toggleTag(scope.row, 'disable_any_subscription')">
+              <el-dropdown-item
+                v-if="scope.row.local"
+                :class="{ 'active-tag': scope.row.tags.includes('disable_any_subscription') }"
+                @click.native="toggleTag(scope.row, 'disable_any_subscription')">
                 {{ $t('users.disableAnySubscription') }}
-                <i v-if="scope.row.tags.includes('disable_any_subscription')" class="el-icon-circle-check"/>
+                <i v-if="scope.row.tags.includes('disable_any_subscription')" class="el-icon-check"/>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -172,6 +196,15 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss' scoped>
+.active-tag {
+  color: #409EFF;
+  font-weight: 700;
+  .el-icon-check {
+    color: #409EFF;
+    float: right;
+    margin: 7px 0 0 15px;
+  }
+}
 .users-container {
   h1 {
     margin: 22px 0 0 15px;
