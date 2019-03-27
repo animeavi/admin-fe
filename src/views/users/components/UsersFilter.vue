@@ -34,7 +34,25 @@ export default {
     }
   },
   methods: {
+    removeOppositeFilters() {
+      const currentFilters = this.$data.value.slice()
+      const indexOfLocal = currentFilters.indexOf('local')
+      const indexOfExternal = currentFilters.indexOf('external')
+      const indexOfActive = currentFilters.indexOf('active')
+      const indexOfDeactivated = currentFilters.indexOf('deactivated')
+      if (currentFilters.length === 4) {
+        return []
+      } else if (indexOfLocal > -1 && indexOfExternal > -1) {
+        const filterToRemove = indexOfLocal > indexOfExternal ? indexOfExternal : indexOfLocal
+        currentFilters.splice(filterToRemove, 1)
+      } else if (indexOfActive > -1 && indexOfDeactivated > -1) {
+        const filterToRemove = indexOfActive > indexOfDeactivated ? indexOfDeactivated : indexOfActive
+        currentFilters.splice(filterToRemove, 1)
+      }
+      return currentFilters
+    },
     toggleFilters() {
+      this.$data.value = this.removeOppositeFilters()
       const currentFilters = this.$data.value.reduce((acc, filter) => ({ ...acc, [filter]: true }), {})
       this.$store.dispatch('ToggleUsersFilter', currentFilters)
     }
