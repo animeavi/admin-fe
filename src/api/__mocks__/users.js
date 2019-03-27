@@ -9,7 +9,7 @@ const filterUsers = (str) => {
   if (filters.length === 0) {
     return users
   }
-  return filters.reduce((filter, acc) => {
+  return filters.reduce((acc, filter) => {
     const filteredUsers = users.filter(user => user[filter])
     return [...acc, ...filteredUsers]
   }, [])
