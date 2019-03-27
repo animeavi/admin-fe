@@ -35,12 +35,13 @@ export default {
   },
   methods: {
     removeOppositeFilters() {
+      const filtersQuantity = Object.keys(this.$store.state.users.filters).length
       const currentFilters = this.$data.value.slice()
       const indexOfLocal = currentFilters.indexOf('local')
       const indexOfExternal = currentFilters.indexOf('external')
       const indexOfActive = currentFilters.indexOf('active')
       const indexOfDeactivated = currentFilters.indexOf('deactivated')
-      if (currentFilters.length === 4) {
+      if (currentFilters.length === filtersQuantity) {
         return []
       } else if (indexOfLocal > -1 && indexOfExternal > -1) {
         const filterToRemove = indexOfLocal > indexOfExternal ? indexOfExternal : indexOfLocal
