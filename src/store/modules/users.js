@@ -76,10 +76,10 @@ const users = {
     },
     async ToggleUsersFilter({ commit, dispatch, state }, filters) {
       const defaultFilters = {
-        localUsersOnly: false,
-        externalUsersOnly: false,
-        activeUsersOnly: false,
-        deactivatedUsersOnly: false
+        local: false,
+        external: false,
+        active: false,
+        deactivated: false
       }
       const currentFilters = { ...defaultFilters, ...filters }
       commit('SET_USERS_FILTERS', currentFilters)
