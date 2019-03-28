@@ -7,6 +7,7 @@ import { cloneDeep } from 'lodash'
 import flushPromises from 'flush-promises'
 
 config.mocks["$t"] = () => {}
+config.stubs.transition = false
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -26,67 +27,56 @@ describe('Filters users', () => {
   it('shows local users on "Local" filter click', async (done) => {
     const wrapper = mount(Filters, {
       store,
-      localVue,
-      stubs: {
-        transition: false
-      }
+      localVue
     })
 
-    let usersLength = store.state.users.totalUsersCount
-    expect(usersLength).toEqual(3)
+    expect(store.state.users.totalUsersCount).toEqual(3)
 
     const filter = wrapper.find(`li.el-select-dropdown__item:nth-child(${1})`)
     filter.trigger('click')
     await wrapper.vm.$nextTick()
-    usersLength = store.state.users.totalUsersCount
-    expect(usersLength).toEqual(2)
+    expect(store.state.users.totalUsersCount).toEqual(2)
 
     filter.trigger('click')
     await wrapper.vm.$nextTick()
-    usersLength = store.state.users.totalUsersCount
-    expect(usersLength).toEqual(2)
+    expect(store.state.users.totalUsersCount).toEqual(2)
 
     done()
   })
 
-  // it('shows local users with search query', async (done) => {
-  //   const wrapper = mount(Users, {
-  //     store,
-  //     localVue,
-  //     stubs: ['users-filter']
-  //   })
+  it('shows local users with search query', async (done) => {
+    expect(store.state.users.totalUsersCount).toEqual(3)
 
-  //   wrapper.vm.handleDebounceSearchInput = (query) => {
-  //     store.dispatch('SearchUsers', { query, page: 1 })
-  //   }
+    store.dispatch('ToggleUsersFilter', { active: true })
+    await flushPromises()
+    store.dispatch('SearchUsers', { query: 'john', page: 1 })
+    await flushPromises()
+    expect(store.state.users.totalUsersCount).toEqual(0)
 
-  //   await wrapper.vm.$nextTick()
-  //   expect(wrapper.vm.usersCount).toEqual(3)
+    store.dispatch('SearchUsers', { query: 'allis', page: 1 })
+    await flushPromises()
+    expect(store.state.users.totalUsersCount).toEqual(1)
 
-  //   const checkboxInput = wrapper.find('input.el-checkbox__original')
-  //   checkboxInput.trigger('click')
-  //   await wrapper.vm.$nextTick()
-  //   const searchInput = wrapper.find('input.el-input__inner')
-  //   searchInput.element.value = 'bob'
-  //   searchInput.trigger('input')
-  //   await wrapper.vm.$nextTick()
-  //   expect(wrapper.vm.usersCount).toEqual(0)
+    store.dispatch('SearchUsers', { query: '', page: 1 })
+    await flushPromises()
+    expect(store.state.users.totalUsersCount).toEqual(2)
 
-  //   searchInput.element.value = 'allis'
-  //   searchInput.trigger('input')
-  //   await wrapper.vm.$nextTick()
-  //   expect(wrapper.vm.usersCount).toEqual(1)
+    done()
+  })
 
-  //   searchInput.element.value = ''
-  //   searchInput.trigger('input')
-  //   await wrapper.vm.$nextTick()
-  //   expect(wrapper.vm.usersCount).toEqual(2)
+  it('applies two filters', async (done) => {
+    expect(store.state.users.totalUsersCount).toEqual(3)
 
-  //   checkboxInput.trigger('click')
-  //   await wrapper.vm.$nextTick()
-  //   expect(wrapper.vm.usersCount).toEqual(3)
+    store.dispatch('ToggleUsersFilter', { active: true, local: true })
+    await flushPromises()
+    expect(store.state.users.totalUsersCount).toEqual(1)
+    expect(store.state.users.fetchedUsers[0].nickname).toEqual('allis')
 
-  //   done()
-  // })
+    store.dispatch('ToggleUsersFilter', { deactivated: true, external: true })
+    await flushPromises()
+    expect(store.state.users.totalUsersCount).toEqual(0)
+
+    done()
+  })
 
 })
