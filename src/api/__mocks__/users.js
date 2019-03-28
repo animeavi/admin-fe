@@ -9,10 +9,15 @@ const filterUsers = (str) => {
   if (filters.length === 0) {
     return users
   }
-  return filters.reduce((acc, filter) => {
-    const filteredUsers = users.filter(user => user[filter])
-    return [...acc, ...filteredUsers]
-  }, [])
+  const applyFilters = (acc, filters, users) => {
+    if (filters.length === 0) {
+      return acc
+    }
+    const filteredUsers = users.filter(user => user[filters[0]])
+    const newAcc = [...filteredUsers]
+    return applyFilters(newAcc, filters.slice(1), filteredUsers)
+  }
+  return applyFilters([], filters, users)
 }
 
 export async function fetchUsers(filters, authHost, token, page = 1) {
