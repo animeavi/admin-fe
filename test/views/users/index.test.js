@@ -6,6 +6,8 @@ import storeConfig from './store.conf'
 import { cloneDeep } from 'lodash'
 
 config.mocks["$t"] = () => {}
+config.stubs['users-filter'] = '<div />'
+
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -23,8 +25,7 @@ describe('Search and filter users', () => {
   it('fetches initial list of users', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue,
-      stubs: ['users-filter']
+      localVue
     })
 
     await wrapper.vm.$nextTick()
@@ -35,8 +36,7 @@ describe('Search and filter users', () => {
   it('starts a search on input change', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue,
-      stubs: ['users-filter']
+      localVue
     })
 
     wrapper.vm.handleDebounceSearchInput = (query) => {
@@ -72,8 +72,7 @@ describe('Users actions', () => {
   it('grants admin and moderator rights to a local user', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue,
-      stubs: ['users-filter']
+      localVue
     })
     await wrapper.vm.$nextTick()
 
@@ -95,8 +94,7 @@ describe('Users actions', () => {
   it('does not show actions that grant admin and moderator rights to external users', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue,
-      stubs: ['users-filter']
+      localVue
     })
     await wrapper.vm.$nextTick()
 
@@ -110,8 +108,7 @@ describe('Users actions', () => {
   it('toggles activation status', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue,
-      stubs: ['users-filter']
+      localVue
     })
     await wrapper.vm.$nextTick()
 
@@ -129,8 +126,7 @@ describe('Users actions', () => {
   it('deactivates user when Delete action is called', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue,
-      stubs: ['users-filter']
+      localVue
     })
     await wrapper.vm.$nextTick()
 
@@ -148,8 +144,7 @@ describe('Users actions', () => {
   it('adds tags', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue,
-      stubs: ['users-filter']
+      localVue
     })
     await wrapper.vm.$nextTick()
 
@@ -173,8 +168,7 @@ describe('Users actions', () => {
   it('deletes tags', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue,
-      stubs: ['users-filter']
+      localVue
     })
     await wrapper.vm.$nextTick()
 
@@ -192,8 +186,7 @@ describe('Users actions', () => {
   it('shows check icon when tag is added', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue,
-      stubs: ['users-filter']
+      localVue
     })
     await wrapper.vm.$nextTick()
 
@@ -209,8 +202,7 @@ describe('Users actions', () => {
   it('does not change user index in array when tag is added', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue,
-      stubs: ['users-filter']
+      localVue
     })
     await wrapper.vm.$nextTick()
 
