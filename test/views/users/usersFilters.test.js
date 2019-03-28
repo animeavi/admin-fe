@@ -24,7 +24,7 @@ describe('Filters users', () => {
     await flushPromises()
   })
 
-  it('shows local users on "Local" filter click', async (done) => {
+  it('shows local users when "Local" filter is applied', async (done) => {
     const wrapper = mount(Filters, {
       store,
       localVue
@@ -34,17 +34,13 @@ describe('Filters users', () => {
 
     const filter = wrapper.find(`li.el-select-dropdown__item:nth-child(${1})`)
     filter.trigger('click')
-    await wrapper.vm.$nextTick()
-    expect(store.state.users.totalUsersCount).toEqual(2)
-
-    filter.trigger('click')
-    await wrapper.vm.$nextTick()
+    await flushPromises()
     expect(store.state.users.totalUsersCount).toEqual(2)
 
     done()
   })
 
-  it('shows local users with search query', async (done) => {
+  it('shows users with applied filter and search query', async (done) => {
     expect(store.state.users.totalUsersCount).toEqual(3)
 
     store.dispatch('ToggleUsersFilter', { active: true })
@@ -79,4 +75,17 @@ describe('Filters users', () => {
     done()
   })
 
+  it('shows all users after removing filters', async (done) => {
+    expect(store.state.users.totalUsersCount).toEqual(3)
+
+    store.dispatch('ToggleUsersFilter', { deactivated: true })
+    await flushPromises()
+    expect(store.state.users.totalUsersCount).toEqual(1)
+
+    store.dispatch('ToggleUsersFilter', {})
+    await flushPromises()
+    expect(store.state.users.totalUsersCount).toEqual(3)
+
+    done()
+  })
 })
