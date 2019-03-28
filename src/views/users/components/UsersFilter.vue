@@ -1,7 +1,6 @@
 <template>
   <el-select
     v-model="value"
-    :collapse-tags="isMobile"
     :clearable="isDesktop"
     :placeholder="$t('usersFilter.inputPlaceholder')"
     multiple
@@ -28,9 +27,6 @@ export default {
   computed: {
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
-    },
-    isMobile() {
-      return this.$store.state.app.device === 'mobile'
     }
   },
   methods: {
