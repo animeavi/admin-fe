@@ -7,7 +7,12 @@ const users = {
     searchQuery: '',
     totalUsersCount: 0,
     currentPage: 1,
-    showLocalUsersOnly: false
+    filters: {
+      local: false,
+      external: false,
+      active: false,
+      deactivated: false
+    }
   },
   mutations: {
     SET_USERS: (state, users) => {
@@ -37,13 +42,14 @@ const users = {
     SET_SEARCH_QUERY: (state, query) => {
       state.searchQuery = query
     },
-    SET_LOCAL_USERS_FILTER: (state, value) => {
-      state.showLocalUsersOnly = value
+    SET_USERS_FILTERS: (state, filters) => {
+      state.filters = filters
     }
   },
   actions: {
     async FetchUsers({ commit, state, getters }, { page }) {
-      const response = await fetchUsers(state.showLocalUsersOnly, getters.authHost, getters.token, page)
+      const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
+      const response = await fetchUsers(filters, getters.authHost, getters.token, page)
 
       commit('SET_LOADING', true)
 
@@ -62,13 +68,25 @@ const users = {
         commit('SET_LOADING', true)
         commit('SET_SEARCH_QUERY', query)
 
-        const response = await searchUsers(query, state.showLocalUsersOnly, getters.authHost, getters.token, page)
+        const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
+        const response = await searchUsers(query, filters, getters.authHost, getters.token, page)
 
         loadUsers(commit, page, response.data)
       }
     },
-    async ToggleLocalUsersFilter({ commit, dispatch, state }, value) {
-      commit('SET_LOCAL_USERS_FILTER', value)
+    async ToggleUsersFilter({ commit, dispatch, state }, filters) {
+      const defaultFilters = {
+        local: false,
+        external: false,
+        active: false,
+        deactivated: false
+      }
+      const currentFilters = { ...defaultFilters, ...filters }
+      commit('SET_USERS_FILTERS', currentFilters)
+      dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
+    },
+    async ClearFilters({ commit, dispatch, state }) {
+      commit('CLEAR_USERS_FILTERS')
       dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
     },
     async ToggleRight({ commit, getters }, { user, right }) {
