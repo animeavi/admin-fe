@@ -2,10 +2,10 @@ import request from '@/utils/request'
 import { getToken } from '@/utils/auth'
 import { baseName } from './utils'
 
-export async function fetchUsers(showLocalUsersOnly, authHost, token, page = 1) {
+export async function fetchUsers(filters, authHost, token, page = 1) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/users?page=${page}&local_only=${showLocalUsersOnly}`,
+    url: `/api/pleroma/admin/users?page=${page}&filters=${filters}`,
     method: 'get',
     headers: authHeaders(token)
   })
@@ -20,10 +20,10 @@ export async function toggleUserActivation(nickname, authHost, token) {
   })
 }
 
-export async function searchUsers(query, showLocalUsersOnly, authHost, token, page = 1) {
+export async function searchUsers(query, filters, authHost, token, page = 1) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/users?query=${query}&page=${page}&local_only=${showLocalUsersOnly}`,
+    url: `/api/pleroma/admin/users?query=${query}&page=${page}&filters=${filters}`,
     method: 'get',
     headers: authHeaders(token)
   })

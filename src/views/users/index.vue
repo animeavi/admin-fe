@@ -2,7 +2,7 @@
   <div class="users-container">
     <h1>{{ $t('users.users') }}</h1>
     <div class="search-container">
-      <el-checkbox :value="showLocalUsersOnly" @change="handleLocalUsersCheckbox">{{ $t('users.localUsersOnly') }}</el-checkbox>
+      <users-filter/>
       <el-input :placeholder="$t('users.search')" class="search" @input="handleDebounceSearchInput"/>
     </div>
     <el-table v-loading="loading" :data="users" style="width: 100%">
@@ -37,41 +37,65 @@
               <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-if="showAdminAction(scope.row)" @click.native="toggleUserRight(scope.row, 'admin')">
+              <el-dropdown-item
+                v-if="showAdminAction(scope.row)"
+                @click.native="toggleUserRight(scope.row, 'admin')">
                 {{ scope.row.roles.admin ? $t('users.revokeAdmin') : $t('users.grantAdmin') }}
               </el-dropdown-item>
-              <el-dropdown-item v-if="showAdminAction(scope.row)" @click.native="toggleUserRight(scope.row, 'moderator')">
+              <el-dropdown-item
+                v-if="showAdminAction(scope.row)"
+                @click.native="toggleUserRight(scope.row, 'moderator')">
                 {{ scope.row.roles.moderator ? $t('users.revokeModerator') : $t('users.grantModerator') }}
               </el-dropdown-item>
-              <el-dropdown-item v-if="showDeactivatedButton(scope.row.id)" :divided="showAdminAction(scope.row)" @click.native="handleDeactivation(scope.row)">
+              <el-dropdown-item
+                v-if="showDeactivatedButton(scope.row.id)"
+                :divided="showAdminAction(scope.row)"
+                @click.native="handleDeactivation(scope.row)">
                 {{ scope.row.deactivated ? $t('users.activateAccount') : $t('users.deactivateAccount') }}
               </el-dropdown-item>
-              <el-dropdown-item v-if="showDeactivatedButton(scope.row.id)" @click.native="handleDeletion(scope.row)">
+              <el-dropdown-item
+                v-if="showDeactivatedButton(scope.row.id)"
+                @click.native="handleDeletion(scope.row)">
                 {{ $t('users.deleteAccount') }}
               </el-dropdown-item>
-              <el-dropdown-item :divided="showAdminAction(scope.row)" @click.native="toggleTag(scope.row, 'force_nsfw')">
+              <el-dropdown-item
+                :divided="showAdminAction(scope.row)"
+                :class="{ 'active-tag': scope.row.tags.includes('force_nsfw') }"
+                @click.native="toggleTag(scope.row, 'force_nsfw')">
                 {{ $t('users.forceNsfw') }}
-                <i v-if="scope.row.tags.includes('force_nsfw')" class="el-icon-circle-check"/>
+                <i v-if="scope.row.tags.includes('force_nsfw')" class="el-icon-check"/>
               </el-dropdown-item>
-              <el-dropdown-item @click.native="toggleTag(scope.row, 'strip_media')">
+              <el-dropdown-item
+                :class="{ 'active-tag': scope.row.tags.includes('strip_media') }"
+                @click.native="toggleTag(scope.row, 'strip_media')">
                 {{ $t('users.stripMedia') }}
-                <i v-if="scope.row.tags.includes('strip_media')" class="el-icon-circle-check"/>
+                <i v-if="scope.row.tags.includes('strip_media')" class="el-icon-check"/>
               </el-dropdown-item>
-              <el-dropdown-item @click.native="toggleTag(scope.row, 'force_unlisted')">
+              <el-dropdown-item
+                :class="{ 'active-tag': scope.row.tags.includes('force_unlisted') }"
+                @click.native="toggleTag(scope.row, 'force_unlisted')">
                 {{ $t('users.forceUnlisted') }}
-                <i v-if="scope.row.tags.includes('force_unlisted')" class="el-icon-circle-check"/>
+                <i v-if="scope.row.tags.includes('force_unlisted')" class="el-icon-check"/>
               </el-dropdown-item>
-              <el-dropdown-item @click.native="toggleTag(scope.row, 'sandbox')">
+              <el-dropdown-item
+                :class="{ 'active-tag': scope.row.tags.includes('sandbox') }"
+                @click.native="toggleTag(scope.row, 'sandbox')">
                 {{ $t('users.sandbox') }}
-                <i v-if="scope.row.tags.includes('sandbox')" class="el-icon-circle-check"/>
+                <i v-if="scope.row.tags.includes('sandbox')" class="el-icon-check"/>
               </el-dropdown-item>
-              <el-dropdown-item v-if="scope.row.local" @click.native="toggleTag(scope.row, 'disable_remote_subscription')">
+              <el-dropdown-item
+                v-if="scope.row.local"
+                :class="{ 'active-tag': scope.row.tags.includes('disable_remote_subscription') }"
+                @click.native="toggleTag(scope.row, 'disable_remote_subscription')">
                 {{ $t('users.disableRemoteSubscription') }}
-                <i v-if="scope.row.tags.includes('disable_remote_subscription')" class="el-icon-circle-check"/>
+                <i v-if="scope.row.tags.includes('disable_remote_subscription')" class="el-icon-check"/>
               </el-dropdown-item>
-              <el-dropdown-item v-if="scope.row.local" @click.native="toggleTag(scope.row, 'disable_any_subscription')">
+              <el-dropdown-item
+                v-if="scope.row.local"
+                :class="{ 'active-tag': scope.row.tags.includes('disable_any_subscription') }"
+                @click.native="toggleTag(scope.row, 'disable_any_subscription')">
                 {{ $t('users.disableAnySubscription') }}
-                <i v-if="scope.row.tags.includes('disable_any_subscription')" class="el-icon-circle-check"/>
+                <i v-if="scope.row.tags.includes('disable_any_subscription')" class="el-icon-check"/>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -93,9 +117,13 @@
 
 <script>
 import debounce from 'lodash.debounce'
+import UsersFilter from './components/UsersFilter'
 
 export default {
   name: 'Users',
+  components: {
+    UsersFilter
+  },
   computed: {
     loading() {
       return this.$store.state.users.loading
@@ -111,9 +139,6 @@ export default {
     },
     currentPage() {
       return this.$store.state.users.currentPage
-    },
-    showLocalUsersOnly() {
-      return this.$store.state.users.showLocalUsersOnly
     },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
@@ -151,9 +176,6 @@ export default {
     showAdminAction({ local, id }) {
       return local && this.showDeactivatedButton(id)
     },
-    handleLocalUsersCheckbox(e) {
-      this.$store.dispatch('ToggleLocalUsersFilter', e)
-    },
     activationIcon(status) {
       return status ? 'el-icon-error' : 'el-icon-success'
     },
@@ -174,9 +196,18 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss' scoped>
+.active-tag {
+  color: #409EFF;
+  font-weight: 700;
+  .el-icon-check {
+    color: #409EFF;
+    float: right;
+    margin: 7px 0 0 15px;
+  }
+}
 .users-container {
   h1 {
-    margin-left: 15px;
+    margin: 22px 0 0 15px;
   }
 
   .pagination {
@@ -185,16 +216,15 @@ export default {
   }
 
   .search {
-    width: 300px;
-    margin-bottom: 21.5px;
-    margin-right: 15px;
+    width: 350px;
     float: right;
   }
   .search-container {
     display: flex;
+    height: 36px;
     justify-content: space-between;
-    align-items: baseline;
-    margin-left: 15px;
+    align-items: center;
+    margin: 22px 15px 22px 15px
   }
 }
 @media
@@ -202,7 +232,7 @@ only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px) {
   .users-container {
     h1 {
-      margin-left: 7px;
+      margin: 7px 10px 7px 10px;
     }
     .el-dropdown-link {
       cursor: pointer;
@@ -212,16 +242,13 @@ only screen and (max-width: 760px),
       font-size: 12px;
     }
     .search {
-      width: 50%;
-      margin-bottom: 21.5px;
-      margin-right: 7px;
-      float: right;
+      width: 100%;
     }
     .search-container {
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-left: 7px;
+      height: 82px;
+      flex-direction: column;
+      margin: 0 10px 7px 10px
     }
     .el-tag {
       width: 30px;
