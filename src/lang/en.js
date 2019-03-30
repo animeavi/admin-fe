@@ -64,7 +64,8 @@ export default {
     clipboardDemo: 'Clipboard',
     i18n: 'I18n',
     externalLink: 'External Link',
-    users: 'Users'
+    users: 'Users',
+    reports: 'Reports'
   },
   navbar: {
     logOut: 'Log Out',
