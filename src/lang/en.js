@@ -199,5 +199,8 @@ export default {
     byStatus: 'By status',
     active: 'Active',
     deactivated: 'Deactivated'
+  },
+  reports: {
+    reports: 'Reports'
   }
 }
