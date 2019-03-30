@@ -28,7 +28,7 @@ export default {
     margin: 22px 0 0 15px;
   }
   .el-timeline {
-    margin: 45px;
+    margin: 45px 45px 45px 19px;
     padding: 0px;
   }
 }
