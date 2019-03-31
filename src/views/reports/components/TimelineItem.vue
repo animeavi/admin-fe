@@ -1,7 +1,10 @@
 <template>
   <el-timeline-item :timestamp="item.timestamp" placement="top" class="timeline-item-container">
     <el-card>
-      <h4>{{ item.header }}</h4>
+      <div class="header-container">
+        <h4>{{ item.header }}</h4>
+        <el-button plain size="small" @click="toggleNoteInput">Reply</el-button>
+      </div>
       <p>{{ item.content }}</p>
       <el-collapse v-model="showNotes">
         <el-collapse-item title="Show notes" name="showNotes">
@@ -13,6 +16,10 @@
             </el-card>
           </div>
         </el-collapse-item>
+        <div class="new-note">
+          <p>New note</p>
+          <el-input v-model="note" :rows="2" type="textarea" autofocus/>
+        </div>
       </el-collapse>
     </el-card>
   </el-timeline-item>
@@ -29,7 +36,12 @@ export default {
   },
   data() {
     return {
-      showNotes: []
+      showNotes: [],
+      note: ''
+    }
+  },
+  methods: {
+    toggleNoteInput() {
     }
   }
 }
@@ -40,7 +52,6 @@ export default {
     padding: 17px 17px 0;
   }
   .el-collapse-item__header {
-    border-bottom: none;
     height: 46px;
   }
   .el-collapse-item__content {
@@ -49,6 +60,19 @@ export default {
   h4 {
     margin: 0;
     height: 17px;
+  }
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .new-note {
+    margin: 14px 0 17px;
+    p {
+      font-size: 13px;
+      font-weight: 500;
+      margin: 13px 0 7px;
+    }
   }
   .note {
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.1);
