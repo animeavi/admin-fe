@@ -16,8 +16,11 @@
             </el-card>
           </div>
         </el-collapse-item>
-        <div class="new-note">
-          <p>New note</p>
+        <div v-show="showNewNoteInput" class="new-note">
+          <div class="header-container">
+            <p>New note</p>
+            <i class="el-icon-close" @click="toggleNoteInput"/>
+          </div>
           <el-input v-model="note" :rows="2" type="textarea" autofocus/>
         </div>
       </el-collapse>
@@ -37,11 +40,13 @@ export default {
   data() {
     return {
       showNotes: [],
+      showNewNoteInput: false,
       note: ''
     }
   },
   methods: {
     toggleNoteInput() {
+      this.$data.showNewNoteInput = !this.$data.showNewNoteInput
     }
   }
 }
@@ -57,6 +62,13 @@ export default {
   .el-collapse-item__content {
     padding-bottom: 7px;
   }
+  .el-icon-arrow-right {
+    margin-right: 6px;
+  }
+  .el-icon-close {
+    padding: 10px 5px 10px 10px;
+    cursor: pointer;
+  }
   h4 {
     margin: 0;
     height: 17px;
@@ -67,10 +79,11 @@ export default {
     align-items: baseline;
   }
   .new-note {
-    margin: 14px 0 17px;
+    margin-bottom: 17px;
     p {
       font-size: 13px;
       font-weight: 500;
+      height: 17px;
       margin: 13px 0 7px;
     }
   }
