@@ -3,7 +3,7 @@
     <h1>{{ $t('reports.reports') }}</h1>
     <div class="block">
       <el-timeline class="timeline">
-        <timeline-item v-for="item in reports" :item="item" :key="item.id"/>
+        <timeline-item v-loading="loading" v-for="item in reports" :item="item" :key="item.id"/>
       </el-timeline>
     </div>
   </div>
@@ -15,8 +15,26 @@ import TimelineItem from './components/TimelineItem'
 export default {
   components: { TimelineItem },
   computed: {
+    loading() {
+      return this.$store.state.users.loading
+    },
     reports() {
       return this.$store.state.reports.fetchedReports
+    }
+  },
+  mounted() {
+    this.$store.dispatch('FetchReports')
+    this.scroll(this.reports)
+  },
+  methods: {
+    scroll(reports) {
+      window.onscroll = () => {
+        const bottomOfWindow = document.documentElement.scrollHeight - document.documentElement.scrollTop === document.documentElement.clientHeight
+
+        if (bottomOfWindow) {
+          this.$store.dispatch('FetchReports')
+        }
+      }
     }
   }
 }
