@@ -22,6 +22,7 @@
             <i class="el-icon-close" @click="toggleNoteInput"/>
           </div>
           <el-input v-model="note" :rows="2" type="textarea" autofocus/>
+          <el-button class="submit-button" plain size="small" @click="addNewNote(item.id)">Submit</el-button>
         </div>
       </el-collapse>
     </el-card>
@@ -47,6 +48,12 @@ export default {
   methods: {
     toggleNoteInput() {
       this.$data.showNewNoteInput = !this.$data.showNewNoteInput
+    },
+    addNewNote(reportId) {
+      const currentUserNickname = this.$store.state.user.name
+      const note = { author: currentUserNickname, text: this.$data.note, timestamp: '2019/04/01' }
+      this.$store.dispatch('AddNote', { reportId, note })
+      this.$data.note = ''
     }
   }
 }
@@ -55,6 +62,9 @@ export default {
 <style rel='stylesheet/scss' lang='scss'>
   .el-card__body {
     padding: 17px 17px 0;
+  }
+  .el-collapse {
+    border-bottom: none;
   }
   .el-collapse-item__header {
     height: 46px;
@@ -79,7 +89,6 @@ export default {
     align-items: baseline;
   }
   .new-note {
-    margin-bottom: 17px;
     p {
       font-size: 13px;
       font-weight: 500;
@@ -93,6 +102,10 @@ export default {
   }
   .note-text {
     margin-bottom: 14px;
+  }
+  .submit-button {
+    display: block;
+    margin: 7px 0 17px auto;
   }
   .timestamp {
     margin: 0;

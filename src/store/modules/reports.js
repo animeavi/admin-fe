@@ -39,8 +39,19 @@ const reports = {
       }
     ]
   },
-  mutations: {},
-  actions: {}
+  mutations: {
+    SET_REPORT: (state, { index, report }) => {
+      state.fetchedReports[index] = report
+    }
+  },
+  actions: {
+    async AddNote({ commit, state, getters }, { reportId, note }) {
+      const report = state.fetchedReports.find(report => report.id === reportId)
+      report.notes = [...report.notes, note]
+      const reportIndex = state.fetchedReports.findIndex(report => report.id === reportId)
+      commit('SET_REPORT', { reportIndex, report })
+    }
+  }
 }
 
 export default reports
