@@ -3,14 +3,14 @@
     <el-card>
       <div class="header-container">
         <h4>{{ item.header }}</h4>
-        <el-button plain size="small" @click="toggleNoteInput">Reply</el-button>
+        <el-button plain size="small" @click="toggleNoteInput">{{ $t('reports.reply') }}</el-button>
       </div>
       <p>{{ item.content }}</p>
       <el-collapse v-model="showNotes">
-        <el-collapse-item title="Show notes" name="showNotes">
+        <el-collapse-item :title="$t('reports.showNotes')" name="showNotes">
           <div v-for="note in item.notes" :key="note.id">
             <el-card class="note">
-              <h4>From {{ note.author }}</h4>
+              <h4>{{ $t('reports.from') }} {{ note.author }}</h4>
               <p class="timestamp">{{ note.timestamp }}</p>
               <p class="note-text">{{ note.text }}</p>
             </el-card>
@@ -18,11 +18,11 @@
         </el-collapse-item>
         <div v-show="showNewNoteInput" class="new-note">
           <div class="header-container">
-            <p>New note</p>
+            <p>{{ $t('reports.newNote') }}</p>
             <i class="el-icon-close" @click="toggleNoteInput"/>
           </div>
           <el-input v-model="note" :rows="2" type="textarea" autofocus/>
-          <el-button class="submit-button" plain size="small" @click="addNewNote(item.id)">Submit</el-button>
+          <el-button class="submit-button" plain size="small" @click="addNewNote(item.id)">{{ $t('reports.submit') }}</el-button>
         </div>
       </el-collapse>
     </el-card>

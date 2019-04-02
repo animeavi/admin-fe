@@ -201,6 +201,11 @@ export default {
     deactivated: 'Deactivated'
   },
   reports: {
-    reports: 'Reports'
+    reports: 'Reports',
+    reply: 'Reply',
+    from: 'From',
+    showNotes: 'Show notes',
+    newNote: 'New note',
+    submit: 'Submit'
   }
 }
