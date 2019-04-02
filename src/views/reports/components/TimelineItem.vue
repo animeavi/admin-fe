@@ -9,10 +9,13 @@
       <el-collapse v-model="showNotes">
         <el-collapse-item :title="$t('reports.showNotes')" name="showNotes">
           <div v-for="note in item.notes" :key="note.id">
-            <el-card class="note">
-              <h4>{{ $t('reports.from') }} {{ note.author }}</h4>
+            <el-card :body-style="{ padding: '6px 14px 0 14px' }" class="note">
+              <div class="header-container">
+                <h4>{{ $t('reports.from') }} {{ note.author }}</h4>
+                <i class="el-icon-close" @click="deleteNote(item.id, note.id)"/>
+              </div>
               <p class="timestamp">{{ note.timestamp }}</p>
-              <p class="note-text">{{ note.text }}</p>
+              <p>{{ note.text }}</p>
             </el-card>
           </div>
         </el-collapse-item>
@@ -54,6 +57,9 @@ export default {
       const note = { author: currentUserNickname, text: this.$data.note, timestamp: '2019/04/01' }
       this.$store.dispatch('AddNote', { reportId, note })
       this.$data.note = ''
+    },
+    deleteNote(reportId, noteId) {
+      this.$store.dispatch('DeleteNote', { reportId, noteId })
     }
   }
 }
@@ -99,9 +105,6 @@ export default {
   .note {
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.1);
     margin-bottom: 10px;
-  }
-  .note-text {
-    margin-bottom: 14px;
   }
   .submit-button {
     display: block;

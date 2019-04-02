@@ -1,4 +1,4 @@
-import { fetchReports } from '@/api/reports'
+import { fetchReports, deleteNote } from '@/api/reports'
 
 const reports = {
   state: {
@@ -33,6 +33,13 @@ const reports = {
     async AddNote({ commit, state, getters }, { reportId, note }) {
       const report = state.fetchedReports.find(report => report.id === reportId)
       report.notes = [...report.notes, note]
+      const reportIndex = state.fetchedReports.findIndex(report => report.id === reportId)
+      commit('SET_REPORT', { reportIndex, report })
+    },
+    async DeleteNote({ commit, state }, { reportId, noteId }) {
+      const response = deleteNote(reportId, noteId)
+      const report = state.fetchedReports.find(report => report.id === reportId)
+      report.notes = response
       const reportIndex = state.fetchedReports.findIndex(report => report.id === reportId)
       commit('SET_REPORT', { reportIndex, report })
     }
