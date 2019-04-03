@@ -73,16 +73,11 @@ describe('Reports', () => {
   })
 
   it('deletes a note', () => {
-    const wrapper = mount(Reports, {
-      store,
-      localVue
-    })
-    const notes = store.state.reports.fetchedReports[0].notes
-    expect(notes.length).toBe(3)
+    store.dispatch('FetchReports')
+    expect(store.state.reports.fetchedReports[0].notes.length).toBe(3)
 
-    wrapper.find('.el-icon-close').trigger('click')
-    const updatedNotes = store.state.reports.fetchedReports[0].notes
-    expect(updatedNotes.length).toBe(2)
+    store.dispatch('DeleteNote', { reportId: '1', noteId: '2' })
+    expect(store.state.reports.fetchedReports[0].notes.length).toBe(2)
   })
 
   it('loads more reports on scroll', () => {

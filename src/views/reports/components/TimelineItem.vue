@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import i18n from '@/lang'
+
 export default {
   name: 'TimelineItem',
   props: {
@@ -59,7 +61,23 @@ export default {
       this.$data.note = ''
     },
     deleteNote(reportId, noteId) {
-      this.$store.dispatch('DeleteNote', { reportId, noteId })
+      this.$confirm(i18n.t('reports.confirmMsg'), {
+        confirmButtonText: i18n.t('reports.delete'),
+        cancelButtonText: i18n.t('reports.cancel'),
+        type: 'warning',
+        showClose: false
+      }).then(() => {
+        this.$store.dispatch('DeleteNote', { reportId, noteId })
+        this.$message({
+          type: 'success',
+          message: i18n.t('reports.deleteCompleted')
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: i18n.t('reports.deleteCanceled')
+        })
+      })
     }
   }
 }

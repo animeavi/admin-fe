@@ -206,6 +206,11 @@ export default {
     from: 'From',
     showNotes: 'Show notes',
     newNote: 'New note',
-    submit: 'Submit'
+    submit: 'Submit',
+    confirmMsg: 'Are you sure you want to delete this note?',
+    delete: 'Delete',
+    cancel: 'Cancel',
+    deleteCompleted: 'Delete comleted',
+    deleteCanceled: 'Delete canceled'
   }
 }
