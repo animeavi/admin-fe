@@ -55,10 +55,14 @@ export default {
       this.$data.showNewNoteInput = !this.$data.showNewNoteInput
     },
     addNewNote(reportId) {
-      const currentUserNickname = this.$store.state.user.name
-      const note = { author: currentUserNickname, text: this.$data.note, timestamp: '2019/04/01' }
-      this.$store.dispatch('AddNote', { reportId, note })
-      this.$data.note = ''
+      if (this.$data.note.length < 2) {
+        this.$message('Note must contain at least 2 characters')
+      } else {
+        const currentUserNickname = this.$store.state.user.name
+        const note = { author: currentUserNickname, text: this.$data.note, timestamp: '2019/04/01' }
+        this.$store.dispatch('AddNote', { reportId, note })
+        this.$data.note = ''
+      }
     },
     deleteNote(reportId, noteId) {
       this.$confirm(i18n.t('reports.confirmMsg'), {
