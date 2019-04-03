@@ -71,4 +71,15 @@ describe('Reports', () => {
     wrapper.find('.new-note .el-icon-close').trigger('click')
     expect(noteTextArea.isVisible()).toBe(false)
   })
+
+  it('loads more reports on scroll', () => {
+    const wrapper = mount(Reports, {
+      store,
+      localVue
+    })
+    expect(store.state.reports.fetchedReports.length).toEqual(3)
+
+    window.dispatchEvent(new CustomEvent('scroll', { detail: 2000 }))
+    expect(store.state.reports.fetchedReports.length).toEqual(6)
+  })
 })
