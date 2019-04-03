@@ -48,4 +48,27 @@ describe('Reports', () => {
     button.trigger('click')
     expect(note.isVisible()).toBe(false)
   })
+
+  it('creates a note', () => {
+    const wrapper = mount(Reports, {
+      store,
+      localVue
+    })
+    const noteTextArea = wrapper.find('textarea')
+    const notes = store.state.reports.fetchedReports[0].notes
+
+    expect(noteTextArea.isVisible()).toBe(false)
+
+    wrapper.find('.el-button--default').trigger('click')
+    expect(noteTextArea.isVisible()).toBe(true)
+    expect(notes.length).toBe(2)
+
+    noteTextArea.setValue('new note')
+    wrapper.find('.submit-button').trigger('click')
+    const updatedNotes = store.state.reports.fetchedReports[0].notes
+    expect(updatedNotes.length).toBe(3)
+
+    wrapper.find('.new-note .el-icon-close').trigger('click')
+    expect(noteTextArea.isVisible()).toBe(false)
+  })
 })
