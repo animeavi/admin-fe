@@ -31,4 +31,21 @@ describe('Reports', () => {
     expect(initialReports).toEqual(3)
     done()
   })
+
+  it('shows notes', () => {
+    const wrapper = mount(Reports, {
+      store,
+      localVue
+    })
+
+    const note = wrapper.find('.el-collapse-item__content')
+    expect(note.isVisible()).toBe(false)
+
+    const button = wrapper.find('.el-collapse-item__header')
+    button.trigger('click')
+    expect(note.isVisible()).toBe(true)
+
+    button.trigger('click')
+    expect(note.isVisible()).toBe(false)
+  })
 })
