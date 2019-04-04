@@ -69,7 +69,8 @@ export default {
         confirmButtonText: i18n.t('reports.delete'),
         cancelButtonText: i18n.t('reports.cancel'),
         type: 'warning',
-        showClose: false
+        showClose: false,
+        customClass: 'confirm-message'
       }).then(() => {
         this.$store.dispatch('DeleteNote', { reportId, noteId })
         this.$message({
@@ -137,7 +138,11 @@ export default {
     font-style: italic;
     color: gray;
   }
-@media
-only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px) {}
+  @media
+  only screen and (max-width: 760px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+    .confirm-message {
+      width: 98%;
+    }
+  }
 </style>
