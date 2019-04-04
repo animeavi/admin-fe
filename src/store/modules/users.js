@@ -48,6 +48,9 @@ const users = {
   },
   actions: {
     async FetchUsers({ commit, state, getters }, { page }) {
+      const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
+      const response = await fetchUsers(filters, getters.authHost, getters.token, page)
+
       commit('SET_LOADING', true)
 
       const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
