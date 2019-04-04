@@ -211,6 +211,7 @@ export default {
     delete: 'Delete',
     cancel: 'Cancel',
     deleteCompleted: 'Delete comleted',
-    deleteCanceled: 'Delete canceled'
+    deleteCanceled: 'Delete canceled',
+    noNotes: 'No notes to display'
   }
 }

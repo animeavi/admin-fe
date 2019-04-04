@@ -8,15 +8,20 @@
       <p>{{ item.content }}</p>
       <el-collapse v-model="showNotes">
         <el-collapse-item :title="$t('reports.showNotes')" name="showNotes">
-          <div v-for="note in item.notes" :key="note.id">
-            <el-card :body-style="{ padding: '6px 14px 0 14px' }" class="note">
-              <div class="header-container">
-                <h4>{{ $t('reports.from') }} {{ note.author }}</h4>
-                <i class="el-icon-close" @click="deleteNote(item.id, note.id)"/>
-              </div>
-              <p class="timestamp">{{ note.timestamp }}</p>
-              <p>{{ note.text }}</p>
-            </el-card>
+          <div v-if="item.notes.length > 0">
+            <div v-for="note in item.notes" :key="note.id">
+              <el-card :body-style="{ padding: '6px 14px 0 14px' }" class="note">
+                <div class="header-container">
+                  <h4>{{ $t('reports.from') }} {{ note.author }}</h4>
+                  <i class="el-icon-close" @click="deleteNote(item.id, note.id)"/>
+                </div>
+                <p class="timestamp">{{ note.timestamp }}</p>
+                <p>{{ note.text }}</p>
+              </el-card>
+            </div>
+          </div>
+          <div v-else>
+            <p class="no-notes">{{ $t('reports.noNotes') }}</p>
           </div>
         </el-collapse-item>
         <div v-show="showNewNoteInput" class="new-note">
@@ -128,6 +133,10 @@ export default {
   .note {
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.1);
     margin-bottom: 10px;
+  }
+  .no-notes {
+    font-style: italic;
+    color: gray;
   }
   .submit-button {
     display: block;
