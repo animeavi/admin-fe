@@ -5,7 +5,17 @@
       <users-filter/>
       <el-input :placeholder="$t('users.search')" class="search" @input="handleDebounceSearchInput"/>
     </div>
-    <el-table v-loading="loading" :data="users" style="width: 100%">
+    <el-dropdown>
+      <el-button v-if="isDesktop" icon="el-icon-edit" class="actions-button"/>
+      <dropdown-menu v-if="showDropdownForMultipleUsers"/>
+      <el-dropdown-menu v-else>
+        <el-dropdown-item>
+          {{ $t('users.selectUsers') }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+    <el-table v-loading="loading" :data="users" style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table-column v-if="isDesktop" type="selection" width="44" align="center"/>
       <el-table-column :min-width="width" :label="$t('users.id')" prop="id" />
       <el-table-column :label="$t('users.name')" prop="nickname">
         <template slot-scope="scope">
@@ -118,11 +128,18 @@
 <script>
 import debounce from 'lodash.debounce'
 import UsersFilter from './components/UsersFilter'
+import DropdownMenu from './components/DropdownMenu'
 
 export default {
   name: 'Users',
   components: {
-    UsersFilter
+    UsersFilter,
+    DropdownMenu
+  },
+  data: function() {
+    return {
+      selectedUsers: []
+    }
   },
   computed: {
     loading() {
@@ -148,6 +165,9 @@ export default {
     },
     width() {
       return this.isMobile ? 55 : false
+    },
+    showDropdownForMultipleUsers() {
+      return this.$data.selectedUsers.length > 0
     }
   },
   created() {
@@ -169,6 +189,9 @@ export default {
       } else {
         this.$store.dispatch('SearchUsers', { query: searchQuery, page })
       }
+    },
+    handleSelectionChange(value) {
+      this.$data.selectedUsers = value
     },
     showDeactivatedButton(id) {
       return this.$store.state.user.id !== id
@@ -206,6 +229,9 @@ export default {
   }
 }
 .users-container {
+  .actions-button {
+    margin-left: 15px;
+  }
   h1 {
     margin: 22px 0 0 15px;
   }
