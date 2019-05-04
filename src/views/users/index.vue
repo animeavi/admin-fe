@@ -7,7 +7,7 @@
     </div>
     <el-dropdown>
       <el-button v-if="isDesktop" icon="el-icon-edit" class="actions-button"/>
-      <dropdown-menu v-if="showDropdownForMultipleUsers"/>
+      <dropdown-menu v-if="showDropdownForMultipleUsers" :selected-users="selectedUsers"/>
       <el-dropdown-menu v-else>
         <el-dropdown-item>
           {{ $t('users.selectUsers') }}

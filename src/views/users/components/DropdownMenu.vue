@@ -59,11 +59,87 @@
 
 <script>
 export default {
-  methods: {
-    toggleTagForMultipleUsers(tag) {
-      if (tag === 'disable_remote_subscription' || tag === 'disable_any_subscription') {
-        // filter users, because these actions can be applied only to local users
+  props: {
+    selectedUsers: {
+      type: Array,
+      default: function() {
+        return []
       }
+    }
+  },
+  methods: {
+    grantRightToMultipleUsers(right) {
+      const mapSelectedUsers = () => this.selectedUsers
+        .filter(user => user.local && !user.roles[right] && this.$store.state.user.id !== user.id)
+        .map(user => this.$store.dispatch('ToggleRight', { user, right }))
+      this.confirmMessage(
+        'Are you sure you want to grant ' + right + ' rights to all selected users?',
+        mapSelectedUsers
+      )
+    },
+    revokeRightToMultipleUsers(right) {
+      const mapSelectedUsers = () => this.selectedUsers
+        .filter(user => user.local && user.roles[right] && this.$store.state.user.id !== user.id)
+        .map(user => this.$store.dispatch('ToggleRight', { user, right }))
+      this.confirmMessage(
+        'Are you sure you want to revoke ' + right + ' rights from all selected users?',
+        mapSelectedUsers
+      )
+    },
+    activateMultipleUsers() {
+      const mapSelectedUsers = () => this.selectedUsers
+        .filter(user => user.deactivated && this.$store.state.user.id !== user.id)
+        .map(user => this.$store.dispatch('ToggleUserActivation', user.nickname))
+      this.confirmMessage(
+        'Are you sure you want to activate accounts of all selected users?',
+        mapSelectedUsers
+      )
+    },
+    deactivateMultipleUsers() {
+      const mapSelectedUsers = () => this.selectedUsers
+        .filter(user => !user.deactivated && this.$store.state.user.id !== user.id)
+        .map(user => this.$store.dispatch('ToggleUserActivation', user.nickname))
+      this.confirmMessage(
+        'Are you sure you want to deactivate accounts of all selected users?',
+        mapSelectedUsers
+      )
+    },
+    deleteMultipleUsers() {
+      const mapSelectedUsers = () => this.selectedUsers
+        .filter(user => this.$store.state.user.id !== user.id)
+        .map(user => this.$store.dispatch('DeleteUser', user))
+      this.confirmMessage(
+        'Are you sure you want to delete accounts of all selected users?',
+        mapSelectedUsers
+      )
+    },
+    toggleTagForMultipleUsers(tag) {
+      const mapSelectedUsers = () => this.selectedUsers
+        .filter(user => tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
+          ? user.local : user
+        ).map(user => this.$store.dispatch('ToggleTag', { user, tag }))
+      this.confirmMessage(
+        'Are you sure you want to apply tag to all selected users?',
+        mapSelectedUsers
+      )
+    },
+    confirmMessage(message, mapSelectedUsers) {
+      this.$confirm(message, {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        mapSelectedUsers()
+        this.$message({
+          type: 'success',
+          message: 'Completed'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Canceled'
+        })
+      })
     }
   }
 }
