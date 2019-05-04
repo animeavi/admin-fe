@@ -29,30 +29,59 @@
       @click.native="deleteMultipleUsers">
       {{ $t('users.deleteAccount') }}
     </el-dropdown-item>
-    <el-dropdown-item
-      divided
-      @click.native="toggleTagForMultipleUsers('force_nsfw')">
-      {{ $t('users.forceNsfw') }}
+    <el-dropdown-item divided class="no-hover">
+      <div class="tag-container">
+        <span class="tag-text">{{ $t('users.forceNsfw') }}</span>
+        <el-button-group class="tag-button-group">
+          <el-button size="mini" @click.native="addTagForMultipleUsers('force_nsfw')">apply</el-button>
+          <el-button size="mini" @click.native="removeTagFromMultipleUsers('force_nsfw')">remove</el-button>
+        </el-button-group>
+      </div>
     </el-dropdown-item>
-    <el-dropdown-item
-      @click.native="toggleTagForMultipleUsers('strip_media')">
-      {{ $t('users.stripMedia') }}
+    <el-dropdown-item class="no-hover">
+      <div class="tag-container">
+        <span class="tag-text">{{ $t('users.stripMedia') }}</span>
+        <el-button-group class="tag-button-group">
+          <el-button size="mini" @click.native="addTagForMultipleUsers('strip_media')">apply</el-button>
+          <el-button size="mini" @click.native="removeTagFromMultipleUsers('strip_media')">remove</el-button>
+        </el-button-group>
+      </div>
     </el-dropdown-item>
-    <el-dropdown-item
-      @click.native="toggleTagForMultipleUsers('force_unlisted')">
-      {{ $t('users.forceUnlisted') }}
+    <el-dropdown-item class="no-hover">
+      <div class="tag-container">
+        <span class="tag-text">{{ $t('users.forceUnlisted') }}</span>
+        <el-button-group class="tag-button-group">
+          <el-button size="mini" @click.native="addTagForMultipleUsers('force_unlisted')">apply</el-button>
+          <el-button size="mini" @click.native="removeTagFromMultipleUsers('force_unlisted')">remove</el-button>
+        </el-button-group>
+      </div>
     </el-dropdown-item>
-    <el-dropdown-item
-      @click.native="toggleTagForMultipleUsers('sandbox')">
-      {{ $t('users.sandbox') }}
+    <el-dropdown-item class="no-hover">
+      <div class="tag-container">
+        <span class="tag-text">{{ $t('users.sandbox') }}</span>
+        <el-button-group class="tag-button-group">
+          <el-button size="mini" @click.native="addTagForMultipleUsers('sandbox')">apply</el-button>
+          <el-button size="mini" @click.native="removeTagFromMultipleUsers('sandbox')">remove</el-button>
+        </el-button-group>
+      </div>
     </el-dropdown-item>
-    <el-dropdown-item
-      @click.native="toggleTagForMultipleUsers('disable_remote_subscription')">
-      {{ $t('users.disableRemoteSubscription') }}
+    <el-dropdown-item class="no-hover">
+      <div class="tag-container">
+        <span class="tag-text">{{ $t('users.disableRemoteSubscription') }}</span>
+        <el-button-group class="tag-button-group">
+          <el-button size="mini" @click.native="addTagForMultipleUsers('disable_remote_subscription')">apply</el-button>
+          <el-button size="mini" @click.native="removeTagFromMultipleUsers('disable_remote_subscription')">remove</el-button>
+        </el-button-group>
+      </div>
     </el-dropdown-item>
-    <el-dropdown-item
-      @click.native="toggleTagForMultipleUsers('disable_any_subscription')">
-      {{ $t('users.disableAnySubscription') }}
+    <el-dropdown-item class="no-hover">
+      <div class="tag-container">
+        <span class="tag-text">{{ $t('users.disableAnySubscription') }}</span>
+        <el-button-group class="tag-button-group">
+          <el-button size="mini" @click.native="addTagForMultipleUsers('disable_any_subscription')">apply</el-button>
+          <el-button size="mini" @click.native="removeTagFromMultipleUsers('disable_any_subscription')">remove</el-button>
+        </el-button-group>
+      </div>
     </el-dropdown-item>
   </el-dropdown-menu>
 </template>
@@ -113,13 +142,25 @@ export default {
         mapSelectedUsers
       )
     },
-    toggleTagForMultipleUsers(tag) {
+    addTagForMultipleUsers(tag) {
       const mapSelectedUsers = () => this.selectedUsers
         .filter(user => tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
-          ? user.local : user
+          ? user.local && !user.tags.includes(tag)
+          : !user.tags.includes(tag)
         ).map(user => this.$store.dispatch('ToggleTag', { user, tag }))
       this.confirmMessage(
         'Are you sure you want to apply tag to all selected users?',
+        mapSelectedUsers
+      )
+    },
+    removeTagFromMultipleUsers(tag) {
+      const mapSelectedUsers = () => this.selectedUsers
+        .filter(user => tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
+          ? user.local && user.tags.includes(tag)
+          : user.tags.includes(tag)
+        ).map(user => this.$store.dispatch('ToggleTag', { user, tag }))
+      this.confirmMessage(
+        'Are you sure you want to remove tag from all selected users?',
         mapSelectedUsers
       )
     },
@@ -144,3 +185,19 @@ export default {
   }
 }
 </script>
+
+<style rel='stylesheet/scss' lang='scss' scoped>
+  .tag-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .tag-text {
+    padding-right: 20px;
+  }
+  .no-hover:hover {
+    color: #606266;
+    background-color: white;
+    cursor: auto;
+  }
+</style>
