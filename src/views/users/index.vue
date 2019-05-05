@@ -1,6 +1,9 @@
 <template>
   <div class="users-container">
-    <h1>{{ $t('users.users') }}</h1>
+    <h1>
+      {{ $t('users.users') }}
+      <span class="user-count">({{ normalizedUsersCount }})</span>
+    </h1>
     <div class="search-container">
       <users-filter/>
       <el-input :placeholder="$t('users.search')" class="search" @input="handleDebounceSearchInput"/>
@@ -141,6 +144,7 @@
 
 <script>
 import debounce from 'lodash.debounce'
+import numeral from 'numeral'
 import UsersFilter from './components/UsersFilter'
 import DropdownMenu from './components/DropdownMenu'
 
@@ -158,6 +162,9 @@ export default {
   computed: {
     loading() {
       return this.$store.state.users.loading
+    },
+    normalizedUsersCount() {
+      return numeral(this.$store.state.users.totalUsersCount).format('0a')
     },
     users() {
       return this.$store.state.users.fetchedUsers
@@ -268,6 +275,10 @@ export default {
     justify-content: space-between;
     align-items: center;
     margin: 22px 15px 22px 15px
+  }
+  .user-count {
+    color: gray;
+    font-size: 28px;
   }
 }
 @media
