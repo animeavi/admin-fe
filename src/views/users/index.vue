@@ -7,15 +7,29 @@
     </div>
     <el-dropdown>
       <el-button v-if="isDesktop" icon="el-icon-edit" class="actions-button"/>
-      <dropdown-menu v-if="showDropdownForMultipleUsers" :selected-users="selectedUsers"/>
+      <dropdown-menu
+        v-if="showDropdownForMultipleUsers"
+        :selected-users="selectedUsers"
+        @apply-action="clearSelection"/>
       <el-dropdown-menu v-else>
         <el-dropdown-item>
           {{ $t('users.selectUsers') }}
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-    <el-table v-loading="loading" :data="users" style="width: 100%" @selection-change="handleSelectionChange">
-      <el-table-column v-if="isDesktop" type="selection" width="44" align="center"/>
+    <el-table
+      v-loading="loading"
+      ref="usersTable"
+      :data="users"
+      row-key="id"
+      style="width: 100%"
+      @selection-change="handleSelectionChange">
+      <el-table-column
+        v-if="isDesktop"
+        type="selection"
+        reserve-selection
+        width="44"
+        align="center"/>
       <el-table-column :min-width="width" :label="$t('users.id')" prop="id" />
       <el-table-column :label="$t('users.name')" prop="nickname">
         <template slot-scope="scope">
@@ -213,6 +227,9 @@ export default {
     },
     getFirstLetter(str) {
       return str.charAt(0).toUpperCase()
+    },
+    clearSelection() {
+      this.$refs.usersTable.clearSelection()
     }
   }
 }

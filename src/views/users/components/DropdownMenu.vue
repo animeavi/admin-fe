@@ -171,6 +171,7 @@ export default {
         type: 'warning'
       }).then(() => {
         mapSelectedUsers()
+        this.$emit('apply-action')
         this.$message({
           type: 'success',
           message: 'Completed'
