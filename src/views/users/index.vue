@@ -8,13 +8,13 @@
       <users-filter/>
       <el-input :placeholder="$t('users.search')" class="search" @input="handleDebounceSearchInput"/>
     </div>
-    <el-dropdown>
+    <el-dropdown trigger="click">
       <el-button v-if="isDesktop" icon="el-icon-edit" class="actions-button"/>
       <dropdown-menu
         v-if="showDropdownForMultipleUsers"
         :selected-users="selectedUsers"
         @apply-action="clearSelection"/>
-      <el-dropdown-menu v-else>
+      <el-dropdown-menu v-else slot="dropdown">
         <el-dropdown-item>
           {{ $t('users.selectUsers') }}
         </el-dropdown-item>
@@ -58,7 +58,7 @@
       </el-table-column>
       <el-table-column :label="$t('users.actions')" fixed="right">
         <template slot-scope="scope">
-          <el-dropdown size="small">
+          <el-dropdown size="small" trigger="click">
             <span class="el-dropdown-link">
               {{ $t('users.moderation') }}
               <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
@@ -252,6 +252,10 @@ export default {
     margin: 7px 0 0 15px;
   }
 }
+.el-dropdown-link:hover {
+      cursor: pointer;
+      color: #409EFF;
+    }
 .users-container {
   .actions-button {
     margin-left: 15px;
@@ -287,10 +291,6 @@ only screen and (max-width: 760px),
   .users-container {
     h1 {
       margin: 7px 10px 7px 10px;
-    }
-    .el-dropdown-link {
-      cursor: pointer;
-      color: #409EFF;
     }
     .el-icon-arrow-down {
       font-size: 12px;
