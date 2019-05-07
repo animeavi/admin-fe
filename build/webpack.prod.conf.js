@@ -57,7 +57,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       favicon: resolve('favicon.ico'),
       title: 'Admin FE',
       templateParameters: {
-        BASE_URL: config.build.assetsPublicPath + config.build.assetsSubDirectory,
+        BASE_URL: env.ASSETS_PUBLIC_PATH + config.build.assetsSubDirectory,
       },
       minify: {
         removeComments: true,
