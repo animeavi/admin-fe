@@ -8,7 +8,7 @@ module.exports = {
   dev: {
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    // assetsPublicPath: '', // To configure assetsPublicPath set ASSETS_PUBLIC_PATH in dev/prod.env.js
     proxyTable: {},
 
     // Various Dev Server settings
@@ -60,7 +60,7 @@ module.exports = {
      * then assetsPublicPath should be set to "/bar/".
      * In most cases please use '/' !!!
      */
-    assetsPublicPath: '/',
+    // assetsPublicPath: '', // To configure assetsPublicPath set ASSETS_PUBLIC_PATH in dev/prod.env.js
 
     /**
      * Source Maps

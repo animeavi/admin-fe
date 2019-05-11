@@ -16,6 +16,8 @@ function resolve(dir) {
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
+const devEnv = require('../config/dev.env')
+
 const devWebpackConfig = merge(baseWebpackConfig, {
   mode: 'development',
   module: {
@@ -39,11 +41,14 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     overlay: config.dev.errorOverlay
       ? { warnings: false, errors: true }
       : false,
-    publicPath: config.dev.assetsPublicPath,
+    publicPath: devEnv.ASSETS_PUBLIC_PATH,
     proxy: config.dev.proxyTable,
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll
+    },
+    headers: {
+      'content-security-policy': "base-uri 'self'; frame-ancestors 'none'; img-src 'self' data: https:; media-src 'self' https:; style-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; script-src 'self';"
     }
   },
   plugins: [
@@ -59,7 +64,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       favicon: resolve('favicon.ico'),
       title: 'Admin FE',
       templateParameters: {
-        BASE_URL: config.dev.assetsPublicPath + config.dev.assetsSubDirectory,
+        BASE_URL: devEnv.ASSETS_PUBLIC_PATH + config.dev.assetsSubDirectory,
       },
     }),
   ]
