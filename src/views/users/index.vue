@@ -8,18 +8,9 @@
       <users-filter/>
       <el-input :placeholder="$t('users.search')" class="search" @input="handleDebounceSearchInput"/>
     </div>
-    <el-dropdown trigger="click">
-      <el-button v-if="isDesktop" icon="el-icon-edit" class="actions-button"/>
-      <dropdown-menu
-        v-if="showDropdownForMultipleUsers"
-        :selected-users="selectedUsers"
-        @apply-action="clearSelection"/>
-      <el-dropdown-menu v-else slot="dropdown">
-        <el-dropdown-item>
-          {{ $t('users.selectUsers') }}
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+    <dropdown-menu
+      :selected-users="selectedUsers"
+      @apply-action="clearSelection"/>
     <el-table
       v-loading="loading"
       ref="usersTable"
@@ -186,9 +177,6 @@ export default {
     },
     width() {
       return this.isMobile ? 55 : false
-    },
-    showDropdownForMultipleUsers() {
-      return this.$data.selectedUsers.length > 0
     }
   },
   created() {
@@ -257,9 +245,6 @@ export default {
       color: #409EFF;
     }
 .users-container {
-  .actions-button {
-    margin-left: 15px;
-  }
   h1 {
     margin: 22px 0 0 15px;
   }
