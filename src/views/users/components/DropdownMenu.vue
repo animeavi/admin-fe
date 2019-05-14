@@ -7,7 +7,7 @@
         {{ $t('users.grantAdmin') }}
       </el-dropdown-item>
       <el-dropdown-item
-        @click.native="revokeRightToMultipleUsers('admin')">
+        @click.native="revokeRightFromMultipleUsers('admin')">
         {{ $t('users.revokeAdmin') }}
       </el-dropdown-item>
       <el-dropdown-item
@@ -15,7 +15,7 @@
         {{ $t('users.grantModerator') }}
       </el-dropdown-item>
       <el-dropdown-item
-        @click.native="revokeRightToMultipleUsers('moderator')">
+        @click.native="revokeRightFromMultipleUsers('moderator')">
         {{ $t('users.revokeModerator') }}
       </el-dropdown-item>
       <el-dropdown-item
@@ -149,7 +149,7 @@ export default {
         grantRight(right)
       )
     },
-    revokeRightToMultipleUsers(right) {
+    revokeRightFromMultipleUsers(right) {
       const { revokeRight } = this.mappers()
       this.confirmMessage(
         `Are you sure you want to revoke ${right} rights from all selected users?`,
