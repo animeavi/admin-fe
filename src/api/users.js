@@ -32,7 +32,7 @@ export async function searchUsers(query, filters, authHost, token, page = 1) {
 export async function addRight(nickname, right, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/permission_group/${nickname}/${right}`,
+    url: `/api/pleroma/admin/users/${nickname}/permission_group/${right}`,
     method: 'post',
     headers: authHeaders(token)
   })
@@ -41,7 +41,7 @@ export async function addRight(nickname, right, authHost, token) {
 export async function deleteRight(nickname, right, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/permission_group/${nickname}/${right}`,
+    url: `/api/pleroma/admin/users/${nickname}/permission_group/${right}`,
     method: 'delete',
     headers: authHeaders(token)
   })
@@ -50,29 +50,29 @@ export async function deleteRight(nickname, right, authHost, token) {
 export async function deleteUser(nickname, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/user.json?nickname=${nickname}`,
+    url: `/api/pleroma/admin/users?nickname=${nickname}`,
     method: 'delete',
     headers: authHeaders(token)
   })
 }
 
-export async function tagUser(nickname, tag, authHost, token) {
+export async function tagUser(nicknames, tags, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
     url: '/api/pleroma/admin/users/tag',
     method: 'put',
     headers: authHeaders(token),
-    data: { nicknames: [nickname], tags: [tag] }
+    data: { nicknames, tags }
   })
 }
 
-export async function untagUser(nickname, tag, authHost, token) {
+export async function untagUser(nicknames, tags, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
     url: '/api/pleroma/admin/users/tag',
     method: 'delete',
     headers: authHeaders(token),
-    data: { nicknames: [nickname], tags: [tag] }
+    data: { nicknames, tags }
   })
 }
 

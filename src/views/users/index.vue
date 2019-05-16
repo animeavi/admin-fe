@@ -188,8 +188,20 @@ export default {
     this.$store.dispatch('FetchUsers', { page: 1 })
   },
   methods: {
+    activationIcon(status) {
+      return status ? 'el-icon-error' : 'el-icon-success'
+    },
+    clearSelection() {
+      this.$refs.usersTable.clearSelection()
+    },
+    getFirstLetter(str) {
+      return str.charAt(0).toUpperCase()
+    },
     handleDeactivation({ nickname }) {
       this.$store.dispatch('ToggleUserActivation', nickname)
+    },
+    handleDeletion(user) {
+      this.$store.dispatch('DeleteUser', user)
     },
     handlePageChange(page) {
       const searchQuery = this.$store.state.users.searchQuery
@@ -202,29 +214,19 @@ export default {
     handleSelectionChange(value) {
       this.$data.selectedUsers = value
     },
-    showDeactivatedButton(id) {
-      return this.$store.state.user.id !== id
-    },
     showAdminAction({ local, id }) {
       return local && this.showDeactivatedButton(id)
     },
-    activationIcon(status) {
-      return status ? 'el-icon-error' : 'el-icon-success'
+    showDeactivatedButton(id) {
+      return this.$store.state.user.id !== id
+    },
+    toggleTag(user, tag) {
+      user.tags.includes(tag)
+        ? this.$store.dispatch('RemoveTag', { users: [user], tag })
+        : this.$store.dispatch('AddTag', { users: [user], tag })
     },
     toggleUserRight(user, right) {
       this.$store.dispatch('ToggleRight', { user, right })
-    },
-    handleDeletion(user) {
-      this.$store.dispatch('DeleteUser', user)
-    },
-    toggleTag(user, tag) {
-      this.$store.dispatch('ToggleTag', { user, tag })
-    },
-    getFirstLetter(str) {
-      return str.charAt(0).toUpperCase()
-    },
-    clearSelection() {
-      this.$refs.usersTable.clearSelection()
     }
   }
 }
