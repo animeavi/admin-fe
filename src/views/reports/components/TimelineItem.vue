@@ -1,19 +1,23 @@
 <template>
-  <el-timeline-item :timestamp="item.timestamp" placement="top" class="timeline-item-container">
+  <el-timeline-item :timestamp="parseTimestamp(report.created_at)" placement="top" class="timeline-item-container">
     <el-card>
       <div class="header-container">
-        <h4>{{ item.header }}</h4>
-        <el-button plain size="small" @click="toggleNoteInput">{{ $t('reports.reply') }}</el-button>
+        <h4>Report on {{ report.account.acct }}</h4>
+        <div>
+          <el-tag :type="getStateType(report.state)" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
+          <el-button plain size="small" @click="toggleNoteInput">{{ $t('reports.reply') }}</el-button>
+        </div>
       </div>
-      <p>{{ item.content }}</p>
+      <h5 class="id">#{{ report.id }}</h5>
+      <p>{{ report.content }}</p>
       <el-collapse v-model="showNotes">
         <el-collapse-item :title="$t('reports.showNotes')" name="showNotes">
-          <div v-if="item.notes.length > 0">
-            <div v-for="note in item.notes" :key="note.id">
+          <div v-if="report.statuses.length > 0">
+            <div v-for="note in report.statuses" :key="note.id">
               <el-card :body-style="{ padding: '6px 14px 0 14px' }" class="note">
                 <div class="header-container">
                   <h4>{{ $t('reports.from') }} {{ note.author }}</h4>
-                  <i class="el-icon-close" @click="deleteNote(item.id, note.id)"/>
+                  <i class="el-icon-close" @click="deleteNote(report.id, note.id)"/>
                 </div>
                 <p class="timestamp">{{ note.timestamp }}</p>
                 <p>{{ note.text }}</p>
@@ -30,7 +34,7 @@
             <i class="el-icon-close" @click="toggleNoteInput"/>
           </div>
           <el-input v-model="note" :rows="2" type="textarea" autofocus/>
-          <el-button class="submit-button" plain size="small" @click="addNewNote(item.id)">{{ $t('reports.submit') }}</el-button>
+          <el-button class="submit-button" plain size="small" @click="addNewNote(report.id)">{{ $t('reports.submit') }}</el-button>
         </div>
       </el-collapse>
     </el-card>
@@ -39,11 +43,12 @@
 
 <script>
 import i18n from '@/lang'
+import * as moment from 'moment'
 
 export default {
   name: 'TimelineItem',
   props: {
-    item: {
+    report: {
       type: Object,
       required: true
     }
@@ -56,9 +61,6 @@ export default {
     }
   },
   methods: {
-    toggleNoteInput() {
-      this.$data.showNewNoteInput = !this.$data.showNewNoteInput
-    },
     addNewNote(reportId) {
       if (this.$data.note.length < 2) {
         this.$message('Note must contain at least 2 characters')
@@ -88,6 +90,25 @@ export default {
           message: i18n.t('reports.deleteCanceled')
         })
       })
+    },
+    capitalizeFirstLetter(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1)
+    },
+    getStateType(state) {
+      switch (state) {
+        case 'closed':
+          return 'info'
+        case 'resolved':
+          return 'success'
+        default:
+          return ''
+      }
+    },
+    parseTimestamp(timestamp) {
+      return moment(timestamp).format('YYYY-MM-DD HH:mm')
+    },
+    toggleNoteInput() {
+      this.$data.showNewNoteInput = !this.$data.showNewNoteInput
     }
   }
 }
@@ -121,6 +142,10 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+  }
+  .id {
+    color: gray;
+    margin: 0;
   }
   .new-note {
     p {

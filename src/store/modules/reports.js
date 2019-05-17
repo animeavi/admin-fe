@@ -1,4 +1,4 @@
-import { fetchReports, deleteNote } from '@/api/reports'
+import { fetchReports } from '@/api/reports'
 
 const reports = {
   state: {
@@ -22,27 +22,27 @@ const reports = {
     }
   },
   actions: {
-    async FetchReports({ commit, state, getters }) {
+    async FetchReports({ commit, getters }) {
       commit('SET_LOADING', true)
-      const response = fetchReports(state.indexOfLastShownReport, state.size)
+      const response = await fetchReports(getters.authHost, getters.token)
 
-      commit('SET_REPORTS', response)
+      commit('SET_REPORTS', response.data.reports)
       commit('SET_INDEX')
       commit('SET_LOADING', false)
-    },
-    async AddNote({ commit, state, getters }, { reportId, note }) {
-      const report = state.fetchedReports.find(report => report.id === reportId)
-      report.notes = [...report.notes, note]
-      const reportIndex = state.fetchedReports.findIndex(report => report.id === reportId)
-      commit('SET_REPORT', { reportIndex, report })
-    },
-    async DeleteNote({ commit, state }, { reportId, noteId }) {
-      const response = deleteNote(reportId, noteId)
-      const report = state.fetchedReports.find(report => report.id === reportId)
-      report.notes = response
-      const reportIndex = state.fetchedReports.findIndex(report => report.id === reportId)
-      commit('SET_REPORT', { reportIndex, report })
     }
+    // async AddNote({ commit, state, getters }, { reportId, note }) {
+    //   const report = state.fetchedReports.find(report => report.id === reportId)
+    //   report.notes = [...report.notes, note]
+    //   const reportIndex = state.fetchedReports.findIndex(report => report.id === reportId)
+    //   commit('SET_REPORT', { reportIndex, report })
+    // },
+    // async DeleteNote({ commit, state }, { reportId, noteId }) {
+    //   const response = deleteNote(reportId, noteId)
+    //   const report = state.fetchedReports.find(report => report.id === reportId)
+    //   report.notes = response
+    //   const reportIndex = state.fetchedReports.findIndex(report => report.id === reportId)
+    //   commit('SET_REPORT', { reportIndex, report })
+    // }
   }
 }
 

@@ -3,7 +3,7 @@
     <h1>{{ $t('reports.reports') }}</h1>
     <div class="block">
       <el-timeline class="timeline">
-        <timeline-item v-loading="loading" v-for="item in reports" :item="item" :key="item.id"/>
+        <timeline-item v-loading="loading" v-for="report in reports" :report="report" :key="report.id"/>
       </el-timeline>
     </div>
   </div>
