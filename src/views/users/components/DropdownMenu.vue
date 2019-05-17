@@ -130,16 +130,20 @@ export default {
         remove: () => this.selectedUsers
           .filter(user => this.$store.state.user.id !== user.id)
           .map(user => this.$store.dispatch('DeleteUser', user)),
-        addTag: (tag) => () => this.selectedUsers
-          .filter(user => tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
-            ? user.local && !user.tags.includes(tag)
-            : !user.tags.includes(tag)
-          ).map(user => this.$store.dispatch('ToggleTag', { user, tag })),
-        removeTag: (tag) => () => this.selectedUsers
-          .filter(user => tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
-            ? user.local && user.tags.includes(tag)
-            : user.tags.includes(tag)
-          ).map(user => this.$store.dispatch('ToggleTag', { user, tag }))
+        addTag: (tag) => () => {
+          const users = this.selectedUsers
+            .filter(user => tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
+              ? user.local && !user.tags.includes(tag)
+              : !user.tags.includes(tag))
+          this.$store.dispatch('AddTag', { users, tag })
+        },
+        removeTag: (tag) => () => {
+          const users = this.selectedUsers
+            .filter(user => tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
+              ? user.local && user.tags.includes(tag)
+              : user.tags.includes(tag))
+          this.$store.dispatch('RemoveTag', { users, tag })
+        }
       }
     },
     grantRightToMultipleUsers(right) {
