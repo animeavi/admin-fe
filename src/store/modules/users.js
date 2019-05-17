@@ -30,6 +30,15 @@ const users = {
         a.nickname.localeCompare(b.nickname)
       )
     },
+    SWAP_USERS: (state, users) => {
+      const usersWithoutSwapped = users.reduce((acc, user) => {
+        return acc.filter(u => u.id !== user.id)
+      }, state.fetchedUsers)
+
+      state.fetchedUsers = [...usersWithoutSwapped, ...users].sort((a, b) =>
+        a.nickname.localeCompare(b.nickname)
+      )
+    },
     SET_COUNT: (state, count) => {
       state.totalUsersCount = count
     },
@@ -47,6 +56,21 @@ const users = {
     }
   },
   actions: {
+    async AddTag({ commit, getters }, { users, tag }) {
+      const nicknames = users.map(user => user.nickname)
+      await tagUser(nicknames, [tag], getters.authHost, getters.token)
+
+      commit('SWAP_USERS', users.map(user => ({ ...user, tags: [...user.tags, tag] })))
+    },
+    async ClearFilters({ commit, dispatch, state }) {
+      commit('CLEAR_USERS_FILTERS')
+      dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
+    },
+    async DeleteUser({ commit, getters }, user) {
+      await deleteUser(user.nickname, getters.authHost, getters.token)
+      const updatedUser = { ...user, deactivated: true }
+      commit('SWAP_USER', updatedUser)
+    },
     async FetchUsers({ commit, state, getters }, { page }) {
       const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
       const response = await fetchUsers(filters, getters.authHost, getters.token, page)
@@ -58,10 +82,11 @@ const users = {
 
       loadUsers(commit, page, response.data)
     },
-    async ToggleUserActivation({ commit, getters }, nickname) {
-      const response = await toggleUserActivation(nickname, getters.authHost, getters.token)
+    async RemoveTag({ commit, getters }, { users, tag }) {
+      const nicknames = users.map(user => user.nickname)
+      await untagUser(nicknames, [tag], getters.authHost, getters.token)
 
-      commit('SWAP_USER', response.data)
+      commit('SWAP_USERS', users.map(user => ({ ...user, tags: user.tags.filter(userTag => userTag !== tag) })))
     },
     async SearchUsers({ commit, dispatch, state, getters }, { query, page }) {
       if (query.length === 0) {
@@ -77,6 +102,10 @@ const users = {
         loadUsers(commit, page, response.data)
       }
     },
+    async ToggleUserActivation({ commit, getters }, nickname) {
+      const { data } = await toggleUserActivation(nickname, getters.authHost, getters.token)
+      commit('SWAP_USER', data)
+    },
     async ToggleUsersFilter({ commit, dispatch, state }, filters) {
       const defaultFilters = {
         local: false,
@@ -88,10 +117,6 @@ const users = {
       commit('SET_USERS_FILTERS', currentFilters)
       dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
     },
-    async ClearFilters({ commit, dispatch, state }) {
-      commit('CLEAR_USERS_FILTERS')
-      dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
-    },
     async ToggleRight({ commit, getters }, { user, right }) {
       user.roles[right]
         ? await deleteRight(user.nickname, right, getters.authHost, getters.token)
@@ -99,22 +124,6 @@ const users = {
 
       const updatedUser = { ...user, roles: { ...user.roles, [right]: !user.roles[right] }}
       commit('SWAP_USER', updatedUser)
-    },
-    async DeleteUser({ commit, getters }, user) {
-      await deleteUser(user.nickname, getters.authHost, getters.token)
-      const updatedUser = { ...user, deactivated: true }
-      commit('SWAP_USER', updatedUser)
-    },
-    async ToggleTag({ commit, getters }, { user, tag }) {
-      if (user.tags.includes(tag)) {
-        await untagUser(user.nickname, tag, getters.authHost, getters.token)
-        const updatedUser = { ...user, tags: user.tags.filter(userTag => userTag !== tag) }
-        commit('SWAP_USER', updatedUser)
-      } else {
-        await tagUser(user.nickname, tag, getters.authHost, getters.token)
-        const updatedUser = { ...user, tags: [...user.tags, tag] }
-        commit('SWAP_USER', updatedUser)
-      }
     }
   }
 }

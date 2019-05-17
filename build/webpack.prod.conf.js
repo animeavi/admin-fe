@@ -57,7 +57,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       favicon: resolve('favicon.ico'),
       title: 'Admin FE',
       templateParameters: {
-        BASE_URL: config.build.assetsPublicPath + config.build.assetsSubDirectory,
+        BASE_URL: env.ASSETS_PUBLIC_PATH + config.build.assetsSubDirectory,
       },
       minify: {
         removeComments: true,
@@ -69,10 +69,6 @@ const webpackConfig = merge(baseWebpackConfig, {
       // default sort mode uses toposort which cannot handle cyclic deps
       // in certain cases, and in webpack 4, chunk order in HTML doesn't
       // matter anyway
-    }),
-    new ScriptExtHtmlWebpackPlugin({
-      //`runtime` must same as runtimeChunk name. default is `runtime`
-      inline: /runtime\..*\.js$/
     }),
     // keep chunk.id stable when chunk has no name
     new webpack.NamedChunksPlugin(chunk => {
