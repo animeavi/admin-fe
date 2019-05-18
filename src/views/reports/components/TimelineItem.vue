@@ -2,33 +2,59 @@
   <el-timeline-item :timestamp="parseTimestamp(report.created_at)" placement="top" class="timeline-item-container">
     <el-card>
       <div class="header-container">
-        <h4>Report on {{ report.account.display_name }}</h4>
+        <h3 class="report-title">Report on {{ report.account.display_name }}</h3>
         <div>
           <el-tag :type="getStateType(report.state)" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
-          <el-button plain size="small" @click="toggleNoteInput">{{ $t('reports.reply') }}</el-button>
+          <!-- <el-button plain size="small" @click="toggleNoteInput">{{ $t('reports.reply') }}</el-button> -->
         </div>
       </div>
       <h5 class="id">ID: {{ report.id }}</h5>
-      <div class="report-row">
-        <span>Account:</span>
+      <div class="line"/>
+      <div>
+        <span class="report-row">Account:</span>
         <img
           :src="report.account.avatar"
           alt="User's avatar"
           class="avatar-img">
         <a :href="report.account.url" target="_blank" class="account">{{ report.account.acct }}</a>
       </div>
-      <div class="report-row">
-        <span>Content: {{ report.content }}</span>
+      <div class="line"/>
+      <div>
+        <span class="report-row">Content: {{ report.content.length > 0 ? report.content : '-' }}</span>
       </div>
-      <div class="report-row">
-        <span>Actor:</span>
+      <div class="line"/>
+      <div>
+        <span class="report-row">Actor:</span>
         <img
           :src="report.actor.avatar"
           alt="User's avatar"
           class="avatar-img">
         <a :href="report.actor.url" target="_blank" class="account">{{ report.actor.acct }}</a>
       </div>
-      <el-collapse v-model="showNotes">
+      <div class="statuses">
+        <el-collapse>
+          <el-collapse-item :title="getStatusesTitle(report.statuses)">
+            <el-card v-for="status in report.statuses" :key="status.id" class="status-card">
+              <div slot="header">
+                <div class="status-header">
+                  <img :src="status.account.avatar" alt="User's avatar" class="status-avatar-img">
+                  <h3 class="status-account-name">{{ status.account.display_name }}</h3>
+                </div>
+                <a :href="status.account.url" target="_blank" class="account">
+                  @{{ status.account.acct }}
+                </a>
+              </div>
+              <div class="status-body">
+                <span class="status-content">{{ status.content }}</span>
+                <a :href="status.url" target="_blank" class="account">
+                  {{ parseTimestamp(status.created_at) }}
+                </a>
+              </div>
+            </el-card>
+          </el-collapse-item>
+        </el-collapse>
+      </div>
+      <!-- <el-collapse v-model="showNotes">
         <el-collapse-item :title="$t('reports.showNotes')" name="showNotes">
           <div v-if="report.statuses.length > 0">
             <div v-for="note in report.statuses" :key="note.id">
@@ -54,7 +80,7 @@
           <el-input v-model="note" :rows="2" type="textarea" autofocus/>
           <el-button class="submit-button" plain size="small" @click="addNewNote(report.id)">{{ $t('reports.submit') }}</el-button>
         </div>
-      </el-collapse>
+      </el-collapse> -->
     </el-card>
   </el-timeline-item>
 </template>
@@ -122,6 +148,9 @@ export default {
           return ''
       }
     },
+    getStatusesTitle(statuses) {
+      return `Reported statuses: ${statuses.length} item(s)`
+    },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('YYYY-MM-DD HH:mm')
     },
@@ -140,9 +169,14 @@ export default {
     vertical-align: bottom;
     width: 15px;
     height: 15px;
+    margin-left: 5px;
   }
   .el-card__body {
-    padding: 17px 17px 0;
+    padding: 17px;
+  }
+  .el-card__header {
+    background-color: #FAFAFA;
+    padding: 10px 20px;
   }
   .el-collapse {
     border-bottom: none;
@@ -168,11 +202,17 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    height: 25px;
+    height: 30px;
   }
   .id {
     color: gray;
     margin: 0 0 12px;
+  }
+  .line {
+    width: 100%;
+    height: 0;
+    border: 0.5px solid #EBEEF5;
+    margin: 15px 0 15px;
   }
   .new-note {
     p {
@@ -191,7 +231,36 @@ export default {
     color: gray;
   }
   .report-row {
-    margin-bottom: 5px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .report-title {
+    margin: 0;
+  }
+  .status-account-name {
+    margin: 0;
+  }
+  .status-avatar-img {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+  }
+  .status-body {
+    display: flex;
+    flex-direction: column;
+  }
+  .status-card {
+    margin-bottom: 15px;
+  }
+  .status-content {
+    font-size: 15px;
+  }
+  .status-header {
+    display: flex;
+    align-items: center;
+  }
+  .statuses {
+    margin-top: 15px;
   }
   .submit-button {
     display: block;
