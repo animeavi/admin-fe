@@ -2,14 +2,32 @@
   <el-timeline-item :timestamp="parseTimestamp(report.created_at)" placement="top" class="timeline-item-container">
     <el-card>
       <div class="header-container">
-        <h4>Report on {{ report.account.acct }}</h4>
+        <h4>Report on {{ report.account.display_name }}</h4>
         <div>
           <el-tag :type="getStateType(report.state)" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
           <el-button plain size="small" @click="toggleNoteInput">{{ $t('reports.reply') }}</el-button>
         </div>
       </div>
-      <h5 class="id">#{{ report.id }}</h5>
-      <p>{{ report.content }}</p>
+      <h5 class="id">ID: {{ report.id }}</h5>
+      <div class="report-row">
+        <span>Account:</span>
+        <img
+          :src="report.account.avatar"
+          alt="User's avatar"
+          class="avatar-img">
+        <a :href="report.account.url" target="_blank" class="account">{{ report.account.acct }}</a>
+      </div>
+      <div class="report-row">
+        <span>Content: {{ report.content }}</span>
+      </div>
+      <div class="report-row">
+        <span>Actor:</span>
+        <img
+          :src="report.actor.avatar"
+          alt="User's avatar"
+          class="avatar-img">
+        <a :href="report.actor.url" target="_blank" class="account">{{ report.actor.acct }}</a>
+      </div>
       <el-collapse v-model="showNotes">
         <el-collapse-item :title="$t('reports.showNotes')" name="showNotes">
           <div v-if="report.statuses.length > 0">
@@ -115,6 +133,14 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
+  .account {
+    text-decoration: underline;
+  }
+  .avatar-img {
+    vertical-align: bottom;
+    width: 15px;
+    height: 15px;
+  }
   .el-card__body {
     padding: 17px 17px 0;
   }
@@ -142,10 +168,11 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    height: 25px;
   }
   .id {
     color: gray;
-    margin: 0;
+    margin: 0 0 12px;
   }
   .new-note {
     p {
@@ -162,6 +189,9 @@ export default {
   .no-notes {
     font-style: italic;
     color: gray;
+  }
+  .report-row {
+    margin-bottom: 5px;
   }
   .submit-button {
     display: block;
