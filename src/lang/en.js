@@ -213,5 +213,11 @@ export default {
     deleteCompleted: 'Delete comleted',
     deleteCanceled: 'Delete canceled',
     noNotes: 'No notes to display'
+  },
+  reportsFilter: {
+    inputPlaceholder: 'Select filter',
+    open: 'Open',
+    closed: 'Closed',
+    resolved: 'Resolved'
   }
 }

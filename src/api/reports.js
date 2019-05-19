@@ -11,12 +11,7 @@ export async function fetchReports(authHost, token) {
   })
 }
 
-// export function deleteNote(reportId, noteId) {
-//   const updatedNotes = reports
-//     .find(report => report.id === reportId)
-//     .notes
-//     .filter(note => note.id !== noteId)
-//   return updatedNotes
-// }
+export async function toggleReportsFilter(authHost, token, filters) {
+}
 
 const authHeaders = (token) => token ? { 'Authorization': `Bearer ${getToken()}` } : {}

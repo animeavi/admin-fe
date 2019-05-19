@@ -1,6 +1,9 @@
 <template>
   <div class="reports-container">
     <h1>{{ $t('reports.reports') }}</h1>
+    <div class="filter-container">
+      <reports-filter/>
+    </div>
     <div class="block">
       <el-timeline class="timeline">
         <timeline-item v-loading="loading" v-for="report in reports" :report="report" :key="report.id"/>
@@ -11,9 +14,10 @@
 
 <script>
 import TimelineItem from './components/TimelineItem'
+import ReportsFilter from './components/ReportsFilter'
 
 export default {
-  components: { TimelineItem },
+  components: { TimelineItem, ReportsFilter },
   computed: {
     loading() {
       return this.$store.state.users.loading
@@ -42,6 +46,10 @@ export default {
 
 <style rel='stylesheet/scss' lang='scss' scoped>
 .reports-container {
+  .filter-container {
+    margin: 22px 15px 22px 15px;
+    padding-bottom: 0
+  }
   h1 {
     margin: 22px 0 0 15px;
   }
@@ -56,6 +64,9 @@ only screen and (max-width: 760px),
   .reports-container {
     h1 {
       margin: 7px 10px 7px 10px;
+    }
+    .filter-container {
+      margin: 0 10px 7px 10px
     }
   }
 }

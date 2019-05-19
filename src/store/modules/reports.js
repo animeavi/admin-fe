@@ -1,4 +1,4 @@
-import { fetchReports } from '@/api/reports'
+import { fetchReports, toggleReportsFilter } from '@/api/reports'
 
 const reports = {
   state: {
@@ -29,6 +29,10 @@ const reports = {
       commit('SET_REPORTS', response.data.reports)
       commit('SET_INDEX')
       commit('SET_LOADING', false)
+    },
+    async ToggleReportsFilter({ getters }, filters) {
+      const response = await toggleReportsFilter(getters.authHost, getters.token, filters)
+      return response.data
     }
     // async AddNote({ commit, state, getters }, { reportId, note }) {
     //   const report = state.fetchedReports.find(report => report.id === reportId)
