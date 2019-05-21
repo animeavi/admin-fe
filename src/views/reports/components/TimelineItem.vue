@@ -11,25 +11,31 @@
       <h5 class="id">ID: {{ report.id }}</h5>
       <div class="line"/>
       <div>
-        <span class="report-row">Account:</span>
+        <span class="report-row-key">Account:</span>
         <img
           :src="report.account.avatar"
           alt="User's avatar"
           class="avatar-img">
-        <a :href="report.account.url" target="_blank" class="account">{{ report.account.acct }}</a>
+        <a :href="report.account.url" target="_blank" class="account">
+          <span class="report-row-value">{{ report.account.acct }}</span>
+        </a>
       </div>
       <div class="line"/>
       <div>
-        <span class="report-row">Content: {{ report.content.length > 0 ? report.content : '-' }}</span>
+        <span class="report-row-key">Content:
+          <span class="report-row-value">{{ report.content.length > 0 ? report.content : '-' }}</span>
+        </span>
       </div>
       <div class="line"/>
       <div>
-        <span class="report-row">Actor:</span>
+        <span class="report-row-key">Actor:</span>
         <img
           :src="report.actor.avatar"
           alt="User's avatar"
           class="avatar-img">
-        <a :href="report.actor.url" target="_blank" class="account">{{ report.actor.acct }}</a>
+        <a :href="report.actor.url" target="_blank" class="account">
+          <span class="report-row-value">{{ report.actor.acct }}</span>
+        </a>
       </div>
       <div class="statuses">
         <el-collapse>
@@ -183,6 +189,7 @@ export default {
   }
   .el-collapse-item__header {
     height: 46px;
+    font-size: 14px;
   }
   .el-collapse-item__content {
     padding-bottom: 7px;
@@ -216,7 +223,7 @@ export default {
   }
   .new-note {
     p {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 500;
       height: 17px;
       margin: 13px 0 7px;
@@ -230,9 +237,12 @@ export default {
     font-style: italic;
     color: gray;
   }
-  .report-row {
-    font-size: 13px;
+  .report-row-key {
+    font-size: 14px;
     font-weight: 500;
+  }
+  .report-row-key {
+    font-size: 14px;
   }
   .report-title {
     margin: 0;
