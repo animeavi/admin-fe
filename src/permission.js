@@ -26,7 +26,7 @@ export const beforeEachRoute = (to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) {
         store.dispatch('GetUserInfo').then(res => {
-          const roles = res.data.rights.admin ? ['admin'] : []
+          const roles = res.data.pleroma.is_admin ? ['admin'] : []
           store.dispatch('GenerateRoutes', { roles }).then(() => {
             router.addRoutes(store.getters.addRouters)
             next({ ...to, replace: true })
