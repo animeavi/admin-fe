@@ -77,15 +77,15 @@ const user = {
             reject('Verification failed, please login again.')
           }
 
-          if (data.rights && data.rights.admin) {
+          if (data.pleroma && data.pleroma.is_admin) {
             commit('SET_ROLES', ['admin'])
           } else {
             reject('getInfo: roles must be a non-null array!')
           }
 
-          commit('SET_NAME', data.name)
+          commit('SET_NAME', data.username)
           commit('SET_ID', data.id)
-          commit('SET_AVATAR', data.profile_image_url)
+          commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', '')
           resolve(response)
         }).catch(error => {

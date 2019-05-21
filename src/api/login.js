@@ -32,8 +32,8 @@ export async function loginByUsername(username, password, authHost) {
 export function getUserInfo(token, authHost) {
   return request({
     baseURL: baseName(authHost),
-    url: '/api/account/verify_credentials',
-    method: 'post',
+    url: '/api/v1/accounts/verify_credentials',
+    method: 'get',
     headers: token ? { 'Authorization': `Bearer ${token}` } : {}
   })
 }

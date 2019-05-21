@@ -42,7 +42,7 @@ export function getUserInfo(token, authHost) {
     'statuses_count': 0,
     'cover_photo': '',
     'hide_follows': false,
-    'pleroma': { 'confirmation_pending': false, 'deactivated': false, 'tags': ['force_nsfw'] },
+    'pleroma': { 'confirmation_pending': false, 'deactivated': false, 'tags': ['force_nsfw'], 'is_admin': true },
     'profile_image_url_original': '',
     'created_at': 'Fri Mar 01 15:15:19 +0000 2019',
     'fields': [],

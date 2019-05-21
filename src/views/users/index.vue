@@ -3,7 +3,7 @@
     <h1>{{ $t('users.users') }}</h1>
     <div class="search-container">
       <users-filter/>
-      <el-input :placeholder="$t('users.search')" class="search" @input="handleDebounceSearchInput"/>
+      <el-input :placeholder="$t('users.search')" v-model="search" class="search" @input="handleDebounceSearchInput"/>
     </div>
     <el-table v-loading="loading" :data="users" style="width: 100%">
       <el-table-column :min-width="width" :label="$t('users.id')" prop="id" />
@@ -123,6 +123,11 @@ export default {
   name: 'Users',
   components: {
     UsersFilter
+  },
+  data() {
+    return {
+      search: ''
+    }
   },
   computed: {
     loading() {
