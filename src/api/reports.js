@@ -2,10 +2,10 @@ import request from '@/utils/request'
 import { getToken } from '@/utils/auth'
 import { baseName } from './utils'
 
-export async function fetchReports(authHost, token) {
+export async function fetchReports(limit, max_id, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/reports`,
+    url: `/api/pleroma/admin/reports?limit=${limit}&max_id=${max_id}`,
     method: 'get',
     headers: authHeaders(token)
   })

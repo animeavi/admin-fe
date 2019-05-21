@@ -3,8 +3,8 @@ import { fetchReports, toggleReportsFilter } from '@/api/reports'
 const reports = {
   state: {
     fetchedReports: [],
-    indexOfLastShownReport: 0,
-    size: 3,
+    idOfLastReport: '',
+    page_limit: 5,
     loading: true
   },
   mutations: {
@@ -17,17 +17,19 @@ const reports = {
     SET_LOADING: (state, status) => {
       state.loading = status
     },
-    SET_INDEX: (state) => {
-      state.indexOfLastShownReport = state.indexOfLastShownReport + state.size
+    SET_LAST_REPORT_ID: (state, id) => {
+      state.idOfLastReport = id
     }
   },
   actions: {
-    async FetchReports({ commit, getters }) {
+    async FetchReports({ commit, state, getters }) {
       commit('SET_LOADING', true)
-      const response = await fetchReports(getters.authHost, getters.token)
+      const response = await fetchReports(state.page_limit, state.idOfLastReport, getters.authHost, getters.token)
+      const reports = response.data.reports
+      const id = reports.length > 0 ? reports[reports.length - 1].id : state.idOfLastReport
 
-      commit('SET_REPORTS', response.data.reports)
-      commit('SET_INDEX')
+      commit('SET_REPORTS', reports)
+      commit('SET_LAST_REPORT_ID', id)
       commit('SET_LOADING', false)
     },
     async ToggleReportsFilter({ getters }, filters) {
