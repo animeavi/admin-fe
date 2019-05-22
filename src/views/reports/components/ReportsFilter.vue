@@ -1,9 +1,8 @@
 <template>
   <el-select
-    v-model="value"
-    :clearable="isDesktop"
+    v-model="filter"
     :placeholder="$t('reportsFilter.inputPlaceholder')"
-    multiple
+    clearable
     class="select-field"
     @change="toggleFilters">
     <el-option value="open">{{ $t('reportsFilter.open') }}</el-option>
@@ -16,18 +15,12 @@
 export default {
   data() {
     return {
-      value: []
-    }
-  },
-  computed: {
-    isDesktop() {
-      return this.$store.state.app.device === 'desktop'
+      filter: []
     }
   },
   methods: {
     toggleFilters() {
-      const currentFilters = this.$data.value.reduce((acc, filter) => ({ ...acc, [filter]: true }), {})
-      this.$store.dispatch('ToggleReportsFilter', currentFilters)
+      this.$store.dispatch('ToggleReportsFilter', this.$data.filter)
     }
   }
 }
