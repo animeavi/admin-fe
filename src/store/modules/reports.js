@@ -1,4 +1,4 @@
-import { fetchReports, filterReports } from '@/api/reports'
+import { changeState, fetchReports, filterReports } from '@/api/reports'
 
 const reports = {
   state: {
@@ -15,18 +15,23 @@ const reports = {
     SET_LOADING: (state, status) => {
       state.loading = status
     },
+    SET_REPORT: (state, { reportIndex, data }) => {
+      state.fetchedReports[reportIndex] = data
+    },
     SET_REPORTS: (state, reports) => {
       state.fetchedReports = reports
     },
     SET_REPORTS_FILTER: (state, filter) => {
       state.stateFilter = filter
     }
-    // SET_REPORT: (state, { index, report }) => {
-    //   state.fetchedReports[index] = report
-    // },
   },
   actions: {
-    async FetchReports({ commit, state, getters }) {
+    async ChangeReportState({ commit, getters, state }, { reportState, reportId }) {
+      const { data } = await changeState(reportState, reportId, getters.authHost, getters.token)
+      const reportIndex = state.fetchedReports.findIndex(report => report.id === reportId)
+      commit('SET_REPORT', { reportIndex, data })
+    },
+    async FetchReports({ commit, getters, state }) {
       commit('SET_LOADING', true)
       const response = await fetchReports(state.page_limit, state.idOfLastReport, getters.authHost, getters.token)
       const reports = state.fetchedReports.concat(response.data.reports)

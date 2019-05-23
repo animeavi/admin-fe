@@ -212,7 +212,8 @@ export default {
     cancel: 'Cancel',
     deleteCompleted: 'Delete comleted',
     deleteCanceled: 'Delete canceled',
-    noNotes: 'No notes to display'
+    noNotes: 'No notes to display',
+    changeState: 'Change state'
   },
   reportsFilter: {
     inputPlaceholder: 'Select filter',

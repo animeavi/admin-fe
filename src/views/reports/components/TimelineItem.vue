@@ -4,7 +4,15 @@
       <div class="header-container">
         <h3 class="report-title">Report on {{ report.account.display_name }}</h3>
         <div>
-          <el-tag :type="getStateType(report.state)" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
+          <el-tag :type="getStateType(report.state)" :key="report.state" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
+          <el-dropdown>
+            <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeState') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-if="report.state !== 'resolved'" @click.native="changeReportState('resolved', report.id)">Resolve</el-dropdown-item>
+              <el-dropdown-item v-if="report.state !== 'open'" @click.native="changeReportState('open', report.id)">Open</el-dropdown-item>
+              <el-dropdown-item v-if="report.state !== 'closed'" @click.native="changeReportState('closed', report.id)">Close</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
           <!-- <el-button plain size="small" @click="toggleNoteInput">{{ $t('reports.reply') }}</el-button> -->
         </div>
       </div>
@@ -120,6 +128,9 @@ export default {
         this.$store.dispatch('AddNote', { reportId, note })
         this.$data.note = ''
       }
+    },
+    changeReportState(reportState, reportId) {
+      this.$store.dispatch('ChangeReportState', { reportState, reportId })
     },
     deleteNote(reportId, noteId) {
       this.$confirm(i18n.t('reports.confirmMsg'), {

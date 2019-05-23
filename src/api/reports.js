@@ -2,6 +2,16 @@ import request from '@/utils/request'
 import { getToken } from '@/utils/auth'
 import { baseName } from './utils'
 
+export async function changeState(state, id, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/reports/${id}`,
+    method: 'put',
+    headers: authHeaders(token),
+    data: { state }
+  })
+}
+
 export async function fetchReports(limit, max_id, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
