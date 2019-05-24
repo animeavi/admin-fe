@@ -12,6 +12,16 @@ export async function changeState(state, id, authHost, token) {
   })
 }
 
+export async function changeStatusScope(id, sensitive, visibility, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/statuses/${id}`,
+    method: 'put',
+    headers: authHeaders(token),
+    data: { sensitive, visibility }
+  })
+}
+
 export async function fetchReports(limit, max_id, authHost, token) {
   return await request({
     baseURL: baseName(authHost),

@@ -1,4 +1,4 @@
-import { changeState, fetchReports, filterReports } from '@/api/reports'
+import { changeState, changeStatusScope, fetchReports, filterReports } from '@/api/reports'
 
 const reports = {
   state: {
@@ -26,6 +26,18 @@ const reports = {
     async ChangeReportState({ commit, getters, state }, { reportState, reportId }) {
       const { data } = await changeState(reportState, reportId, getters.authHost, getters.token)
       const updatedReports = state.fetchedReports.map(report => report.id === reportId ? data : report)
+      commit('SET_REPORTS', updatedReports)
+    },
+    async ChangeStatusScope({ commit, getters, state }, { statusId, isSensitive, visibility, reportId }) {
+      const { data } = await changeStatusScope(statusId, isSensitive, visibility, getters.authHost, getters.token)
+      const updatedReports = state.fetchedReports.map(report => {
+        if (report.id === reportId) {
+          const statuses = report.statuses.map(status => status.id === statusId ? data : status)
+          return { ...report, statuses }
+        } else {
+          return report
+        }
+      })
       commit('SET_REPORTS', updatedReports)
     },
     async FetchReports({ commit, getters, state }) {

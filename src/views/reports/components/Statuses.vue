@@ -13,11 +13,31 @@
             <el-dropdown trigger="click">
               <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeScope') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-if="!status.sensitive">{{ $t('reports.addSensitive') }}</el-dropdown-item>
-                <el-dropdown-item v-if="status.sensitive">{{ $t('reports.removeSensitive') }}</el-dropdown-item>
-                <el-dropdown-item v-if="status.visibility !== 'public'">{{ $t('reports.public') }}</el-dropdown-item>
-                <el-dropdown-item v-if="status.visibility !== 'private'">{{ $t('reports.private') }}</el-dropdown-item>
-                <el-dropdown-item v-if="status.visibility !== 'unlisted'">{{ $t('reports.unlisted') }}</el-dropdown-item>
+                <el-dropdown-item
+                  v-if="!status.sensitive"
+                  @click.native="changeStatus(status.id, true, status.visibility, report.id)">
+                  {{ $t('reports.addSensitive') }}
+                </el-dropdown-item>
+                <el-dropdown-item
+                  v-if="status.sensitive"
+                  @click.native="changeStatus(status.id, false, status.visibility, report.id)">
+                  {{ $t('reports.removeSensitive') }}
+                </el-dropdown-item>
+                <el-dropdown-item
+                  v-if="status.visibility !== 'public'"
+                  @click.native="changeStatus(status.id, status.sensitive, 'public', report.id)">
+                  {{ $t('reports.public') }}
+                </el-dropdown-item>
+                <el-dropdown-item
+                  v-if="status.visibility !== 'private'"
+                  @click.native="changeStatus(status.id, status.sensitive, 'private', report.id)">
+                  {{ $t('reports.private') }}
+                </el-dropdown-item>
+                <el-dropdown-item
+                  v-if="status.visibility !== 'unlisted'"
+                  @click.native="changeStatus(status.id, status.sensitive, 'unlisted', report.id)">
+                  {{ $t('reports.unlisted') }}
+                </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -51,8 +71,10 @@ export default {
     capitalizeFirstLetter(str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
     },
+    changeStatus(statusId, isSensitive, visibility, reportId) {
+      this.$store.dispatch('ChangeStatusScope', { statusId, isSensitive, visibility, reportId })
+    },
     getStatusesTitle(statuses) {
-      console.log(this.report)
       return `Reported statuses: ${statuses.length} item(s)`
     },
     parseTimestamp(timestamp) {
