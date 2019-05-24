@@ -22,6 +22,15 @@ export async function changeStatusScope(id, sensitive, visibility, authHost, tok
   })
 }
 
+export async function deleteStatus(id, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/statuses/${id}`,
+    method: 'delete',
+    headers: authHeaders(token)
+  })
+}
+
 export async function fetchReports(limit, max_id, authHost, token) {
   return await request({
     baseURL: baseName(authHost),

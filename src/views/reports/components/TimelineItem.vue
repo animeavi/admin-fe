@@ -21,7 +21,7 @@
         <span class="report-row-key">Account:</span>
         <img
           :src="report.account.avatar"
-          alt="User's avatar"
+          alt="avatar"
           class="avatar-img">
         <a :href="report.account.url" target="_blank" class="account">
           <span class="report-row-value">{{ report.account.acct }}</span>

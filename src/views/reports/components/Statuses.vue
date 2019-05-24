@@ -38,6 +38,10 @@
                   @click.native="changeStatus(status.id, status.sensitive, 'unlisted', report.id)">
                   {{ $t('reports.unlisted') }}
                 </el-dropdown-item>
+                <el-dropdown-item
+                  @click.native="deleteStatus(status.id, report.id)">
+                  {{ $t('reports.deleteStatus') }}
+                </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -73,6 +77,24 @@ export default {
     },
     changeStatus(statusId, isSensitive, visibility, reportId) {
       this.$store.dispatch('ChangeStatusScope', { statusId, isSensitive, visibility, reportId })
+    },
+    deleteStatus(statusId, reportId) {
+      this.$confirm('Are you sure you want to delete this status?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('DeleteStatus', { statusId, reportId })
+        this.$message({
+          type: 'success',
+          message: 'Delete completed'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Delete canceled'
+        })
+      })
     },
     getStatusesTitle(statuses) {
       return `Reported statuses: ${statuses.length} item(s)`

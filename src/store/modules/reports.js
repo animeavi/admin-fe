@@ -1,4 +1,4 @@
-import { changeState, changeStatusScope, fetchReports, filterReports } from '@/api/reports'
+import { changeState, changeStatusScope, deleteStatus, fetchReports, filterReports } from '@/api/reports'
 
 const reports = {
   state: {
@@ -33,6 +33,18 @@ const reports = {
       const updatedReports = state.fetchedReports.map(report => {
         if (report.id === reportId) {
           const statuses = report.statuses.map(status => status.id === statusId ? data : status)
+          return { ...report, statuses }
+        } else {
+          return report
+        }
+      })
+      commit('SET_REPORTS', updatedReports)
+    },
+    async DeleteStatus({ commit, getters, state }, { statusId, reportId }) {
+      deleteStatus(statusId, getters.authHost, getters.token)
+      const updatedReports = state.fetchedReports.map(report => {
+        if (report.id === reportId) {
+          const statuses = report.statuses.filter(status => status.id !== statusId)
           return { ...report, statuses }
         } else {
           return report

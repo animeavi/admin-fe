@@ -223,7 +223,8 @@ export default {
     public: 'Make status public',
     private: 'Make status private',
     unlisted: 'Make status unlisted',
-    sensitive: 'Sensitive'
+    sensitive: 'Sensitive',
+    deleteStatus: 'Delete status'
   },
   reportsFilter: {
     inputPlaceholder: 'Select filter',
