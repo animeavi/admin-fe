@@ -4,21 +4,20 @@
       <div class="header-container">
         <h3 class="report-title">Report on {{ report.account.display_name }}</h3>
         <div>
-          <el-tag :type="getStateType(report.state)" :key="report.state" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
+          <el-tag :type="getStateType(report.state)" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
           <el-dropdown>
             <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeState') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-if="report.state !== 'resolved'" @click.native="changeReportState('resolved', report.id)">Resolve</el-dropdown-item>
-              <el-dropdown-item v-if="report.state !== 'open'" @click.native="changeReportState('open', report.id)">Open</el-dropdown-item>
+              <el-dropdown-item v-if="report.state !== 'open'" @click.native="changeReportState('open', report.id)">Reopen</el-dropdown-item>
               <el-dropdown-item v-if="report.state !== 'closed'" @click.native="changeReportState('closed', report.id)">Close</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <!-- <el-button plain size="small" @click="toggleNoteInput">{{ $t('reports.reply') }}</el-button> -->
         </div>
       </div>
       <h5 class="id">ID: {{ report.id }}</h5>
-      <div class="line"/>
       <div>
+        <div class="line"/>
         <span class="report-row-key">Account:</span>
         <img
           :src="report.account.avatar"
@@ -28,14 +27,14 @@
           <span class="report-row-value">{{ report.account.acct }}</span>
         </a>
       </div>
-      <div class="line"/>
-      <div>
+      <div v-if="report.content.length > 0">
+        <div class="line"/>
         <span class="report-row-key">Content:
-          <span class="report-row-value">{{ report.content.length > 0 ? report.content : '-' }}</span>
+          <span class="report-row-value">{{ report.content }}</span>
         </span>
       </div>
-      <div class="line"/>
       <div>
+        <div class="line"/>
         <span class="report-row-key">Actor:</span>
         <img
           :src="report.actor.avatar"
@@ -45,7 +44,7 @@
           <span class="report-row-value">{{ report.actor.acct }}</span>
         </a>
       </div>
-      <div class="statuses">
+      <div v-if="report.statuses.length > 0" class="statuses">
         <el-collapse>
           <el-collapse-item :title="getStatusesTitle(report.statuses)">
             <el-card v-for="status in report.statuses" :key="status.id" class="status-card">
@@ -68,33 +67,6 @@
           </el-collapse-item>
         </el-collapse>
       </div>
-      <!-- <el-collapse v-model="showNotes">
-        <el-collapse-item :title="$t('reports.showNotes')" name="showNotes">
-          <div v-if="report.statuses.length > 0">
-            <div v-for="note in report.statuses" :key="note.id">
-              <el-card :body-style="{ padding: '6px 14px 0 14px' }" class="note">
-                <div class="header-container">
-                  <h4>{{ $t('reports.from') }} {{ note.author }}</h4>
-                  <i class="el-icon-close" @click="deleteNote(report.id, note.id)"/>
-                </div>
-                <p class="timestamp">{{ note.timestamp }}</p>
-                <p>{{ note.text }}</p>
-              </el-card>
-            </div>
-          </div>
-          <div v-else>
-            <p class="no-notes">{{ $t('reports.noNotes') }}</p>
-          </div>
-        </el-collapse-item>
-        <div v-show="showNewNoteInput" class="new-note">
-          <div class="header-container">
-            <p>{{ $t('reports.newNote') }}</p>
-            <i class="el-icon-close" @click="toggleNoteInput"/>
-          </div>
-          <el-input v-model="note" :rows="2" type="textarea" autofocus/>
-          <el-button class="submit-button" plain size="small" @click="addNewNote(report.id)">{{ $t('reports.submit') }}</el-button>
-        </div>
-      </el-collapse> -->
     </el-card>
   </el-timeline-item>
 </template>
@@ -162,7 +134,7 @@ export default {
         case 'resolved':
           return 'success'
         default:
-          return ''
+          return 'primary'
       }
     },
     getStatusesTitle(statuses) {

@@ -15,9 +15,6 @@ const reports = {
     SET_LOADING: (state, status) => {
       state.loading = status
     },
-    SET_REPORT: (state, { reportIndex, data }) => {
-      state.fetchedReports[reportIndex] = data
-    },
     SET_REPORTS: (state, reports) => {
       state.fetchedReports = reports
     },
@@ -28,8 +25,8 @@ const reports = {
   actions: {
     async ChangeReportState({ commit, getters, state }, { reportState, reportId }) {
       const { data } = await changeState(reportState, reportId, getters.authHost, getters.token)
-      const reportIndex = state.fetchedReports.findIndex(report => report.id === reportId)
-      commit('SET_REPORT', { reportIndex, data })
+      const updatedReports = state.fetchedReports.map(report => report.id === reportId ? data : report)
+      commit('SET_REPORTS', updatedReports)
     },
     async FetchReports({ commit, getters, state }) {
       commit('SET_LOADING', true)
@@ -60,19 +57,6 @@ const reports = {
         commit('SET_LOADING', false)
       }
     }
-    // async AddNote({ commit, state, getters }, { reportId, note }) {
-    //   const report = state.fetchedReports.find(report => report.id === reportId)
-    //   report.notes = [...report.notes, note]
-    //   const reportIndex = state.fetchedReports.findIndex(report => report.id === reportId)
-    //   commit('SET_REPORT', { reportIndex, report })
-    // },
-    // async DeleteNote({ commit, state }, { reportId, noteId }) {
-    //   const response = deleteNote(reportId, noteId)
-    //   const report = state.fetchedReports.find(report => report.id === reportId)
-    //   report.notes = response
-    //   const reportIndex = state.fetchedReports.findIndex(report => report.id === reportId)
-    //   commit('SET_REPORT', { reportIndex, report })
-    // }
   }
 }
 
