@@ -5,12 +5,12 @@
         <h3 class="report-title">Report on {{ report.account.display_name }}</h3>
         <div>
           <el-tag :type="getStateType(report.state)" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
-          <el-dropdown>
+          <el-dropdown trigger="click">
             <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeState') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-if="report.state !== 'resolved'" @click.native="changeReportState('resolved', report.id)">Resolve</el-dropdown-item>
-              <el-dropdown-item v-if="report.state !== 'open'" @click.native="changeReportState('open', report.id)">Reopen</el-dropdown-item>
-              <el-dropdown-item v-if="report.state !== 'closed'" @click.native="changeReportState('closed', report.id)">Close</el-dropdown-item>
+              <el-dropdown-item v-if="report.state !== 'resolved'" @click.native="changeReportState('resolved', report.id)">{{ $t('reports.resolve') }}</el-dropdown-item>
+              <el-dropdown-item v-if="report.state !== 'open'" @click.native="changeReportState('open', report.id)">{{ $t('reports.reopen') }}</el-dropdown-item>
+              <el-dropdown-item v-if="report.state !== 'closed'" @click.native="changeReportState('closed', report.id)">{{ $t('reports.close') }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -46,25 +46,7 @@
       </div>
       <div v-if="report.statuses.length > 0" class="statuses">
         <el-collapse>
-          <el-collapse-item :title="getStatusesTitle(report.statuses)">
-            <el-card v-for="status in report.statuses" :key="status.id" class="status-card">
-              <div slot="header">
-                <div class="status-header">
-                  <img :src="status.account.avatar" alt="User's avatar" class="status-avatar-img">
-                  <h3 class="status-account-name">{{ status.account.display_name }}</h3>
-                </div>
-                <a :href="status.account.url" target="_blank" class="account">
-                  @{{ status.account.acct }}
-                </a>
-              </div>
-              <div class="status-body">
-                <span class="status-content">{{ status.content }}</span>
-                <a :href="status.url" target="_blank" class="account">
-                  {{ parseTimestamp(status.created_at) }}
-                </a>
-              </div>
-            </el-card>
-          </el-collapse-item>
+          <statuses :report="report"/>
         </el-collapse>
       </div>
     </el-card>
@@ -74,9 +56,11 @@
 <script>
 import i18n from '@/lang'
 import * as moment from 'moment'
+import Statuses from './Statuses'
 
 export default {
   name: 'TimelineItem',
+  components: { Statuses },
   props: {
     report: {
       type: Object,
@@ -136,9 +120,6 @@ export default {
         default:
           return 'primary'
       }
-    },
-    getStatusesTitle(statuses) {
-      return `Reported statuses: ${statuses.length} item(s)`
     },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('YYYY-MM-DD HH:mm')
@@ -229,28 +210,6 @@ export default {
   }
   .report-title {
     margin: 0;
-  }
-  .status-account-name {
-    margin: 0;
-  }
-  .status-avatar-img {
-    width: 15px;
-    height: 15px;
-    margin-right: 5px;
-  }
-  .status-body {
-    display: flex;
-    flex-direction: column;
-  }
-  .status-card {
-    margin-bottom: 15px;
-  }
-  .status-content {
-    font-size: 15px;
-  }
-  .status-header {
-    display: flex;
-    align-items: center;
   }
   .statuses {
     margin-top: 15px;

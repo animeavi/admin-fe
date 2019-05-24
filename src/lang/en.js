@@ -213,7 +213,17 @@ export default {
     deleteCompleted: 'Delete comleted',
     deleteCanceled: 'Delete canceled',
     noNotes: 'No notes to display',
-    changeState: 'Change state'
+    changeState: 'Change state',
+    changeScope: 'Change scope',
+    resolve: 'Resolve',
+    reopen: 'Reopen',
+    close: 'Close',
+    addSensitive: 'Add Sensitive flag',
+    removeSensitive: 'Remove Sensitive flag',
+    public: 'Make status public',
+    private: 'Make status private',
+    unlisted: 'Make status unlisted',
+    sensitive: 'Sensitive'
   },
   reportsFilter: {
     inputPlaceholder: 'Select filter',
