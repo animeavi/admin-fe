@@ -31,16 +31,18 @@ export default {
   },
   mounted() {
     this.$store.dispatch('FetchReports')
-    this.scroll(this.reports)
+  },
+  created() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
-    scroll(reports) {
-      window.onscroll = () => {
-        const bottomOfWindow = document.documentElement.scrollHeight - document.documentElement.scrollTop === document.documentElement.clientHeight
-
-        if (bottomOfWindow) {
-          this.$store.dispatch('FetchReports')
-        }
+    handleScroll(reports) {
+      const bottomOfWindow = document.documentElement.scrollHeight - document.documentElement.scrollTop === document.documentElement.clientHeight
+      if (bottomOfWindow) {
+        this.$store.dispatch('FetchReports')
       }
     }
   }
