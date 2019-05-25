@@ -38,7 +38,7 @@
         <span class="report-row-key">Actor:</span>
         <img
           :src="report.actor.avatar"
-          alt="User's avatar"
+          alt="avatar"
           class="avatar-img">
         <a :href="report.actor.url" target="_blank" class="account">
           <span class="report-row-value">{{ report.actor.acct }}</span>

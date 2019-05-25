@@ -4,14 +4,17 @@ import Element from 'element-ui'
 import Reports from '@/views/reports/index'
 import storeConfig from './store.conf'
 import { cloneDeep } from 'lodash'
+import flushPromises from 'flush-promises'
 
 config.mocks["$t"] = () => {}
+config.stubs['reports-filter'] = '<div />'
+config.stubs['timeline-item'] = '<div />'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(Element)
 
-// jest.mock('@/api/reports')
+jest.mock('@/api/reports')
 
 describe('Reports', () => {
   let store
@@ -26,68 +29,24 @@ describe('Reports', () => {
       localVue
     })
 
-    await wrapper.vm.$nextTick()
+    await flushPromises()
     const initialReports = store.state.reports.fetchedReports.length
-    expect(initialReports).toEqual(3)
+    expect(initialReports).toEqual(5)
     done()
   })
 
-  it('shows notes', () => {
+  it('loads more reports on scroll', async (done) => {
     const wrapper = mount(Reports, {
       store,
       localVue
     })
 
-    const note = wrapper.find('.el-collapse-item__content')
-    expect(note.isVisible()).toBe(false)
-
-    const button = wrapper.find('.el-collapse-item__header')
-    button.trigger('click')
-    expect(note.isVisible()).toBe(true)
-
-    button.trigger('click')
-    expect(note.isVisible()).toBe(false)
-  })
-
-  it('creates a note', () => {
-    const wrapper = mount(Reports, {
-      store,
-      localVue
-    })
-    const noteTextArea = wrapper.find('textarea')
-    const notes = store.state.reports.fetchedReports[0].notes
-
-    expect(noteTextArea.isVisible()).toBe(false)
-
-    wrapper.find('.el-button--default').trigger('click')
-    expect(noteTextArea.isVisible()).toBe(true)
-    expect(notes.length).toBe(2)
-
-    noteTextArea.setValue('new note')
-    wrapper.find('.submit-button').trigger('click')
-    const updatedNotes = store.state.reports.fetchedReports[0].notes
-    expect(updatedNotes.length).toBe(3)
-
-    wrapper.find('.new-note .el-icon-close').trigger('click')
-    expect(noteTextArea.isVisible()).toBe(false)
-  })
-
-  it('deletes a note', () => {
-    store.dispatch('FetchReports')
-    expect(store.state.reports.fetchedReports[0].notes.length).toBe(3)
-
-    store.dispatch('DeleteNote', { reportId: '1', noteId: '2' })
-    expect(store.state.reports.fetchedReports[0].notes.length).toBe(2)
-  })
-
-  it('loads more reports on scroll', () => {
-    const wrapper = mount(Reports, {
-      store,
-      localVue
-    })
-    expect(store.state.reports.fetchedReports.length).toEqual(3)
+    await flushPromises()
+    expect(store.state.reports.fetchedReports.length).toEqual(5)
 
     window.dispatchEvent(new CustomEvent('scroll', { detail: 2000 }))
-    expect(store.state.reports.fetchedReports.length).toEqual(6)
+    await flushPromises()
+    expect(store.state.reports.fetchedReports.length).toEqual(7)
+    done()
   })
 })
