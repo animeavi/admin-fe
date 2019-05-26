@@ -189,7 +189,8 @@ export default {
     sandbox: 'Force posts to be followers-only',
     disableRemoteSubscription: 'Disallow following user from remote instances',
     disableAnySubscription: 'Disallow following user at all',
-    selectUsers: 'Select users to apply actions to multiple users'
+    selectUsers: 'Select users to apply actions to multiple users',
+    moderateUsers: 'Moderate multiple users'
   },
   usersFilter: {
     inputPlaceholder: 'Select filter',

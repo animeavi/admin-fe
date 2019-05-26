@@ -8,7 +8,7 @@
       <users-filter/>
       <el-input :placeholder="$t('users.search')" class="search" @input="handleDebounceSearchInput"/>
     </div>
-    <dropdown-menu
+    <dropdown-actions-menu
       :selected-users="selectedUsers"
       @apply-action="clearSelection"/>
     <el-table
@@ -137,13 +137,13 @@
 import debounce from 'lodash.debounce'
 import numeral from 'numeral'
 import UsersFilter from './components/UsersFilter'
-import DropdownMenu from './components/DropdownMenu'
+import DropdownActionsMenu from './components/DropdownActionsMenu'
 
 export default {
   name: 'Users',
   components: {
     UsersFilter,
-    DropdownMenu
+    DropdownActionsMenu
   },
   data: function() {
     return {
@@ -265,7 +265,7 @@ export default {
     height: 36px;
     justify-content: space-between;
     align-items: center;
-    margin: 22px 15px 22px 15px
+    margin: 22px 15px 15px 15px
   }
   .user-count {
     color: gray;

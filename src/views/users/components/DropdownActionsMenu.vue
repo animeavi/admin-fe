@@ -1,6 +1,14 @@
 <template>
-  <el-dropdown size="small" trigger="click">
-    <el-button v-if="isDesktop" icon="el-icon-edit" class="actions-button"/>
+  <el-dropdown size="small" trigger="click" placement="bottom-start">
+    <el-button v-if="isDesktop" class="actions-button">
+      <span class="actions-button-container">
+        <span>
+          <i class="el-icon-edit" />
+          {{ $t('users.moderateUsers') }}
+        </span>
+        <i class="el-icon-arrow-down el-icon--right"/>
+      </span>
+    </el-button>
     <el-dropdown-menu v-if="showDropdownForMultipleUsers" slot="dropdown">
       <el-dropdown-item
         @click.native="grantRightToMultipleUsers('admin')">
@@ -220,7 +228,20 @@ export default {
 
 <style rel='stylesheet/scss' lang='scss' scoped>
   .actions-button {
-    margin-left: 15px;
+    text-align: left;
+    margin: 0 15px 10px 0;
+    width: 350px;
+    padding: 10px 15px;
+  }
+  .actions-button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  .el-dropdown {
+    float: right;
+  }
+  .el-dropdown-menu {
+    margin-right: 15px;
   }
   .tag-container {
     display: flex;
