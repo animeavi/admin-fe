@@ -40,6 +40,10 @@ const reports = {
       })
       commit('SET_REPORTS', updatedReports)
     },
+    ClearFetchedReports({ commit }) {
+      commit('SET_REPORTS', [])
+      commit('SET_LAST_REPORT_ID', '')
+    },
     async DeleteStatus({ commit, getters, state }, { statusId, reportId }) {
       deleteStatus(statusId, getters.authHost, getters.token)
       const updatedReports = state.fetchedReports.map(report => {
@@ -54,7 +58,11 @@ const reports = {
     },
     async FetchReports({ commit, getters, state }) {
       commit('SET_LOADING', true)
-      const response = await fetchReports(state.page_limit, state.idOfLastReport, getters.authHost, getters.token)
+
+      const response = state.stateFilter.length === 0
+        ? await fetchReports(state.page_limit, state.idOfLastReport, getters.authHost, getters.token)
+        : await filterReports(state.stateFilter, state.page_limit, state.idOfLastReport, getters.authHost, getters.token)
+
       const reports = state.fetchedReports.concat(response.data.reports)
       const id = reports.length > 0 ? reports[reports.length - 1].id : state.idOfLastReport
 
@@ -62,24 +70,8 @@ const reports = {
       commit('SET_LAST_REPORT_ID', id)
       commit('SET_LOADING', false)
     },
-    async ToggleReportsFilter({ commit, dispatch, getters, state }, filter) {
-      commit('SET_REPORTS', [])
-      commit('SET_LAST_REPORT_ID', '')
-
-      if (filter.length === 0) {
-        dispatch('FetchReports')
-      } else {
-        commit('SET_REPORTS_FILTER', filter)
-        commit('SET_LOADING', true)
-
-        const response = await filterReports(state.stateFilter, state.page_limit, state.idOfLastReport, getters.authHost, getters.token)
-        const reports = state.fetchedReports.concat(response.data.reports)
-        const id = reports.length > 0 ? reports[reports.length - 1].id : state.idOfLastReport
-
-        commit('SET_REPORTS', reports)
-        commit('SET_LAST_REPORT_ID', id)
-        commit('SET_LOADING', false)
-      }
+    SetFilter({ commit }, filter) {
+      commit('SET_REPORTS_FILTER', filter)
     }
   }
 }

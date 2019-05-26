@@ -20,7 +20,9 @@ export default {
   },
   methods: {
     toggleFilters() {
-      this.$store.dispatch('ToggleReportsFilter', this.$data.filter)
+      this.$store.dispatch('SetFilter', this.$data.filter)
+      this.$store.dispatch('ClearFetchedReports')
+      this.$store.dispatch('FetchReports')
     }
   }
 }
