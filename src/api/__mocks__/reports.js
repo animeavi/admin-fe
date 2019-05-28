@@ -9,6 +9,12 @@ const reports = [
 ]
 
 export async function fetchReports(limit, max_id, authHost, token) {
-  const filteredReports = max_id.length > 0 ? reports.slice(5) : reports.slice(0, 5)
-  return Promise.resolve({ data: { reports: filteredReports }})
+  const paginatedReports = max_id.length > 0 ? reports.slice(5) : reports.slice(0, 5)
+  return Promise.resolve({ data: { reports: paginatedReports }})
+}
+
+export async function filterReports(filter, limit, max_id, authHost, token) {
+  const filteredReports = reports.filter(report => report.state === filter)
+  const paginatedReports = max_id.length > 0 ? filteredReports.slice(5) : filteredReports.slice(0, 5)
+  return Promise.resolve({ data: { reports: paginatedReports }})
 }
