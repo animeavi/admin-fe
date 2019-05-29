@@ -21,14 +21,9 @@ const users = {
     SET_LOADING: (state, status) => {
       state.loading = status
     },
-    SWAP_USER: (state, user) => {
-      const usersWithoutSwapped = state.fetchedUsers.filter(u => {
-        return u.id !== user.id
-      })
-
-      state.fetchedUsers = [...usersWithoutSwapped, user].sort((a, b) =>
-        a.nickname.localeCompare(b.nickname)
-      )
+    SWAP_USER: (state, updatedUser) => {
+      const updated = state.fetchedUsers.map(user => user.id === updatedUser.id ? updatedUser : user)
+      state.fetchedUsers = updated.sort((a, b) => a.nickname.localeCompare(b.nickname))
     },
     SWAP_USERS: (state, users) => {
       const usersWithoutSwapped = users.reduce((acc, user) => {

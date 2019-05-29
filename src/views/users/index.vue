@@ -1,11 +1,29 @@
 <template>
   <div class="users-container">
-    <h1>{{ $t('users.users') }}</h1>
+    <h1>
+      {{ $t('users.users') }}
+      <span class="user-count">({{ normalizedUsersCount }})</span>
+    </h1>
     <div class="search-container">
       <users-filter/>
       <el-input :placeholder="$t('users.search')" v-model="search" class="search" @input="handleDebounceSearchInput"/>
     </div>
-    <el-table v-loading="loading" :data="users" style="width: 100%">
+    <dropdown-actions-menu
+      :selected-users="selectedUsers"
+      @apply-action="clearSelection"/>
+    <el-table
+      v-loading="loading"
+      ref="usersTable"
+      :data="users"
+      row-key="id"
+      style="width: 100%"
+      @selection-change="handleSelectionChange">
+      <el-table-column
+        v-if="isDesktop"
+        type="selection"
+        reserve-selection
+        width="44"
+        align="center"/>
       <el-table-column :min-width="width" :label="$t('users.id')" prop="id" />
       <el-table-column :label="$t('users.name')" prop="nickname">
         <template slot-scope="scope">
@@ -31,7 +49,7 @@
       </el-table-column>
       <el-table-column :label="$t('users.actions')" fixed="right">
         <template slot-scope="scope">
-          <el-dropdown size="small">
+          <el-dropdown size="small" trigger="click">
             <span class="el-dropdown-link">
               {{ $t('users.moderation') }}
               <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
@@ -117,12 +135,20 @@
 
 <script>
 import debounce from 'lodash.debounce'
+import numeral from 'numeral'
 import UsersFilter from './components/UsersFilter'
+import DropdownActionsMenu from './components/DropdownActionsMenu'
 
 export default {
   name: 'Users',
   components: {
-    UsersFilter
+    UsersFilter,
+    DropdownActionsMenu
+  },
+  data: function() {
+    return {
+      selectedUsers: []
+    }
   },
   data() {
     return {
@@ -132,6 +158,9 @@ export default {
   computed: {
     loading() {
       return this.$store.state.users.loading
+    },
+    normalizedUsersCount() {
+      return numeral(this.$store.state.users.totalUsersCount).format('0a')
     },
     users() {
       return this.$store.state.users.fetchedUsers
@@ -167,6 +196,9 @@ export default {
     activationIcon(status) {
       return status ? 'el-icon-error' : 'el-icon-success'
     },
+    clearSelection() {
+      this.$refs.usersTable.clearSelection()
+    },
     getFirstLetter(str) {
       return str.charAt(0).toUpperCase()
     },
@@ -183,6 +215,9 @@ export default {
       } else {
         this.$store.dispatch('SearchUsers', { query: searchQuery, page })
       }
+    },
+    handleSelectionChange(value) {
+      this.$data.selectedUsers = value
     },
     showAdminAction({ local, id }) {
       return local && this.showDeactivatedButton(id)
@@ -212,6 +247,10 @@ export default {
     margin: 7px 0 0 15px;
   }
 }
+.el-dropdown-link:hover {
+      cursor: pointer;
+      color: #409EFF;
+    }
 .users-container {
   h1 {
     margin: 22px 0 0 15px;
@@ -231,7 +270,11 @@ export default {
     height: 36px;
     justify-content: space-between;
     align-items: center;
-    margin: 22px 15px 22px 15px
+    margin: 22px 15px 15px 15px
+  }
+  .user-count {
+    color: gray;
+    font-size: 28px;
   }
 }
 @media
@@ -240,10 +283,6 @@ only screen and (max-width: 760px),
   .users-container {
     h1 {
       margin: 7px 10px 7px 10px;
-    }
-    .el-dropdown-link {
-      cursor: pointer;
-      color: #409EFF;
     }
     .el-icon-arrow-down {
       font-size: 12px;

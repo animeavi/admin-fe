@@ -1,5 +1,6 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue, config } from '@vue/test-utils'
+import flushPromises from 'flush-promises'
 import Element from 'element-ui'
 import Users from '@/views/users/index'
 import storeConfig from './store.conf'
@@ -7,7 +8,6 @@ import { cloneDeep } from 'lodash'
 
 config.mocks["$t"] = () => {}
 config.stubs['users-filter'] = '<div />'
-
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -25,10 +25,11 @@ describe('Search and filter users', () => {
   it('fetches initial list of users', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      sync: false
     })
 
-    await wrapper.vm.$nextTick()
+    await flushPromises()
     expect(wrapper.vm.usersCount).toEqual(3)
     done()
   })
@@ -36,24 +37,25 @@ describe('Search and filter users', () => {
   it('starts a search on input change', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      sync: false
     })
 
     wrapper.vm.handleDebounceSearchInput = (query) => {
       store.dispatch('SearchUsers', { query, page: 1 })
     }
 
-    await wrapper.vm.$nextTick()
+    await flushPromises()
     expect(wrapper.vm.usersCount).toEqual(3)
     const input = wrapper.find('.search input.el-input__inner')
     input.element.value = 'bob'
     input.trigger('input')
-    await wrapper.vm.$nextTick()
+    await flushPromises()
     expect(wrapper.vm.usersCount).toEqual(1)
 
     input.element.value = ''
     input.trigger('input')
-    await wrapper.vm.$nextTick()
+    await flushPromises()
     expect(wrapper.vm.usersCount).toEqual(3)
 
     done()
@@ -72,18 +74,19 @@ describe('Users actions', () => {
   it('grants admin and moderator rights to a local user', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      sync: false
     })
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     const user = store.state.users.fetchedUsers[2]
     expect(user.roles.admin).toBe(false)
     expect(user.roles.moderator).toBe(false)
 
     wrapper.find(htmlElement(3, 1)).trigger('click')
-    await wrapper.vm.$nextTick()
+    await flushPromises()
     wrapper.find(htmlElement(3, 2)).trigger('click')
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     const updatedUser = store.state.users.fetchedUsers[2]
     expect(updatedUser.roles.admin).toBe(true)
@@ -94,9 +97,10 @@ describe('Users actions', () => {
   it('does not show actions that grant admin and moderator rights to external users', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      sync: false
     })
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     const dropdownMenuItems = wrapper.findAll(
       `.el-table__fixed-body-wrapper table tr:nth-child(2) ul.el-dropdown-menu li`
@@ -108,15 +112,16 @@ describe('Users actions', () => {
   it('toggles activation status', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      sync: false
     })
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     const user = store.state.users.fetchedUsers[1]
     expect(user.deactivated).toBe(false)
 
     wrapper.find(htmlElement(2, 1)).trigger('click')
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     const updatedUser = store.state.users.fetchedUsers[1]
     expect(updatedUser.deactivated).toBe(true)
@@ -126,15 +131,16 @@ describe('Users actions', () => {
   it('deactivates user when Delete action is called', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      sync: false
     })
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     const user = store.state.users.fetchedUsers[1]
     expect(user.deactivated).toBe(false)
 
     wrapper.find(htmlElement(2, 2)).trigger('click')
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     const updatedUser = store.state.users.fetchedUsers[1]
     expect(updatedUser.deactivated).toBe(true)
@@ -144,9 +150,10 @@ describe('Users actions', () => {
   it('adds tags', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      sync: false
     })
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     const user1 = store.state.users.fetchedUsers[0]
     const user2 = store.state.users.fetchedUsers[1]
@@ -154,9 +161,9 @@ describe('Users actions', () => {
     expect(user2.tags.length).toBe(1)
 
     wrapper.find(htmlElement(1, 5)).trigger('click')
-    await wrapper.vm.$nextTick()
+    await flushPromises()
     wrapper.find(htmlElement(2, 5)).trigger('click')
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     const updatedUser1 = store.state.users.fetchedUsers[0]
     const updatedUser2 = store.state.users.fetchedUsers[1]
@@ -168,15 +175,16 @@ describe('Users actions', () => {
   it('deletes tags', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      sync: false
     })
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     const user = store.state.users.fetchedUsers[1]
     expect(user.tags.length).toBe(1)
 
     wrapper.find(htmlElement(2, 6)).trigger('click')
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     const updatedUser = store.state.users.fetchedUsers[1]
     expect(updatedUser.tags.length).toBe(0)
@@ -186,14 +194,15 @@ describe('Users actions', () => {
   it('shows check icon when tag is added', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      sync: false
     })
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     expect(wrapper.find(`${htmlElement(1, 5)} i`).exists()).toBe(false)
 
     wrapper.find(htmlElement(1, 5)).trigger('click')
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     expect(wrapper.find(`${htmlElement(1, 5)} i`).exists()).toBe(true)
     done()
@@ -202,9 +211,10 @@ describe('Users actions', () => {
   it('does not change user index in array when tag is added', async (done) => {
     const wrapper = mount(Users, {
       store,
-      localVue
+      localVue,
+      sync: false
     })
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     const firstUserNickname = store.state.users.fetchedUsers[0].nickname
     const secondUserNickname = store.state.users.fetchedUsers[1].nickname
@@ -212,7 +222,7 @@ describe('Users actions', () => {
     expect(secondUserNickname).toBe('bob')
 
     wrapper.find(htmlElement(2, 5)).trigger('click')
-    await wrapper.vm.$nextTick()
+    await flushPromises()
 
     const firstUserNicknameAfterToggle = store.state.users.fetchedUsers[0].nickname
     const secondUserNicknameAfterToggle = store.state.users.fetchedUsers[1].nickname
