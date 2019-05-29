@@ -1,5 +1,5 @@
 import Vuex from 'vuex'
-import { mount, createLocalVue, config } from '@vue/test-utils'
+import { createLocalVue, config } from '@vue/test-utils'
 import Element from 'element-ui'
 import storeConfig from './store.conf'
 import { cloneDeep } from 'lodash'

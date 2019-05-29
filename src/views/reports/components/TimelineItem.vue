@@ -54,8 +54,7 @@
 </template>
 
 <script>
-import i18n from '@/lang'
-import * as moment from 'moment'
+import moment from 'moment'
 import Statuses from './Statuses'
 
 export default {
@@ -67,46 +66,9 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      showNotes: [],
-      showNewNoteInput: false,
-      note: ''
-    }
-  },
   methods: {
-    addNewNote(reportId) {
-      if (this.$data.note.length < 2) {
-        this.$message('Note must contain at least 2 characters')
-      } else {
-        const currentUserNickname = this.$store.state.user.name
-        const note = { author: currentUserNickname, text: this.$data.note, timestamp: '2019/04/01' }
-        this.$store.dispatch('AddNote', { reportId, note })
-        this.$data.note = ''
-      }
-    },
     changeReportState(reportState, reportId) {
       this.$store.dispatch('ChangeReportState', { reportState, reportId })
-    },
-    deleteNote(reportId, noteId) {
-      this.$confirm(i18n.t('reports.confirmMsg'), {
-        confirmButtonText: i18n.t('reports.delete'),
-        cancelButtonText: i18n.t('reports.cancel'),
-        type: 'warning',
-        showClose: false,
-        customClass: 'confirm-message'
-      }).then(() => {
-        this.$store.dispatch('DeleteNote', { reportId, noteId })
-        this.$message({
-          type: 'success',
-          message: i18n.t('reports.deleteCompleted')
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: i18n.t('reports.deleteCanceled')
-        })
-      })
     },
     capitalizeFirstLetter(str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
@@ -123,9 +85,6 @@ export default {
     },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('YYYY-MM-DD HH:mm')
-    },
-    toggleNoteInput() {
-      this.$data.showNewNoteInput = !this.$data.showNewNoteInput
     }
   }
 }

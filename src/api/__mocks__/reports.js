@@ -18,3 +18,8 @@ export async function filterReports(filter, limit, max_id, authHost, token) {
   const paginatedReports = max_id.length > 0 ? filteredReports.slice(5) : filteredReports.slice(0, 5)
   return Promise.resolve({ data: { reports: paginatedReports }})
 }
+
+export async function changeState(state, id, authHost, token) {
+  const report = reports.find(report => report.id === id)
+  return Promise.resolve({ data: { ...report, state }})
+}
