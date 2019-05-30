@@ -69,7 +69,7 @@ describe('Report in a timeline', () => {
       }
     })
 
-    const statuses = wrapper.findAll(`.el-card .status-card`)
+    const statuses = wrapper.findAll(`.status-card`)
     expect(statuses.length).toEqual(2)
   })
 
@@ -84,7 +84,7 @@ describe('Report in a timeline', () => {
     })
     expect(report.statuses[0].sensitive).toBe(false)
 
-    const button = wrapper.find(`.el-card .status-card li.el-dropdown-menu__item`)
+    const button = wrapper.find(`.status-card li.el-dropdown-menu__item`)
     button.trigger('click')
     await flushPromises()
     expect(store.state.reports.fetchedReports[4].statuses[0].sensitive).toEqual(true)
@@ -106,6 +106,42 @@ describe('Report in a timeline', () => {
     button.trigger('click')
     await flushPromises()
     expect(store.state.reports.fetchedReports[4].statuses[1].sensitive).toEqual(false)
+    done()
+  })
+
+  it('changes status visibility from public to unlisted', async (done) => {
+    const report = store.state.reports.fetchedReports[4]
+    const wrapper = mount(TimelineItem, {
+      store,
+      localVue,
+      propsData: {
+        report: report
+      }
+    })
+    expect(report.statuses[0].visibility).toBe('public')
+
+    const button = wrapper.find(`.status-card li.el-dropdown-menu__item:nth-child(${3})`)
+    button.trigger('click')
+    await flushPromises()
+    expect(store.state.reports.fetchedReports[4].statuses[0].visibility).toEqual('unlisted')
+    done()
+  })
+
+  it('changes status visibility from unlisted to private', async (done) => {
+    const report = store.state.reports.fetchedReports[4]
+    const wrapper = mount(TimelineItem, {
+      store,
+      localVue,
+      propsData: {
+        report: report
+      }
+    })
+    expect(report.statuses[1].visibility).toBe('unlisted')
+
+    const button = wrapper.find(`.status-card:nth-child(${2}) li.el-dropdown-menu__item:nth-child(${3})`)
+    button.trigger('click')
+    await flushPromises()
+    expect(store.state.reports.fetchedReports[4].statuses[1].visibility).toEqual('private')
     done()
   })
 })
