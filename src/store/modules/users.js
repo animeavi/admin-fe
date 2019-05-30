@@ -67,10 +67,10 @@ const users = {
       commit('SWAP_USER', updatedUser)
     },
     async FetchUsers({ commit, state, getters }, { page }) {
+      commit('SET_LOADING', true)
+
       const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
       const response = await fetchUsers(filters, getters.authHost, getters.token, page)
-
-      commit('SET_LOADING', true)
 
       loadUsers(commit, page, response.data)
     },

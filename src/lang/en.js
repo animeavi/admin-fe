@@ -64,7 +64,8 @@ export default {
     clipboardDemo: 'Clipboard',
     i18n: 'I18n',
     externalLink: 'External Link',
-    users: 'Users'
+    users: 'Users',
+    reports: 'Reports'
   },
   navbar: {
     logOut: 'Log Out',
@@ -200,5 +201,37 @@ export default {
     byStatus: 'By status',
     active: 'Active',
     deactivated: 'Deactivated'
+  },
+  reports: {
+    reports: 'Reports',
+    reply: 'Reply',
+    from: 'From',
+    showNotes: 'Show notes',
+    newNote: 'New note',
+    submit: 'Submit',
+    confirmMsg: 'Are you sure you want to delete this note?',
+    delete: 'Delete',
+    cancel: 'Cancel',
+    deleteCompleted: 'Delete comleted',
+    deleteCanceled: 'Delete canceled',
+    noNotes: 'No notes to display',
+    changeState: 'Change state',
+    changeScope: 'Change scope',
+    resolve: 'Resolve',
+    reopen: 'Reopen',
+    close: 'Close',
+    addSensitive: 'Add Sensitive flag',
+    removeSensitive: 'Remove Sensitive flag',
+    public: 'Make status public',
+    private: 'Make status private',
+    unlisted: 'Make status unlisted',
+    sensitive: 'Sensitive',
+    deleteStatus: 'Delete status'
+  },
+  reportsFilter: {
+    inputPlaceholder: 'Select filter',
+    open: 'Open',
+    closed: 'Closed',
+    resolved: 'Resolved'
   }
 }

@@ -120,6 +120,9 @@
         </template>
       </el-table-column>
     </el-table>
+    <div v-if="users.length === 0" class="no-users-message">
+      <p>There are no users to display</p>
+    </div>
     <div v-if="!loading" class="pagination">
       <el-pagination
         :total="usersCount"
@@ -148,6 +151,11 @@ export default {
   data: function() {
     return {
       selectedUsers: []
+    }
+  },
+  data() {
+    return {
+      search: ''
     }
   },
   data() {
