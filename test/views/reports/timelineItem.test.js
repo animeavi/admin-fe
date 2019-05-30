@@ -144,4 +144,14 @@ describe('Report in a timeline', () => {
     expect(store.state.reports.fetchedReports[4].statuses[1].visibility).toEqual('private')
     done()
   })
+
+  it('deletes a status', async (done) => {
+    const report = store.state.reports.fetchedReports[4]
+    expect(report.statuses.length).toEqual(2)
+
+    store.dispatch('DeleteStatus', { statusId: '11', reportId: '7'})
+    await flushPromises()
+    expect(store.state.reports.fetchedReports[4].statuses.length).toEqual(1)
+    done()
+  })
 })
