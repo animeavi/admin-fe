@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import * as moment from 'moment'
+import moment from 'moment'
 
 export default {
   name: 'Statuses',

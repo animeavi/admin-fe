@@ -23,7 +23,7 @@ describe('Report in a timeline', () => {
     await flushPromises()
   })
 
-  it('changes report stsatus from open to resolved', async (done) => {
+  it('changes report state from open to resolved', async (done) => {
     const report = store.state.reports.fetchedReports[0]
     const wrapper = mount(TimelineItem, {
       store,
@@ -41,7 +41,7 @@ describe('Report in a timeline', () => {
     done()
   })
 
-  it('changes report stsatus from open to closed', async (done) => {
+  it('changes report state from open to closed', async (done) => {
     const report = store.state.reports.fetchedReports[3]
     const wrapper = mount(TimelineItem, {
       store,
@@ -56,6 +56,56 @@ describe('Report in a timeline', () => {
     button.trigger('click')
     await flushPromises()
     expect(store.state.reports.fetchedReports[3].state).toBe('closed')
+    done()
+  })
+
+  it('shows statuses', () => {
+    const report = store.state.reports.fetchedReports[4]
+    const wrapper = mount(TimelineItem, {
+      store,
+      localVue,
+      propsData: {
+        report: report
+      }
+    })
+
+    const statuses = wrapper.findAll(`.el-card .status-card`)
+    expect(statuses.length).toEqual(2)
+  })
+
+  it('adds sensitive flag to a status', async (done) => {
+    const report = store.state.reports.fetchedReports[4]
+    const wrapper = mount(TimelineItem, {
+      store,
+      localVue,
+      propsData: {
+        report: report
+      }
+    })
+    expect(report.statuses[0].sensitive).toBe(false)
+
+    const button = wrapper.find(`.el-card .status-card li.el-dropdown-menu__item`)
+    button.trigger('click')
+    await flushPromises()
+    expect(store.state.reports.fetchedReports[4].statuses[0].sensitive).toEqual(true)
+    done()
+  })
+
+  it('removes sensitive flag to a status', async (done) => {
+    const report = store.state.reports.fetchedReports[4]
+    const wrapper = mount(TimelineItem, {
+      store,
+      localVue,
+      propsData: {
+        report: report
+      }
+    })
+    expect(report.statuses[1].sensitive).toBe(true)
+
+    const button = wrapper.find(`.status-card:nth-child(${2}) li.el-dropdown-menu__item`)
+    button.trigger('click')
+    await flushPromises()
+    expect(store.state.reports.fetchedReports[4].statuses[1].sensitive).toEqual(false)
     done()
   })
 })
