@@ -3,6 +3,7 @@ import { mount, createLocalVue, config } from '@vue/test-utils'
 import flushPromises from 'flush-promises'
 import Element from 'element-ui'
 import Users from '@/views/users/index'
+import NewAccountDialog from '@/views/users/components/NewAccountDialog'
 import storeConfig from './store.conf'
 import { cloneDeep } from 'lodash'
 
@@ -230,5 +231,100 @@ describe('Users actions', () => {
     expect(firstUserNicknameAfterToggle).toEqual('allis')
     expect(secondUserNicknameAfterToggle).toEqual('bob')
     done()
+  })
+})
+
+describe('Creates new account', () => {
+  let store
+
+  const nicknameInput = 'input[name="nickname"]'
+  const emailInput = 'input[name="email"]'
+  const passwordInput = 'input[name="password"]'
+
+  beforeEach(async() => {
+    store = new Vuex.Store(cloneDeep(storeConfig))
+  })
+
+  it('opens and closes dialog window', async (done) => {
+    const wrapper = mount(Users, {
+      store,
+      localVue,
+      sync: false
+    })
+    await flushPromises()
+
+    const dialog = wrapper.find('div.el-dialog__wrapper')
+    expect(dialog.isVisible()).toBe(false)
+
+    const openDialogButton = wrapper.find('button.actions-button')
+    const closeDialogButton = wrapper.find('div.el-dialog__footer button')
+
+    openDialogButton.trigger('click')
+    await flushPromises()
+    expect(dialog.isVisible()).toBe(true)
+
+    closeDialogButton.trigger('click')
+    await flushPromises()
+    expect(dialog.isVisible()).toBe(false)
+    done()
+  })
+
+  it('creates new account', async (done) => {
+    const wrapper = mount(Users, {
+      store,
+      localVue,
+      sync: false
+    })
+    await flushPromises()
+    expect(wrapper.vm.usersCount).toEqual(3)
+
+    const openDialogButton = wrapper.find('button.actions-button')
+    openDialogButton.trigger('click')
+    await flushPromises()
+
+    const nickname = wrapper.find(nicknameInput)
+    nickname.element.value = 'marshall'
+    nickname.trigger('input')
+
+    const email = wrapper.find(emailInput)
+    email.element.value = 'marshall@marshall.com'
+    email.trigger('input')
+
+    const password = wrapper.find(passwordInput)
+    password.element.value = '1234'
+    password.trigger('input')
+
+    const createButton = wrapper.find('button.el-button--primary')
+    createButton.trigger('click')
+    await flushPromises()
+
+    expect(wrapper.vm.usersCount).toEqual(4)
+    done()
+  })
+
+  it('validates data', () => {
+    const wrapper = mount(NewAccountDialog, {
+      store,
+      localVue,
+      sync: false
+    })
+
+    const validateEmailRule = { validator: wrapper.vm.validateEmail, field: 'email', fullField: 'email', type: 'string' }
+    const validatePasswordRule = { validator: wrapper.vm.validatePassword, field: 'password', fullField: 'password', type: 'string' }
+    const validateUsernameRule = { validator: wrapper.vm.validateUsername, field: 'nickname', fullField: 'nickname', type: 'string' }
+    const identity = val => val
+
+    expect(wrapper.vm.validateUsername(validateUsernameRule, '', identity).message).toBe('Please input the username')
+    expect(wrapper.vm.validateUsername(validateUsernameRule, 'marshall%$', identity).message).toBe('Username can include "a-z", "A-Z" and "0-9" characters')
+    expect(wrapper.vm.validateUsername(validateUsernameRule, 'Marshall66', identity)).toBeUndefined()
+
+    expect(wrapper.vm.validateEmail(validateEmailRule, '', identity).message).toBe('Please input the e-mail')
+    expect(wrapper.vm.validateEmail(validateEmailRule, 'test', identity).message).toBe('Please input valid e-mail')
+    expect(wrapper.vm.validateEmail(validateEmailRule, 'test@test.com', identity)).toBeUndefined()
+
+    expect(wrapper.vm.validatePassword(validatePasswordRule, '', identity).message).toBe('Please input the password')
+    expect(wrapper.vm.validatePassword(validatePasswordRule, '1234', identity)).toBeUndefined()
+
+
   })
 })

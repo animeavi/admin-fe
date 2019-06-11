@@ -4,13 +4,25 @@
       {{ $t('users.users') }}
       <span class="user-count">({{ normalizedUsersCount }})</span>
     </h1>
-    <div class="search-container">
+    <div class="filter-container">
       <users-filter/>
       <el-input :placeholder="$t('users.search')" v-model="search" class="search" @input="handleDebounceSearchInput"/>
     </div>
-    <dropdown-actions-menu
-      :selected-users="selectedUsers"
-      @apply-action="clearSelection"/>
+    <div class="actions-container">
+      <el-button class="actions-button create-account" @click="dialogFormVisible = true">
+        <span>
+          <i class="el-icon-plus" />
+          {{ $t('users.createAccount') }}
+        </span>
+      </el-button>
+      <multiple-users-menu
+        :selected-users="selectedUsers"
+        @apply-action="clearSelection"/>
+    </div>
+    <new-account-dialog
+      :dialog-form-visible="dialogFormVisible"
+      @createNewAccount="createNewAccount"
+      @closeWindow="dialogFormVisible = false"/>
     <el-table
       v-loading="loading"
       ref="usersTable"
@@ -140,22 +152,21 @@
 import debounce from 'lodash.debounce'
 import numeral from 'numeral'
 import UsersFilter from './components/UsersFilter'
-import DropdownActionsMenu from './components/DropdownActionsMenu'
+import MultipleUsersMenu from './components/MultipleUsersMenu'
+import NewAccountDialog from './components/NewAccountDialog'
 
 export default {
   name: 'Users',
   components: {
     UsersFilter,
-    DropdownActionsMenu
-  },
-  data: function() {
-    return {
-      selectedUsers: []
-    }
+    MultipleUsersMenu,
+    NewAccountDialog
   },
   data() {
     return {
-      search: ''
+      search: '',
+      selectedUsers: [],
+      dialogFormVisible: false
     }
   },
   data() {
@@ -207,6 +218,9 @@ export default {
     clearSelection() {
       this.$refs.usersTable.clearSelection()
     },
+    createNewAccount(accountData) {
+      this.$store.dispatch('CreateNewAccount', accountData)
+    },
     getFirstLetter(str) {
       return str.charAt(0).toUpperCase()
     },
@@ -246,6 +260,18 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss' scoped>
+.actions-button {
+  text-align: left;
+  width: 350px;
+  padding: 10px;
+}
+.actions-container {
+  display: flex;
+  height: 36px;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 15px 10px 15px;
+}
 .active-tag {
   color: #409EFF;
   font-weight: 700;
@@ -256,9 +282,12 @@ export default {
   }
 }
 .el-dropdown-link:hover {
-      cursor: pointer;
-      color: #409EFF;
-    }
+    cursor: pointer;
+    color: #409EFF;
+  }
+.el-icon-plus {
+  margin-right: 5px;
+}
 .users-container {
   h1 {
     margin: 22px 0 0 15px;
@@ -273,7 +302,7 @@ export default {
     width: 350px;
     float: right;
   }
-  .search-container {
+  .filter-container {
     display: flex;
     height: 36px;
     justify-content: space-between;
@@ -292,17 +321,25 @@ only screen and (max-width: 760px),
     h1 {
       margin: 7px 10px 7px 10px;
     }
+    .actions-container {
+      display: flex;
+      flex-direction: column;
+      margin: 0 10px 7px 10px
+    }
+    .create-account {
+      width: 100%;
+    }
     .el-icon-arrow-down {
       font-size: 12px;
     }
     .search {
       width: 100%;
     }
-    .search-container {
+    .filter-container {
       display: flex;
       height: 82px;
       flex-direction: column;
-      margin: 0 10px 7px 10px
+      margin: 0 10px
     }
     .el-tag {
       width: 30px;

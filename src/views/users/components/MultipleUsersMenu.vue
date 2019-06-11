@@ -29,22 +29,26 @@
       <el-dropdown-item
         divided
         @click.native="activateMultipleUsers">
-        {{ $t('users.activateAccount') }}
+        {{ $t('users.activateAccounts') }}
       </el-dropdown-item>
       <el-dropdown-item
         @click.native="deactivateMultipleUsers">
-        {{ $t('users.deactivateAccount') }}
+        {{ $t('users.deactivateAccounts') }}
       </el-dropdown-item>
       <el-dropdown-item
         @click.native="deleteMultipleUsers">
-        {{ $t('users.deleteAccount') }}
+        {{ $t('users.deleteAccounts') }}
       </el-dropdown-item>
       <el-dropdown-item divided class="no-hover">
         <div class="tag-container">
           <span class="tag-text">{{ $t('users.forceNsfw') }}</span>
           <el-button-group class="tag-button-group">
-            <el-button size="mini" @click.native="addTagForMultipleUsers('force_nsfw')">apply</el-button>
-            <el-button size="mini" @click.native="removeTagFromMultipleUsers('force_nsfw')">remove</el-button>
+            <el-button size="mini" @click.native="addTagForMultipleUsers('force_nsfw')">
+              {{ $t('users.apply') }}
+            </el-button>
+            <el-button size="mini" @click.native="removeTagFromMultipleUsers('force_nsfw')">
+              {{ $t('users.remove') }}
+            </el-button>
           </el-button-group>
         </div>
       </el-dropdown-item>
@@ -52,8 +56,12 @@
         <div class="tag-container">
           <span class="tag-text">{{ $t('users.stripMedia') }}</span>
           <el-button-group class="tag-button-group">
-            <el-button size="mini" @click.native="addTagForMultipleUsers('strip_media')">apply</el-button>
-            <el-button size="mini" @click.native="removeTagFromMultipleUsers('strip_media')">remove</el-button>
+            <el-button size="mini" @click.native="addTagForMultipleUsers('strip_media')">
+              {{ $t('users.apply') }}
+            </el-button>
+            <el-button size="mini" @click.native="removeTagFromMultipleUsers('strip_media')">
+              {{ $t('users.remove') }}
+            </el-button>
           </el-button-group>
         </div>
       </el-dropdown-item>
@@ -61,8 +69,12 @@
         <div class="tag-container">
           <span class="tag-text">{{ $t('users.forceUnlisted') }}</span>
           <el-button-group class="tag-button-group">
-            <el-button size="mini" @click.native="addTagForMultipleUsers('force_unlisted')">apply</el-button>
-            <el-button size="mini" @click.native="removeTagFromMultipleUsers('force_unlisted')">remove</el-button>
+            <el-button size="mini" @click.native="addTagForMultipleUsers('force_unlisted')">
+              {{ $t('users.apply') }}
+            </el-button>
+            <el-button size="mini" @click.native="removeTagFromMultipleUsers('force_unlisted')">
+              {{ $t('users.remove') }}
+            </el-button>
           </el-button-group>
         </div>
       </el-dropdown-item>
@@ -70,26 +82,38 @@
         <div class="tag-container">
           <span class="tag-text">{{ $t('users.sandbox') }}</span>
           <el-button-group class="tag-button-group">
-            <el-button size="mini" @click.native="addTagForMultipleUsers('sandbox')">apply</el-button>
-            <el-button size="mini" @click.native="removeTagFromMultipleUsers('sandbox')">remove</el-button>
+            <el-button size="mini" @click.native="addTagForMultipleUsers('sandbox')">
+              {{ $t('users.apply') }}
+            </el-button>
+            <el-button size="mini" @click.native="removeTagFromMultipleUsers('sandbox')">
+              {{ $t('users.remove') }}
+            </el-button>
           </el-button-group>
         </div>
       </el-dropdown-item>
       <el-dropdown-item class="no-hover">
         <div class="tag-container">
-          <span class="tag-text">{{ $t('users.disableRemoteSubscription') }}</span>
+          <span class="tag-text">{{ $t('users.disableRemoteSubscriptionForMultiple') }}</span>
           <el-button-group class="tag-button-group">
-            <el-button size="mini" @click.native="addTagForMultipleUsers('disable_remote_subscription')">apply</el-button>
-            <el-button size="mini" @click.native="removeTagFromMultipleUsers('disable_remote_subscription')">remove</el-button>
+            <el-button size="mini" @click.native="addTagForMultipleUsers('disable_remote_subscription')">
+              {{ $t('users.apply') }}
+            </el-button>
+            <el-button size="mini" @click.native="removeTagFromMultipleUsers('disable_remote_subscription')">
+              {{ $t('users.remove') }}
+            </el-button>
           </el-button-group>
         </div>
       </el-dropdown-item>
       <el-dropdown-item class="no-hover">
         <div class="tag-container">
-          <span class="tag-text">{{ $t('users.disableAnySubscription') }}</span>
+          <span class="tag-text">{{ $t('users.disableAnySubscriptionForMultiple') }}</span>
           <el-button-group class="tag-button-group">
-            <el-button size="mini" @click.native="addTagForMultipleUsers('disable_any_subscription')">apply</el-button>
-            <el-button size="mini" @click.native="removeTagFromMultipleUsers('disable_any_subscription')">remove</el-button>
+            <el-button size="mini" @click.native="addTagForMultipleUsers('disable_any_subscription')">
+              {{ $t('users.apply') }}
+            </el-button>
+            <el-button size="mini" @click.native="removeTagFromMultipleUsers('disable_any_subscription')">
+              {{ $t('users.remove') }}
+            </el-button>
           </el-button-group>
         </div>
       </el-dropdown-item>
@@ -157,68 +181,68 @@ export default {
     grantRightToMultipleUsers(right) {
       const { grantRight } = this.mappers()
       this.confirmMessage(
-        `Are you sure you want to grant ${right} rights to all selected users?`,
+        this.$t('users.grantRightConfirmation', { right }),
         grantRight(right)
       )
     },
     revokeRightFromMultipleUsers(right) {
       const { revokeRight } = this.mappers()
       this.confirmMessage(
-        `Are you sure you want to revoke ${right} rights from all selected users?`,
+        this.$t('users.revokeRightConfirmation', { right }),
         revokeRight(right)
       )
     },
     activateMultipleUsers() {
       const { activate } = this.mappers()
       this.confirmMessage(
-        'Are you sure you want to activate accounts of all selected users?',
+        this.$t('users.activateMultipleUsersConfirmation'),
         activate
       )
     },
     deactivateMultipleUsers() {
       const { deactivate } = this.mappers()
       this.confirmMessage(
-        'Are you sure you want to deactivate accounts of all selected users?',
+        this.$t('users.deactivateMultipleUsersConfirmation'),
         deactivate
       )
     },
     deleteMultipleUsers() {
       const { remove } = this.mappers()
       this.confirmMessage(
-        'Are you sure you want to delete accounts of all selected users?',
+        this.$t('users.deleteMultipleUsersConfirmation'),
         remove
       )
     },
     addTagForMultipleUsers(tag) {
       const { addTag } = this.mappers()
       this.confirmMessage(
-        'Are you sure you want to apply tag to all selected users?',
+        this.$t('users.addTagForMultipleUsersConfirmation'),
         addTag(tag)
       )
     },
     removeTagFromMultipleUsers(tag) {
       const { removeTag } = this.mappers()
       this.confirmMessage(
-        'Are you sure you want to remove tag from all selected users?',
+        this.$t('users.removeTagFromMultipleUsersConfirmation'),
         removeTag(tag)
       )
     },
     confirmMessage(message, applyAction) {
       this.$confirm(message, {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
+        confirmButtonText: this.$t('users.ok'),
+        cancelButtonText: this.$t('users.cancel'),
         type: 'warning'
       }).then(() => {
         applyAction()
         this.$emit('apply-action')
         this.$message({
           type: 'success',
-          message: 'Completed'
+          message: this.$t('users.completed')
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: 'Canceled'
+          message: this.$t('users.canceled')
         })
       })
     }
@@ -229,9 +253,8 @@ export default {
 <style rel='stylesheet/scss' lang='scss' scoped>
   .actions-button {
     text-align: left;
-    margin: 0 15px 10px 0;
     width: 350px;
-    padding: 10px 15px;
+    padding: 10px;
   }
   .actions-button-container {
     display: flex;
@@ -240,8 +263,8 @@ export default {
   .el-dropdown {
     float: right;
   }
-  .el-dropdown-menu {
-    margin-right: 15px;
+  .el-icon-edit {
+    margin-right: 5px;
   }
   .tag-container {
     display: flex;
