@@ -1,4 +1,4 @@
-import { addRight, fetchUsers, deleteRight, deleteUser, searchUsers, tagUser, toggleUserActivation, untagUser } from '@/api/users'
+import { addRight, createNewAccount, fetchUsers, deleteRight, deleteUser, searchUsers, tagUser, toggleUserActivation, untagUser } from '@/api/users'
 
 const users = {
   state: {
@@ -61,6 +61,10 @@ const users = {
       commit('CLEAR_USERS_FILTERS')
       dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
     },
+    async CreateNewAccount({ dispatch, getters, state }, { nickname, email, password }) {
+      await createNewAccount(nickname, email, password, getters.authHost, getters.token)
+      dispatch('FetchUsers', { page: state.currentPage })
+    },
     async DeleteUser({ commit, getters }, user) {
       await deleteUser(user.nickname, getters.authHost, getters.token)
       const updatedUser = { ...user, deactivated: true }
@@ -83,7 +87,7 @@ const users = {
     async SearchUsers({ commit, dispatch, state, getters }, { query, page }) {
       if (query.length === 0) {
         commit('SET_SEARCH_QUERY', query)
-        dispatch('FetchUsers', page)
+        dispatch('FetchUsers', { page })
       } else {
         commit('SET_LOADING', true)
         commit('SET_SEARCH_QUERY', query)

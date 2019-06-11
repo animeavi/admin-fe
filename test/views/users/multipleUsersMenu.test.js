@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue, config } from '@vue/test-utils'
 import Element from 'element-ui'
-import DropdownMenu from '@/views/users/components/DropdownMenu'
+import MultipleUsersMenu from '@/views/users/components/MultipleUsersMenu'
 import storeConfig from './store.conf'
 import { cloneDeep } from 'lodash'
 import flushPromises from 'flush-promises'
@@ -25,7 +25,7 @@ describe('Apply users actions to multiple users', () => {
   })
 
   it('grants admin rights to multiple users', async (done) => {
-    const wrapper = mount(DropdownMenu, {
+    const wrapper = mount(MultipleUsersMenu, {
       store,
       localVue,
       sync: false,
@@ -62,7 +62,7 @@ describe('Apply users actions to multiple users', () => {
   })
 
   it('grants moderator rights to multiple users', async (done) => {
-    const wrapper = mount(DropdownMenu, {
+    const wrapper = mount(MultipleUsersMenu, {
       store,
       localVue,
       sync: false,
@@ -99,7 +99,7 @@ describe('Apply users actions to multiple users', () => {
   })
 
   it('revokes admin rights from multiple users', async (done) => {
-    const wrapper = mount(DropdownMenu, {
+    const wrapper = mount(MultipleUsersMenu, {
       store,
       localVue,
       sync: false,
@@ -132,7 +132,7 @@ describe('Apply users actions to multiple users', () => {
   })
 
   it('calls a function that revokes moderator rights from multiple users', async (done) => {
-    const wrapper = mount(DropdownMenu, {
+    const wrapper = mount(MultipleUsersMenu, {
       store,
       localVue,
       sync: false,
@@ -152,7 +152,7 @@ describe('Apply users actions to multiple users', () => {
   })
 
   it('activates multiple accounts', async (done) => {
-    const wrapper = mount(DropdownMenu, {
+    const wrapper = mount(MultipleUsersMenu, {
       store,
       localVue,
       sync: false,
@@ -180,7 +180,7 @@ describe('Apply users actions to multiple users', () => {
   })
 
   it('deactivates multiple accounts', async (done) => {
-    const wrapper = mount(DropdownMenu, {
+    const wrapper = mount(MultipleUsersMenu, {
       store,
       localVue,
       sync: false,
@@ -212,7 +212,7 @@ describe('Apply users actions to multiple users', () => {
   })
 
   it('deletes multiple accounts', async (done) => {
-    const wrapper = mount(DropdownMenu, {
+    const wrapper = mount(MultipleUsersMenu, {
       store,
       localVue,
       sync: false,
@@ -248,7 +248,7 @@ describe('Apply users actions to multiple users', () => {
   })
 
   it('applies tags for multiple accounts', async (done) => {
-    const wrapper = mount(DropdownMenu, {
+    const wrapper = mount(MultipleUsersMenu, {
       store,
       localVue,
       sync: false,
@@ -289,7 +289,7 @@ describe('Apply users actions to multiple users', () => {
   })
 
   it('removes tags from multiple accounts', async (done) => {
-    const wrapper = mount(DropdownMenu, {
+    const wrapper = mount(MultipleUsersMenu, {
       store,
       localVue,
       sync: false,

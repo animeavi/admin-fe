@@ -1,4 +1,4 @@
-export const users = [
+export let users = [
   { active: true, deactivated: false, id: '2', nickname: 'allis', local: true, external: false, roles: { admin: true, moderator: false }, tags: [] },
   { active: true, deactivated: false, id: '10', nickname: 'bob', local: false, external: true, roles: { admin: false, moderator: false }, tags: ['sandbox'] },
   { active: false, deactivated: true, id: 'abc', nickname: 'john', local: true, external: false, roles: { admin: false, moderator: false }, tags: ['strip_media'] }
@@ -67,5 +67,11 @@ export async function tagUser(nickname, tag, authHost, token) {
 }
 
 export async function untagUser(nickname, tag, authHost, token) {
+  return Promise.resolve()
+}
+
+export async function createNewAccount(nickname, email, password, authHost, token) {
+  const newUser = { active: true, deactivated: false, id: '15', nickname, local: true, external: false, roles: { admin: false, moderator: false }, tags: [] }
+  users = [...users, newUser]
   return Promise.resolve()
 }
