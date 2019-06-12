@@ -169,11 +169,6 @@ export default {
       dialogFormVisible: false
     }
   },
-  data() {
-    return {
-      search: ''
-    }
-  },
   computed: {
     loading() {
       return this.$store.state.users.loading
