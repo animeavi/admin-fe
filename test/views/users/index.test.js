@@ -314,15 +314,15 @@ describe('Creates new account', () => {
     const validateUsernameRule = { validator: wrapper.vm.validateUsername, field: 'nickname', fullField: 'nickname', type: 'string' }
     const identity = val => val
 
-    expect(wrapper.vm.validateUsername(validateUsernameRule, '', identity).message).toBe('Please input the username')
-    expect(wrapper.vm.validateUsername(validateUsernameRule, 'marshall%$', identity).message).toBe('Username can include "a-z", "A-Z" and "0-9" characters')
+    expect(wrapper.vm.validateUsername(validateUsernameRule, '', identity)).toBeInstanceOf(Error)
+    expect(wrapper.vm.validateUsername(validateUsernameRule, 'marshall%$', identity)).toBeInstanceOf(Error)
     expect(wrapper.vm.validateUsername(validateUsernameRule, 'Marshall66', identity)).toBeUndefined()
 
-    expect(wrapper.vm.validateEmail(validateEmailRule, '', identity).message).toBe('Please input the e-mail')
-    expect(wrapper.vm.validateEmail(validateEmailRule, 'test', identity).message).toBe('Please input valid e-mail')
+    expect(wrapper.vm.validateEmail(validateEmailRule, '', identity)).toBeInstanceOf(Error)
+    expect(wrapper.vm.validateEmail(validateEmailRule, 'test', identity)).toBeInstanceOf(Error)
     expect(wrapper.vm.validateEmail(validateEmailRule, 'test@test.com', identity)).toBeUndefined()
 
-    expect(wrapper.vm.validatePassword(validatePasswordRule, '', identity).message).toBe('Please input the password')
+    expect(wrapper.vm.validatePassword(validatePasswordRule, '', identity)).toBeInstanceOf(Error)
     expect(wrapper.vm.validatePassword(validatePasswordRule, '1234', identity)).toBeUndefined()
 
 
