@@ -3,15 +3,22 @@
     <el-card v-for="status in report.statuses" :key="status.id" class="status-card">
       <div slot="header">
         <div class="status-header">
-          <div class="status-account">
-            <img :src="status.account.avatar" alt="avatar" class="status-avatar-img">
-            <h3 class="status-account-name">{{ status.account.display_name }}</h3>
+          <div class="status-account-container">
+            <div class="status-account">
+              <img :src="status.account.avatar" class="status-avatar-img">
+              <h3 class="status-account-name">{{ status.account.display_name }}</h3>
+            </div>
+            <a :href="status.account.url" target="_blank" class="account">
+              @{{ status.account.acct }}
+            </a>
           </div>
           <div class="status-actions">
             <el-tag v-if="status.sensitive" type="warning" size="large">{{ $t('reports.sensitive') }}</el-tag>
             <el-tag size="large">{{ capitalizeFirstLetter(status.visibility) }}</el-tag>
             <el-dropdown trigger="click">
-              <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeScope') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
+              <el-button plain size="small" icon="el-icon-edit" class="status-actions-button">
+                {{ $t('reports.changeScope') }}<i class="el-icon-arrow-down el-icon--right"/>
+              </el-button>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item
                   v-if="!status.sensitive"
@@ -46,12 +53,9 @@
             </el-dropdown>
           </div>
         </div>
-        <a :href="status.account.url" target="_blank" class="account">
-          @{{ status.account.acct }}
-        </a>
       </div>
       <div class="status-body">
-        <span class="status-content">{{ status.content }}</span>
+        <span class="status-content" v-html="status.content"/>
         <a :href="status.url" target="_blank" class="account">
           {{ parseTimestamp(status.created_at) }}
         </a>
@@ -121,6 +125,7 @@ export default {
   }
   .status-account-name {
     margin: 0;
+    height: 22px;
   }
   .status-body {
     display: flex;
@@ -135,6 +140,37 @@ export default {
   .status-header {
     display: flex;
     justify-content: space-between;
-
+  }
+  @media
+  only screen and (max-width: 760px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+    .el-message {
+      min-width: 80%;
+    }
+    .el-message-box {
+      width: 80%;
+    }
+    .status-card {
+      .el-card__header {
+        padding: 10px 17px
+      }
+      .el-tag {
+        margin: 3px 4px 3px 0;
+      }
+      .status-account-container {
+        margin-bottom: 5px;
+      }
+      .status-actions-button {
+        margin: 3px 0 3px;
+      }
+      .status-actions {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .status-header {
+        display: flex;
+        flex-direction: column;
+      }
+    }
   }
 </style>

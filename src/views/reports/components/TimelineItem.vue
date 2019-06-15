@@ -2,7 +2,10 @@
   <el-timeline-item :timestamp="parseTimestamp(report.created_at)" placement="top" class="timeline-item-container">
     <el-card>
       <div class="header-container">
-        <h3 class="report-title">Report on {{ report.account.display_name }}</h3>
+        <div>
+          <h3 class="report-title">Report on {{ report.account.display_name }}</h3>
+          <h5 class="id">ID: {{ report.id }}</h5>
+        </div>
         <div>
           <el-tag :type="getStateType(report.state)" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
           <el-dropdown trigger="click">
@@ -15,7 +18,6 @@
           </el-dropdown>
         </div>
       </div>
-      <h5 class="id">ID: {{ report.id }}</h5>
       <div>
         <div class="line"/>
         <span class="report-row-key">Account:</span>
@@ -132,11 +134,11 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    height: 30px;
+    height: 40px;
   }
   .id {
     color: gray;
-    margin: 0 0 12px;
+    margin-top: 6px;
   }
   .line {
     width: 100%;
@@ -185,8 +187,15 @@ export default {
   @media
   only screen and (max-width: 760px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
-    .confirm-message {
-      width: 98%;
+    .timeline-item-container {
+      .header-container {
+        display: flex;
+        flex-direction: column;
+        height: 80px;
+      }
+      .id {
+        margin: 6px 0 0 0;
+      }
     }
   }
 </style>
