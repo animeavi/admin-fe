@@ -314,7 +314,7 @@ only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px) {
   .users-container {
     h1 {
-      margin: 7px 10px 7px 10px;
+      margin: 7px 10px 15px 10px;
     }
     .actions-container {
       display: flex;
