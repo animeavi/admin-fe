@@ -48,6 +48,9 @@ const users = {
     },
     SET_USERS_FILTERS: (state, filters) => {
       state.filters = filters
+    },
+    SET_USER_PROFILE: (state, user) => {
+      state.userProfile = user
     }
   },
   actions: {

@@ -1,0 +1,26 @@
+image: node:10
+
+stages:
+  - lint
+  - build
+  - test
+
+lint:
+  stage: lint
+  script:
+    - yarn
+    - yarn lint
+
+test:
+  stage: test
+  variables:
+    APT_CACHE_DIR: apt-cache
+  script:
+    - yarn
+    - yarn test
+
+build:
+  stage: build
+  script:
+    - yarn
+    - npm run build:prod

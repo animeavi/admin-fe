@@ -39,6 +39,15 @@ export async function deleteUser(nickname, authHost, token) {
   })
 }
 
+export async function fetchUser(id, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/users/${id}`,
+    method: 'get',
+    headers: authHeaders(token)
+  })
+}
+
 export async function fetchUsers(filters, authHost, token, page = 1) {
   return await request({
     baseURL: baseName(authHost),
@@ -83,6 +92,15 @@ export async function untagUser(nicknames, tags, authHost, token) {
     method: 'delete',
     headers: authHeaders(token),
     data: { nicknames, tags }
+  })
+}
+
+export async function fetchUserStatuses(id, authHost, godmode, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/users/${id}/statuses?godmode=${godmode}`,
+    method: 'get',
+    headers: authHeaders(token)
   })
 }
 
