@@ -39,7 +39,7 @@
       <el-table-column :min-width="width" :label="$t('users.id')" prop="id" />
       <el-table-column :label="$t('users.name')" prop="nickname">
         <template slot-scope="scope">
-          {{ scope.row.nickname }}
+          <router-link :to="{ name: 'UsersShow', params: { id: scope.row.id }}">{{ scope.row.nickname }}</router-link>
           <el-tag v-if="isDesktop" type="info" size="mini">
             <span>{{ scope.row.local ? $t('users.local') : $t('users.external') }}</span>
           </el-tag>

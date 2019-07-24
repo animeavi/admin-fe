@@ -221,7 +221,16 @@ export default {
     emptyPasswordError: 'Please input the password',
     emptyNicknameError: 'Please input the username',
     invalidNicknameError: 'Username can include "a-z", "A-Z" and "0-9" characters'
-
+  },
+  userProfile: {
+    tags: 'Tags',
+    moderator: 'Moderator',
+    admin: 'Admin',
+    local: 'Local',
+    nickname: 'Nickname',
+    deactivated: 'Deactivated',
+    recentStatuses: 'Recent Statues',
+    showPrivateStatuses: 'Show private statuses'
   },
   usersFilter: {
     inputPlaceholder: 'Select filter',
@@ -245,8 +254,9 @@ export default {
     deleteCompleted: 'Delete comleted',
     deleteCanceled: 'Delete canceled',
     noNotes: 'No notes to display',
-    changeState: 'Change state',
+    changeState: 'Change report state',
     changeScope: 'Change scope',
+    moderateUser: 'Moderate user',
     resolve: 'Resolve',
     reopen: 'Reopen',
     close: 'Close',

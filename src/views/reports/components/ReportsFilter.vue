@@ -4,19 +4,41 @@
     :placeholder="$t('reportsFilter.inputPlaceholder')"
     clearable
     class="select-field"
+    value-key="value"
     @change="toggleFilters">
-    <el-option value="open">{{ $t('reportsFilter.open') }}</el-option>
-    <el-option value="closed">{{ $t('reportsFilter.closed') }}</el-option>
-    <el-option value="resolved">{{ $t('reportsFilter.resolved') }}</el-option>
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">{{ item.label }}</el-option>
   </el-select>
 </template>
 
 <script>
+import i18n from '@/lang'
+
 export default {
   data() {
     return {
-      filter: []
+      filter: 'open',
+      options: [
+        {
+          value: 'open',
+          label: i18n.t('reportsFilter.open')
+        },
+        {
+          value: 'closed',
+          label: i18n.t('reportsFilter.closed')
+        },
+        {
+          value: 'resolved',
+          label: i18n.t('reportsFilter.resolved')
+        }
+      ]
     }
+  },
+  created() {
+    this.$store.dispatch('SetFilter', this.$data.filter)
   },
   methods: {
     toggleFilters() {

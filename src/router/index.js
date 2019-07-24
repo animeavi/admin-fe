@@ -76,5 +76,17 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/users/:id',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'UsersShow',
+        component: () => import('@/views/users/show')
+      }
+    ],
+    hidden: true
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
