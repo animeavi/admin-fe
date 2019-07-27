@@ -229,21 +229,11 @@ describe('Apply users actions to multiple users', () => {
     expect(wrapper.vm.deleteMultipleUsers).toHaveBeenCalled()
 
     const remove = wrapper.vm.mappers().remove
-    const user1 = store.state.users.fetchedUsers[0]
-    const user2 = store.state.users.fetchedUsers[1]
-    const user3 = store.state.users.fetchedUsers[2]
-    expect(user1.deactivated).toBe(false)
-    expect(user2.deactivated).toBe(false)
-    expect(user3.deactivated).toBe(true)
+    expect(store.state.users.fetchedUsers.length).toEqual(3)
     remove()
     await flushPromises()
 
-    const updatedUser1 = store.state.users.fetchedUsers[0]
-    const updatedUser2 = store.state.users.fetchedUsers[1]
-    const updatedUser3 = store.state.users.fetchedUsers[2]
-    expect(updatedUser1.deactivated).toBe(true)
-    expect(updatedUser2.deactivated).toBe(true)
-    expect(updatedUser3.deactivated).toBe(true)
+    expect(store.state.users.fetchedUsers.length).toEqual(0)
     done()
   })
 
