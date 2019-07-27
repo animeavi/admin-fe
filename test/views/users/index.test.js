@@ -129,22 +129,18 @@ describe('Users actions', () => {
     done()
   })
 
-  it('deactivates user when Delete action is called', async (done) => {
+  it('deletes user', async (done) => {
     const wrapper = mount(Users, {
       store,
       localVue,
       sync: false
     })
     await flushPromises()
-
-    const user = store.state.users.fetchedUsers[1]
-    expect(user.deactivated).toBe(false)
+    expect(store.state.users.fetchedUsers.length).toEqual(3)
 
     wrapper.find(htmlElement(2, 2)).trigger('click')
     await flushPromises()
-
-    const updatedUser = store.state.users.fetchedUsers[1]
-    expect(updatedUser.deactivated).toBe(true)
+    expect(store.state.users.fetchedUsers.length).toEqual(2)
     done()
   })
 

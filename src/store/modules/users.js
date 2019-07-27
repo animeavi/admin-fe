@@ -68,17 +68,15 @@ const users = {
       await createNewAccount(nickname, email, password, getters.authHost, getters.token)
       dispatch('FetchUsers', { page: state.currentPage })
     },
-    async DeleteUser({ commit, getters }, user) {
-      await deleteUser(user.nickname, getters.authHost, getters.token)
-      const updatedUser = { ...user, deactivated: true }
-      commit('SWAP_USER', updatedUser)
+    async DeleteUser({ commit, dispatch, getters, state }, user) {
+      const { nickname } = await deleteUser(user.nickname, getters.authHost, getters.token)
+      const users = state.fetchedUsers.filter(user => user.nickname !== nickname)
+      commit('SET_USERS', users)
     },
     async FetchUsers({ commit, state, getters }, { page }) {
       commit('SET_LOADING', true)
-
       const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
       const response = await fetchUsers(filters, getters.authHost, getters.token, page)
-
       loadUsers(commit, page, response.data)
     },
     async RemoveTag({ commit, getters }, { users, tag }) {
