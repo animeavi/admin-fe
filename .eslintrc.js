@@ -141,7 +141,8 @@ module.exports = {
     'no-unsafe-finally': 2,
     'no-unused-vars': [2, {
       'vars': 'all',
-      'args': 'none'
+      'args': 'none',
+      'ignoreRestSiblings': true
     }],
     'no-useless-call': 2,
     'no-useless-computed-key': 2,

@@ -65,7 +65,8 @@ export default {
     i18n: 'I18n',
     externalLink: 'External Link',
     users: 'Users',
-    reports: 'Reports'
+    reports: 'Reports',
+    settings: 'Settings'
   },
   navbar: {
     logOut: 'Log Out',
@@ -273,5 +274,30 @@ export default {
     open: 'Open',
     closed: 'Closed',
     resolved: 'Resolved'
+  },
+  settings: {
+    settings: 'Settings',
+    instance: 'Instance',
+    upload: 'Upload',
+    mailer: 'Mailer',
+    logger: 'Logger',
+    activityPub: 'ActivityPub',
+    auth: 'Authentication',
+    autoLinker: 'Auto Linker',
+    captcha: 'Captcha',
+    frontend: 'Frontend',
+    http: 'HTTP',
+    mrf: 'MRF',
+    mediaProxy: 'Media Proxy',
+    metadata: 'Metadata',
+    gopher: 'Gopher',
+    endpoint: 'Endpoint',
+    jobQueue: 'Job queue',
+    webPush: 'Web push encryption',
+    esshd: 'BBS / SSH access',
+    rateLimiters: 'Rate limiters',
+    database: 'Database',
+    other: 'Other',
+    success: 'Settings changed successfully!'
   }
 }

@@ -4,6 +4,7 @@ import app from './modules/app'
 import errorLog from './modules/errorLog'
 import permission from './modules/permission'
 import reports from './modules/reports'
+import settings from './modules/settings'
 import tagsView from './modules/tagsView'
 import user from './modules/user'
 import userProfile from './modules/userProfile'
@@ -18,6 +19,7 @@ const store = new Vuex.Store({
     errorLog,
     permission,
     reports,
+    settings,
     tagsView,
     user,
     userProfile,

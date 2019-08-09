@@ -77,6 +77,18 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/settings',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/settings/index'),
+        name: 'Settings',
+        meta: { title: 'settings', icon: 'settings', noCache: true }
+      }
+    ]
+  },
+  {
     path: '/users/:id',
     component: Layout,
     children: [
