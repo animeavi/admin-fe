@@ -141,7 +141,7 @@ export const wrapConfig = settings => {
       ? settings[config]['value']
       : Object.keys(settings[config]).reduce((acc, settingName) => {
         const data = settings[config][settingName]
-        if (data === '') {
+        if (data === null || data === '') {
           return acc
         } else if (key === ':rate_limit') {
           return [...acc, { 'tuple': [`:${settingName}`, data] }]
@@ -164,7 +164,7 @@ export const wrapConfig = settings => {
 const wrapNestedTuples = setting => {
   return Object.keys(setting).reduce((acc, settingName) => {
     const data = setting[settingName]
-    if (data === '') {
+    if (data === null || data === '') {
       return acc
     } else if (settingName === 'ip') {
       const ip = data.split('.')
