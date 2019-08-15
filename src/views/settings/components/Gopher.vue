@@ -30,11 +30,8 @@ export default {
   name: 'Gopher',
   computed: {
     ...mapGetters([
-      'gopherConfig'
+      'gopher'
     ]),
-    gopher() {
-      return this.gopherConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },

@@ -137,27 +137,15 @@ export default {
   computed: {
     ...mapGetters([
       'corsPlugCredentials',
-      'corsPlugExposeConfig',
+      'corsPlugExpose',
       'corsPlugHeaders',
       'corsPlugMaxAge',
       'corsPlugMethods',
-      'hackneyPoolsConfig',
-      'httpConfig',
-      'httpSecurityConfig',
+      'hackneyPools',
+      'http',
+      'httpSecurity',
       'metricsExporter'
     ]),
-    corsPlugExpose() {
-      return this.corsPlugExposeConfig
-    },
-    hackneyPools() {
-      return this.hackneyPoolsConfig
-    },
-    http() {
-      return this.httpConfig
-    },
-    httpSecurity() {
-      return this.httpSecurityConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },

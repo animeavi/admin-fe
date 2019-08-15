@@ -1,5 +1,5 @@
 <template>
-  <el-form v-if="!loading" ref="auto_linker" :model="auto_linker" :label-width="labelWidth">
+  <el-form v-if="!loading" ref="autoLinker" :model="autoLinker" :label-width="labelWidth">
     <el-form-item label="Class">
       <el-switch :value="booleanClass" @change="processTwoTypeValue($event, 'auto_linker', 'opts', 'class')"/>
       <p v-if="!booleanClass" class="expl">Specify the class to be added to the generated link. False to clear.</p>
@@ -17,11 +17,11 @@
       <p class="expl">Override the rel attribute. False to clear</p>
     </el-form-item>
     <el-form-item label="New window">
-      <el-switch :value="auto_linker.opts.new_window" @change="processNestedData($event, 'auto_linker', 'opts', 'new_window')"/>
+      <el-switch :value="autoLinker.opts.new_window" @change="processNestedData($event, 'auto_linker', 'opts', 'new_window')"/>
       <p class="expl">Set to false to remove <span class="code">target='_blank'</span> attribute</p>
     </el-form-item>
     <el-form-item label="Scheme">
-      <el-switch :value="auto_linker.opts.scheme" @change="processNestedData($event, 'auto_linker', 'opts', 'scheme')"/>
+      <el-switch :value="autoLinker.opts.scheme" @change="processNestedData($event, 'auto_linker', 'opts', 'scheme')"/>
       <p class="expl">Set to true to link urls with schema <span class="code">http://google.com</span></p>
     </el-form-item>
     <el-form-item label="Truncate">
@@ -34,15 +34,15 @@
       <p class="expl">Specify the class to be added to the generated link. False to clear.</p>
     </el-form-item>
     <el-form-item label="Strip prefix">
-      <el-switch :value="auto_linker.opts.strip_prefix" @change="processNestedData($event, 'auto_linker', 'opts', 'strip_prefix')"/>
+      <el-switch :value="autoLinker.opts.strip_prefix" @change="processNestedData($event, 'auto_linker', 'opts', 'strip_prefix')"/>
       <p class="expl">Strip the scheme prefix</p>
     </el-form-item>
     <el-form-item label="Extra">
-      <el-switch :value="auto_linker.opts.extra" @change="processNestedData($event, 'auto_linker', 'opts', 'extra')"/>
+      <el-switch :value="autoLinker.opts.extra" @change="processNestedData($event, 'auto_linker', 'opts', 'extra')"/>
       <p class="expl">Link urls with rarely used schemes (magnet, ipfs, irc, etc.)</p>
     </el-form-item>
     <el-form-item label="Validate TLD">
-      <el-switch :value="auto_linker.opts.validate_tld" @change="processNestedData($event, 'auto_linker', 'opts', 'validate_tld')"/>
+      <el-switch :value="autoLinker.opts.validate_tld" @change="processNestedData($event, 'auto_linker', 'opts', 'validate_tld')"/>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">Submit</el-button>
@@ -58,11 +58,8 @@ export default {
   name: 'AutoLinker',
   computed: {
     ...mapGetters([
-      'autoLinkerConfig'
+      'autoLinker'
     ]),
-    auto_linker() {
-      return this.autoLinkerConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
@@ -84,15 +81,15 @@ export default {
   },
   methods: {
     getBooleanValue(name) {
-      const value = this.autoLinkerConfig.opts[name]
+      const value = this.autoLinker.opts[name]
       return typeof value === 'string' || typeof value === 'number'
     },
     getNumValue(name) {
-      const value = this.autoLinkerConfig.opts[name]
+      const value = this.autoLinker.opts[name]
       return value || 0
     },
     getStringValue(name) {
-      const value = this.autoLinkerConfig.opts[name]
+      const value = this.autoLinker.opts[name]
       return value || ''
     },
     processTwoTypeValue(value, tab, inputName, childName) {

@@ -97,7 +97,7 @@
         <p class="expl">Enable Pleroma’s Relay, which makes it possible to follow a whole instance</p>
       </el-form-item>
       <el-form-item label="Rewrite policy">
-        <el-select :value="rewritePolicy || []" multiple @change="updateSetting($event, 'instance', 'rewrite_policy')">
+        <el-select :value="rewritePolicy || []" multiple filterable allow-create @change="updateSetting($event, 'instance', 'rewrite_policy')">
           <el-option
             v-for="item in rewritePolicyOptions"
             :key="item.value"
@@ -105,7 +105,7 @@
             :value="item.value"/>
         </el-select>
         <p
-          v-for="item in rewritePolicy"
+          v-for="item in rewritePolicyExplanations"
           :key="item"
           class="expl">{{ getRewritePolicyExpl(item) }}</p>
       </el-form-item>
@@ -230,9 +230,9 @@
       </el-form-item>
     </el-form>
     <div class="line"/>
-    <el-form ref="uri_schemes" :model="uri_schemes" :label-width="labelWidth">
+    <el-form ref="uriSchemes" :model="uriSchemes" :label-width="labelWidth">
       <el-form-item label="URI schemes">
-        <el-select :value="uri_schemes.valid_schemes || []" multiple filterable allow-create placeholder="Select" @change="updateSetting($event, 'uri_schemes', 'valid_schemes')">
+        <el-select :value="uriSchemes.valid_schemes || []" multiple filterable allow-create placeholder="Select" @change="updateSetting($event, 'uri_schemes', 'valid_schemes')">
           <el-option
             v-for="item in uriSchemesOptions"
             :key="item.value"
@@ -243,36 +243,36 @@
       </el-form-item>
     </el-form>
     <div class="line"/>
-    <el-form ref="admin_token" :model="admin_token" :label-width="labelWidth">
+    <el-form ref="adminToken" :model="adminToken" :label-width="labelWidth">
       <el-form-item label="Admin token">
-        <el-input :value="admin_token.value" @input="updateSetting($event, 'admin_token', 'value')"/>
+        <el-input :value="adminToken.value" @input="updateSetting($event, 'admin_token', 'value')"/>
         <p class="expl">Allows to set a token that can be used to authenticate with the admin api without using an actual user by giving it as the <span class="code">admin_token</span> parameter.</p>
       </el-form-item>
     </el-form>
     <div class="line"/>
-    <el-form ref="scheduled_activity" :model="scheduled_activity" :label-width="labelWidth">
+    <el-form ref="scheduledActivity" :model="scheduledActivity" :label-width="labelWidth">
       <el-form-item label="Scheduled activity:"/>
       <el-form-item label="Daily user limit">
-        <el-input-number :value="scheduled_activity.daily_user_limit" :step="5" :min="0" size="large" @change="updateSetting($event, 'Pleroma.ScheduledActivity', 'daily_user_limit')"/>
+        <el-input-number :value="scheduledActivity.daily_user_limit" :step="5" :min="0" size="large" @change="updateSetting($event, 'Pleroma.ScheduledActivity', 'daily_user_limit')"/>
         <p class="expl">The number of scheduled activities a user is allowed to create in a single day (Default: 25)</p>
       </el-form-item>
       <el-form-item label="Total user limit">
-        <el-input-number :value="scheduled_activity.total_user_limit" :step="10" :min="0" size="large" @change="updateSetting($event, 'Pleroma.ScheduledActivity', 'total_user_limit')"/>
+        <el-input-number :value="scheduledActivity.total_user_limit" :step="10" :min="0" size="large" @change="updateSetting($event, 'Pleroma.ScheduledActivity', 'total_user_limit')"/>
         <p class="expl">The number of scheduled activities a user is allowed to create in total (Default: 300)</p>
       </el-form-item>
       <el-form-item label="Enabled">
-        <el-switch :value="scheduled_activity.enabled" @change="updateSetting($event, 'Pleroma.ScheduledActivity', 'enabled')"/>
+        <el-switch :value="scheduledActivity.enabled" @change="updateSetting($event, 'Pleroma.ScheduledActivity', 'enabled')"/>
         <p class="expl">Whether scheduled activities are sent to the job queue to be executed</p>
       </el-form-item>
     </el-form>
     <div class="line"/>
-    <el-form ref="fetch_initial_posts" :model="fetch_initial_posts" :label-width="labelWidth">
+    <el-form ref="fetchInitialPosts" :model="fetchInitialPosts" :label-width="labelWidth">
       <el-form-item label="Fetch initial posts">
-        <el-switch :value="fetch_initial_posts.enabled" @change="updateSetting($event, 'fetch_initial_posts', 'enabled')"/>
+        <el-switch :value="fetchInitialPosts.enabled" @change="updateSetting($event, 'fetch_initial_posts', 'enabled')"/>
         <p class="expl">If enabled, when a new user is federated with, fetch some of their latest posts</p>
       </el-form-item>
       <el-form-item label="Pages">
-        <el-input-number :value="fetch_initial_posts.pages" :step="1" :min="0" size="large" @change="updateSetting($event, 'fetch_initial_posts', 'pages')"/>
+        <el-input-number :value="fetchInitialPosts.pages" :step="1" :min="0" size="large" @change="updateSetting($event, 'fetch_initial_posts', 'pages')"/>
         <p class="expl">The amount of pages to fetch</p>
       </el-form-item>
     </el-form>
@@ -321,37 +321,25 @@ export default {
   name: 'Instance',
   computed: {
     ...mapGetters([
-      'adminTokenConfig',
-      'fetchInitialPostsConfig',
-      'instanceConfig',
-      'pleromaUserConfig',
-      'scheduledActivityConfig',
-      'suggestionsConfig',
-      'uriSchemesConfig'
+      'adminToken',
+      'fetchInitialPosts',
+      'instance',
+      'pleromaUser',
+      'scheduledActivity',
+      'suggestions',
+      'uriSchemes'
     ]),
-    admin_token() {
-      return this.adminTokenConfig
-    },
     autofollowedNicknamesOptions() {
       return options.autofollowedNicknamesOptions
     },
     federationPublisherModulesOptions() {
       return options.federationPublisherModulesOptions
     },
-    fetch_initial_posts() {
-      return this.fetchInitialPostsConfig
-    },
-    instance() {
-      return this.instanceConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
-    },
-    pleromaUser() {
-      return this.pleromaUserConfig
     },
     quarantinedInstancesOptions() {
       return options.quarantinedInstancesOptions
@@ -362,17 +350,11 @@ export default {
     rewritePolicy() {
       return typeof this.instance.rewrite_policy === 'string' ? [this.instance.rewrite_policy] : this.instance.rewrite_policy
     },
+    rewritePolicyExplanations() {
+      return this.rewritePolicy ? this.rewritePolicy.filter(policy => options.rewritePolicyOptions.find(el => el.value === policy)) : []
+    },
     rewritePolicyOptions() {
       return options.rewritePolicyOptions
-    },
-    scheduled_activity() {
-      return this.scheduledActivityConfig
-    },
-    suggestions() {
-      return this.suggestionsConfig
-    },
-    uri_schemes() {
-      return this.uriSchemesConfig
     },
     uriSchemesOptions() {
       return options.uriSchemesOptions

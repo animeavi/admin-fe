@@ -58,15 +58,9 @@ export default {
   name: 'JobQueue',
   computed: {
     ...mapGetters([
-      'queuesConfig',
-      'retryQueueConfig'
+      'queues',
+      'retryQueue'
     ]),
-    queues() {
-      return this.queuesConfig
-    },
-    retryQueue() {
-      return this.retryQueueConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },

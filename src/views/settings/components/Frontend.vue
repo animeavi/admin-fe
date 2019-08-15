@@ -325,34 +325,19 @@ export default {
   name: 'Frontend',
   computed: {
     ...mapGetters([
-      'assetsConfig',
-      'frontendConfig',
-      'emojiConfig',
-      'chatConfig',
-      'markupConfig'
+      'assets',
+      'frontend',
+      'emoji',
+      'chat',
+      'markup'
     ]),
-    assets() {
-      return this.assetsConfig
-    },
-    chat() {
-      return this.chatConfig
-    },
-    emoji() {
-      return this.emojiConfig
-    },
-    frontend() {
-      return this.frontendConfig
-    },
     groups() {
-      return Object.keys(this.emojiConfig.groups).map(key => [key, this.emojiConfig.groups[key]])
-    },
-    markup() {
-      return this.markupConfig
+      return Object.keys(this.emoji.groups).map(key => [key, this.emoji.groups[key]])
     },
     mascots() {
-      return Object.keys(this.assetsConfig.mascots)
+      return Object.keys(this.assets.mascots)
         .map(mascotName =>
-          [mascotName, this.assetsConfig.mascots[mascotName].url, this.assetsConfig.mascots[mascotName].mime_type])
+          [mascotName, this.assets.mascots[mascotName].url, this.assets.mascots[mascotName].mime_type])
     },
     themeOptions() {
       return options.themeOptions

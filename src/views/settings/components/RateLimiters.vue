@@ -206,7 +206,7 @@ export default {
   name: 'RateLimiters',
   computed: {
     ...mapGetters([
-      'rateLimitersConfig'
+      'rateLimiters'
     ]),
     accountConfirmationResendAllUsers() {
       return this.rateLimiters.account_confirmation_resend ? this.rateLimiters.account_confirmation_resend.tuple : [null, null]
@@ -233,9 +233,6 @@ export default {
       return Array.isArray(this.rateLimiters.app_account_creation)
         ? this.rateLimiters.app_account_creation[0].tuple
         : false
-    },
-    rateLimiters() {
-      return this.rateLimitersConfig
     },
     passwordResetAllUsers() {
       return this.rateLimiters.password_reset ? this.rateLimiters.password_reset.tuple : [null, null]

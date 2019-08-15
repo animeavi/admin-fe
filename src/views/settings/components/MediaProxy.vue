@@ -83,16 +83,13 @@ export default {
   name: 'MediaProxy',
   computed: {
     ...mapGetters([
-      'mediaProxyConfig'
+      'mediaProxy'
     ]),
     inlineContentTypes() {
       return Array.isArray(this.mediaProxy.proxy_opts.inline_content_types) ? 'whitelistedTypeArray' : this.mediaProxy.proxy_opts.inline_content_types
     },
     http() {
       return this.mediaProxy.proxy_opts.http || {}
-    },
-    mediaProxy() {
-      return this.mediaProxyConfig
     },
     reqHeadersOptions() {
       return this.mediaProxySettings.reqHeadersOptions

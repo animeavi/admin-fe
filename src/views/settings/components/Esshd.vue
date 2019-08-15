@@ -62,27 +62,12 @@ export default {
   name: 'Instance',
   computed: {
     ...mapGetters([
-      'enabledConfig',
-      'handlerConfig',
-      'passwordAuthenticatorConfig',
-      'portConfig',
-      'privDirConfig'
+      'enabled',
+      'handler',
+      'passwordAuthenticator',
+      'port',
+      'privDir'
     ]),
-    enabled() {
-      return this.enabledConfig
-    },
-    handler() {
-      return this.handlerConfig
-    },
-    passwordAuthenticator() {
-      return this.passwordAuthenticatorConfig
-    },
-    port() {
-      return this.portConfig
-    },
-    privDir() {
-      return this.privDirConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },

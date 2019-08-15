@@ -151,18 +151,15 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'mailerConfig'
+      'mailer'
     ]),
     editorContent: {
       get: function() {
-        return this.mailerConfig.dkim ? this.mailerConfig.dkim[0] : ''
+        return this.mailer.dkim ? this.mailer.dkim[0] : ''
       },
       set: function(value) {
         this.updateSetting([value], 'Pleroma.Emails.Mailer', 'dkim')
       }
-    },
-    mailer() {
-      return this.mailerConfig
     },
     adapterOptions() {
       return options.adapterOptions
