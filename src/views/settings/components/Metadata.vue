@@ -58,15 +58,9 @@ export default {
   name: 'Metadata',
   computed: {
     ...mapGetters([
-      'metadataConfig',
-      'richMediaConfig'
+      'metadata',
+      'richMedia'
     ]),
-    metadata() {
-      return this.metadataConfig
-    },
-    richMedia() {
-      return this.richMediaConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },

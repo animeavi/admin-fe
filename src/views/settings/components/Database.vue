@@ -142,24 +142,15 @@ export default {
   name: 'Instance',
   computed: {
     ...mapGetters([
-      'databaseConfig',
-      'ectoReposConfig',
-      'pleromaRepoConfig'
+      'database',
+      'ectoRepos',
+      'pleromaRepo'
     ]),
-    database() {
-      return this.databaseConfig
-    },
-    ectoRepos() {
-      return this.ectoReposConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
-    },
-    pleromaRepo() {
-      return this.pleromaRepoConfig
     }
   },
   methods: {

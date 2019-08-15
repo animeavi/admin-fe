@@ -39,15 +39,9 @@ export default {
   name: 'Captcha',
   computed: {
     ...mapGetters([
-      'captchaConfig',
-      'kocaptchaConfig'
+      'captcha',
+      'kocaptcha'
     ]),
-    captcha() {
-      return this.captchaConfig
-    },
-    kocaptcha() {
-      return this.kocaptchaConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },

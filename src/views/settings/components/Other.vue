@@ -37,13 +37,10 @@ export default {
   name: 'Other',
   computed: {
     ...mapGetters([
-      'formatEncodersConfig',
+      'formatEncoders',
       'mimeTypesConfig',
-      'teslaAdapterConfig'
+      'teslaAdapter'
     ]),
-    formatEncoders() {
-      return this.formatEncodersConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
@@ -52,9 +49,6 @@ export default {
     },
     mimeTypes() {
       return Object.keys(this.mimeTypesConfig.value).map(key => [key, this.mimeTypesConfig.value[key]])
-    },
-    teslaAdapter() {
-      return this.teslaAdapterConfig
     }
   },
   methods: {

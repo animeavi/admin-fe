@@ -47,20 +47,14 @@ export default {
   name: 'ActivityPub',
   computed: {
     ...mapGetters([
-      'activityPubConfig',
-      'userConfig'
+      'activityPub',
+      'user'
     ]),
-    activityPub() {
-      return this.activityPubConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
-    },
-    user() {
-      return this.userConfig
     }
   },
   methods: {

@@ -148,36 +148,18 @@ export default {
   name: 'Upload',
   computed: {
     ...mapGetters([
-      'uploadAnonymizeFilenameConfig',
-      'uploadConfig',
-      'uploadFilterMogrifyConfig',
-      'uploadersLocalConfig',
-      'uploadMDIIConfig',
-      'uploadS3Config'
+      'uploadAnonymizeFilename',
+      'upload',
+      'uploadFilterMogrify',
+      'uploadersLocal',
+      'uploadMDII',
+      'uploadS3'
     ]),
     inlineContentTypes() {
       return Array.isArray(this.upload.proxy_opts.inline_content_types) ? 'whitelistedTypeArray' : this.upload.proxy_opts.inline_content_types
     },
     http() {
       return this.upload.proxy_opts.http || {}
-    },
-    upload() {
-      return this.uploadConfig
-    },
-    uploadersLocal() {
-      return this.uploadersLocalConfig
-    },
-    uploadAnonymizeFilename() {
-      return this.uploadAnonymizeFilenameConfig
-    },
-    uploadFilterMogrify() {
-      return this.uploadFilterMogrifyConfig
-    },
-    uploadMDII() {
-      return this.uploadMDIIConfig
-    },
-    uploadS3() {
-      return this.uploadS3Config
     },
     hackneyPoolsOptions() {
       return options.hackneyPoolsOptions
@@ -204,7 +186,7 @@ export default {
       return pool ? 'Max connections: ' + pool.max_connections + ', timeout: ' + pool.timeout : ''
     },
     processHttpSettings(value, tab, section, httpSection, input) {
-      const updatedValue = { ...this.uploadConfig[section][httpSection], ...{ [input]: value }}
+      const updatedValue = { ...this.upload[section][httpSection], ...{ [input]: value }}
       this.processNestedData(updatedValue, tab, section, httpSection)
     },
     processNestedData(value, tab, section, input) {

@@ -28,11 +28,8 @@ export default {
   name: 'WebPush',
   computed: {
     ...mapGetters([
-      'vapidDetailsConfig'
+      'vapidDetails'
     ]),
-    vapidDetails() {
-      return this.vapidDetailsConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },

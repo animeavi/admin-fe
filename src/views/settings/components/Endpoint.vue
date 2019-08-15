@@ -25,7 +25,7 @@
       <el-input :value="endpoint.render_errors.view" @input="processNestedData($event, 'Pleroma.Web.Endpoint', 'render_errors', 'view')"/>
     </el-form-item>
     <el-form-item label="Accepts">
-      <el-input :value="endpoint.render_errors.accepts" @input="processNestedData($event, 'Pleroma.Web.Endpoint', 'render_errors', 'accepts')"/>
+      <el-select :value="endpoint.render_errors.accepts || []" multiple filterable allow-create @input="processNestedData($event, 'Pleroma.Web.Endpoint', 'render_errors', 'accepts')"/>
     </el-form-item>
     <el-form-item label="Layout">
       <el-switch :value="endpoint.render_errors.layout" @change="processNestedData($event, 'Pleroma.Web.Endpoint', 'render_errors', 'layout')"/>
@@ -185,11 +185,11 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'endpointConfig'
+      'endpoint'
     ]),
     editorContentHttp: {
       get: function() {
-        return this.endpointConfig.http.dispatch ? this.endpointConfig.http.dispatch[0] : ''
+        return this.endpoint.http.dispatch ? this.endpoint.http.dispatch[0] : ''
       },
       set: function(value) {
         this.processNestedData([value], 'Pleroma.Web.Endpoint', 'http', 'dispatch')
@@ -197,7 +197,7 @@ export default {
     },
     editorContentHttps: {
       get: function() {
-        return this.endpointConfig.https.dispatch ? this.endpointConfig.https.dispatch[0] : ''
+        return this.endpoint.https.dispatch ? this.endpoint.https.dispatch[0] : ''
       },
       set: function(value) {
         this.processNestedData([value], 'Pleroma.Web.Endpoint', 'https', 'dispatch')
@@ -208,9 +208,6 @@ export default {
     },
     configureHttps() {
       return !this.endpoint.https === false
-    },
-    endpoint() {
-      return this.endpointConfig
     },
     endpointHttp() {
       return this.endpoint.http || {}

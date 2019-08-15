@@ -9,7 +9,7 @@
             :label="item.label"
             :value="item.value"/>
         </el-select>
-        <p class="expl">List of instances to remove medias from</p>
+        <p class="expl"><span class="code">:console</span> is used to send logs to stdout, <span class="code">{ExSyslogger, :ex_syslogger}</span> to log to syslog, and <span class="code">Quack.Logger</span> to log to Slack</p>
       </el-form-item>
     </el-form>
     <div class="line"/>
@@ -180,42 +180,24 @@ export default {
   name: 'Logger',
   computed: {
     ...mapGetters([
-      'consoleConfig',
-      'exsysloggerConfig',
-      'levelConfig',
-      'loggerBackendsConfig',
-      'metaConfig',
-      'webhookUrlConfig'
+      'consoleLogger',
+      'exsyslogger',
+      'level',
+      'loggerBackends',
+      'meta',
+      'webhookUrl'
     ]),
-    consoleLogger() {
-      return this.consoleConfig
-    },
-    exsyslogger() {
-      return this.exsysloggerConfig
-    },
-    level() {
-      return this.levelConfig
-    },
-    loggerBackends() {
-      return this.loggerBackendsConfig
-    },
     loggerBackendsValue() {
       return this.loggerBackends.value ? this.loggerBackends.value.map(el => JSON.stringify(el)) : []
     },
     loggerBackendsOptions() {
       return options.loggerBackendsOptions
     },
-    meta() {
-      return this.metaConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
-    },
-    webhookUrl() {
-      return this.webhookUrlConfig
     }
   },
   methods: {

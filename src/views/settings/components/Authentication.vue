@@ -27,7 +27,7 @@
         </p>
       </el-form-item>
       <el-form-item label="OAuth consumer strategies">
-        <el-input :value="auth.oauth_consumer_strategies" @input="updateSetting($event, 'auth', 'oauth_consumer_strategies')"/>
+        <el-select :value="auth.oauth_consumer_strategies || []" multiple filterable allow-create @change="updateSetting($event, 'auth', 'oauth_consumer_strategies')"/>
         <p class="expl">The list of enabled OAuth consumer strategies; by default it's set by
           <span class="code">OAUTH_CONSUMER_STRATEGIES</span>
           environment variable. You can enter values in the following format: <span class="code">'a:foo b:baz'</span>
@@ -238,43 +238,16 @@ export default {
   name: 'Authentication',
   computed: {
     ...mapGetters([
-      'pleromaAuthenticatorConfig',
-      'ldapConfig',
-      'authConfig',
-      'ueberauthConfig',
-      'oauth2Config',
-      'facebookConfig',
-      'googleConfig',
-      'twitterConfig',
-      'microsoftConfig'
+      'pleromaAuthenticator',
+      'ldap',
+      'auth',
+      'ueberauth',
+      'oauth2',
+      'facebook',
+      'google',
+      'twitter',
+      'microsoft'
     ]),
-    auth() {
-      return this.authConfig
-    },
-    ldap() {
-      return this.ldapConfig
-    },
-    oauth2() {
-      return this.oauth2Config
-    },
-    pleromaAuthenticator() {
-      return this.pleromaAuthenticatorConfig
-    },
-    ueberauth() {
-      return this.ueberauthConfig
-    },
-    facebook() {
-      return this.facebookConfig
-    },
-    google() {
-      return this.googleConfig
-    },
-    twitter() {
-      return this.twitterConfig
-    },
-    microsoft() {
-      return this.microsoftConfig
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },

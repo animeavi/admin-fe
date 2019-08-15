@@ -146,47 +146,23 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'mrfHellthreadConfig',
-      'mrfKeywordConfig',
-      'mrfMentionConfig',
-      'mrfNormalizeMarkupConfig',
-      'mrfSimpleConfig',
-      'mrfSubchainConfig',
-      'mrfRejectnonpublicConfig',
-      'mrfUserAllowlistConfig'
+      'mrfHellthread',
+      'mrfKeyword',
+      'mrfMention',
+      'mrfNormalizeMarkup',
+      'mrfSimple',
+      'mrfSubchain',
+      'mrfRejectnonpublic',
+      'mrfUserAllowlist'
     ]),
     matchActor() {
       return Object.keys(this.mrfSubchain.match_actor).map(key => [key, this.mrfSubchain.match_actor[key]])
-    },
-    mrfHellthread() {
-      return this.mrfHellthreadConfig
-    },
-    mrfKeyword() {
-      return this.mrfKeywordConfig
-    },
-    mrfMention() {
-      return this.mrfMentionConfig
-    },
-    mrfNormalizeMarkup() {
-      return this.mrfNormalizeMarkupConfig
-    },
-    mrfSimple() {
-      return this.mrfSimpleConfig
-    },
-    mrfSubchain() {
-      return this.mrfSubchainConfig
-    },
-    mrfRejectnonpublic() {
-      return this.mrfRejectnonpublicConfig
-    },
-    mrfUserAllowlist() {
-      return this.mrfUserAllowlistConfig
     },
     policiesOptions() {
       return options.rewritePolicyOptions
     },
     replacePatterns() {
-      return Object.keys(this.mrfKeywordConfig.replace).map(key => [key, this.mrfKeywordConfig.replace[key]])
+      return Object.keys(this.mrfKeyword.replace).map(key => [key, this.mrfKeyword.replace[key]])
     },
     userAllowlist() {
       return Object.keys(this.mrfUserAllowlist).map(key => [key, this.mrfUserAllowlist[key]])
