@@ -107,8 +107,14 @@ export const parseTuples = (tuples, key) => {
       nonAtomsTuples.includes(item.tuple[0])
         ? accum[item.tuple[0].substr(1)] = parseNonAtomTuples(item.tuple[1])
         : accum[item.tuple[0].substr(1)] = parseTuples(item.tuple[1])
+    } else if (Array.isArray(item.tuple[1])) {
+      accum[item.tuple[0].substr(1)] = item.tuple[1]
     } else if (item.tuple[1] && typeof item.tuple[1] === 'object' && 'tuple' in item.tuple[1]) {
       accum[item.tuple[0].substr(1)] = item.tuple[1]['tuple'].join('.')
+    } else if (item.tuple[1] && typeof item.tuple[1] === 'object') {
+      nonAtomsObjects.includes(item.tuple[0])
+        ? accum[item.tuple[0].substr(1)] = parseNonAtomObject(item.tuple[1])
+        : accum[item.tuple[0].substr(1)] = parseObject(item.tuple[1])
     } else {
       key === 'mrf_user_allowlist'
         ? accum[item.tuple[0]] = item.tuple[1]
@@ -121,6 +127,20 @@ export const parseTuples = (tuples, key) => {
 const parseNonAtomTuples = (tuples) => {
   return tuples.reduce((acc, item) => {
     acc[item.tuple[0]] = item.tuple[1]
+    return acc
+  }, {})
+}
+
+const parseNonAtomObject = (object) => {
+  return Object.keys(object).reduce((acc, item) => {
+    acc[item] = object[item]
+    return acc
+  }, {})
+}
+
+const parseObject = (object) => {
+  return Object.keys(object).reduce((acc, item) => {
+    acc[item.substr(1)] = object[item]
     return acc
   }, {})
 }
