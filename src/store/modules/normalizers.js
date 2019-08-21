@@ -1,4 +1,7 @@
-const nonAtomsTuples = ['replace', 'match_actor', ':replace', ':match_actor']
+const nonAtomsTuples = ['replace', ':replace']
+const nonAtomsObjects = ['match_actor', ':match_actor']
+const objects = ['digest', 'pleroma_fe', 'masto_fe', 'poll_limits']
+const objectParents = ['mascots']
 const groups = {
   'cors_plug': [
     'credentials',
@@ -146,16 +149,23 @@ export const wrapConfig = settings => {
         } else if (key === ':rate_limit') {
           return [...acc, { 'tuple': [`:${settingName}`, data] }]
         } else if (settingName === 'ip') {
-          const ip = data.split('.')
+          const ip = data.split('.').map(s => parseInt(s, 10))
           return [...acc, { 'tuple': [`:${settingName}`, { 'tuple': ip }] }]
-        } else if (!Array.isArray(data) && typeof data === 'object') {
-          return nonAtomsTuples.includes(settingName)
-            ? [...acc, { 'tuple': [`:${settingName}`, wrapNonAtomsTuples(data)] }]
-            : [...acc, { 'tuple': [`:${settingName}`, wrapNestedTuples(data)] }]
+        } else if (Array.isArray(data) || typeof data !== 'object') {
+          return key === ':mrf_user_allowlist'
+            ? [...acc, { 'tuple': [`${settingName}`, data] }]
+            : [...acc, { 'tuple': [`:${settingName}`, data] }]
+        } else if (nonAtomsObjects.includes(settingName)) {
+          return [...acc, { 'tuple': [`:${settingName}`, wrapNonAtomsObjects(data)] }]
+        } else if (objectParents.includes(settingName)) {
+          return [...acc, { 'tuple': [`:${settingName}`, wrapNestedObjects(data)] }]
+        } else if (objects.includes(settingName)) {
+          return [...acc, { 'tuple': [`:${settingName}`, wrapObjects(data)] }]
+        } else if (nonAtomsTuples.includes(settingName)) {
+          return [...acc, { 'tuple': [`:${settingName}`, wrapNonAtomsTuples(data)] }]
+        } else {
+          return [...acc, { 'tuple': [`:${settingName}`, wrapNestedTuples(data)] }]
         }
-        return key === ':mrf_user_allowlist'
-          ? [...acc, { 'tuple': [`${settingName}`, settings[config][settingName]] }]
-          : [...acc, { 'tuple': [`:${settingName}`, settings[config][settingName]] }]
       }, [])
     return { group, key, value }
   })
@@ -167,12 +177,21 @@ const wrapNestedTuples = setting => {
     if (data === null || data === '') {
       return acc
     } else if (settingName === 'ip') {
-      const ip = data.split('.')
+      const ip = data.split('.').map(s => parseInt(s, 10))
       return [...acc, { 'tuple': [`:${settingName}`, { 'tuple': ip }] }]
-    } else if (!Array.isArray(data) && typeof data === 'object') {
+    } else if (Array.isArray(data) || typeof data !== 'object') {
+      return [...acc, { 'tuple': [`:${settingName}`, data] }]
+    } else if (nonAtomsObjects.includes(settingName)) {
+      return [...acc, { 'tuple': [`:${settingName}`, wrapNonAtomsObjects(data)] }]
+    } else if (objectParents.includes(settingName)) {
+      return [...acc, { 'tuple': [`:${settingName}`, wrapNestedObjects(data)] }]
+    } else if (objects.includes(settingName)) {
+      return [...acc, { 'tuple': [`:${settingName}`, wrapObjects(data)] }]
+    } else if (nonAtomsTuples.includes(settingName)) {
+      return [...acc, { 'tuple': [`:${settingName}`, wrapNonAtomsTuples(data)] }]
+    } else {
       return [...acc, { 'tuple': [`:${settingName}`, wrapNestedTuples(data)] }]
     }
-    return [...acc, { 'tuple': [`:${settingName}`, setting[settingName]] }]
   }, [])
 }
 
@@ -180,6 +199,24 @@ const wrapNonAtomsTuples = setting => {
   return Object.keys(setting).reduce((acc, settingName) => {
     return [...acc, { 'tuple': [`${settingName}`, setting[settingName]] }]
   }, [])
+}
+
+const wrapNestedObjects = setting => {
+  return Object.keys(setting).reduce((acc, settingName) => {
+    return [...acc, { 'tuple': [`:${settingName}`, wrapObjects(setting[settingName])] }]
+  }, [])
+}
+
+const wrapNonAtomsObjects = setting => {
+  return Object.keys(setting).reduce((acc, settingName) => {
+    return { ...acc, [`${settingName}`]: setting[settingName] }
+  }, {})
+}
+
+const wrapObjects = setting => {
+  return Object.keys(setting).reduce((acc, settingName) => {
+    return { ...acc, [`:${settingName}`]: setting[settingName] }
+  }, {})
 }
 
 const getGroup = key => {

@@ -12,9 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
-- fixes inputs for renders_errors and rewrite_policy settings
-- removes unnecessary computed properties
-- enables source maps for production build
+- converts maps and structs to JS objects, not array of tuples when wrapping config
+- changes type of IP value from string to number
 
 ## [1.0.1] - 2019-08-15
 
