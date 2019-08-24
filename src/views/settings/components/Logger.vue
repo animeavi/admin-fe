@@ -2,7 +2,7 @@
   <div>
     <el-form ref="loggerBackends" :model="loggerBackends" :label-width="labelWidth">
       <el-form-item label="Backends">
-        <el-select :value="loggerBackendsValue" multiple @change="updateloggerBackends($event, 'backends', 'value')">
+        <el-select :value="loggerBackendsValue" multiple filterable allow-create @change="updateloggerBackends($event, 'backends', 'value')">
           <el-option
             v-for="(item, index) in loggerBackendsOptions"
             :key="index"
@@ -16,7 +16,7 @@
     <el-form ref="consoleLogger" :model="consoleLogger" :label-width="labelWidth">
       <el-form-item label="Console logger:"/>
       <el-form-item label="Level">
-        <el-select :value="consoleLogger.level" @change="updateSetting($event, 'console', 'level')">
+        <el-select :value="consoleLogger.level" clearable @change="updateSetting($event, 'console', 'level')">
           <el-option value=":debug" label=":debug - for debug-related messages"/>
           <el-option value=":info" label=":info - for information of any kind"/>
           <el-option value=":warn" label=":warn - for warnings"/>
@@ -79,7 +79,7 @@
     <el-form ref="exsyslogger" :model="exsyslogger" :label-width="labelWidth">
       <el-form-item label="ExSyslogger:"/>
       <el-form-item label="Level">
-        <el-select :value="exsyslogger.level" @change="updateSetting($event, 'ex_syslogger', 'level')">
+        <el-select :value="exsyslogger.level" clearable @change="updateSetting($event, 'ex_syslogger', 'level')">
           <el-option value=":debug" label=":debug - for debug-related messages"/>
           <el-option value=":info" label=":info - for information of any kind"/>
           <el-option value=":warn" label=":warn - for warnings"/>
@@ -120,7 +120,7 @@
         <p class="expl">Syslog facility to be used. It defaults to <span class="code">:local0</span></p>
       </el-form-item>
       <el-form-item label="Options">
-        <el-select :value="exsyslogger.option || []" multiple @change="updateSetting($event, 'ex_syslogger', 'option')">
+        <el-select :value="exsyslogger.option || []" multiple filterable allow-create @change="updateSetting($event, 'ex_syslogger', 'option')">
           <el-option value=":pid"/>
           <el-option value=":cons"/>
           <el-option value=":odelay"/>
@@ -139,7 +139,7 @@
     </el-form>
     <el-form ref="level" :model="level" :label-width="labelWidth">
       <el-form-item label="Level">
-        <el-select :value="level.value" @change="updateSetting($event, 'level', 'value')">
+        <el-select :value="level.value" clearable @change="updateSetting($event, 'level', 'value')">
           <el-option value=":debug" label=":debug - for debug-related messages"/>
           <el-option value=":info" label=":info - for information of any kind"/>
           <el-option value=":warn" label=":warn - for warnings"/>

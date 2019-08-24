@@ -13,7 +13,8 @@ export const options = {
     { label: 'EnsureRePrepended', value: 'Pleroma.Web.ActivityPub.MRF.EnsureRePrepended', expl: 'EnsureRePrepended: Rewrites posts to ensure that replies to posts with subjects do not have an identical subject and instead begin with re:' },
     { label: 'AntiLinkSpamPolicy', value: 'Pleroma.Web.ActivityPub.MRF.AntiLinkSpamPolicy', expl: 'Rejects posts from likely spambots by rejecting posts from new users that contain links' },
     { label: 'MediaProxyWarmingPolicy', value: 'Pleroma.Web.ActivityPub.MRF.MediaProxyWarmingPolicy', expl: 'Crawls attachments using their MediaProxy URLs so that the MediaProxy cache is primed' },
-    { label: 'MentionPolicy', value: 'Pleroma.Web.ActivityPub.MRF.MentionPolicy', expl: 'Drops posts mentioning configurable users. (see :mrf_mention section)' }
+    { label: 'MentionPolicy', value: 'Pleroma.Web.ActivityPub.MRF.MentionPolicy', expl: 'Drops posts mentioning configurable users. (see :mrf_mention section)' },
+    { label: 'VocabularyPolicy', value: 'Pleroma.Web.ActivityPub.MRF.VocabularyPolicy', expl: 'Restricts activities to a configured set of vocabulary' }
   ],
   quarantinedInstancesOptions: [],
   autofollowedNicknamesOptions: [],

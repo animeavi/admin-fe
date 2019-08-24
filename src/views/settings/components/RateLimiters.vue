@@ -192,6 +192,30 @@
         </div>
       </div>
     </el-form-item>
+    <el-form-item label="Activity pub routes:">
+      <div v-if="!activityPubRoutesAuthUsers">
+        <el-input :value="activityPubRoutesAllUsers[0]" placeholder="scale" class="scale-input" @input="parseRateLimiter($event, 'ap_routes', 'scale', 'oneLimit', activityPubRoutesAllUsers)"/> :
+        <el-input :value="activityPubRoutesAllUsers[1]" placeholder="limit" class="limit-input" @input="parseRateLimiter($event, 'ap_routes', 'limit', 'oneLimit', activityPubRoutesAllUsers)"/>
+        <div class="limit-button-container">
+          <el-button icon="el-icon-plus" circle @click="toggleLimits([{ 'tuple': [null, null] }, { 'tuple': [null, null] }], 'ap_routes')"/>
+          <p class="expl limit-expl">Set different limits for unauthenticated and authenticated users</p>
+        </div>
+      </div>
+      <div v-if="activityPubRoutesAuthUsers">
+        <el-form-item label="Authenticated users:">
+          <el-input :value="activityPubRoutesAuthUsers[0]" placeholder="scale" class="scale-input" @input="parseRateLimiter($event, 'ap_routes', 'scale', 'authUserslimit', [activityPubRoutesUnauthUsers, activityPubRoutesAuthUsers])"/> :
+          <el-input :value="activityPubRoutesAuthUsers[1]" placeholder="limit" class="limit-input" @input="parseRateLimiter($event, 'ap_routes', 'limit', 'authUserslimit', [activityPubRoutesUnauthUsers, activityPubRoutesAuthUsers])"/>
+        </el-form-item>
+        <el-form-item label="Unauthenticated users:">
+          <el-input :value="activityPubRoutesUnauthUsers[0]" placeholder="scale" class="scale-input" @input="parseRateLimiter($event, 'ap_routes', 'scale', 'unauthUsersLimit', [activityPubRoutesUnauthUsers, activityPubRoutesAuthUsers])"/> :
+          <el-input :value="activityPubRoutesUnauthUsers[1]" placeholder="limit" class="limit-input" @input="parseRateLimiter($event, 'ap_routes', 'limit', 'unauthUsersLimit', [activityPubRoutesUnauthUsers, activityPubRoutesAuthUsers])"/>
+        </el-form-item>
+        <div class="limit-button-container">
+          <el-button icon="el-icon-minus" circle @click="toggleLimits({ 'tuple': [null, null] }, 'ap_routes')"/>
+          <p class="expl limit-expl">Set limit for all users</p>
+        </div>
+      </div>
+    </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">Submit</el-button>
     </el-form-item>
@@ -219,6 +243,19 @@ export default {
     accountConfirmationResendUnauthUsers() {
       return Array.isArray(this.rateLimiters.account_confirmation_resend)
         ? this.rateLimiters.account_confirmation_resend[0].tuple
+        : false
+    },
+    activityPubRoutesAllUsers() {
+      return this.rateLimiters.ap_routes ? this.rateLimiters.ap_routes.tuple : [null, null]
+    },
+    activityPubRoutesAuthUsers() {
+      return Array.isArray(this.rateLimiters.ap_routes)
+        ? this.rateLimiters.ap_routes[1].tuple
+        : false
+    },
+    activityPubRoutesUnauthUsers() {
+      return Array.isArray(this.rateLimiters.ap_routes)
+        ? this.rateLimiters.ap_routes[0].tuple
         : false
     },
     appAccountCreationAllUsers() {

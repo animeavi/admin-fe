@@ -36,7 +36,7 @@
         <p class="expl">The total time the connection is allowed to read from the remote upstream</p>
       </el-form-item>
       <el-form-item label="Inline content types">
-        <el-select :value="inlineContentTypes" @change="processNestedData($event, 'Pleroma.Upload', 'proxy_opts', 'inline_content_types')">
+        <el-select :value="inlineContentTypes" clearable @change="processNestedData($event, 'Pleroma.Upload', 'proxy_opts', 'inline_content_types')">
           <el-option :value="true" label="True"/>
           <el-option :value="false" label="False"/>
           <el-option value="whitelistedTypeArray" label="List of whitelisted content types"/>
@@ -50,7 +50,7 @@
         </p>
       </el-form-item>
       <el-form-item v-if="inlineContentTypes === 'whitelistedTypeArray'" label="Whitelisted content types">
-        <el-select :value="whitelistedContentTypes" multiple @change="processNestedData($event, 'Pleroma.Upload', 'proxy_opts', 'inline_content_types')">
+        <el-select :value="whitelistedContentTypes" multiple filterable allow-create @change="processNestedData($event, 'Pleroma.Upload', 'proxy_opts', 'inline_content_types')">
           <el-option
             v-for="item in whitelistedContentTypesOptions"
             :label="item.label"
@@ -67,7 +67,7 @@
         <el-switch :value="http.follow_redirect" @change="processHttpSettings($event, 'Pleroma.Upload', 'proxy_opts', 'http', 'follow_redirect')"/>
       </el-form-item>
       <el-form-item label="Pool">
-        <el-select :value="http.pool" @change="processHttpSettings($event, 'Pleroma.Upload', 'proxy_opts', 'http', 'pool')">
+        <el-select :value="http.pool" clearable @change="processHttpSettings($event, 'Pleroma.Upload', 'proxy_opts', 'http', 'pool')">
           <el-option
             v-for="item in hackneyPoolsOptions"
             :label="item.label"
@@ -110,6 +110,10 @@
       <el-form-item label="Bucket">
         <el-input :value="uploadS3.bucket" @input="updateSetting($event, 'Pleroma.Uploaders.S3', 'bucket')"/>
         <p class="expl">S3 bucket name</p>
+      </el-form-item>
+      <el-form-item label="Bucket namespace">
+        <el-input :value="uploadS3.bucket_namespace" @input="updateSetting($event, 'Pleroma.Uploaders.S3', 'bucket_namespace')"/>
+        <p class="expl">S3 bucket namespace</p>
       </el-form-item>
       <el-form-item label="Public endpoint">
         <el-input :value="uploadS3.public_endpoint" @input="updateSetting($event, 'Pleroma.Uploaders.S3', 'public_endpoint')"/>

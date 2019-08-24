@@ -42,7 +42,14 @@ export const initialSettings = [
       { 'tuple': [':remote_post_retention_days', 90] },
       { 'tuple': [':skip_thread_containment', true] },
       { 'tuple': [':limit_to_local_content', ':unauthenticated'] },
-      { 'tuple': [':dynamic_configuration', true] }
+      { 'tuple': [':dynamic_configuration', true] },
+      { 'tuple': [':max_account_fields', 10] },
+      { 'tuple': [':max_remote_account_fields', 20] },
+      { 'tuple': [':account_field_name_length', 255] },
+      { 'tuple': [':account_field_value_length', 255] },
+      { 'tuple': [':external_user_synchronization', true] },
+      { 'tuple': [':user_bio_length', 5000] },
+      { 'tuple': [':user_name_length', 100] }
     ]
   },
   {

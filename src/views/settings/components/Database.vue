@@ -23,7 +23,7 @@
     <div class="line"/>
     <el-form ref="ectoRepos" :model="ectoRepos" :label-width="labelWidth">
       <el-form-item label="Ecto repos">
-        <el-select :value="ectoRepos.value || []" multiple allow-create @change="updateSetting($event, 'ecto_repos', 'value')">
+        <el-select :value="ectoRepos.value || []" multiple filterable allow-create @change="updateSetting($event, 'ecto_repos', 'value')">
           <el-option label="Pleroma.Repo" value="Pleroma.Repo"/>
         </el-select>
       </el-form-item>
@@ -45,7 +45,7 @@
         <p class="expl">An URL that specifies storage information</p>
       </el-form-item>
       <el-form-item label="Log level">
-        <el-select :value="pleromaRepo.log" @change="updateSetting($event, 'Pleroma.Repo', 'log')">
+        <el-select :value="pleromaRepo.log" clearable @change="updateSetting($event, 'Pleroma.Repo', 'log')">
           <el-option :value="false" label="False - disables logging for that repository."/>
           <el-option value=":debug" label=":debug - for debug-related messages"/>
           <el-option value=":info" label=":info - for information of any kind"/>
@@ -59,7 +59,7 @@
         <p class="expl">The size of the pool used by the connection module. Defaults to <span class="code">10</span></p>
       </el-form-item>
       <el-form-item label="Telemetry prefix">
-        <el-select :value="pleromaRepo.telemetry_prefix || []" multiple allow-create @change="updateSetting($event, 'Pleroma.Repo', 'telemetry_prefix')">
+        <el-select :value="pleromaRepo.telemetry_prefix || []" multiple filterable allow-create @change="updateSetting($event, 'Pleroma.Repo', 'telemetry_prefix')">
           <el-option label=":my_app" value=":my_app"/>
           <el-option label=":repo" value=":repo"/>
           <el-option label=":query" value=":query"/>
@@ -69,7 +69,7 @@
         <el-input :value="pleromaRepo.types" @input="updateSetting($event, 'Pleroma.Repo', 'types')"/>
       </el-form-item>
       <el-form-item label="Telemetry event">
-        <el-select :value="pleromaRepo.telemetry_event || []" multiple allow-create @change="updateSetting($event, 'Pleroma.Repo', 'telemetry_event')">
+        <el-select :value="pleromaRepo.telemetry_event || []" multiple filterable allow-create @change="updateSetting($event, 'Pleroma.Repo', 'telemetry_event')">
           <el-option label="Pleroma.Repo.Instrumenter" value="Pleroma.Repo.Instrumenter"/>
         </el-select>
       </el-form-item>
@@ -120,7 +120,7 @@
         <p class="expl">The timeout for establishing new connections. Defaults to 5000</p>
       </el-form-item>
       <el-form-item label="Prepare">
-        <el-select :value="pleromaRepo.prepare" @change="updateSetting($event, 'Pleroma.Repo', 'prepare')">
+        <el-select :value="pleromaRepo.prepare" clearable @change="updateSetting($event, 'Pleroma.Repo', 'prepare')">
           <el-option label="named" value=":named"/>
           <el-option label="unnamed" value=":unnamed"/>
         </el-select>
