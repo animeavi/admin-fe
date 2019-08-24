@@ -17,6 +17,7 @@ const settings = {
       'credentials': {},
       'database': {},
       'ecto_repos': {},
+      'email_notifications': { digest: {}},
       'emoji': { groups: {}},
       'enabled': {},
       'ex_syslogger': {},
@@ -46,11 +47,13 @@ const settings = {
       'mrf_simple': {},
       'mrf_subchain': { match_actor: {}},
       'mrf_user_allowlist': {},
+      'mrf_vocabulary': {},
       'oauth2': {},
       'password_authenticator': {},
       'Pleroma.Captcha': {},
       'Pleroma.Captcha.Kocaptcha': {},
       'Pleroma.Emails.Mailer': {},
+      'Pleroma.Emails.UserEmail': { styling: {}},
       'Pleroma.Repo': {},
       'Pleroma.ScheduledActivity': {},
       'Pleroma.Upload': { proxy_opts: {}},
@@ -136,7 +139,9 @@ const settings = {
     },
     async UploadMedia({ dispatch, getters, state }, { file, tab, inputName, childName }) {
       const response = await uploadMedia(file, getters.authHost, getters.token)
-      const updatedValue = { ...state.settings[tab][inputName], ...{ [childName]: response.data.url }}
+      const updatedValue = childName
+        ? { ...state.settings[tab][inputName], ...{ [childName]: response.data.url }}
+        : response.data.url
       dispatch('UpdateSettings', { tab, data: { [inputName]: updatedValue }})
     }
   }

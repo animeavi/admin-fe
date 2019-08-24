@@ -41,6 +41,14 @@
         <el-input-number :value="instance.banner_upload_limit / 1048576" :step="1" :min="0" size="large" @change="updateSetting($event * 1048576, 'instance', 'banner_upload_limit')"/>
         <p class="expl">File size limit of user’s profile banners</p>
       </el-form-item>
+      <el-form-item label="User bio length">
+        <el-input-number :value="instance.user_bio_length" :step="1" :min="0" size="large" @change="updateSetting($event, 'instance', 'user_bio_length')"/>
+        <p class="expl">A user bio maximum length (default: 5000)</p>
+      </el-form-item>
+      <el-form-item label="User name length">
+        <el-input-number :value="instance.user_name_length" :step="1" :min="0" size="large" @change="updateSetting($event, 'instance', 'user_name_length')"/>
+        <p class="expl">A user name maximum length (default: 100)</p>
+      </el-form-item>
       <el-form-item label="Poll limits:"/>
       <el-form-item label="Max options">
         <el-input-number :value="instance.poll_limits.max_options" :step="1" :min="0" size="large" @change="processNestedData($event, 'instance', 'poll_limits', 'max_options')"/>
@@ -84,7 +92,7 @@
         <p class="expl">Timeout (in days) of each external federation target being unreachable prior to pausing federating to it</p>
       </el-form-item>
       <el-form-item label="Federation publisher modules">
-        <el-select :value="instance.federation_publisher_modules || []" multiple @change="updateSetting($event, 'instance', 'federation_publisher_modules')">
+        <el-select :value="instance.federation_publisher_modules || []" multiple filterable allow-create @change="updateSetting($event, 'instance', 'federation_publisher_modules')">
           <el-option
             v-for="item in federationPublisherModulesOptions"
             :key="item.value"
@@ -114,7 +122,7 @@
         <p class="expl">Makes the client API in authentificated mode-only except for user-profiles. Useful for disabling the Local Timeline and The Whole Known Network</p>
       </el-form-item>
       <el-form-item label="Quarantined instances">
-        <el-select :value="instance.quarantined_instances || []" multiple placeholder="Select" @change="updateSetting($event, 'instance', 'quarantined_instances')">
+        <el-select :value="instance.quarantined_instances || []" multiple filterable allow-create @change="updateSetting($event, 'instance', 'quarantined_instances')">
           <el-option
             v-for="item in quarantinedInstancesOptions"
             :key="item.value"
@@ -132,7 +140,7 @@
         <el-input :value="instance.static_dir" @input="updateSetting($event, 'instance', 'static_dir')"/>
       </el-form-item>
       <el-form-item label="Allowed post formats">
-        <el-select :value="instance.allowed_post_formats || []" multiple placeholder="Select" @change="updateSetting($event, 'instance', 'allowed_post_formats')">
+        <el-select :value="instance.allowed_post_formats || []" multiple filterable allow-create @change="updateSetting($event, 'instance', 'allowed_post_formats')">
           <el-option label="text/plain" value="text/plain"/>
           <el-option label="text/html" value="text/html"/>
           <el-option label="text/markdown" value="text/markdown"/>
@@ -152,7 +160,7 @@
         <p class="expl">Copy the scope <span class="code">(private/unlisted/public)</span> in replies to posts by default</p>
       </el-form-item>
       <el-form-item label="Subject line behavior">
-        <el-select :value="instance.subject_line_behavior" @change="updateSetting($event, 'instance', 'subject_line_behavior')">
+        <el-select :value="instance.subject_line_behavior" clearable @change="updateSetting($event, 'instance', 'subject_line_behavior')">
           <el-option label="Email" value="email">Email / Copy and preprend re:, as in email</el-option>
           <el-option label="Masto" value="masto">Masto / Copy verbatim, as in Mastodon</el-option>
           <el-option label="Noop" value="noop">Noop / Don't copy the subject</el-option>
@@ -172,7 +180,7 @@
         <p class="expl">The maximum number of pinned statuses. '0' will disable the feature</p>
       </el-form-item>
       <el-form-item label="Autofollowed nicknames">
-        <el-select :value="instance.autofollowed_nicknames || []" multiple placeholder="Select" @change="updateSetting($event, 'instance', 'autofollowed_nicknames')">
+        <el-select :value="instance.autofollowed_nicknames || []" multiple filterable allow-create @change="updateSetting($event, 'instance', 'autofollowed_nicknames')">
           <el-option
             v-for="item in autofollowedNicknamesOptions"
             :key="item.value"
@@ -214,7 +222,7 @@
         <p class="expl">Skip filter out broken threads.</p>
       </el-form-item>
       <el-form-item label="Limit to local content">
-        <el-select :value="instance.limit_to_local_content" @change="updateSetting($event, 'instance', 'limit_to_local_content')">
+        <el-select :value="instance.limit_to_local_content" clearable @change="updateSetting($event, 'instance', 'limit_to_local_content')">
           <el-option label="Unauthenticated" value=":unauthenticated"/>
           <el-option label="All" value=":all"/>
           <el-option label="False" value="false"/>
@@ -224,6 +232,22 @@
         <el-switch :value="instance.dynamic_configuration" @change="updateSetting($event, 'instance', 'dynamic_configuration')"/>
         <p class="expl">Allow transferring configuration to DB with the subsequent customization from Admin API</p>
       </el-form-item>
+      <el-form-item label="Max account fields">
+        <el-input-number :value="instance.max_account_fields" :step="1" :min="0" size="large" @change="updateSetting($event, 'instance', 'max_account_fields')"/>
+        <p class="expl">The maximum number of custom fields in the user profile (Default: 4)</p>
+      </el-form-item>
+      <el-form-item label="Max remote account fields">
+        <el-input-number :value="instance.max_remote_account_fields" :step="1" :min="0" size="large" @change="updateSetting($event, 'instance', 'max_remote_account_fields')"/>
+        <p class="expl">The maximum number of custom fields in the remote user profile (Default: 10)</p>
+      </el-form-item>
+      <el-form-item label="Account field name length">
+        <el-input-number :value="instance.account_field_name_length" :step="1" :min="0" size="large" @change="updateSetting($event, 'instance', 'account_field_name_length')"/>
+        <p class="expl">An account field name maximum length (Default: 255)</p>
+      </el-form-item>
+      <el-form-item label="Account field value length">
+        <el-input-number :value="instance.account_field_value_length" :step="1" :min="0" size="large" @change="updateSetting($event, 'instance', 'account_field_value_length')"/>
+        <p class="expl">An account field value maximum length (Default: 255)</p>
+      </el-form-item>
       <el-form-item label="External user synchronization">
         <el-switch :value="instance.external_user_synchronization" @change="updateSetting($event, 'instance', 'external_user_synchronization')"/>
         <p class="expl">Enabling following/followers counters synchronization for external users.</p>
@@ -232,7 +256,7 @@
     <div class="line"/>
     <el-form ref="uriSchemes" :model="uriSchemes" :label-width="labelWidth">
       <el-form-item label="URI schemes">
-        <el-select :value="uriSchemes.valid_schemes || []" multiple filterable allow-create placeholder="Select" @change="updateSetting($event, 'uri_schemes', 'valid_schemes')">
+        <el-select :value="uriSchemes.valid_schemes || []" multiple filterable allow-create @change="updateSetting($event, 'uri_schemes', 'valid_schemes')">
           <el-option
             v-for="item in uriSchemesOptions"
             :key="item.value"

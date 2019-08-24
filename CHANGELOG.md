@@ -6,9 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+
+- add ability to configure new settings (UploadS3 bucket namespace, Rate limit for Activity pub routes, Email notifications settings, MRF Vocabulary, user bio and name length and others)
+
 ### Changed
 
 - removes "Dashboard" from dropdown menu
+- makes all single selects clearable and allow to enter custom values in all multiple selects
+- remove legacy activitypub accept_blocks setting 
 
 ### Fixed
 

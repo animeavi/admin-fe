@@ -1,10 +1,6 @@
 <template>
   <div>
     <el-form ref="activityPub" :model="activityPub" :label-width="labelWidth">
-      <el-form-item label="Accept blocks">
-        <el-switch :value="activityPub.accept_blocks" @change="updateSetting($event, 'activitypub', 'accept_blocks')"/>
-        <p class="expl">Whether to accept incoming block activities from other instances</p>
-      </el-form-item>
       <el-form-item label="Unfollow blocked">
         <el-switch :value="activityPub.unfollow_blocked" @change="updateSetting($event, 'activitypub', 'unfollow_blocked')"/>
         <p class="expl">Whether blocks result in people getting unfollowed</p>

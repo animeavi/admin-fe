@@ -10,7 +10,7 @@
         <p class="expl">The time in seconds for which the captcha is valid</p>
       </el-form-item>
       <el-form-item label="Method">
-        <el-select :value="captcha.method" placeholder="Select" @change="updateSetting($event, 'Pleroma.Captcha', 'method')">
+        <el-select :value="captcha.method" clearable @change="updateSetting($event, 'Pleroma.Captcha', 'method')">
           <el-option label="Pleroma.Captcha.Kocaptcha" value="Pleroma.Captcha.Kocaptcha"/>
         </el-select>
         <p class="expl">The method/service to use for captcha</p>

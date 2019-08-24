@@ -8,7 +8,7 @@
       </el-form-item>
       <el-form-item label="Pleroma FE:"/>
       <el-form-item label="Theme">
-        <el-select :value="frontend.pleroma_fe.theme" @change="processNestedData($event, 'frontend_configurations', 'pleroma_fe', 'theme')">
+        <el-select :value="frontend.pleroma_fe.theme" clearable @change="processNestedData($event, 'frontend_configurations', 'pleroma_fe', 'theme')">
           <el-option
             v-for="item in themeOptions"
             :key="item.value"
@@ -80,7 +80,7 @@
         <p class="expl">Copy the scope <span class="code">(private/unlisted/public)</span> in replies to posts by default</p>
       </el-form-item>
       <el-form-item label="Subject line behavior">
-        <el-select :value="frontend.pleroma_fe.subjectLineBehavior" @change="processNestedData($event, 'frontend_configurations', 'pleroma_fe', 'subjectLineBehavior')">
+        <el-select :value="frontend.pleroma_fe.subjectLineBehavior" clearable @change="processNestedData($event, 'frontend_configurations', 'pleroma_fe', 'subjectLineBehavior')">
           <el-option label="Email" value="email">Email / Copy and preprend re:, as in email</el-option>
           <el-option label="Masto" value="masto">Masto / Copy verbatim, as in Mastodon</el-option>
           <el-option label="Noop" value="noop">Noop / Don't copy the subject</el-option>
@@ -123,7 +123,7 @@
       <div class="line"/>
       <el-form-item label="Masto FE:"/>
       <el-form-item label="Theme">
-        <el-select :value="frontend.masto_fe.theme" @change="processNestedData($event, 'frontend_configurations', 'masto_fe', 'theme')">
+        <el-select :value="frontend.masto_fe.theme" clearable @change="processNestedData($event, 'frontend_configurations', 'masto_fe', 'theme')">
           <el-option
             v-for="item in themeOptions"
             :key="item.value"
@@ -195,7 +195,7 @@
         <p class="expl">Copy the scope <span class="code">(private/unlisted/public)</span> in replies to posts by default</p>
       </el-form-item>
       <el-form-item label="Subject line behavior">
-        <el-select :value="frontend.masto_fe.subjectLineBehavior" @change="processNestedData($event, 'frontend_configurations', 'masto_fe', 'subjectLineBehavior')">
+        <el-select :value="frontend.masto_fe.subjectLineBehavior" clearable @change="processNestedData($event, 'frontend_configurations', 'masto_fe', 'subjectLineBehavior')">
           <el-option label="Email" value="email">Email / Copy and preprend re:, as in email</el-option>
           <el-option label="Masto" value="masto">Masto / Copy verbatim, as in Mastodon</el-option>
           <el-option label="Noop" value="noop">Noop / Don't copy the subject</el-option>
@@ -240,7 +240,7 @@
     <el-form ref="assets" :model="assets" :label-width="labelWidth">
       <el-form-item label="Assets:"/>
       <el-form-item label="Default mascot">
-        <el-select :value="assets.default_mascot" @change="updateSetting($event, 'assets', 'default_mascot')"/>
+        <el-select :value="assets.default_mascot" clearable @change="updateSetting($event, 'assets', 'default_mascot')"/>
         <p class="expl">An element from mascots - This will be used as the default mascot on MastoFE
         (default: <span class="code">:pleroma_fox_tan</span>)</p>
       </el-form-item>

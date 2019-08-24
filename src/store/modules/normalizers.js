@@ -1,6 +1,6 @@
 const nonAtomsTuples = ['replace', ':replace']
 const nonAtomsObjects = ['match_actor', ':match_actor']
-const objects = ['digest', 'pleroma_fe', 'masto_fe', 'poll_limits']
+const objects = ['digest', 'pleroma_fe', 'masto_fe', 'poll_limits', 'styling']
 const objectParents = ['mascots']
 const groups = {
   'cors_plug': [
@@ -24,6 +24,7 @@ const groups = {
     'Pleroma.Captcha',
     'Pleroma.Captcha.Kocaptcha',
     'Pleroma.Emails.Mailer',
+    'Pleroma.Emails.UserEmail',
     'Pleroma.Repo',
     'Pleroma.ScheduledActivity',
     'Pleroma.Upload',
@@ -45,6 +46,7 @@ const groups = {
     'chat',
     'database',
     'ecto_repos',
+    'email_notifications',
     'emoji',
     'env',
     'fetch_initial_posts',
@@ -65,6 +67,7 @@ const groups = {
     'mrf_simple',
     'mrf_subchain',
     'mrf_user_allowlist',
+    'mrf_vocabulary',
     'oauth2',
     'rate_limit',
     'rich_media',

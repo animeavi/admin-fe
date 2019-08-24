@@ -82,7 +82,7 @@
         <p class="expl">The maximum age for the <span class="code">Expect-CT</span> header if sent</p>
       </el-form-item>
       <el-form-item label="Referrer policy">
-        <el-select :value="httpSecurity.referrer_policy" placeholder="Select" @change="updateSetting($event, 'http_security', 'referrer_policy')">
+        <el-select :value="httpSecurity.referrer_policy" clearable @change="updateSetting($event, 'http_security', 'referrer_policy')">
           <el-option label="same-origin" value="same-origin"/>
           <el-option label="no-referrer" value="no-referrer"/>
         </el-select>

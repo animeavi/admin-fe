@@ -2,7 +2,7 @@
   <div>
     <el-form ref="metadata" :model="metadata" :label-width="labelWidth">
       <el-form-item label="Providers">
-        <el-select :value="metadata.providers || []" multiple @change="updateSetting($event, 'Pleroma.Web.Metadata', 'providers')">
+        <el-select :value="metadata.providers || []" multiple filterable allow-create @change="updateSetting($event, 'Pleroma.Web.Metadata', 'providers')">
           <el-option value="Pleroma.Web.Metadata.Providers.OpenGraph"/>
           <el-option value="Pleroma.Web.Metadata.Providers.TwitterCard"/>
           <el-option value="Pleroma.Web.Metadata.Providers.RelMe"/>

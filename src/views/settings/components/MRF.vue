@@ -124,6 +124,18 @@
       <el-form-item label="Scrub policy">
         <el-input :value="mrfNormalizeMarkup.scrub_policy" @input="updateSetting($event, 'mrf_normalize_markup', 'scrub_policy')"/>
       </el-form-item>
+    </el-form>
+    <div class="line"/>
+    <el-form ref="mrfVocabulary" :model="mrfVocabulary" :label-width="labelWidth">
+      <el-form-item label="MRF Vocabulary:"/>
+      <el-form-item label="Accept">
+        <el-select :value="mrfVocabulary.accept || []" multiple allow-create filterable @change="updateSetting($event, 'mrf_vocabulary', 'accept')"/>
+        <p class="expl">A list of ActivityStreams terms to accept.  If empty, all supported messages are accepted.</p>
+      </el-form-item>
+      <el-form-item label="Reject">
+        <el-select :value="mrfVocabulary.reject || []" multiple allow-create filterable @change="updateSetting($event, 'mrf_vocabulary', 'reject')"/>
+        <p class="expl">A list of ActivityStreams terms to reject.  If empty, no messages are rejected.</p>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>
@@ -153,7 +165,8 @@ export default {
       'mrfSimple',
       'mrfSubchain',
       'mrfRejectnonpublic',
-      'mrfUserAllowlist'
+      'mrfUserAllowlist',
+      'mrfVocabulary'
     ]),
     matchActor() {
       return Object.keys(this.mrfSubchain.match_actor).map(key => [key, this.mrfSubchain.match_actor[key]])
