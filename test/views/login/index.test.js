@@ -31,13 +31,19 @@ describe('Login', () => {
     router.beforeEach(beforeEachRoute)
   })
 
-  it('throws error if username does not contain authHost', () => {
+  it('takes authHost from window.location if it is not provided in username', () => {
     const wrapper = mount(Login, {
       store,
       router,
       localVue
     })
 
+    Object.defineProperty(window, 'location', {
+      value: {
+        ...window.location,
+        host: 'pleroma'
+      }
+    });
     const errorLog = store.state.errorLog.logs
     expect(errorLog.length).toBe(0)
     const submitButton = wrapper.find('button')
@@ -49,10 +55,7 @@ describe('Login', () => {
     submitButton.trigger('click')
 
     const updatedErrorLog = store.state.errorLog.logs
-    expect(updatedErrorLog.length).toBe(1)
-    expect(updatedErrorLog[0].message).toEqual(
-      'Username must contain username and host, e.g. john@pleroma.social'
-    )
+    expect(updatedErrorLog.length).toBe(0)
   })
 
   it('throws error if password is incorrect', async (done) => {
@@ -92,7 +95,7 @@ describe('Login', () => {
     const submitButton = wrapper.find('button')
     expect(wrapper.vm.$route.path).toBe('/login')
 
-    wrapper.find(usernameInput).element.value = 'bob@apple'
+    wrapper.find(usernameInput).element.value = 'bob@pleroma'
     wrapper.find(usernameInput).trigger('input')
     wrapper.find(passwordInput).element.value = '123456'
     wrapper.find(passwordInput).trigger('input')

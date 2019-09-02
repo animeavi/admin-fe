@@ -1,10 +1,11 @@
 const users = [
-  { username: 'bob', password: '123456' }
+  { username: 'bob', password: '123456', authHost: 'pleroma' }
 ]
 
-export async function loginByUsername(username, password) {
+export async function loginByUsername(username, password, authHost) {
   const user = users.find(user => user.username === username)
   const verifyPassword = user.password === password
+  const verifyHost = user.authHost === authHost
   const data = {
     'token_type': 'Bearer',
     'scope': 'read write follow',
@@ -14,7 +15,7 @@ export async function loginByUsername(username, password) {
     'access_token': 'bar123'
   }
 
-  return verifyPassword
+  return verifyPassword && verifyHost
     ? Promise.resolve({ data })
     : Promise.reject({ message: 'Invalid credentials' })
 }
