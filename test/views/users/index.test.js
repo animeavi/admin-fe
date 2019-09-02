@@ -27,7 +27,8 @@ describe('Search and filter users', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      sync: false
+      sync: false,
+      stubs: ['router-link']
     })
 
     await flushPromises()
@@ -39,7 +40,8 @@ describe('Search and filter users', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      sync: false
+      sync: false,
+      stubs: ['router-link']
     })
 
     wrapper.vm.handleDebounceSearchInput = (query) => {
@@ -76,7 +78,8 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      sync: false
+      sync: false,
+      stubs: ['router-link']
     })
     await flushPromises()
 
@@ -99,7 +102,8 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      sync: false
+      sync: false,
+      stubs: ['router-link']
     })
     await flushPromises()
 
@@ -114,7 +118,8 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      sync: false
+      sync: false,
+      stubs: ['router-link']
     })
     await flushPromises()
 
@@ -133,7 +138,8 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      sync: false
+      sync: false,
+      stubs: ['router-link']
     })
     await flushPromises()
     expect(store.state.users.fetchedUsers.length).toEqual(3)
@@ -148,7 +154,8 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      sync: false
+      sync: false,
+      stubs: ['router-link']
     })
     await flushPromises()
 
@@ -173,7 +180,8 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      sync: false
+      sync: false,
+      stubs: ['router-link']
     })
     await flushPromises()
 
@@ -192,7 +200,8 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      sync: false
+      sync: false,
+      stubs: ['router-link']
     })
     await flushPromises()
 
@@ -209,7 +218,8 @@ describe('Users actions', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      sync: false
+      sync: false,
+      stubs: ['router-link']
     })
     await flushPromises()
 
@@ -245,7 +255,8 @@ describe('Creates new account', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      sync: false
+      sync: false,
+      stubs: ['router-link']
     })
     await flushPromises()
 
@@ -269,7 +280,8 @@ describe('Creates new account', () => {
     const wrapper = mount(Users, {
       store,
       localVue,
-      sync: false
+      sync: false,
+      stubs: ['router-link']
     })
     await flushPromises()
     expect(wrapper.vm.usersCount).toEqual(3)
@@ -302,7 +314,8 @@ describe('Creates new account', () => {
     const wrapper = mount(NewAccountDialog, {
       store,
       localVue,
-      sync: false
+      sync: false,
+      stubs: ['router-link']
     })
 
     const validateEmailRule = { validator: wrapper.vm.validateEmail, field: 'email', fullField: 'email', type: 'string' }
