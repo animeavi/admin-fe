@@ -19,6 +19,7 @@
           auto-complete="on"
         />
       </el-form-item>
+      <div class="omit-host-note">{{ $t('login.omitHostname') }}</div>
 
       <el-form-item prop="password">
         <span class="svg-container">
@@ -37,8 +38,11 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">
+      <el-button :loading="loading" class="login-button" type="primary" @click.native.prevent="handleLogin">
         {{ $t('login.logIn') }}
+      </el-button>
+      <el-button v-if="pleromaFEToken" :loading="loadingPleromaFE" class="login-button" type="primary" @click.native.prevent="handlePleromaFELogin">
+        {{ $t('login.logInViaPleromaFE') }}
       </el-button>
     </el-form>
   </div>
@@ -46,6 +50,9 @@
 
 <script>
 import SvgIcon from '@/components/SvgIcon'
+import localforage from 'localforage'
+import _ from 'lodash'
+import i18n from '@/lang'
 
 export default {
   name: 'Login',
@@ -58,8 +65,12 @@ export default {
       },
       passwordType: 'password',
       loading: false,
+      loadingPleromaFE: false,
       showDialog: false,
-      redirect: undefined
+      redirect: undefined,
+      pleromaFEToken: false,
+      pleromaFEStateKey: 'vuex-lz',
+      pleromaFEState: {}
     }
   },
   watch: {
@@ -69,6 +80,16 @@ export default {
       },
       immediate: true
     }
+  },
+  async mounted() {
+    const pleromaFEState = await localforage.getItem(this.pleromaFEStateKey)
+    this.pleromaFEState = pleromaFEState
+
+    if (_.get(pleromaFEState, 'oauth.userToken') === undefined) {
+      return
+    }
+
+    this.pleromaFEToken = true
   },
   methods: {
     showPwd() {
@@ -87,6 +108,20 @@ export default {
       }).catch(() => {
         this.loading = false
       })
+    },
+    async handlePleromaFELogin() {
+      this.loadingPleromaFE = true
+      try {
+        await this.$store.dispatch('LoginByPleromaFE', { token: this.pleromaFEState.oauth.userToken })
+      } catch (error) {
+        this.loadingPleromaFE = false
+        this.$message.error(i18n.t('login.pleromaFELoginFailed'))
+      }
+
+      this.loadingPleromaFE = false
+      this.$router.push({ path: this.redirect || '/users/index' })
+
+      this.$message.success(i18n.t('login.pleromaFELoginSucceed'))
     },
     getLoginData() {
       const [username, authHost] = this.loginForm.username.split('@')
@@ -141,6 +176,17 @@ export default {
       background: rgba(0, 0, 0, 0.1);
       border-radius: 5px;
       color: #454545;
+    }
+    .login-button {
+      width: 100%;
+      margin: 0 0 10px 0;
+    }
+    .omit-host-note {
+      color: #596f8c;
+      font-size: 0.8em;
+      font-style: italic;
+      margin: -20px 0 15px 0;
+      padding: 3px 0 0 15px;
     }
   }
 </style>
