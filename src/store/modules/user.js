@@ -106,6 +106,14 @@ const user = {
         removeAuthHost()
         resolve()
       })
+    },
+    async LoginByPleromaFE({ commit, dispatch }, { token }) {
+      commit('SET_TOKEN', token)
+      setToken(token)
+      commit('SET_AUTH_HOST', window.location.host)
+      setAuthHost(window.location.host)
+
+      dispatch('GetUserInfo')
     }
   }
 }

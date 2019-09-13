@@ -78,12 +78,15 @@ export default {
   login: {
     title: 'Login Form',
     logIn: 'Log in',
-    username: 'Username@Host',
-    password: 'Password',
+    logInViaPleromaFE: 'Log in via PleromaFE',
+    username: 'username@host',
+    password: 'password',
+    omitHostname: 'omit hostname if Pleroma is located on this domain',
     errorMessage: 'Username must contain username and host, e.g. john@pleroma.social',
     any: 'any',
     thirdparty: 'Or connect with',
-    thirdpartyTips: 'Can not be simulated on local, so please combine you own business simulation! ! !'
+    pleromaFELoginFailed: 'Failed to login via PleromaFE, please login with username/password',
+    pleromaFELoginSucceed: 'Logged in via PleromaFE'
   },
   documentation: {
     documentation: 'Documentation',
