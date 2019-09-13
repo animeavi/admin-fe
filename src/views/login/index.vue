@@ -53,6 +53,7 @@ import SvgIcon from '@/components/SvgIcon'
 import localforage from 'localforage'
 import _ from 'lodash'
 import i18n from '@/lang'
+import { authenticateWithPleromaFE } from '@/services/pleromaAuth'
 
 export default {
   name: 'Login',
@@ -112,16 +113,16 @@ export default {
     async handlePleromaFELogin() {
       this.loadingPleromaFE = true
       try {
-        await this.$store.dispatch('LoginByPleromaFE', { token: this.pleromaFEState.oauth.userToken })
+        await authenticateWithPleromaFE(this.$store)
       } catch (error) {
         this.loadingPleromaFE = false
         this.$message.error(i18n.t('login.pleromaFELoginFailed'))
       }
 
       this.loadingPleromaFE = false
-      this.$router.push({ path: this.redirect || '/users/index' })
 
       this.$message.success(i18n.t('login.pleromaFELoginSucceed'))
+      this.$router.push({ path: this.redirect || '/users/index' })
     },
     getLoginData() {
       const [username, authHost] = this.loginForm.username.split('@')
