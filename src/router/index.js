@@ -19,6 +19,11 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/login-pleroma',
+    component: () => import('@/views/login/pleroma'),
+    hidden: true
+  },
+  {
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true

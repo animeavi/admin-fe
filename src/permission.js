@@ -14,7 +14,7 @@ function hasPermission(roles, permissionRoles) {
   return roles.some(role => permissionRoles.indexOf(role) >= 0)
 }
 
-const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
+const whiteList = ['/login', '/auth-redirect', '/login-pleroma']// no redirect whitelist
 
 export const beforeEachRoute = (to, from, next) => {
   NProgress.start() // start progress bar
