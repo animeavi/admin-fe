@@ -18,7 +18,7 @@ To compile everything for production run `yarn build:prod`.
 
 #### Disabling features
 
-You can disable certain AdminFE features, like reports or settings by modifying `config/prod.env.js` env variable `DISABLED_FEATURES`, e.g. if you want to compile AdminFE without "Setting" you'll need to set it to: `DISABLED_FEATURES: '["settings"]'`.
+You can disable certain AdminFE features, like reports or settings by modifying `config/prod.env.js` env variable `DISABLED_FEATURES`, e.g. if you want to compile AdminFE without "Settings" you'll need to set it to: `DISABLED_FEATURES: '["settings"]'`.
 
 ## Changelog
 
