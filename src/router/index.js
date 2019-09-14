@@ -6,6 +6,35 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/views/layout/Layout'
 
+const disabledFeatures = process.env.DISABLED_FEATURES || []
+const settingsDisabled = disabledFeatures.includes('settings')
+const settings = {
+  path: '/settings',
+  component: Layout,
+  children: [
+    {
+      path: 'index',
+      component: () => import('@/views/settings/index'),
+      name: 'Settings',
+      meta: { title: 'settings', icon: 'settings', noCache: true }
+    }
+  ]
+}
+
+const reportsDisabled = disabledFeatures.includes('reports')
+const reports = {
+  path: '/reports',
+  component: Layout,
+  children: [
+    {
+      path: 'index',
+      component: () => import('@/views/reports/index'),
+      name: 'Reports',
+      meta: { title: 'reports', icon: 'documentation', noCache: true }
+    }
+  ]
+}
+
 export const constantRouterMap = [
   {
     path: '/redirect',
@@ -69,30 +98,8 @@ export const asyncRouterMap = [
       }
     ]
   },
-  {
-    path: '/reports',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/reports/index'),
-        name: 'Reports',
-        meta: { title: 'reports', icon: 'documentation', noCache: true }
-      }
-    ]
-  },
-  {
-    path: '/settings',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/settings/index'),
-        name: 'Settings',
-        meta: { title: 'settings', icon: 'settings', noCache: true }
-      }
-    ]
-  },
+  ...(settingsDisabled ? [] : [settings]),
+  ...(reportsDisabled ? [] : [reports]),
   {
     path: '/users/:id',
     component: Layout,
