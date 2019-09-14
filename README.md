@@ -6,6 +6,20 @@
 
 Admin UI for pleroma instance owners
 
+## Usage
+
+### Development
+
+To run AdminFE locally execute `yarn dev`
+
+### Build
+
+To compile everything for production run `yarn build:prod`.
+
+#### Disabling features
+
+You can disable certain AdminFE features, like reports or settings by modifying `config/prod.env.js` env variable `DISABLED_FEATURES`, e.g. if you want to compile AdminFE without "Setting" you'll need to set it to: `DISABLED_FEATURES: '["settings"]'`.
+
 ## Changelog
 
 Detailed changes for each release are documented in the [CHANGELOG](./CHANGELOG.md).
