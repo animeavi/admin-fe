@@ -16,14 +16,6 @@ const steps = [
     }
   },
   {
-    element: '.screenfull',
-    popover: {
-      title: 'Screenfull',
-      description: 'Bring the page into fullscreen',
-      position: 'left'
-    }
-  },
-  {
     element: '.international-icon',
     popover: {
       title: 'Switch language',

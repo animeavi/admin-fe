@@ -16,7 +16,7 @@ const settings = {
       path: 'index',
       component: () => import('@/views/settings/index'),
       name: 'Settings',
-      meta: { title: 'settings', icon: 'settings', noCache: true }
+      meta: { title: 'Settings', icon: 'settings', noCache: true }
     }
   ]
 }
@@ -30,7 +30,21 @@ const reports = {
       path: 'index',
       component: () => import('@/views/reports/index'),
       name: 'Reports',
-      meta: { title: 'reports', icon: 'documentation', noCache: true }
+      meta: { title: 'Reports', icon: 'documentation', noCache: true }
+    }
+  ]
+}
+
+const invitesDisabled = disabledFeatures.includes('invites')
+const invites = {
+  path: '/invites',
+  component: Layout,
+  children: [
+    {
+      path: 'index',
+      component: () => import('@/views/invites/index'),
+      name: 'Invites',
+      meta: { title: 'Invites', icon: 'guide', noCache: true }
     }
   ]
 }
@@ -108,12 +122,13 @@ export const asyncRouterMap = [
         path: 'index',
         component: () => import('@/views/users/index'),
         name: 'Users',
-        meta: { title: 'users', icon: 'peoples', noCache: true }
+        meta: { title: 'Users', icon: 'peoples', noCache: true }
       }
     ]
   },
   ...(settingsDisabled ? [] : [settings]),
   ...(reportsDisabled ? [] : [reports]),
+  ...(invitesDisabled ? [] : [invites]),
   ...(emojiPacksDisabled ? [] : [emojiPacks]),
   {
     path: '/users/:id',

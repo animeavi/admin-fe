@@ -5,20 +5,20 @@
     :title="$t('users.createAccount')"
     custom-class="create-user-dialog"
     @open="resetForm">
-    <el-form ref="form" :model="form" :rules="rules" :label-width="getLabelWidth" status-icon>
+    <el-form ref="newUserForm" :model="newUserForm" :rules="rules" :label-width="getLabelWidth" status-icon>
       <el-form-item :label="$t('users.username')" prop="nickname" class="create-account-form-item">
-        <el-input v-model="form.nickname" name="nickname" autofocus/>
+        <el-input v-model="newUserForm.nickname" name="nickname" autofocus/>
       </el-form-item>
       <el-form-item :label="$t('users.email')" prop="email" class="create-account-form-item">
-        <el-input v-model="form.email" name="email" type="email"/>
+        <el-input v-model="newUserForm.email" name="email" type="email"/>
       </el-form-item>
-      <el-form-item :label="$t('users.password')" prop="password" class="create-account-form-item">
-        <el-input v-model="form.password" type="password" name="password" autocomplete="off"/>
+      <el-form-item :label="$t('users.password')" prop="password" class="create-account-form-item-without-margin">
+        <el-input v-model="newUserForm.password" type="password" name="password" autocomplete="off"/>
       </el-form-item>
     </el-form>
     <span slot="footer">
       <el-button @click="closeDialogWindow">{{ $t('users.cancel') }}</el-button>
-      <el-button type="primary" @click="submitForm('form')">{{ $t('users.create') }}</el-button>
+      <el-button type="primary" @click="submitForm('newUserForm')">{{ $t('users.create') }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-      form: {
+      newUserForm: {
         nickname: '',
         email: '',
         password: ''
@@ -67,7 +67,7 @@ export default {
       }
     },
     getLabelWidth() {
-      return this.isDesktop ? '120px' : '80px'
+      return this.isDesktop ? '120px' : '85px'
     }
   },
   methods: {
@@ -76,18 +76,13 @@ export default {
     },
     resetForm() {
       this.$nextTick(() => {
-        this.$refs['form'].resetFields()
+        this.$refs['newUserForm'].resetFields()
       })
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('createNewAccount', this.$data.form)
-          this.closeDialogWindow()
-          this.$message({
-            type: 'success',
-            message: this.$t('users.completed')
-          })
+          this.$emit('createNewAccount', this.$data.newUserForm)
         } else {
           this.$message({
             type: 'error',
@@ -135,17 +130,26 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
+.el-dialog__body {
+  padding: 20px 20px 20px 20px
+}
+.create-account-form-item {
+  margin-bottom: 20px;
+}
+.create-account-form-item-without-margin {
+  margin-bottom: 0px;
+}
 @media
 only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px) {
   .create-user-dialog {
-    width: 80%
+    width: 85%
   }
   .create-account-form-item {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
   .el-dialog__body {
-    padding: 20px 20px 0 20px
+    padding: 20px 20px 20px 20px
   }
 }
 </style>

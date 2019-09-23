@@ -29,6 +29,10 @@ export async function fetchUsers(filters, authHost, token, page = 1) {
   }})
 }
 
+export async function getPasswordResetToken(nickname, authHost, token) {
+  return Promise.resolve({ data: { token: 'g05lxnBJQnL', link: 'http://url/api/pleroma/password_reset/g05lxnBJQnL' }})
+}
+
 export async function toggleUserActivation(nickname, authHost, token) {
   const response = users.find(user => user.nickname === nickname)
   return Promise.resolve({ data: { ...response, deactivated: !response.deactivated }})

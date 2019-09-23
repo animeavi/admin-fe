@@ -202,7 +202,7 @@ export default {
     disableAnySubscriptionForMultiple: 'Disallow following users at all',
     selectUsers: 'Select users to apply actions to multiple users',
     moderateUsers: 'Moderate multiple users',
-    createAccount: 'Create new user account',
+    createAccount: 'Create new account',
     apply: 'apply',
     remove: 'remove',
     grantRightConfirmation: 'Are you sure you want to grant {right} rights to all selected users?',
@@ -220,12 +220,15 @@ export default {
     email: 'E-mail',
     password: 'Password',
     create: 'Create',
-    submitFormError: 'There are errors on the form. Please fix them before continuing.',
+    submitFormError: 'There are invalid values in the form. Please fix them before continuing.',
     emptyEmailError: 'Please input the e-mail',
     invalidEmailError: 'Please input valid e-mail',
     emptyPasswordError: 'Please input the password',
     emptyNicknameError: 'Please input the username',
-    invalidNicknameError: 'Username can include "a-z", "A-Z" and "0-9" characters'
+    invalidNicknameError: 'Username can include "a-z", "A-Z" and "0-9" characters',
+    getPasswordResetToken: 'Get password reset token',
+    passwordResetTokenCreated: 'Password reset token was created',
+    accountCreated: 'New account was created!'
   },
   userProfile: {
     tags: 'Tags',
@@ -303,5 +306,31 @@ export default {
     database: 'Database',
     other: 'Other',
     success: 'Settings changed successfully!'
+  },
+  invites: {
+    inviteTokens: 'Invite tokens',
+    createInviteToken: 'Generate invite token',
+    pickDate: 'Pick a date',
+    maxUse: 'Max use',
+    expiresAt: 'Expires at',
+    tokenCreated: 'Invite token was created',
+    token: 'Token',
+    uses: 'Uses',
+    used: 'Used',
+    cancel: 'Cancel',
+    create: 'Create',
+    revoke: 'Revoke',
+    id: 'ID',
+    actions: 'Actions',
+    active: 'Active',
+    inviteUserViaEmail: 'Invite user via email',
+    sendRegistration: 'Send registration invite via email',
+    email: 'Email',
+    name: 'Name',
+    emptyEmailError: 'Please input the e-mail',
+    invalidEmailError: 'Please input valid e-mail',
+    emailSent: 'Invite was sent',
+    submitFormError: 'There are invalid values in the form. Please fix them before continuing.',
+    inviteViaEmailAlert: 'To send invite via email make sure to enable `invites_enabled` and disable `registrations_open`'
   }
 }

@@ -1,4 +1,4 @@
-import { addRight, createNewAccount, fetchUsers, deleteRight, deleteUser, searchUsers, tagUser, toggleUserActivation, untagUser } from '@/api/users'
+import { addRight, createNewAccount, deleteRight, deleteUser, fetchUsers, getPasswordResetToken, searchUsers, tagUser, toggleUserActivation, untagUser } from '@/api/users'
 
 const users = {
   state: {
@@ -12,6 +12,10 @@ const users = {
       external: false,
       active: false,
       deactivated: false
+    },
+    passwordResetToken: {
+      token: '',
+      link: ''
     }
   },
   mutations: {
@@ -23,7 +27,9 @@ const users = {
     },
     SWAP_USER: (state, updatedUser) => {
       const updated = state.fetchedUsers.map(user => user.id === updatedUser.id ? updatedUser : user)
-      state.fetchedUsers = updated.sort((a, b) => a.nickname.localeCompare(b.nickname))
+      state.fetchedUsers = updated
+        .map(user => user.nickname ? user : { ...user, nickname: '' })
+        .sort((a, b) => a.nickname.localeCompare(b.nickname))
     },
     SWAP_USERS: (state, users) => {
       const usersWithoutSwapped = users.reduce((acc, user) => {
@@ -42,6 +48,10 @@ const users = {
     },
     SET_PAGE_SIZE: (state, pageSize) => {
       state.pageSize = pageSize
+    },
+    SET_PASSWORD_RESET_TOKEN: (state, { token, link }) => {
+      state.passwordResetToken.token = token
+      state.passwordResetToken.link = link
     },
     SET_SEARCH_QUERY: (state, query) => {
       state.searchQuery = query
@@ -78,6 +88,13 @@ const users = {
       const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
       const response = await fetchUsers(filters, getters.authHost, getters.token, page)
       loadUsers(commit, page, response.data)
+    },
+    async GetPasswordResetToken({ commit, state, getters }, nickname) {
+      const { data } = await getPasswordResetToken(nickname, getters.authHost, getters.token)
+      commit('SET_PASSWORD_RESET_TOKEN', data)
+    },
+    RemovePasswordToken({ commit }) {
+      commit('SET_PASSWORD_RESET_TOKEN', { link: '', token: '' })
     },
     async RemoveTag({ commit, getters }, { users, tag }) {
       const nicknames = users.map(user => user.nickname)

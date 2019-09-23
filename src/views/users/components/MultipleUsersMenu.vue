@@ -146,35 +146,87 @@ export default {
   },
   methods: {
     mappers() {
+      const applyActionToAllUsers = (filteredUsers, fn) => Promise.all(filteredUsers.map(fn))
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: this.$t('users.completed')
+          })
+          this.$emit('apply-action')
+        }).catch((err) => {
+          console.log(err)
+          return
+        })
       return {
-        grantRight: (right) => () => this.selectedUsers
-          .filter(user => user.local && !user.roles[right] && this.$store.state.user.id !== user.id)
-          .map(user => this.$store.dispatch('ToggleRight', { user, right })),
-        revokeRight: (right) => () => this.selectedUsers
-          .filter(user => user.local && user.roles[right] && this.$store.state.user.id !== user.id)
-          .map(user => this.$store.dispatch('ToggleRight', { user, right })),
-        activate: () => this.selectedUsers
-          .filter(user => user.deactivated && this.$store.state.user.id !== user.id)
-          .map(user => this.$store.dispatch('ToggleUserActivation', user.nickname)),
-        deactivate: () => this.selectedUsers
-          .filter(user => !user.deactivated && this.$store.state.user.id !== user.id)
-          .map(user => this.$store.dispatch('ToggleUserActivation', user.nickname)),
-        remove: () => this.selectedUsers
-          .filter(user => this.$store.state.user.id !== user.id)
-          .map(user => this.$store.dispatch('DeleteUser', user)),
-        addTag: (tag) => () => {
-          const users = this.selectedUsers
-            .filter(user => tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
-              ? user.local && !user.tags.includes(tag)
-              : !user.tags.includes(tag))
-          this.$store.dispatch('AddTag', { users, tag })
+        grantRight: (right) => () => {
+          const filterUsersFn = user => user.local && !user.roles[right] && this.$store.state.user.id !== user.id
+          const toggleRightFn = async(user) => await this.$store.dispatch('ToggleRight', { user, right })
+          const filtered = this.selectedUsers.filter(filterUsersFn)
+
+          applyActionToAllUsers(filtered, toggleRightFn)
         },
-        removeTag: (tag) => () => {
-          const users = this.selectedUsers
-            .filter(user => tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
-              ? user.local && user.tags.includes(tag)
-              : user.tags.includes(tag))
-          this.$store.dispatch('RemoveTag', { users, tag })
+        revokeRight: (right) => () => {
+          const filterUsersFn = user => user.local && user.roles[right] && this.$store.state.user.id !== user.id
+          const toggleRightFn = async(user) => await this.$store.dispatch('ToggleRight', { user, right })
+          const filtered = this.selectedUsers.filter(filterUsersFn)
+
+          applyActionToAllUsers(filtered, toggleRightFn)
+        },
+        activate: () => {
+          const filtered = this.selectedUsers.filter(user => user.deactivated && this.$store.state.user.id !== user.id)
+          const toggleActivationFn = async(user) => await this.$store.dispatch('ToggleUserActivation', user.nickname)
+
+          applyActionToAllUsers(filtered, toggleActivationFn)
+        },
+        deactivate: () => {
+          const filtered = this.selectedUsers.filter(user => !user.deactivated && this.$store.state.user.id !== user.id)
+          const toggleActivationFn = async(user) => await this.$store.dispatch('ToggleUserActivation', user.nickname)
+
+          applyActionToAllUsers(filtered, toggleActivationFn)
+        },
+        remove: () => {
+          const filtered = this.selectedUsers.filter(user => this.$store.state.user.id !== user.id)
+          const deleteAccountFn = async(user) => await this.$store.dispatch('DeleteUser', user)
+
+          applyActionToAllUsers(filtered, deleteAccountFn)
+        },
+        addTag: (tag) => async() => {
+          const filterUsersFn = user => tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
+            ? user.local && !user.tags.includes(tag)
+            : !user.tags.includes(tag)
+          const users = this.selectedUsers.filter(filterUsersFn)
+
+          try {
+            await this.$store.dispatch('AddTag', { users, tag })
+          } catch (err) {
+            console.log(err)
+            return
+          }
+
+          this.$message({
+            type: 'success',
+            message: this.$t('users.completed')
+          })
+          this.$emit('apply-action')
+        },
+        removeTag: (tag) => async() => {
+          const filterUsersFn = user => tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
+            ? user.local && user.tags.includes(tag)
+            : user.tags.includes(tag)
+          const users = this.selectedUsers.filter(filterUsersFn)
+
+          try {
+            await this.$store.dispatch('RemoveTag', { users, tag })
+          } catch (err) {
+            console.log(err)
+            return
+          }
+
+          this.$message({
+            type: 'success',
+            message: this.$t('users.completed')
+          })
+          this.$emit('apply-action')
         }
       }
     },
@@ -234,11 +286,6 @@ export default {
         type: 'warning'
       }).then(() => {
         applyAction()
-        this.$emit('apply-action')
-        this.$message({
-          type: 'success',
-          message: this.$t('users.completed')
-        })
       }).catch(() => {
         this.$message({
           type: 'info',
