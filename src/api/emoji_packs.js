@@ -140,8 +140,7 @@ export async function updatePackFile(host, token, args) {
 }
 
 export function addressOfEmojiInPack(host, packName, name) {
-  // This needs http because hackney on the BE does not understand URLs with just "//"
-  return `http://${baseName(host)}/emoji/${packName}/${name}`
+  return `${baseName(host)}/emoji/${packName}/${name}`
 }
 
 const authHeaders = (token) => token ? { 'Authorization': `Bearer ${getToken()}` } : {}
