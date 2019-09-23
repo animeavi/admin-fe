@@ -10,9 +10,9 @@ const service = axios.create({
 service.interceptors.response.use(
   response => response,
   error => {
-    console.log('err' + error)
+    console.log('Error ' + error)
     Message({
-      message: error.message,
+      message: `${error.message} - ${error.response.data}`,
       type: 'error',
       duration: 5 * 1000
     })

@@ -35,6 +35,20 @@ const reports = {
   ]
 }
 
+const emojiPacksDisabled = disabledFeatures.includes('emoji-packs')
+const emojiPacks = {
+  path: '/emoji-packs',
+  component: Layout,
+  children: [
+    {
+      path: 'index',
+      component: () => import('@/views/emoji-packs/index'),
+      name: 'Emoji packs',
+      meta: { title: 'emoji-packs', icon: 'settings', noCache: true }
+    }
+  ]
+}
+
 export const constantRouterMap = [
   {
     path: '/redirect',
@@ -100,6 +114,7 @@ export const asyncRouterMap = [
   },
   ...(settingsDisabled ? [] : [settings]),
   ...(reportsDisabled ? [] : [reports]),
+  ...(emojiPacksDisabled ? [] : [emojiPacks]),
   {
     path: '/users/:id',
     component: Layout,
