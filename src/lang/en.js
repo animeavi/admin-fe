@@ -66,7 +66,8 @@ export default {
     externalLink: 'External Link',
     users: 'Users',
     reports: 'Reports',
-    settings: 'Settings'
+    settings: 'Settings',
+    'emoji-packs': 'Emoji packs'
   },
   navbar: {
     logOut: 'Log Out',

@@ -10,6 +10,7 @@ import user from './modules/user'
 import userProfile from './modules/userProfile'
 import users from './modules/users'
 import getters from './getters'
+import emoji_packs from './modules/emoji_packs.js'
 
 Vue.use(Vuex)
 
@@ -23,7 +24,8 @@ const store = new Vuex.Store({
     tagsView,
     user,
     userProfile,
-    users
+    users,
+    emoji_packs
   },
   getters
 })
