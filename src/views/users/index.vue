@@ -9,9 +9,9 @@
       <el-input :placeholder="$t('users.search')" v-model="search" class="search" @input="handleDebounceSearchInput"/>
     </div>
     <div class="actions-container">
-      <el-button class="actions-button create-account" @click="dialogFormVisible = true">
+      <el-button class="actions-button create-account" @click="createAccountDialogOpen = true">
         <span>
-          <i class="el-icon-plus" />
+          <i class="el-icon-plus"/>
           {{ $t('users.createAccount') }}
         </span>
       </el-button>
@@ -20,9 +20,9 @@
         @apply-action="clearSelection"/>
     </div>
     <new-account-dialog
-      :dialog-form-visible="dialogFormVisible"
+      :dialog-form-visible="createAccountDialogOpen"
       @createNewAccount="createNewAccount"
-      @closeWindow="dialogFormVisible = false"/>
+      @closeWindow="createAccountDialogOpen = false"/>
     <el-table
       v-loading="loading"
       ref="usersTable"
@@ -127,11 +127,30 @@
                 {{ $t('users.disableAnySubscription') }}
                 <i v-if="scope.row.tags.includes('disable_any_subscription')" class="el-icon-check"/>
               </el-dropdown-item>
+              <el-dropdown-item
+                v-if="scope.row.local"
+                divided
+                @click.native="getPasswordResetToken(scope.row.nickname)">
+                {{ $t('users.getPasswordResetToken') }}
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog
+      v-loading="loading"
+      :visible.sync="resetPasswordDialogOpen"
+      :title="$t('users.passwordResetTokenCreated')"
+      custom-class="password-reset-token-dialog"
+      @close="closeResetPasswordDialog">
+      <div>
+        <p class="password-reset-token">Password reset token was generated: {{ passwordResetToken }}</p>
+        <p>You can also use this link to reset password:
+          <a :href="passwordResetLink" target="_blank" class="reset-password-link">{{ passwordResetLink }}</a>
+        </p>
+      </div>
+    </el-dialog>
     <div v-if="users.length === 0" class="no-users-message">
       <p>There are no users to display</p>
     </div>
@@ -166,7 +185,8 @@ export default {
     return {
       search: '',
       selectedUsers: [],
-      dialogFormVisible: false
+      createAccountDialogOpen: false,
+      resetPasswordDialogOpen: false
     }
   },
   computed: {
@@ -184,6 +204,12 @@ export default {
     },
     pageSize() {
       return this.$store.state.users.pageSize
+    },
+    passwordResetLink() {
+      return this.$store.state.users.passwordResetToken.link
+    },
+    passwordResetToken() {
+      return this.$store.state.users.passwordResetToken.token
     },
     currentPage() {
       return this.$store.state.users.currentPage
@@ -213,11 +239,25 @@ export default {
     clearSelection() {
       this.$refs.usersTable.clearSelection()
     },
-    createNewAccount(accountData) {
-      this.$store.dispatch('CreateNewAccount', accountData)
+    async createNewAccount(accountData) {
+      try {
+        await this.$store.dispatch('CreateNewAccount', accountData)
+      } catch (_e) {
+        return
+      } finally {
+        this.createAccountDialogOpen = false
+      }
+      this.$message({
+        type: 'success',
+        message: this.$t('users.accountCreated')
+      })
     },
     getFirstLetter(str) {
       return str.charAt(0).toUpperCase()
+    },
+    getPasswordResetToken(nickname) {
+      this.resetPasswordDialogOpen = true
+      this.$store.dispatch('GetPasswordResetToken', nickname)
     },
     handleDeactivation({ nickname }) {
       this.$store.dispatch('ToggleUserActivation', nickname)
@@ -235,6 +275,10 @@ export default {
     },
     handleSelectionChange(value) {
       this.$data.selectedUsers = value
+    },
+    closeResetPasswordDialog() {
+      this.resetPasswordDialogOpen = false
+      this.$store.dispatch('RemovePasswordToken')
     },
     showAdminAction({ local, id }) {
       return local && this.showDeactivatedButton(id)
@@ -254,7 +298,7 @@ export default {
 }
 </script>
 
-<style rel='stylesheet/scss' lang='scss' scoped>
+<style rel='stylesheet/scss' lang='scss'>
 .actions-button {
   text-align: left;
   width: 350px;
@@ -282,6 +326,15 @@ export default {
   }
 .el-icon-plus {
   margin-right: 5px;
+}
+.password-reset-token {
+  margin: 0 0 14px 0;
+}
+.password-reset-token-dialog {
+  width: 50%
+}
+.reset-password-link {
+  text-decoration: underline;
 }
 .users-container {
   h1 {
@@ -312,6 +365,9 @@ export default {
 @media
 only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px) {
+  .password-reset-token-dialog {
+    width: 85%
+  }
   .users-container {
     h1 {
       margin: 7px 10px 15px 10px;

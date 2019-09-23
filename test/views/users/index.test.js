@@ -238,6 +238,33 @@ describe('Users actions', () => {
     expect(secondUserNicknameAfterToggle).toEqual('bob')
     done()
   })
+
+  it('creates password revoke token', async (done) => {
+    const wrapper = mount(Users, {
+      store,
+      localVue,
+      sync: false,
+      stubs: ['router-link']
+    })
+    await flushPromises()
+
+    const dialog = wrapper.find('.password-reset-token-dialog')
+    const closeDialogButton = wrapper.find('.password-reset-token-dialog button')
+    expect(dialog.isVisible()).toBe(false)
+    expect(store.state.users.passwordResetToken.token).toBe('')
+
+    wrapper.find(htmlElement(1, 11)).trigger('click')
+    await flushPromises()
+
+    expect(dialog.isVisible()).toBe(true)
+    expect(store.state.users.passwordResetToken.token).toBe('g05lxnBJQnL')
+    expect(store.state.users.passwordResetToken.link).toBe('http://url/api/pleroma/password_reset/g05lxnBJQnL')
+
+    closeDialogButton.trigger('click')
+    await flushPromises()
+    expect(dialog.isVisible()).toBe(false)
+    done()
+  })
 })
 
 describe('Creates new account', () => {

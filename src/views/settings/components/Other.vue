@@ -65,8 +65,12 @@ export default {
       }, {})
       this.updateSetting(updatedValue, 'types', 'value')
     },
-    onSubmit() {
-      this.$store.dispatch('SubmitChanges')
+    async onSubmit() {
+      try {
+        await this.$store.dispatch('SubmitChanges')
+      } catch (e) {
+        return
+      }
       this.$message({
         type: 'success',
         message: i18n.t('settings.success')

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import app from './modules/app'
 import errorLog from './modules/errorLog'
+import invites from './modules/invites'
 import permission from './modules/permission'
 import reports from './modules/reports'
 import settings from './modules/settings'
@@ -18,6 +19,7 @@ const store = new Vuex.Store({
   modules: {
     app,
     errorLog,
+    invites,
     permission,
     reports,
     settings,

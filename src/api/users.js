@@ -17,7 +17,7 @@ export async function createNewAccount(nickname, email, password, authHost, toke
     url: '/api/pleroma/admin/users',
     method: 'post',
     headers: authHeaders(token),
-    data: { nickname, email, password }
+    data: { users: [{ nickname, email, password }] }
   })
 }
 
@@ -52,6 +52,15 @@ export async function fetchUsers(filters, authHost, token, page = 1) {
   return await request({
     baseURL: baseName(authHost),
     url: `/api/pleroma/admin/users?page=${page}&filters=${filters}`,
+    method: 'get',
+    headers: authHeaders(token)
+  })
+}
+
+export async function getPasswordResetToken(nickname, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/users/${nickname}/password_reset`,
     method: 'get',
     headers: authHeaders(token)
   })
