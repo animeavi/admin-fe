@@ -39,6 +39,10 @@
         @click.native="deleteMultipleUsers">
         {{ $t('users.deleteAccounts') }}
       </el-dropdown-item>
+      <el-dropdown-item
+        @click.native="requirePasswordReset">
+        {{ $t('users.requirePasswordReset') }}
+      </el-dropdown-item>
       <el-dropdown-item divided class="no-hover">
         <div class="tag-container">
           <span class="tag-text">{{ $t('users.forceNsfw') }}</span>
@@ -227,6 +231,9 @@ export default {
             message: this.$t('users.completed')
           })
           this.$emit('apply-action')
+        },
+        requirePasswordReset: () => {
+          this.selectedUsers.map(user => this.$store.dispatch('RequirePasswordReset', user))
         }
       }
     },
@@ -263,6 +270,13 @@ export default {
       this.confirmMessage(
         this.$t('users.deleteMultipleUsersConfirmation'),
         remove
+      )
+    },
+    requirePasswordReset() {
+      const { requirePasswordReset } = this.mappers()
+      this.confirmMessage(
+        this.$t('users.requirePasswordResetConfirmation'),
+        requirePasswordReset
       )
     },
     addTagForMultipleUsers(tag) {

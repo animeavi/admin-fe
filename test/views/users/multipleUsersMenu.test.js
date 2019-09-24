@@ -251,15 +251,15 @@ describe('Apply users actions to multiple users', () => {
     const addTagForMultipleUsersStub = jest.fn()
     wrapper.setMethods({ addTagForMultipleUsers: addTagForMultipleUsersStub })
 
-    wrapper.find(`.el-dropdown-menu__item:nth-child(8) button:nth-child(1)`).trigger('click')
+    wrapper.find(`.el-dropdown-menu__item:nth-child(9) button:nth-child(1)`).trigger('click')
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalled()
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalledWith('force_nsfw')
 
-    wrapper.find(`.el-dropdown-menu__item:nth-child(10) button:nth-child(1)`).trigger('click')
+    wrapper.find(`.el-dropdown-menu__item:nth-child(11) button:nth-child(1)`).trigger('click')
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalled()
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalledWith('force_unlisted')
 
-    wrapper.find(`.el-dropdown-menu__item:nth-child(12) button:nth-child(1)`).trigger('click')
+    wrapper.find(`.el-dropdown-menu__item:nth-child(13) button:nth-child(1)`).trigger('click')
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalled()
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalledWith('disable_remote_subscription')
 
@@ -292,15 +292,15 @@ describe('Apply users actions to multiple users', () => {
     const removeTagFromMultipleUsersStub = jest.fn()
     wrapper.setMethods({ removeTagFromMultipleUsers: removeTagFromMultipleUsersStub })
 
-    wrapper.find(`.el-dropdown-menu__item:nth-child(9) button:nth-child(2)`).trigger('click')
+    wrapper.find(`.el-dropdown-menu__item:nth-child(10) button:nth-child(2)`).trigger('click')
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalled()
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalledWith('strip_media')
 
-    wrapper.find(`.el-dropdown-menu__item:nth-child(11) button:nth-child(2)`).trigger('click')
+    wrapper.find(`.el-dropdown-menu__item:nth-child(12) button:nth-child(2)`).trigger('click')
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalled()
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalledWith('sandbox')
 
-    wrapper.find(`.el-dropdown-menu__item:nth-child(13) button:nth-child(2)`).trigger('click')
+    wrapper.find(`.el-dropdown-menu__item:nth-child(14) button:nth-child(2)`).trigger('click')
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalled()
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalledWith('disable_any_subscription')
 

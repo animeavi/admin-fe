@@ -1,4 +1,16 @@
-import { addRight, createNewAccount, deleteRight, deleteUser, fetchUsers, getPasswordResetToken, searchUsers, tagUser, toggleUserActivation, untagUser } from '@/api/users'
+import {
+  addRight,
+  createNewAccount,
+  deleteRight,
+  deleteUser,
+  fetchUsers,
+  getPasswordResetToken,
+  searchUsers,
+  tagUser,
+  toggleUserActivation,
+  untagUser,
+  requirePasswordReset
+} from '@/api/users'
 
 const users = {
   state: {
@@ -82,6 +94,9 @@ const users = {
       const { data } = await deleteUser(user.nickname, getters.authHost, getters.token)
       const users = state.fetchedUsers.filter(user => user.nickname !== data)
       commit('SET_USERS', users)
+    },
+    async RequirePasswordReset({ commit, getters, state }, user) {
+      await requirePasswordReset(user.nickname, getters.authHost, getters.token)
     },
     async FetchUsers({ commit, state, getters }, { page }) {
       commit('SET_LOADING', true)
