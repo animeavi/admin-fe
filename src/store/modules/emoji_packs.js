@@ -1,4 +1,6 @@
-import { listPacks,
+import {
+  listPacks,
+  listRemotePacks,
   downloadFrom,
   reloadEmoji,
   createPack,
@@ -47,7 +49,8 @@ const packs = {
       commit('SET_LOCAL_PACKS', data)
     },
     async SetRemoteEmojiPacks({ commit, getters, state }, { remoteInstance }) {
-      const { data } = await listPacks(remoteInstance)
+      const { data } = await listRemotePacks(getters.authHost, getters.token, remoteInstance)
+
       commit('SET_REMOTE_PACKS', data)
     },
     async DownloadFrom({ commit, getters, state }, { instanceAddress, packName, as }) {
