@@ -133,6 +133,11 @@
                 @click.native="getPasswordResetToken(scope.row.nickname)">
                 {{ $t('users.getPasswordResetToken') }}
               </el-dropdown-item>
+              <el-dropdown-item
+                v-if="scope.row.local"
+                @click.native="requirePasswordReset(scope.row.nickname)">
+                {{ $t('users.requirePasswordReset') }}
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -258,6 +263,9 @@ export default {
     getPasswordResetToken(nickname) {
       this.resetPasswordDialogOpen = true
       this.$store.dispatch('GetPasswordResetToken', nickname)
+    },
+    requirePasswordReset(nickname) {
+      this.$store.dispatch('RequirePasswordReset', { nickname })
     },
     handleDeactivation({ nickname }) {
       this.$store.dispatch('ToggleUserActivation', nickname)

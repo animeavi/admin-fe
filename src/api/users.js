@@ -66,6 +66,15 @@ export async function getPasswordResetToken(nickname, authHost, token) {
   })
 }
 
+export async function requirePasswordReset(nickname, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/users/${nickname}/force_password_reset`,
+    method: 'patch',
+    headers: authHeaders(token)
+  })
+}
+
 export async function searchUsers(query, filters, authHost, token, page = 1) {
   return await request({
     baseURL: baseName(authHost),

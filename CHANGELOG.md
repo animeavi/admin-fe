@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Emoji pack configuration
+- Ability to require user's password reset
 
 ## [1.1.0] - 2019-09-15
 
@@ -26,7 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - removes "Dashboard" from dropdown menu
 - makes all single selects clearable and allow to enter custom values in all multiple selects
-- removes legacy activitypub accept_blocks setting 
+- removes legacy activitypub accept_blocks setting
 
 ### Fixed
 
