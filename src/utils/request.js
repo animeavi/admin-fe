@@ -11,8 +11,13 @@ service.interceptors.response.use(
   response => response,
   error => {
     console.log('Error ' + error)
+    console.log(error.response.data)
+
+    // If there's an "error" property in the json, use it
+    const edata = error.response.data.error ? error.response.data.error : error.response.data
+
     Message({
-      message: `${error.message} - ${error.response.data}`,
+      message: `${error.message} - ${edata}`,
       type: 'error',
       duration: 5 * 1000
     })
