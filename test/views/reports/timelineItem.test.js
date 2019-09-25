@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue, config } from '@vue/test-utils'
 import Element from 'element-ui'
-import TimelineItem from '@/views/reports/components/TimelineItem'
+import Report from '@/views/reports/components/Report'
 import storeConfig from './store.conf'
 import { cloneDeep } from 'lodash'
 import flushPromises from 'flush-promises'
@@ -25,7 +25,7 @@ describe('Report in a timeline', () => {
 
   it('changes report state from open to resolved', async (done) => {
     const report = store.state.reports.fetchedReports[0]
-    const wrapper = mount(TimelineItem, {
+    const wrapper = mount(Report, {
       store,
       localVue,
       propsData: {
@@ -43,7 +43,7 @@ describe('Report in a timeline', () => {
 
   it('changes report state from open to closed', async (done) => {
     const report = store.state.reports.fetchedReports[3]
-    const wrapper = mount(TimelineItem, {
+    const wrapper = mount(Report, {
       store,
       localVue,
       propsData: {
@@ -61,7 +61,7 @@ describe('Report in a timeline', () => {
 
   it('shows statuses', () => {
     const report = store.state.reports.fetchedReports[4]
-    const wrapper = mount(TimelineItem, {
+    const wrapper = mount(Report, {
       store,
       localVue,
       propsData: {
@@ -75,7 +75,7 @@ describe('Report in a timeline', () => {
 
   it('adds sensitive flag to a status', async (done) => {
     const report = store.state.reports.fetchedReports[4]
-    const wrapper = mount(TimelineItem, {
+    const wrapper = mount(Report, {
       store,
       localVue,
       propsData: {
@@ -93,7 +93,7 @@ describe('Report in a timeline', () => {
 
   it('removes sensitive flag to a status', async (done) => {
     const report = store.state.reports.fetchedReports[4]
-    const wrapper = mount(TimelineItem, {
+    const wrapper = mount(Report, {
       store,
       localVue,
       propsData: {
@@ -111,7 +111,7 @@ describe('Report in a timeline', () => {
 
   it('changes status visibility from public to unlisted', async (done) => {
     const report = store.state.reports.fetchedReports[4]
-    const wrapper = mount(TimelineItem, {
+    const wrapper = mount(Report, {
       store,
       localVue,
       propsData: {
@@ -129,7 +129,7 @@ describe('Report in a timeline', () => {
 
   it('changes status visibility from unlisted to private', async (done) => {
     const report = store.state.reports.fetchedReports[4]
-    const wrapper = mount(TimelineItem, {
+    const wrapper = mount(Report, {
       store,
       localVue,
       propsData: {
