@@ -1,6 +1,6 @@
 <template>
-  <el-collapse-item :title="getStatusesTitle(report.statuses)">
-    <el-card v-for="status in report.statuses" :key="status.id" class="status-card">
+  <div>
+    <el-card v-for="status in statuses" :key="status.id" class="status-card">
       <div slot="header">
         <div class="status-header">
           <div class="status-account-container">
@@ -22,31 +22,31 @@
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item
                   v-if="!status.sensitive"
-                  @click.native="changeStatus(status.id, true, status.visibility, report.id)">
+                  @click.native="changeStatus(status.id, true, status.visibility)">
                   {{ $t('reports.addSensitive') }}
                 </el-dropdown-item>
                 <el-dropdown-item
                   v-if="status.sensitive"
-                  @click.native="changeStatus(status.id, false, status.visibility, report.id)">
+                  @click.native="changeStatus(status.id, false, status.visibility)">
                   {{ $t('reports.removeSensitive') }}
                 </el-dropdown-item>
                 <el-dropdown-item
                   v-if="status.visibility !== 'public'"
-                  @click.native="changeStatus(status.id, status.sensitive, 'public', report.id)">
+                  @click.native="changeStatus(status.id, status.sensitive, 'public')">
                   {{ $t('reports.public') }}
                 </el-dropdown-item>
                 <el-dropdown-item
                   v-if="status.visibility !== 'private'"
-                  @click.native="changeStatus(status.id, status.sensitive, 'private', report.id)">
+                  @click.native="changeStatus(status.id, status.sensitive, 'private')">
                   {{ $t('reports.private') }}
                 </el-dropdown-item>
                 <el-dropdown-item
                   v-if="status.visibility !== 'unlisted'"
-                  @click.native="changeStatus(status.id, status.sensitive, 'unlisted', report.id)">
+                  @click.native="changeStatus(status.id, status.sensitive, 'unlisted')">
                   {{ $t('reports.unlisted') }}
                 </el-dropdown-item>
                 <el-dropdown-item
-                  @click.native="deleteStatus(status.id, report.id)">
+                  @click.native="deleteStatus(status.id)">
                   {{ $t('reports.deleteStatus') }}
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -61,7 +61,7 @@
         </a>
       </div>
     </el-card>
-  </el-collapse-item>
+  </div>
 </template>
 
 <script>
@@ -70,8 +70,8 @@ import moment from 'moment'
 export default {
   name: 'Statuses',
   props: {
-    report: {
-      type: Object,
+    statuses: {
+      type: Array,
       required: true
     }
   },
@@ -79,16 +79,16 @@ export default {
     capitalizeFirstLetter(str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
     },
-    changeStatus(statusId, isSensitive, visibility, reportId) {
-      this.$store.dispatch('ChangeStatusScope', { statusId, isSensitive, visibility, reportId })
+    changeStatus(statusId, isSensitive, visibility) {
+      this.$store.dispatch('ChangeStatusScope', { statusId, isSensitive, visibility })
     },
-    deleteStatus(statusId, reportId) {
+    deleteStatus(statusId) {
       this.$confirm('Are you sure you want to delete this status?', 'Warning', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('DeleteStatus', { statusId, reportId })
+        this.$store.dispatch('DeleteStatus', { statusId })
         this.$message({
           type: 'success',
           message: 'Delete completed'
@@ -99,9 +99,6 @@ export default {
           message: 'Delete canceled'
         })
       })
-    },
-    getStatusesTitle(statuses) {
-      return `Reported statuses: ${statuses.length} item(s)`
     },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('YYYY-MM-DD HH:mm')
@@ -152,7 +149,7 @@ export default {
     }
     .status-card {
       .el-card__header {
-        padding: 10px 17px
+        padding: 10px 17px;
       }
       .el-tag {
         margin: 3px 4px 3px 0;

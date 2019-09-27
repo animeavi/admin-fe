@@ -28,33 +28,17 @@ const reports = {
       const updatedReports = state.fetchedReports.map(report => report.id === reportId ? data : report)
       commit('SET_REPORTS', updatedReports)
     },
-    async ChangeStatusScope({ commit, getters, state }, { statusId, isSensitive, visibility, reportId }) {
-      const { data } = await changeStatusScope(statusId, isSensitive, visibility, getters.authHost, getters.token)
-      const updatedReports = state.fetchedReports.map(report => {
-        if (report.id === reportId) {
-          const statuses = report.statuses.map(status => status.id === statusId ? data : status)
-          return { ...report, statuses }
-        } else {
-          return report
-        }
-      })
-      commit('SET_REPORTS', updatedReports)
+    async ChangeStatusScope({ dispatch, getters }, { statusId, isSensitive, visibility }) {
+      await changeStatusScope(statusId, isSensitive, visibility, getters.authHost, getters.token)
+      dispatch('FetchReports')
     },
     ClearFetchedReports({ commit }) {
       commit('SET_REPORTS', [])
       commit('SET_LAST_REPORT_ID', '')
     },
-    async DeleteStatus({ commit, getters, state }, { statusId, reportId }) {
+    async DeleteStatus({ dispatch, getters }, { statusId }) {
       deleteStatus(statusId, getters.authHost, getters.token)
-      const updatedReports = state.fetchedReports.map(report => {
-        if (report.id === reportId) {
-          const statuses = report.statuses.filter(status => status.id !== statusId)
-          return { ...report, statuses }
-        } else {
-          return report
-        }
-      })
-      commit('SET_REPORTS', updatedReports)
+      dispatch('FetchReports')
     },
     async FetchReports({ commit, getters, state }) {
       commit('SET_LOADING', true)

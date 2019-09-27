@@ -49,7 +49,9 @@
       </div>
       <div v-if="report.statuses.length > 0" class="statuses">
         <el-collapse>
-          <statuses :report="report"/>
+          <el-collapse-item :title="getStatusesTitle(report.statuses)">
+            <statuses :statuses="report.statuses" />
+          </el-collapse-item>
         </el-collapse>
       </div>
     </el-card>
@@ -86,6 +88,9 @@ export default {
         default:
           return 'primary'
       }
+    },
+    getStatusesTitle(statuses) {
+      return `Reported statuses: ${statuses.length} item(s)`
     },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('L HH:mm')
