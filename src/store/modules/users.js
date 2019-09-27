@@ -98,10 +98,11 @@ const users = {
     async RequirePasswordReset({ commit, getters, state }, user) {
       await requirePasswordReset(user.nickname, getters.authHost, getters.token)
     },
-    async FetchUsers({ commit, state, getters }, { page }) {
+    async FetchUsers({ commit, state, getters, dispatch }, { page }) {
       commit('SET_LOADING', true)
       const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
       const response = await fetchUsers(filters, getters.authHost, getters.token, page)
+      await dispatch('GetNodeInfo')
       loadUsers(commit, page, response.data)
     },
     async GetPasswordResetToken({ commit, state, getters }, nickname) {

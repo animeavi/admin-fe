@@ -273,6 +273,14 @@ export default {
       )
     },
     requirePasswordReset() {
+      const mailerEnabled = this.$store.state.user.nodeInfo.metadata.mailerEnabled
+
+      if (!mailerEnabled) {
+        this.$alert(this.$t('users.mailerMustBeEnabled'), 'Error', { type: 'error' })
+
+        return
+      }
+
       const { requirePasswordReset } = this.mappers()
       this.confirmMessage(
         this.$t('users.requirePasswordResetConfirmation'),

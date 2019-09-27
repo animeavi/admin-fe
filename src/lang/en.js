@@ -215,6 +215,7 @@ export default {
     addTagForMultipleUsersConfirmation: 'Are you sure you want to apply tag to all selected users?',
     removeTagFromMultipleUsersConfirmation: 'Are you sure you want to remove tag from all selected users?',
     requirePasswordResetConfirmation: 'Are you sure you want to require password reset for all selected users?',
+    mailerMustBeEnabled: 'To require user\'s password reset you must enable mailer.',
     ok: 'Okay',
     completed: 'Completed',
     cancel: 'Cancel',

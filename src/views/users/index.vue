@@ -265,6 +265,14 @@ export default {
       this.$store.dispatch('GetPasswordResetToken', nickname)
     },
     requirePasswordReset(nickname) {
+      const mailerEnabled = this.$store.state.user.nodeInfo.metadata.mailerEnabled
+
+      if (!mailerEnabled) {
+        this.$alert(this.$t('users.mailerMustBeEnabled'), 'Error', { type: 'error' })
+
+        return
+      }
+
       this.$store.dispatch('RequirePasswordReset', { nickname })
     },
     handleDeactivation({ nickname }) {
