@@ -5,53 +5,53 @@
     </el-button>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item
-        v-if="showDeactivatedButton(report.account)"
-        @click.native="handleDeactivation(report.account)">
-        {{ report.account.deactivated ? $t('users.activateAccount') : $t('users.deactivateAccount') }}
+        v-if="showDeactivatedButton(account)"
+        @click.native="handleDeactivation(account)">
+        {{ account.deactivated ? $t('users.activateAccount') : $t('users.deactivateAccount') }}
       </el-dropdown-item>
       <el-dropdown-item
-        v-if="showDeactivatedButton(report.account.id)"
-        @click.native="handleDeletion(report.account.id)">
+        v-if="showDeactivatedButton(account.id)"
+        @click.native="handleDeletion(account.id)">
         {{ $t('users.deleteAccount') }}
       </el-dropdown-item>
       <el-dropdown-item
         :divided="true"
-        :class="{ 'active-tag': report.account.tags.includes('force_nsfw') }"
-        @click.native="toggleTag(report.account, 'force_nsfw')">
+        :class="{ 'active-tag': account.tags.includes('force_nsfw') }"
+        @click.native="toggleTag(account, 'force_nsfw')">
         {{ $t('users.forceNsfw') }}
-        <i v-if="report.account.tags.includes('force_nsfw')" class="el-icon-check"/>
+        <i v-if="account.tags.includes('force_nsfw')" class="el-icon-check"/>
       </el-dropdown-item>
       <el-dropdown-item
-        :class="{ 'active-tag': report.account.tags.includes('strip_media') }"
-        @click.native="toggleTag(report.account, 'strip_media')">
+        :class="{ 'active-tag': account.tags.includes('strip_media') }"
+        @click.native="toggleTag(account, 'strip_media')">
         {{ $t('users.stripMedia') }}
-        <i v-if="report.account.tags.includes('strip_media')" class="el-icon-check"/>
+        <i v-if="account.tags.includes('strip_media')" class="el-icon-check"/>
       </el-dropdown-item>
       <el-dropdown-item
-        :class="{ 'active-tag': report.account.tags.includes('force_unlisted') }"
-        @click.native="toggleTag(report.account, 'force_unlisted')">
+        :class="{ 'active-tag': account.tags.includes('force_unlisted') }"
+        @click.native="toggleTag(account, 'force_unlisted')">
         {{ $t('users.forceUnlisted') }}
-        <i v-if="report.account.tags.includes('force_unlisted')" class="el-icon-check"/>
+        <i v-if="account.tags.includes('force_unlisted')" class="el-icon-check"/>
       </el-dropdown-item>
       <el-dropdown-item
-        :class="{ 'active-tag': report.account.tags.includes('sandbox') }"
-        @click.native="toggleTag(report.account, 'sandbox')">
+        :class="{ 'active-tag': account.tags.includes('sandbox') }"
+        @click.native="toggleTag(account, 'sandbox')">
         {{ $t('users.sandbox') }}
-        <i v-if="report.account.tags.includes('sandbox')" class="el-icon-check"/>
+        <i v-if="account.tags.includes('sandbox')" class="el-icon-check"/>
       </el-dropdown-item>
       <el-dropdown-item
-        v-if="report.account.local"
-        :class="{ 'active-tag': report.account.tags.includes('disable_remote_subscription') }"
-        @click.native="toggleTag(report.account, 'disable_remote_subscription')">
+        v-if="account.local"
+        :class="{ 'active-tag': account.tags.includes('disable_remote_subscription') }"
+        @click.native="toggleTag(account, 'disable_remote_subscription')">
         {{ $t('users.disableRemoteSubscription') }}
-        <i v-if="report.account.tags.includes('disable_remote_subscription')" class="el-icon-check"/>
+        <i v-if="account.tags.includes('disable_remote_subscription')" class="el-icon-check"/>
       </el-dropdown-item>
       <el-dropdown-item
-        v-if="report.account.local"
-        :class="{ 'active-tag': report.account.tags.includes('disable_any_subscription') }"
-        @click.native="toggleTag(report.account, 'disable_any_subscription')">
+        v-if="account.local"
+        :class="{ 'active-tag': account.tags.includes('disable_any_subscription') }"
+        @click.native="toggleTag(account, 'disable_any_subscription')">
         {{ $t('users.disableAnySubscription') }}
-        <i v-if="report.account.tags.includes('disable_any_subscription')" class="el-icon-check"/>
+        <i v-if="account.tags.includes('disable_any_subscription')" class="el-icon-check"/>
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
@@ -61,7 +61,7 @@
 export default {
   name: 'ModerateUserDropdown',
   props: {
-    report: {
+    account: {
       type: Object,
       required: true
     }
