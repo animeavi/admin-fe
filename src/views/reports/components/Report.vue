@@ -3,8 +3,8 @@
     <el-card>
       <div class="header-container">
         <div>
-          <h3 class="report-title">Report on {{ report.account.display_name }}</h3>
-          <h5 class="id">ID: {{ report.id }}</h5>
+          <h3 class="report-title">{{ $t('reports.reportOn') }} {{ report.account.display_name }}</h3>
+          <h5 class="id">{{ $t('reports.id') }}: {{ report.id }}</h5>
         </div>
         <div>
           <el-tag :type="getStateType(report.state)" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
@@ -21,30 +21,30 @@
       </div>
       <div>
         <div class="line"/>
-        <span class="report-row-key">Account:</span>
+        <span class="report-row-key">{{ $t('reports.account') }}:</span>
         <img
           :src="report.account.avatar"
           alt="avatar"
           class="avatar-img">
         <a :href="report.account.url" target="_blank" class="account">
-          <span class="report-row-value">{{ report.account.acct }}</span>
+          <span>{{ report.account.acct }}</span>
         </a>
       </div>
       <div v-if="report.content.length > 0">
         <div class="line"/>
-        <span class="report-row-key">Content:
-          <span class="report-row-value">{{ report.content }}</span>
+        <span class="report-row-key">{{ $t('reports.content') }}:
+          <span>{{ report.content }}</span>
         </span>
       </div>
       <div>
         <div class="line"/>
-        <span class="report-row-key">Actor:</span>
+        <span class="report-row-key">{{ $t('reports.actor') }}:</span>
         <img
           :src="report.actor.avatar"
           alt="avatar"
           class="avatar-img">
         <a :href="report.actor.url" target="_blank" class="account">
-          <span class="report-row-value">{{ report.actor.acct }}</span>
+          <span>{{ report.actor.acct }}</span>
         </a>
       </div>
       <div v-if="report.statuses.length > 0" class="statuses">
