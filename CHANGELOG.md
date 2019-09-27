@@ -6,10 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+## [1.2.0] - 2019-09-27
+
 ### Added
 
 - Emoji pack configuration
 - Ability to require user's password reset
+– Ability to track admin/moderator actions, a.k.a. "the moderation log"
 
 ## [1.1.0] - 2019-09-15
 

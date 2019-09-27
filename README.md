@@ -18,8 +18,19 @@ To compile everything for production run `yarn build:prod`.
 
 #### Disabling features
 
-You can disable certain AdminFE features, like reports or settings by modifying `config/prod.env.js` env variable `DISABLED_FEATURES`, e.g. if you want to compile AdminFE without "Settings" you'll need to set it to: `DISABLED_FEATURES: '["settings"]'`,
-to disable emoji pack settings add `"emoji-packs"` to the list.
+You can disable certain AdminFE features, like reports or settings by modifying `config/prod.env.js` env variable `DISABLED_FEATURES`, e.g. if you want to compile AdminFE without "Settings" you'll need to set it to: `DISABLED_FEATURES: '["settings"]'`.
+
+Features, that can be disabled:
+
+- reports: `DISABLED_FEATURES: '["reports"]'`
+- invites: `DISABLED_FEATURES: '["invites"]'`
+- moderation log: `DISABLED_FEATURES: '["moderationLog"]'`
+- settings: `DISABLED_FEATURES: '["settings"]'`
+- emoji packs: `DISABLED_FEATURES: '["emojiPacks"]'`
+
+Of course, you can disable multiple features just by adding to the array, e.g. `DISABLED_FEATURES: '["emojiPacks", "settings"]'` will have both emoji packs and settings disabled.
+
+Users administration cannot be disabled.
 
 ## Changelog
 
