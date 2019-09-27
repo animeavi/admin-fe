@@ -67,6 +67,7 @@ export default {
     users: 'Users',
     reports: 'Reports',
     settings: 'Settings',
+    moderationLog: 'Moderation Log',
     'emoji-packs': 'Emoji packs'
   },
   navbar: {
@@ -283,6 +284,9 @@ export default {
     open: 'Open',
     closed: 'Closed',
     resolved: 'Resolved'
+  },
+  moderationLog: {
+    moderationLog: 'Moderation Log'
   },
   settings: {
     settings: 'Settings',
