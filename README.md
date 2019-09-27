@@ -4,7 +4,17 @@
 
 ## About
 
-Admin UI for pleroma instance owners
+Admin UI for pleroma instance owners.
+
+### Features
+
+1. User administration: grant roles to users (admin/moderator), deactivate/delete as well as force their statuses to have NSFW tag, strip media and many more
+1. Invites management: generate invite tokens & send invites via email
+1. Moderation log: track moderator/admin actions
+1. Settings: configure your pleroma instance via friendly (hopefully) UI
+1. Emoji packs: configure your emoji packs
+
+You can have any combination of these features (i.e. you can disable anything, but user administration, see "Disabling features" section below).
 
 ## Usage
 
