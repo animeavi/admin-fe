@@ -14,6 +14,7 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(Element)
 
+jest.mock('@/api/nodeInfo')
 jest.mock('@/api/users')
 
 describe('Search and filter users', () => {

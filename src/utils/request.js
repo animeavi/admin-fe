@@ -10,7 +10,7 @@ const service = axios.create({
 service.interceptors.response.use(
   response => response,
   error => {
-    console.log('Error ' + error)
+    console.log(`Error ${error}`)
     console.log(error.response.data)
 
     // If there's an "error" property in the json, use it
