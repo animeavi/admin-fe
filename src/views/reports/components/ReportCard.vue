@@ -12,6 +12,17 @@
               @{{ report.actor.acct }}
             </a>
           </div>
+          <div>
+            <el-tag :type="getStateType(report.state)" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
+            <el-dropdown trigger="click">
+              <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeState') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item v-if="report.state !== 'resolved'" @click.native="changeReportState('resolved', report.id)">{{ $t('reports.resolve') }}</el-dropdown-item>
+                <el-dropdown-item v-if="report.state !== 'open'" @click.native="changeReportState('open', report.id)">{{ $t('reports.reopen') }}</el-dropdown-item>
+                <el-dropdown-item v-if="report.state !== 'closed'" @click.native="changeReportState('closed', report.id)">{{ $t('reports.close') }}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
         </div>
       </div>
       <div class="report-body">
@@ -34,6 +45,22 @@ export default {
     }
   },
   methods: {
+    capitalizeFirstLetter(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1)
+    },
+    changeReportState(reportState, reportId) {
+      this.$store.dispatch('ChangeReportState', { reportState, reportId })
+    },
+    getStateType(state) {
+      switch (state) {
+        case 'closed':
+          return 'info'
+        case 'resolved':
+          return 'success'
+        default:
+          return 'primary'
+      }
+    },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('YYYY-MM-DD HH:mm')
     }
@@ -44,6 +71,15 @@ export default {
 <style rel='stylesheet/scss' lang='scss'>
   a {
     text-decoration: underline;
+  }
+  .el-icon-arrow-right {
+    margin-right: 6px;
+  }
+  .report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    height: 40px;
   }
   .report-actor {
     display: flex;
@@ -77,6 +113,11 @@ export default {
   (min-device-width: 768px) and (max-device-width: 1024px) {
     .el-card__header {
       padding: 10px 17px;
+    }
+    .report-header {
+      display: flex;
+      flex-direction: column;
+      height: 80px;
     }
     .report-actor-container {
       margin-bottom: 5px;

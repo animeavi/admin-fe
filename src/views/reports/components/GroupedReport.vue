@@ -5,6 +5,14 @@
         <h3 class="report-title">{{ $t('reports.reportsOn') }} {{ group.account.display_name }}</h3>
       </div>
       <div>
+        <el-dropdown trigger="click">
+          <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeAllReports') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="changeAllReports('resolved', group.reports)">{{ $t('reports.resolveAll') }}</el-dropdown-item>
+            <el-dropdown-item @click.native="changeAllReports('open', group.reports)">{{ $t('reports.reopenAll') }}</el-dropdown-item>
+            <el-dropdown-item @click.native="changeAllReports('closed', group.reports)">{{ $t('reports.closeAll') }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         <moderate-user-dropdown :account="group.account"/>
       </div>
     </div>
@@ -59,8 +67,8 @@ export default {
     }
   },
   methods: {
-    changeMultipleReportsState(reportState, groupOfReports) {
-      // this.$store.dispatch('ChangeReportState', { reportState, reportId })
+    changeAllReports(reportState, groupOfReports) {
+      console.log(groupOfReports)
     }
   }
 }
