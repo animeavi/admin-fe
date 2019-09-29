@@ -31,19 +31,13 @@ export async function deleteStatus(id, authHost, token) {
   })
 }
 
-export async function fetchReports(limit, max_id, authHost, token) {
+export async function fetchReports(filter, page, pageSize, authHost, token) {
+  const url = filter.length > 0
+    ? `/api/pleroma/admin/reports?state=${filter}&page=${page}&page_size=${pageSize}`
+    : `/api/pleroma/admin/reports?page=${page}&page_size=${pageSize}`
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/reports?limit=${limit}&max_id=${max_id}`,
-    method: 'get',
-    headers: authHeaders(token)
-  })
-}
-
-export async function filterReports(filter, limit, max_id, authHost, token) {
-  return await request({
-    baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/reports?state=${filter}&limit=${limit}&max_id=${max_id}`,
+    url,
     method: 'get',
     headers: authHeaders(token)
   })

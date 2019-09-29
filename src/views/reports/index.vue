@@ -225,27 +225,18 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('FetchReports')
+    this.$store.dispatch('FetchReports', 1)
   },
   created() {
     window.addEventListener('scroll', this.handleScroll)
   },
-  // destroyed() {
-  //   window.removeEventListener('scroll', this.handleScroll)
-  // },
   methods: {
     handlePageChange(page) {
-      this.$store.dispatch('FetchReports', { page })
+      this.$store.dispatch('FetchReports', page)
     },
     toggleReportsGrouping() {
       this.$store.dispatch('ToggleReportsGrouping')
     }
-    // handleScroll(reports) {
-    //   const bottomOfWindow = document.documentElement.scrollHeight - document.documentElement.scrollTop === document.documentElement.clientHeight
-    //   if (bottomOfWindow) {
-    //     this.$store.dispatch('FetchReports')
-    //   }
-    // }
   }
 }
 </script>
@@ -274,6 +265,10 @@ export default {
 
   }
 }
+.reports-pagination {
+  margin: 25px 0;
+  text-align: center;
+}
 @media
 only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px) {
@@ -287,10 +282,6 @@ only screen and (max-width: 760px),
   }
   #app > div > div.main-container > section > div > div.block > ul {
     margin: 45px 45px 5px 19px;
-  }
-  .reports-pagination {
-    margin: 25px 0;
-    text-align: center;
   }
 }
 </style>

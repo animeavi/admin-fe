@@ -1,10 +1,12 @@
-import { changeState, changeStatusScope, deleteStatus, fetchReports, filterReports } from '@/api/reports'
+import { changeState, changeStatusScope, deleteStatus, fetchReports } from '@/api/reports'
 
 const reports = {
   state: {
     fetchedReports: [],
+    totalReportsCount: 0,
+    currentPage: 1,
+    pageSize: 1,
     groupReports: true,
-    idOfLastReport: '',
     stateFilter: '',
     loading: true
   },
@@ -15,8 +17,14 @@ const reports = {
     SET_LOADING: (state, status) => {
       state.loading = status
     },
+    SET_PAGE: (state, page) => {
+      state.currentPage = page
+    },
     SET_REPORTS: (state, reports) => {
       state.fetchedReports = reports
+    },
+    SET_REPORTS_COUNT: (state, total) => {
+      state.totalReportsCount = total
     },
     SET_REPORTS_FILTER: (state, filter) => {
       state.stateFilter = filter
@@ -26,30 +34,29 @@ const reports = {
     }
   },
   actions: {
-    async ChangeReportState({ commit, getters, state }, { reportState, reportId }) {
-      const { data } = await changeState(reportState, reportId, getters.authHost, getters.token)
-      const updatedReports = state.fetchedReports.map(report => report.id === reportId ? data : report)
-      commit('SET_REPORTS', updatedReports)
+    async ChangeReportState({ dispatch, getters, state }, { reportState, reportId }) {
+      await changeState(reportState, reportId, getters.authHost, getters.token)
+      dispatch('FetchReports', state.currentPage)
     },
-    async ChangeStatusScope({ dispatch, getters }, { statusId, isSensitive, visibility }) {
+    async ChangeStatusScope({ dispatch, getters, state }, { statusId, isSensitive, visibility }) {
       await changeStatusScope(statusId, isSensitive, visibility, getters.authHost, getters.token)
-      dispatch('FetchReports')
+      dispatch('FetchReports', state.currentPage)
     },
     ClearFetchedReports({ commit }) {
       commit('SET_REPORTS', [])
       commit('SET_LAST_REPORT_ID', '')
     },
-    async DeleteStatus({ dispatch, getters }, { statusId }) {
-      deleteStatus(statusId, getters.authHost, getters.token)
-      dispatch('FetchReports')
+    async DeleteStatus({ dispatch, getters, state }, { statusId }) {
+      await deleteStatus(statusId, getters.authHost, getters.token)
+      dispatch('FetchReports', state.currentPage)
     },
-    async FetchReports({ commit, getters, state }) {
+    async FetchReports({ commit, getters, state }, page) {
       commit('SET_LOADING', true)
-      const { data } = state.stateFilter.length === 0
-        ? await fetchReports(state.page_limit, state.idOfLastReport, getters.authHost, getters.token)
-        : await filterReports(state.stateFilter, state.page_limit, state.idOfLastReport, getters.authHost, getters.token)
+      const { data } = await fetchReports(state.stateFilter, page, state.pageSize, getters.authHost, getters.token)
 
       commit('SET_REPORTS', data.reports)
+      commit('SET_REPORTS_COUNT', data.total)
+      commit('SET_PAGE', page)
       commit('SET_LOADING', false)
     },
     SetFilter({ commit }, filter) {
