@@ -5,8 +5,8 @@ const reports = {
     fetchedReports: [],
     totalReportsCount: 0,
     currentPage: 1,
-    pageSize: 1,
-    groupReports: true,
+    pageSize: 50,
+    groupReports: false,
     stateFilter: '',
     loading: true
   },

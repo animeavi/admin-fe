@@ -8,24 +8,10 @@
       </el-checkbox>
     </div>
     <div class="block">
-      <el-timeline v-if="groupReports" class="timeline">
-        <grouped-report v-loading="loading" v-for="group in groups" :group="group" :key="group.id"/>
-      </el-timeline>
-      <el-timeline v-else class="timeline">
-        <report v-loading="loading" v-for="report in reports" :report="report" :key="report.id"/>
-      </el-timeline>
+      <grouped-report v-loading="loading" v-if="groupReports" :groups="groups"/>
+      <report v-loading="loading" v-else :reports="reports"/>
       <div v-if="reports.length === 0" class="no-reports-message">
         <p>There are no reports to display</p>
-      </div>
-      <div v-if="!loading" class="reports-pagination">
-        <el-pagination
-          :total="totalReportsCount"
-          :current-page="currentPage"
-          :page-size="pageSize"
-          background
-          layout="prev, pager, next"
-          @current-change="handlePageChange"
-        />
       </div>
     </div>
   </div>
@@ -211,29 +197,14 @@ export default {
     loading() {
       return this.$store.state.reports.loading
     },
-    pageSize() {
-      return this.$store.state.reports.pageSize
-    },
     reports() {
       return this.$store.state.reports.fetchedReports
-    },
-    totalReportsCount() {
-      return this.$store.state.reports.totalReportsCount
-    },
-    currentPage() {
-      return this.$store.state.reports.currentPage
     }
-  },
-  mounted() {
-    this.$store.dispatch('FetchReports', 1)
   },
   created() {
     window.addEventListener('scroll', this.handleScroll)
   },
   methods: {
-    handlePageChange(page) {
-      this.$store.dispatch('FetchReports', page)
-    },
     toggleReportsGrouping() {
       this.$store.dispatch('ToggleReportsGrouping')
     }
@@ -262,12 +233,7 @@ export default {
   .no-reports-message {
     color: gray;
     margin-left: 19px
-
   }
-}
-.reports-pagination {
-  margin: 25px 0;
-  text-align: center;
 }
 @media
 only screen and (max-width: 760px),

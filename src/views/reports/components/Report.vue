@@ -1,61 +1,80 @@
 <template>
-  <el-timeline-item :timestamp="parseTimestamp(report.created_at)" placement="top" class="timeline-item-container">
-    <el-card>
-      <div class="header-container">
-        <div>
-          <h3 class="report-title">{{ $t('reports.reportOn') }} {{ report.account.display_name }}</h3>
-          <h5 class="id">{{ $t('reports.id') }}: {{ report.id }}</h5>
-        </div>
-        <div>
-          <el-tag :type="getStateType(report.state)" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
-          <el-dropdown trigger="click">
-            <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeState') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-if="report.state !== 'resolved'" @click.native="changeReportState('resolved', report.id)">{{ $t('reports.resolve') }}</el-dropdown-item>
-              <el-dropdown-item v-if="report.state !== 'open'" @click.native="changeReportState('open', report.id)">{{ $t('reports.reopen') }}</el-dropdown-item>
-              <el-dropdown-item v-if="report.state !== 'closed'" @click.native="changeReportState('closed', report.id)">{{ $t('reports.close') }}</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <moderate-user-dropdown :account="report.account"/>
-        </div>
-      </div>
-      <div>
-        <div class="line"/>
-        <span class="report-row-key">{{ $t('reports.account') }}:</span>
-        <img
-          :src="report.account.avatar"
-          alt="avatar"
-          class="avatar-img">
-        <a :href="report.account.url" target="_blank" class="account">
-          <span>{{ report.account.acct }}</span>
-        </a>
-      </div>
-      <div v-if="report.content.length > 0">
-        <div class="line"/>
-        <span class="report-row-key">{{ $t('reports.content') }}:
-          <span>{{ report.content }}</span>
-        </span>
-      </div>
-      <div>
-        <div class="line"/>
-        <span class="report-row-key">{{ $t('reports.actor') }}:</span>
-        <img
-          :src="report.actor.avatar"
-          alt="avatar"
-          class="avatar-img">
-        <a :href="report.actor.url" target="_blank" class="account">
-          <span>{{ report.actor.acct }}</span>
-        </a>
-      </div>
-      <div v-if="report.statuses.length > 0" class="statuses">
-        <el-collapse>
-          <el-collapse-item :title="getStatusesTitle(report.statuses)">
-            <statuses :statuses="report.statuses" />
-          </el-collapse-item>
-        </el-collapse>
-      </div>
-    </el-card>
-  </el-timeline-item>
+  <div>
+    <el-timeline class="timeline">
+      <el-timeline-item
+        v-for="report in reports"
+        :timestamp="parseTimestamp(report.created_at)"
+        :key="report.id"
+        placement="top"
+        class="timeline-item-container">
+        <el-card>
+          <div class="header-container">
+            <div>
+              <h3 class="report-title">{{ $t('reports.reportOn') }} {{ report.account.display_name }}</h3>
+              <h5 class="id">{{ $t('reports.id') }}: {{ report.id }}</h5>
+            </div>
+            <div>
+              <el-tag :type="getStateType(report.state)" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
+              <el-dropdown trigger="click">
+                <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeState') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-if="report.state !== 'resolved'" @click.native="changeReportState('resolved', report.id)">{{ $t('reports.resolve') }}</el-dropdown-item>
+                  <el-dropdown-item v-if="report.state !== 'open'" @click.native="changeReportState('open', report.id)">{{ $t('reports.reopen') }}</el-dropdown-item>
+                  <el-dropdown-item v-if="report.state !== 'closed'" @click.native="changeReportState('closed', report.id)">{{ $t('reports.close') }}</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <moderate-user-dropdown :account="report.account"/>
+            </div>
+          </div>
+          <div>
+            <div class="line"/>
+            <span class="report-row-key">{{ $t('reports.account') }}:</span>
+            <img
+              :src="report.account.avatar"
+              alt="avatar"
+              class="avatar-img">
+            <a :href="report.account.url" target="_blank" class="account">
+              <span>{{ report.account.acct }}</span>
+            </a>
+          </div>
+          <div v-if="report.content.length > 0">
+            <div class="line"/>
+            <span class="report-row-key">{{ $t('reports.content') }}:
+              <span>{{ report.content }}</span>
+            </span>
+          </div>
+          <div>
+            <div class="line"/>
+            <span class="report-row-key">{{ $t('reports.actor') }}:</span>
+            <img
+              :src="report.actor.avatar"
+              alt="avatar"
+              class="avatar-img">
+            <a :href="report.actor.url" target="_blank" class="account">
+              <span>{{ report.actor.acct }}</span>
+            </a>
+          </div>
+          <div v-if="report.statuses.length > 0" class="statuses">
+            <el-collapse>
+              <el-collapse-item :title="getStatusesTitle(report.statuses)">
+                <statuses :statuses="report.statuses" />
+              </el-collapse-item>
+            </el-collapse>
+          </div>
+        </el-card>
+      </el-timeline-item>
+    </el-timeline>
+    <div v-if="!loading" class="reports-pagination">
+      <el-pagination
+        :total="totalReportsCount"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        background
+        layout="prev, pager, next"
+        @current-change="handlePageChange"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -67,10 +86,27 @@ export default {
   name: 'Report',
   components: { Statuses, ModerateUserDropdown },
   props: {
-    report: {
-      type: Object,
+    reports: {
+      type: Array,
       required: true
     }
+  },
+  computed: {
+    loading() {
+      return this.$store.state.reports.loading
+    },
+    pageSize() {
+      return this.$store.state.reports.pageSize
+    },
+    totalReportsCount() {
+      return this.$store.state.reports.totalReportsCount
+    },
+    currentPage() {
+      return this.$store.state.reports.currentPage
+    }
+  },
+  mounted() {
+    this.$store.dispatch('FetchReports', 1)
   },
   methods: {
     changeReportState(reportState, reportId) {
@@ -91,6 +127,9 @@ export default {
     },
     getStatusesTitle(statuses) {
       return `Reported statuses: ${statuses.length} item(s)`
+    },
+    handlePageChange(page) {
+      this.$store.dispatch('FetchReports', page)
     },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('L HH:mm')
@@ -178,6 +217,10 @@ export default {
   }
   .report-title {
     margin: 0;
+  }
+  .reports-pagination {
+    margin: 25px 0;
+    text-align: center;
   }
   .statuses {
     margin-top: 15px;

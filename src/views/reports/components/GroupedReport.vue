@@ -1,55 +1,57 @@
 <template>
-  <el-card>
-    <div class="header-container">
-      <div>
-        <h3 class="report-title">{{ $t('reports.reportsOn') }} {{ group.account.display_name }}</h3>
+  <el-timeline class="timeline">
+    <el-card v-for="group in groups" :key="group.id">
+      <div class="header-container">
+        <div>
+          <h3 class="report-title">{{ $t('reports.reportsOn') }} {{ group.account.display_name }}</h3>
+        </div>
+        <div>
+          <el-dropdown trigger="click">
+            <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeAllReports') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="changeAllReports('resolved', group.reports)">{{ $t('reports.resolveAll') }}</el-dropdown-item>
+              <el-dropdown-item @click.native="changeAllReports('open', group.reports)">{{ $t('reports.reopenAll') }}</el-dropdown-item>
+              <el-dropdown-item @click.native="changeAllReports('closed', group.reports)">{{ $t('reports.closeAll') }}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <moderate-user-dropdown :account="group.account"/>
+        </div>
       </div>
       <div>
-        <el-dropdown trigger="click">
-          <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeAllReports') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="changeAllReports('resolved', group.reports)">{{ $t('reports.resolveAll') }}</el-dropdown-item>
-            <el-dropdown-item @click.native="changeAllReports('open', group.reports)">{{ $t('reports.reopenAll') }}</el-dropdown-item>
-            <el-dropdown-item @click.native="changeAllReports('closed', group.reports)">{{ $t('reports.closeAll') }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <moderate-user-dropdown :account="group.account"/>
-      </div>
-    </div>
-    <div>
-      <div class="line"/>
-      <span class="report-row-key">{{ $t('reports.account') }}:</span>
-      <img
-        :src="group.account.avatar"
-        alt="avatar"
-        class="avatar-img">
-      <a :href="group.account.url" target="_blank">
-        <span>{{ group.account.acct }}</span>
-      </a>
-    </div>
-    <div>
-      <div class="line"/>
-      <span class="report-row-key">{{ $t('reports.actors') }}:</span>
-      <span v-for="actor in group.actors" :key="actor.id">
-        <a :href="actor.url" target="_blank">
-          <span>{{ actor.acct }}, </span>
+        <div class="line"/>
+        <span class="report-row-key">{{ $t('reports.account') }}:</span>
+        <img
+          :src="group.account.avatar"
+          alt="avatar"
+          class="avatar-img">
+        <a :href="group.account.url" target="_blank">
+          <span>{{ group.account.acct }}</span>
         </a>
-      </span>
-    </div>
-    <div v-if="group.status">
-      <div class="line"/>
-      <span class="report-row-key">{{ $t('reports.reportedStatus') }}:</span>
-      <statuses :statuses="group.status" class="reported-status"/>
-    </div>
-    <div v-if="group.reports">
-      <div class="line"/>
-      <el-collapse>
-        <el-collapse-item :title="$t('reports.reports')">
-          <report-card :reports="group.reports"/>
-        </el-collapse-item>
-      </el-collapse>
-    </div>
-  </el-card>
+      </div>
+      <div>
+        <div class="line"/>
+        <span class="report-row-key">{{ $t('reports.actors') }}:</span>
+        <span v-for="actor in group.actors" :key="actor.id">
+          <a :href="actor.url" target="_blank">
+            <span>{{ actor.acct }}, </span>
+          </a>
+        </span>
+      </div>
+      <div v-if="group.status">
+        <div class="line"/>
+        <span class="report-row-key">{{ $t('reports.reportedStatus') }}:</span>
+        <statuses :statuses="group.status" class="reported-status"/>
+      </div>
+      <div v-if="group.reports">
+        <div class="line"/>
+        <el-collapse>
+          <el-collapse-item :title="$t('reports.reports')">
+            <report-card :reports="group.reports"/>
+          </el-collapse-item>
+        </el-collapse>
+      </div>
+    </el-card>
+  </el-timeline>
 </template>
 
 <script>
@@ -61,8 +63,8 @@ export default {
   name: 'Report',
   components: { ModerateUserDropdown, ReportCard, Statuses },
   props: {
-    group: {
-      type: Object,
+    groups: {
+      type: Array,
       required: true
     }
   },
