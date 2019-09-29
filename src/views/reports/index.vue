@@ -1,6 +1,9 @@
 <template>
   <div class="reports-container">
-    <h1>{{ $t('reports.reports') }}</h1>
+    <h1>
+      {{ $t('reports.reports') }}
+      <span class="report-count">({{ normalizedReportsCount }})</span>
+    </h1>
     <div class="filter-container">
       <reports-filter/>
       <el-checkbox v-model="groupReports" class="group-reports-checkbox">
@@ -19,6 +22,7 @@
 
 <script>
 import GroupedReport from './components/GroupedReport'
+import numeral from 'numeral'
 import Report from './components/Report'
 import ReportsFilter from './components/ReportsFilter'
 
@@ -197,6 +201,9 @@ export default {
     loading() {
       return this.$store.state.reports.loading
     },
+    normalizedReportsCount() {
+      return numeral(this.$store.state.reports.totalReportsCount).format('0a')
+    },
     reports() {
       return this.$store.state.reports.fetchedReports
     }
@@ -233,6 +240,10 @@ export default {
   .no-reports-message {
     color: gray;
     margin-left: 19px
+  }
+  .report-count {
+    color: gray;
+    font-size: 28px;
   }
 }
 @media
