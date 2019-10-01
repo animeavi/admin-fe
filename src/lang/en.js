@@ -236,11 +236,16 @@ export default {
     tags: 'Tags',
     moderator: 'Moderator',
     admin: 'Admin',
-    local: 'Local',
+    local: 'local',
+    external: 'external',
+    localUppercase: 'Local',
     nickname: 'Nickname',
-    deactivated: 'Deactivated',
     recentStatuses: 'Recent Statues',
-    showPrivateStatuses: 'Show private statuses'
+    showPrivateStatuses: 'Show private statuses',
+    roles: 'Roles',
+    activeUppercase: 'Active',
+    active: 'active',
+    deactivated: 'deactivated'
   },
   usersFilter: {
     inputPlaceholder: 'Select filter',
