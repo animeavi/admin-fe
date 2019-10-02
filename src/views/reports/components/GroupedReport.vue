@@ -40,7 +40,9 @@
       <div v-if="group.status">
         <div class="line"/>
         <span class="report-row-key">{{ $t('reports.reportedStatus') }}:</span>
-        <statuses :statuses="group.status" class="reported-status"/>
+        <div v-for="status in group.status" :key="status.id">
+          <status :status="status" class="reported-status"/>
+        </div>
       </div>
       <div v-if="group.reports">
         <div class="line"/>
@@ -57,11 +59,11 @@
 <script>
 import ModerateUserDropdown from './ModerateUserDropdown'
 import ReportCard from './ReportCard'
-import Statuses from './Statuses'
+import Status from '../../status/Status'
 
 export default {
   name: 'Report',
-  components: { ModerateUserDropdown, ReportCard, Statuses },
+  components: { ModerateUserDropdown, ReportCard, Status },
   props: {
     groups: {
       type: Array,

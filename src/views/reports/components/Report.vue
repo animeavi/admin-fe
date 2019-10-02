@@ -57,7 +57,9 @@
           <div v-if="report.statuses.length > 0" class="statuses">
             <el-collapse>
               <el-collapse-item :title="getStatusesTitle(report.statuses)">
-                <statuses :statuses="report.statuses" />
+                <div v-for="status in report.statuses" :key="status.id">
+                  <status :status="status" />
+                </div>
               </el-collapse-item>
             </el-collapse>
           </div>
@@ -79,12 +81,12 @@
 
 <script>
 import moment from 'moment'
-import Statuses from './Statuses'
+import Status from '../../status/Status'
 import ModerateUserDropdown from './ModerateUserDropdown'
 
 export default {
   name: 'Report',
-  components: { Statuses, ModerateUserDropdown },
+  components: { Status, ModerateUserDropdown },
   props: {
     reports: {
       type: Array,
