@@ -70,22 +70,8 @@
       </el-row>
       <el-col :span="18">
         <el-timeline class="statuses">
-          <el-timeline-item v-for="status in statuses" :timestamp="createdAtLocaleString(status.created_at)" :key="status.id">
-            <el-card>
-              <strong v-if="status.spoiler_text">{{ status.spoiler_text }}</strong>
-              <p v-if="status.content" v-html="status.content" />
-              <div v-if="status.poll" class="poll">
-                <ul>
-                  <li v-for="(option, index) in status.poll.options" :key="index">
-                    {{ option.title }}
-                    <el-progress :percentage="optionPercent(status.poll, option)" />
-                  </li>
-                </ul>
-              </div>
-              <div v-for="(attachment, index) in status.media_attachments" :key="index" class="image">
-                <img :src="attachment.preview_url">
-              </div>
-            </el-card>
+          <el-timeline-item v-for="status in statuses" :key="status.id">
+            <status :status="status"/>
           </el-timeline-item>
         </el-timeline>
       </el-col>
@@ -94,8 +80,11 @@
 </template>
 
 <script>
+import Status from '../status/Status'
+
 export default {
   name: 'UsersShow',
+  components: { Status },
   data() {
     return {
       showPrivate: false
@@ -116,19 +105,6 @@ export default {
     this.$store.dispatch('FetchData', { id: this.$route.params.id, godmode: false })
   },
   methods: {
-    optionPercent(poll, pollOption) {
-      const allVotes = poll.options.reduce((acc, option) => (acc + option.votes_count), 0)
-      if (allVotes === 0) {
-        return 0
-      }
-
-      return +(pollOption.votes_count / allVotes * 100).toFixed(1)
-    },
-    createdAtLocaleString(createdAt) {
-      const date = new Date(createdAt)
-
-      return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
-    },
     onTogglePrivate() {
       console.log(this.showPrivate)
 

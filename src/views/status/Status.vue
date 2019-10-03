@@ -54,7 +54,40 @@
       </div>
     </div>
     <div class="status-body">
-      <span class="status-content" v-html="status.content"/>
+      <div v-if="status.spoiler_text">
+        <strong>{{ status.spoiler_text }}</strong>
+        <el-button v-if="!showHiddenStatus" size="mini" class="show-more-button" @click="showHiddenStatus = true">Show more</el-button>
+        <el-button v-if="showHiddenStatus" size="mini" class="show-more-button" @click="showHiddenStatus = false">Show less</el-button>
+        <div v-if="showHiddenStatus">
+          <span class="status-content" v-html="status.content"/>
+          <div v-if="status.poll" class="poll">
+            <ul>
+              <li v-for="(option, index) in status.poll.options" :key="index">
+                {{ option.title }}
+                <el-progress :percentage="optionPercent(status.poll, option)" />
+              </li>
+            </ul>
+          </div>
+          <div v-for="(attachment, index) in status.media_attachments" :key="index" class="image">
+            <img :src="attachment.preview_url">
+          </div>
+        </div>
+
+      </div>
+      <div v-if="!status.spoiler_text">
+        <span class="status-content" v-html="status.content"/>
+        <div v-if="status.poll" class="poll">
+          <ul>
+            <li v-for="(option, index) in status.poll.options" :key="index">
+              {{ option.title }}
+              <el-progress :percentage="optionPercent(status.poll, option)" />
+            </li>
+          </ul>
+        </div>
+        <div v-for="(attachment, index) in status.media_attachments" :key="index" class="image">
+          <img :src="attachment.preview_url">
+        </div>
+      </div>
       <a :href="status.url" target="_blank" class="account">
         {{ parseTimestamp(status.created_at) }}
       </a>
@@ -66,11 +99,16 @@
 import moment from 'moment'
 
 export default {
-  name: 'Statuses',
+  name: 'Status',
   props: {
     status: {
       type: Object,
       required: true
+    }
+  },
+  data() {
+    return {
+      showHiddenStatus: false
     }
   },
   methods: {
@@ -98,6 +136,13 @@ export default {
         })
       })
     },
+    optionPercent(poll, pollOption) {
+      const allVotes = poll.options.reduce((acc, option) => (acc + option.votes_count), 0)
+      if (allVotes === 0) {
+        return 0
+      }
+      return +(pollOption.votes_count / allVotes * 100).toFixed(1)
+    },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('YYYY-MM-DD HH:mm')
     }
@@ -106,66 +151,78 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
-  .account {
-    text-decoration: underline;
+.account {
+  text-decoration: underline;
+  line-height: 26px;
+  font-size: 13px;
+}
+.image {
+  width: 20%;
+  img {
+    width: 100%;
   }
-  .status-account {
-    display: flex;
-    align-items: center;
+}
+.show-more-button {
+  margin-left: 5px;
+}
+.status-account {
+  display: flex;
+  align-items: center;
+}
+.status-avatar-img {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+}
+.status-account-name {
+  margin: 0;
+  height: 22px;
+}
+.status-body {
+  display: flex;
+  flex-direction: column;
+}
+.status-content {
+  font-size: 15px;
+  line-height: 26px;
+}
+.status-card {
+  margin-bottom: 15px;
+}
+.status-header {
+  display: flex;
+  justify-content: space-between;
+}
+@media
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+  .el-message {
+    min-width: 80%;
   }
-  .status-avatar-img {
-    width: 15px;
-    height: 15px;
-    margin-right: 5px;
-  }
-  .status-account-name {
-    margin: 0;
-    height: 22px;
-  }
-  .status-body {
-    display: flex;
-    flex-direction: column;
-  }
-  .status-content {
-    font-size: 15px;
+  .el-message-box {
+    width: 80%;
   }
   .status-card {
-    margin-bottom: 15px;
-  }
-  .status-header {
-    display: flex;
-    justify-content: space-between;
-  }
-  @media
-  only screen and (max-width: 760px),
-  (min-device-width: 768px) and (max-device-width: 1024px) {
-    .el-message {
-      min-width: 80%;
+    .el-card__header {
+      padding: 10px 17px;
     }
-    .el-message-box {
-      width: 80%;
+    .el-tag {
+      margin: 3px 4px 3px 0;
     }
-    .status-card {
-      .el-card__header {
-        padding: 10px 17px;
-      }
-      .el-tag {
-        margin: 3px 4px 3px 0;
-      }
-      .status-account-container {
-        margin-bottom: 5px;
-      }
-      .status-actions-button {
-        margin: 3px 0 3px;
-      }
-      .status-actions {
-        display: flex;
-        flex-wrap: wrap;
-      }
-      .status-header {
-        display: flex;
-        flex-direction: column;
-      }
+    .status-account-container {
+      margin-bottom: 5px;
+    }
+    .status-actions-button {
+      margin: 3px 0 3px;
+    }
+    .status-actions {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .status-header {
+      display: flex;
+      flex-direction: column;
     }
   }
+}
 </style>
