@@ -1,4 +1,4 @@
-import { changeState, changeStatusScope, deleteStatus, fetchReports } from '@/api/reports'
+import { changeState, fetchReports } from '@/api/reports'
 
 const reports = {
   state: {
@@ -38,17 +38,9 @@ const reports = {
       await changeState(reportState, reportId, getters.authHost, getters.token)
       dispatch('FetchReports', state.currentPage)
     },
-    async ChangeStatusScope({ dispatch, getters, state }, { statusId, isSensitive, visibility }) {
-      await changeStatusScope(statusId, isSensitive, visibility, getters.authHost, getters.token)
-      dispatch('FetchReports', state.currentPage)
-    },
     ClearFetchedReports({ commit }) {
       commit('SET_REPORTS', [])
       commit('SET_LAST_REPORT_ID', '')
-    },
-    async DeleteStatus({ dispatch, getters, state }, { statusId }) {
-      await deleteStatus(statusId, getters.authHost, getters.token)
-      dispatch('FetchReports', state.currentPage)
     },
     async FetchReports({ commit, getters, state }, page) {
       commit('SET_LOADING', true)

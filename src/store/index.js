@@ -6,6 +6,7 @@ import invites from './modules/invites'
 import permission from './modules/permission'
 import reports from './modules/reports'
 import settings from './modules/settings'
+import status from './modules/status'
 import tagsView from './modules/tagsView'
 import user from './modules/user'
 import userProfile from './modules/userProfile'
@@ -23,6 +24,7 @@ const store = new Vuex.Store({
     permission,
     reports,
     settings,
+    status,
     tagsView,
     user,
     userProfile,
