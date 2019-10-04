@@ -41,7 +41,7 @@
         <div class="line"/>
         <span class="report-row-key">{{ $t('reports.reportedStatus') }}:</span>
         <div v-for="status in group.status" :key="status.id">
-          <status :status="status" class="reported-status"/>
+          <status :status="status" :page="1" class="reported-status"/> <!-- Change page value when pagination is implemented -->
         </div>
       </div>
       <div v-if="group.reports">

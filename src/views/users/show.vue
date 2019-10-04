@@ -1,5 +1,5 @@
 <template>
-  <main v-if="!loading">
+  <main v-if="!userProfileLoading">
     <header>
       <el-avatar :src="user.avatar" size="large" />
       <h1>{{ user.display_name }}</h1>
@@ -69,9 +69,9 @@
         </el-col>
       </el-row>
       <el-col :span="18">
-        <el-timeline class="statuses">
+        <el-timeline v-if="!statusesLoading" class="statuses">
           <el-timeline-item v-for="status in statuses" :key="status.id">
-            <status :status="status"/>
+            <status :status="status" :user-id="user.id" :godmode="showPrivate"/>
           </el-timeline-item>
         </el-timeline>
       </el-col>
@@ -91,24 +91,25 @@ export default {
     }
   },
   computed: {
-    loading() {
-      return this.$store.state.userProfile.loading
+    statuses() {
+      return this.$store.state.userProfile.statuses
+    },
+    statusesLoading() {
+      return this.$store.state.userProfile.statusesLoading
     },
     user() {
       return this.$store.state.userProfile.user
     },
-    statuses() {
-      return this.$store.state.userProfile.statuses
+    userProfileLoading() {
+      return this.$store.state.userProfile.userProfileLoading
     }
   },
   mounted: function() {
-    this.$store.dispatch('FetchData', { id: this.$route.params.id, godmode: false })
+    this.$store.dispatch('FetchUserProfile', { userId: this.$route.params.id, godmode: false })
   },
   methods: {
     onTogglePrivate() {
-      console.log(this.showPrivate)
-
-      this.$store.dispatch('FetchData', { id: this.$route.params.id, godmode: this.showPrivate })
+      this.$store.dispatch('FetchUserProfile', { userId: this.$route.params.id, godmode: this.showPrivate })
     }
   }
 }
