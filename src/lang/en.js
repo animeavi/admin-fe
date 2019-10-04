@@ -312,7 +312,8 @@ export default {
     rateLimiters: 'Rate limiters',
     database: 'Database',
     other: 'Other',
-    success: 'Settings changed successfully!'
+    success: 'Settings changed successfully!',
+    emojiPacks: 'Emoji packs'
   },
   invites: {
     inviteTokens: 'Invite tokens',
