@@ -32,8 +32,12 @@
                 <tr class="el-table__row">
                   <td>{{ $t('userProfile.roles') }}</td>
                   <td>
-                    <el-tag v-if="user.roles.moderator" class="user-profile-tag"/>
-                    <el-tag v-if="user.roles.admin" class="user-profile-tag"/>
+                    <el-tag v-if="user.roles.admin" class="user-profile-tag">
+                      {{ $t('users.admin') }}
+                    </el-tag>
+                    <el-tag v-if="user.roles.moderator" class="user-profile-tag">
+                      {{ $t('users.moderator') }}
+                    </el-tag>
                     <span v-if="!user.roles.moderator && !user.roles.admin">—</span>
                   </td>
                 </tr>
