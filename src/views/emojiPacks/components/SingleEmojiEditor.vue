@@ -21,7 +21,7 @@
         <p>Select the local pack to copy to</p>
         <el-select v-model="copyToLocalPackName" placeholder="Local pack">
           <el-option
-            v-for="(_pack, name) in $store.state.emoji_packs.localPacks"
+            v-for="(_pack, name) in $store.state.emojiPacks.localPacks"
             :key="name"
             :label="name"
             :value="name" />
@@ -64,7 +64,7 @@
 
 <script>
 
-import { addressOfEmojiInPack } from '@/api/emoji_packs'
+import { addressOfEmojiInPack } from '@/api/emojiPacks'
 
 export default {
   props: {

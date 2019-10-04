@@ -49,7 +49,7 @@
           </el-button>
         </div>
 
-        <div v-for="(pack, name) in $store.state.emoji_packs.localPacks" :key="name">
+        <div v-for="(pack, name) in $store.state.emojiPacks.localPacks" :key="name">
           <emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="true" />
           <el-divider />
         </div>
@@ -64,7 +64,7 @@
           Refresh remote packs
         </el-button>
 
-        <div v-for="(pack, name) in $store.state.emoji_packs.remotePacks" :key="name">
+        <div v-for="(pack, name) in $store.state.emojiPacks.remotePacks" :key="name">
           <emoji-pack :name="name" :pack="pack" :host="remoteInstanceAddress" :is-local="false" />
           <el-divider />
         </div>
