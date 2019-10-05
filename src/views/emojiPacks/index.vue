@@ -24,11 +24,10 @@
           </el-button>
         </div>
       </el-form-item>
-      <el-form-item v-if="localPacks.length > 0" :label="$t('settings.packs')">
-        <div v-for="(pack, name) in localPacks" :key="name">
+      <el-form-item v-if="Object.keys(localPacks).length > 0" :label="$t('settings.packs')">
+        <el-collapse v-for="(pack, name) in localPacks" :key="name" v-model="activeLocalPack">
           <emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="true" />
-          <el-divider />
-        </div>
+        </el-collapse>
       </el-form-item>
       <div class="line"/>
       <el-form-item :label="$t('settings.remotePacks')">
@@ -44,11 +43,10 @@
           </el-button>
         </div>
       </el-form-item>
-      <el-form-item v-if="remotePacks.length > 0" :label="$t('settings.packs')">
-        <div v-for="(pack, name) in remotePacks" :key="name">
+      <el-form-item v-if="Object.keys(remotePacks).length > 0" :label="$t('settings.packs')">
+        <el-collapse v-for="(pack, name) in remotePacks" :key="name" v-model="activeRemotePack">
           <emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="true" />
-          <el-divider />
-        </div>
+        </el-collapse>
       </el-form-item>
     </el-form>
   </div>
@@ -62,7 +60,9 @@ export default {
   data() {
     return {
       remoteInstanceAddress: '',
-      newPackName: ''
+      newPackName: '',
+      activeLocalPack: '',
+      activeRemotePack: ''
     }
   },
   computed: {

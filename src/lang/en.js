@@ -323,7 +323,14 @@ export default {
     packs: 'Packs',
     remotePacks: 'Remote packs',
     remoteInstanceAddress: 'Remote instance address',
-    refreshRemote: 'Refresh remote packs'
+    refreshRemote: 'Refresh remote packs',
+    sharePack: 'Share pack',
+    homepage: 'Homepage',
+    description: 'Description',
+    license: 'License',
+    fallbackSrc: 'Fallback source',
+    fallbackSrcSha: 'Fallback source SHA',
+    savePackMetadata: 'Save pack metadata'
   },
   invites: {
     inviteTokens: 'Invite tokens',
