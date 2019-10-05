@@ -313,7 +313,17 @@ export default {
     database: 'Database',
     other: 'Other',
     success: 'Settings changed successfully!',
-    emojiPacks: 'Emoji packs'
+    emojiPacks: 'Emoji packs',
+    reloadEmoji: 'Reload emoji',
+    importPacks: 'Import packs from the server filesystem',
+    importEmojiTooltip: 'Importing from the filesystem will scan the directories and import those without pack.json but with emoji.txt or without neither',
+    localPacks: 'Local packs',
+    refreshLocalPacks: 'Refresh local packs',
+    createLocalPack: 'Create a new local pack',
+    packs: 'Packs',
+    remotePacks: 'Remote packs',
+    remoteInstanceAddress: 'Remote instance address',
+    refreshRemote: 'Refresh remote packs'
   },
   invites: {
     inviteTokens: 'Invite tokens',
