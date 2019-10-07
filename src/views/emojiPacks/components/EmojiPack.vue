@@ -1,6 +1,6 @@
 <template>
   <el-collapse-item :title="name" :name="name">
-    <el-form label-width="120px" size="small">
+    <el-form label-width="120px" label-position="left" size="small">
       <el-form-item :label="$t('settings.sharePack')">
         <el-switch v-model="share" :disabled="!isLocal" />
       </el-form-item>
@@ -29,6 +29,11 @@
         <el-button v-if="isLocal" type="primary" @click="savePackMetadata">{{ $t('settings.savePackMetadata') }}</el-button>
       </el-form-item>
     </el-form>
+    <el-collapse v-model="showPackContent" class="contents-collapse">
+      <el-collapse-item :name="name" title="Show pack contents">
+        <new-emoji-uploader v-if="isLocal" :pack-name="name"/>
+      </el-collapse-item>
+    </el-collapse>
   </el-collapse-item>
 </template>
 
@@ -38,6 +43,9 @@
 }
 .el-collapse-item__header {
   height: 36px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #606266;
 }
 .emoji-pack-card {
   margin-top: 5px;
@@ -72,7 +80,7 @@ export default {
 
   data() {
     return {
-      shownPackEmoji: [],
+      showPackContent: [],
       downloadSharedAs: ''
     }
   },

@@ -61,8 +61,8 @@ export default {
     return {
       remoteInstanceAddress: '',
       newPackName: '',
-      activeLocalPack: '',
-      activeRemotePack: ''
+      activeLocalPack: [],
+      activeRemotePack: []
     }
   },
   computed: {

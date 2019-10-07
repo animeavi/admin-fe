@@ -1,49 +1,53 @@
 <template>
-  <div>
-    <h4>Add new emoji to the pack</h4>
-
-    <el-row :gutter="20">
-      <el-col :span="4" class="new-emoji-col">
-        <el-input v-model="shortcode" placeholder="Shortcode" />
-      </el-col>
-
-      <el-col :span="8">
-        <div>
-          <h5>Upload a file</h5>
-        </div>
-        File name
-        <el-input v-model="customFileName" size="mini" placeholder="Custom file name (optional)"/>
-        <input ref="fileUpload" type="file" accept="image/*" >
-
-        <div class="or">
-          or
-        </div>
-
-        <div>
-          <h5>Enter a URL</h5>
-        </div>
-        <el-input v-model="imageUploadURL" placeholder="Image URL" />
-
-        <small>
-          (If both are filled, the file is used)
-        </small>
-      </el-col>
-
-      <el-col :span="4" class="new-emoji-col">
-        <el-button :disabled="shortcode.trim() == ''" @click="upload">Upload</el-button>
-      </el-col>
-    </el-row>
-  </div>
+  <el-form label-width="130px" label-position="left" size="small">
+    <div class="add-new-emoji">{{ $t('settings.addNewEmoji') }}</div>
+    <el-form-item :label="$t('settings.shortcode')">
+      <el-input v-model="shortcode" :placeholder="$t('settings.required')"/>
+    </el-form-item>
+    <el-form-item :label="$t('settings.customFilename')">
+      <el-input v-model="customFileName" :placeholder="$t('settings.optional')"/>
+    </el-form-item>
+    <el-form-item :label="$t('settings.uploadFile')">
+      <!-- <div class="upload-file-url">
+        <el-input v-model="imageUploadURL" :placeholder="$t('settings.url')"/>
+        <el-button :disabled="shortcodePresent" class="upload-button" @click="uploadEmoji">{{ $t('settings.upload') }}</el-button>
+      </div>
+      <div class="upload-container">
+        <p class="text">or</p>-->
+      <el-upload
+        :http-request="uploadEmoji"
+        :multiple="false"
+        :show-file-list="false"
+        action="add">
+        <el-button :disabled="shortcodePresent" type="primary">{{ $t('settings.clickToUpload') }}</el-button>
+      </el-upload>
+      <!-- </div> -->
+    </el-form-item>
+  </el-form>
 </template>
 
 <style>
-  .new-emoji-col {
-    margin-top: 8em;
-  }
-
-  .or {
-    margin: 1em;
-  }
+.add-new-emoji {
+  height: 36px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #606266;
+}
+.text {
+  line-height: 20px;
+  margin-right: 15px
+}
+.upload-container {
+  display: flex;
+  align-items: baseline;
+}
+.upload-button {
+  margin-left: 10px;
+}
+.upload-file-url {
+  display: flex;
+  justify-content: space-between
+}
 </style>
 
 <script>
@@ -54,7 +58,6 @@ export default {
       required: true
     }
   },
-
   data() {
     return {
       shortcode: '',
@@ -62,31 +65,25 @@ export default {
       customFileName: ''
     }
   },
-
+  computed: {
+    shortcodePresent() {
+      return this.shortcode.trim() === ''
+    }
+  },
   methods: {
-    upload() {
-      let file = null
+    uploadEmoji({ file }) {
+      this.$store.dispatch('UpdateAndSavePackFile', {
+        action: 'add',
+        packName: this.packName,
+        shortcode: this.shortcode,
+        file,
+        fileName: this.customFileName
+      }).then(() => {
+        this.shortcode = ''
+        this.imageUploadURL = ''
 
-      if (this.$refs.fileUpload.files.length > 0) {
-        file = this.$refs.fileUpload.files[0]
-      } else if (this.imageUploadURL.trim() !== '') {
-        file = this.imageUploadURL
-      }
-
-      if (file !== null) {
-        this.$store.dispatch('UpdateAndSavePackFile', {
-          action: 'add',
-          packName: this.packName,
-          shortcode: this.shortcode,
-          file: file,
-          fileName: this.customFileName
-        }).then(() => {
-          this.shortcode = ''
-          this.imageUploadURL = ''
-
-          this.$store.dispatch('ReloadEmoji')
-        })
-      }
+        this.$store.dispatch('ReloadEmoji')
+      })
     }
   }
 }

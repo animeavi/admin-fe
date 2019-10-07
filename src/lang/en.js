@@ -330,7 +330,16 @@ export default {
     license: 'License',
     fallbackSrc: 'Fallback source',
     fallbackSrcSha: 'Fallback source SHA',
-    savePackMetadata: 'Save pack metadata'
+    savePackMetadata: 'Save pack metadata',
+    addNewEmoji: 'Add new emoji to the pack',
+    shortcode: 'Shortcode',
+    uploadFile: 'Upload a file',
+    customFilename: 'Custom filename',
+    optional: 'optional',
+    customFilenameDesc: 'Custom file name (optional)',
+    url: 'URL',
+    required: 'required',
+    clickToUpload: 'Click to upload'
   },
   invites: {
     inviteTokens: 'Invite tokens',
