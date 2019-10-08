@@ -30,8 +30,18 @@
       </el-form-item>
     </el-form>
     <el-collapse v-model="showPackContent" class="contents-collapse">
-      <el-collapse-item :name="name" title="Show pack contents">
+      <el-collapse-item :title="$t('settings.addNewEmoji')" name="addEmoji">
         <new-emoji-uploader v-if="isLocal" :pack-name="name"/>
+      </el-collapse-item>
+      <el-collapse-item :title="$t('settings.manageEmoji')" name="manageEmoji">
+        <single-emoji-editor
+          v-for="(file, ename) in pack.files"
+          :key="ename"
+          :host="host"
+          :pack-name="name"
+          :name="ename"
+          :file="file"
+          :is-local="isLocal" />
       </el-collapse-item>
     </el-collapse>
   </el-collapse-item>

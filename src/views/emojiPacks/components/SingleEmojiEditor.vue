@@ -1,71 +1,50 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :span="4">
-      <el-input v-if="isLocal" v-model="modifyingName" placeholder="Name/Shortcode" />
-      <el-input v-else :value="modifyingName" placeholder="Name/Shortcode" />
-    </el-col>
-    <el-col :span="6">
-      <el-input v-if="isLocal" v-model="modifyingFile" placeholder="File"/>
-      <el-input v-else :value="modifyingFile" placeholder="File"/>
-    </el-col>
+  <div>
+    <div v-if="isLocal" class="emoji-container">
+      <img
+        :src="addressOfEmojiInPack(host, packName, file)"
+        class="emoji-preview-img">
+      <el-input v-model="emojiName" :placeholder="$t('settings.shortcode')" class="emoji-info"/>
+      <el-input v-model="emojiFile" :placeholder="$t('settings.file')" class="emoji-info"/>
+      <div class="emoji-buttons">
+        <el-button type="primary" class="emoji-button" @click="update">{{ $t('settings.update') }}</el-button>
+        <el-button class="emoji-button" @click="remove">{{ $t('settings.remove') }}</el-button>
+      </div>
+    </div>
 
-    <el-col v-if="isLocal" :span="2">
-      <el-button type="primary" @click="update">Update</el-button>
-    </el-col>
-    <el-col v-if="isLocal" :span="2">
-      <el-button type="danger" @click="remove">Remove</el-button>
-    </el-col>
-
-    <el-col v-if="!isLocal" :span="4">
-      <el-popover v-model="copyToLocalVisible" placement="bottom">
-        <p>Select the local pack to copy to</p>
-        <el-select v-model="copyToLocalPackName" placeholder="Local pack">
+    <div v-if="!isLocal" class="emoji-container">
+      <img
+        :src="addressOfEmojiInPack(host, packName, file)"
+        class="emoji-preview-img">
+      <el-input :value="emojiName" :placeholder="$t('settings.shortcode')" class="emoji-info"/>
+      <el-input :value="emojiFile" :placeholder="$t('settings.file')" class="emoji-info"/>
+      <el-popover v-model="copyPopoverVisible" placement="left-start" popper-class="copy-popover">
+        <p>{{ $t('settings.selectLocalPack') }}</p>
+        <el-select v-model="copyToLocalPackName" :placeholder="$t('settings.localPack')">
           <el-option
-            v-for="(_pack, name) in $store.state.emojiPacks.localPacks"
+            v-for="(_pack, name) in localPacks"
             :key="name"
             :label="name"
             :value="name" />
         </el-select>
-
-        <p>Specify a custom shortcode (leave empty to use the same shortcode)</p>
-        <el-input v-model="copyToShortcode" placeholder="Shortcode (optional)" />
-
-        <p>Specify a custom filename (leavy empty to use the same filename)</p>
-        <el-input v-model="copyToFilename" placeholder="Filename (optional)" />
-
+        <p>{{ $t('settings.specifyShortcode') }}</p>
+        <el-input v-model="copyToShortcode" :placeholder="$t('settings.leaveEmptyShortcode')"/>
+        <p>{{ $t('settings.specifyFilename') }}</p>
+        <el-input v-model="copyToFilename" :placeholder="$t('settings.leaveEmptyFilename')"/>
         <el-button
           :disabled="!copyToLocalPackName"
-          type="success"
+          type="primary"
           class="copy-to-local-button"
-          @click="copyToLocal">Copy</el-button>
-
-        <el-button slot="reference" type="primary">Copy to local pack...</el-button>
+          @click="copyToLocal">{{ $t('settings.copy') }}</el-button>
+        <el-button slot="reference" type="primary" class="emoji-button">{{ $t('settings.copyToLocalPack') }}</el-button>
       </el-popover>
-    </el-col>
-
-    <el-col :span="2">
-      <img
-        :src="addressOfEmojiInPack(host, packName, file)"
-        class="emoji-preview-img">
-    </el-col>
-  </el-row>
+    </div>
+  </div>
 </template>
-
-<style>
-  .emoji-preview-img {
-    max-width: 5em;
-  }
-
-  .copy-to-local-button {
-    margin-top: 2em;
-    float: right;
-  }
-</style>
 
 <script>
 
 import { addressOfEmojiInPack } from '@/api/emojiPacks'
-
 export default {
   props: {
     host: {
@@ -89,33 +68,33 @@ export default {
       required: true
     }
   },
-
   data() {
     return {
       newName: null,
       newFile: null,
-
       copyToLocalPackName: null,
-      copyToLocalVisible: false,
+      copyPopoverVisible: false,
       copyToShortcode: '',
       copyToFilename: ''
     }
   },
-
   computed: {
-    modifyingName: {
+    emojiName: {
       get() {
-        // Return a modified name if it was actually modified, otherwise return the old name
+        // Return a modified name if it was modified, otherwise return the old name
         return this.newName !== null ? this.newName : this.name
       },
       set(val) { this.newName = val }
     },
-    modifyingFile: {
+    emojiFile: {
       get() {
-        // Return a modified name if it was actually modified, otherwise return the old name
+        // Return a modified name if it was modified, otherwise return the old name
         return this.newFile !== null ? this.newFile : this.file
       },
       set(val) { this.newFile = val }
+    },
+    localPacks() {
+      return this.$store.state.emojiPacks.localPacks
     }
   },
   methods: {
@@ -124,8 +103,8 @@ export default {
         action: 'update',
         packName: this.packName,
         oldName: this.name,
-        newName: this.modifyingName,
-        newFilename: this.modifyingFile
+        newName: this.emojiName,
+        newFilename: this.emojiFile
       }).then(() => {
         this.newName = null
         this.newFile = null
@@ -151,7 +130,6 @@ export default {
         })
       })
     },
-
     copyToLocal() {
       this.$store.dispatch('UpdateAndSavePackFile', {
         action: 'add',
@@ -168,8 +146,35 @@ export default {
         this.$store.dispatch('ReloadEmoji')
       })
     },
-
     addressOfEmojiInPack
   }
 }
 </script>
+
+<style>
+.copy-popover {
+  width: 330px
+}
+.emoji-button {
+  margin-left: 10px
+}
+.emoji-buttons {
+  min-width: 210px
+}
+.emoji-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.emoji-preview-img {
+  max-width: 5em;
+}
+.emoji-info {
+  margin-left: 10px
+}
+.copy-to-local-button {
+  margin-top: 12px;
+  float: right;
+}
+</style>

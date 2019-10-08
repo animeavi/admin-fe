@@ -1,6 +1,5 @@
 <template>
   <el-form label-width="130px" label-position="left" size="small">
-    <div class="add-new-emoji">{{ $t('settings.addNewEmoji') }}</div>
     <el-form-item :label="$t('settings.shortcode')">
       <el-input v-model="shortcode" :placeholder="$t('settings.required')"/>
     </el-form-item>

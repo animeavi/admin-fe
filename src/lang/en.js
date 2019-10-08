@@ -339,7 +339,20 @@ export default {
     customFilenameDesc: 'Custom file name (optional)',
     url: 'URL',
     required: 'required',
-    clickToUpload: 'Click to upload'
+    clickToUpload: 'Click to upload',
+    showPackContents: 'Show pack contents',
+    manageEmoji: 'Manage existing emoji',
+    file: 'File',
+    update: 'Update',
+    remove: 'Remove',
+    selectLocalPack: 'Select the local pack to copy to',
+    localPack: 'Local pack',
+    specifyShortcode: 'Specify a custom shortcode',
+    specifyFilename: 'Specify a custom filename',
+    leaveEmptyShortcode: 'leave empty to use the same shortcode',
+    leaveEmptyFilename: 'leave empty to use the same filename',
+    copy: 'Copy',
+    copyToLocalPack: 'Copy to local pack'
   },
   invites: {
     inviteTokens: 'Invite tokens',
