@@ -352,7 +352,16 @@ export default {
     leaveEmptyShortcode: 'leave empty to use the same shortcode',
     leaveEmptyFilename: 'leave empty to use the same filename',
     copy: 'Copy',
-    copyToLocalPack: 'Copy to local pack'
+    copyToLocalPack: 'Copy to local pack',
+    thisWillDownload: 'This will download the',
+    downloadToCurrentInstance: 'pack to the current instance under the name',
+    canBeChanged: 'can be changed below',
+    willBeUsable: 'It will then be usable and shareable from the current instance',
+    downloadPack: 'Download pack',
+    deletePack: 'Delete pack',
+    downloadSharedPack: 'Download shared pack to current instance',
+    downloadAsOptional: 'Download as (optional)',
+    downloadPackArchive: 'Download pack archive'
   },
   invites: {
     inviteTokens: 'Invite tokens',

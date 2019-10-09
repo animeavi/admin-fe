@@ -25,15 +25,26 @@
         :label="$t('settings.fallbackSrcSha')">
         {{ pack.pack["fallback-src-sha256"] }}
       </el-form-item>
-      <el-form-item class="save-pack-button">
-        <el-button v-if="isLocal" type="primary" @click="savePackMetadata">{{ $t('settings.savePackMetadata') }}</el-button>
+      <el-form-item v-if="isLocal" class="save-pack-button">
+        <el-button type="primary" @click="savePackMetadata">{{ $t('settings.savePackMetadata') }}</el-button>
+        <el-button @click="deletePack">{{ $t('settings.deletePack') }}</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-link
+          v-if="pack.pack['can-download']"
+          :href="`//${host}/api/pleroma/emoji/packs/${name}/download_shared`"
+          :underline="false"
+          type="primary"
+          target="_blank">
+          <el-button class="download-archive">{{ $t('settings.downloadPackArchive') }}</el-button>
+        </el-link>
       </el-form-item>
     </el-form>
     <el-collapse v-model="showPackContent" class="contents-collapse">
-      <el-collapse-item :title="$t('settings.addNewEmoji')" name="addEmoji">
-        <new-emoji-uploader v-if="isLocal" :pack-name="name"/>
+      <el-collapse-item v-if="isLocal" :title="$t('settings.addNewEmoji')" name="addEmoji">
+        <new-emoji-uploader :pack-name="name"/>
       </el-collapse-item>
-      <el-collapse-item :title="$t('settings.manageEmoji')" name="manageEmoji">
+      <el-collapse-item v-if="Object.keys(pack.files).length > 0" :title="$t('settings.manageEmoji')" name="manageEmoji">
         <single-emoji-editor
           v-for="(file, ename) in pack.files"
           :key="ename"
@@ -43,24 +54,22 @@
           :file="file"
           :is-local="isLocal" />
       </el-collapse-item>
+      <el-collapse-item v-if="!isLocal" :title="$t('settings.downloadPack')" name="downloadPack">
+        <p>
+          {{ $t('settings.thisWillDownload') }} "{{ name }}" {{ $t('settings.downloadToCurrentInstance') }}
+          "{{ downloadSharedAs.trim() === '' ? name : downloadSharedAs }}" ({{ $t('settings.canBeChanged') }}).
+          {{ $t('settings.willBeUsable') }}.
+        </p>
+        <div class="download-shared-pack">
+          <el-input v-model="downloadSharedAs" :placeholder="$t('settings.downloadAsOptional')"/>
+          <el-button type="primary" class="download-shared-pack-button" @click="downloadFromInstance">
+            {{ $t('settings.downloadSharedPack') }}
+          </el-button>
+        </div>
+      </el-collapse-item>
     </el-collapse>
   </el-collapse-item>
 </template>
-
-<style>
-.el-collapse-item__content {
-  padding-bottom: 0;
-}
-.el-collapse-item__header {
-  height: 36px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #606266;
-}
-.emoji-pack-card {
-  margin-top: 5px;
-}
-</style>
 
 <script>
 import SingleEmojiEditor from './SingleEmojiEditor.vue'
@@ -179,3 +188,31 @@ export default {
   }
 }
 </script>
+
+<style>
+.download-archive {
+  width: 250px
+}
+.download-shared-pack {
+  display: flex;
+  margin-bottom: 10px;
+}
+.download-shared-pack-button {
+  margin-left: 10px;
+}
+.el-collapse-item__content {
+  padding-bottom: 0;
+}
+.el-collapse-item__header {
+  height: 36px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #606266;
+}
+.emoji-pack-card {
+  margin-top: 5px;
+}
+.save-pack-button {
+  margin-bottom: 5px
+}
+</style>
