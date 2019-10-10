@@ -308,7 +308,9 @@ export default {
         : this.$store.dispatch('AddTag', { users: [user], tag })
     },
     toggleUserRight(user, right) {
-      this.$store.dispatch('ToggleRight', { user, right })
+      user.roles[right]
+        ? this.$store.dispatch('DeleteRight', { users: [user], right })
+        : this.$store.dispatch('AddRight', { users: [user], right })
     }
   }
 }

@@ -76,6 +76,14 @@ const users = {
     }
   },
   actions: {
+    async AddRight({ dispatch, getters, state }, { users, right }) {
+      const usersNicknames = users.map(user => user.nickname)
+      await addRight(usersNicknames, right, getters.authHost, getters.token)
+
+      dispatch('FetchUsers', { page: state.currentPage })
+      // const updatedUser = { ...user, roles: { ...user.roles, [right]: !user.roles[right] }}
+      // commit('SWAP_USER', updatedUser)
+    },
     async AddTag({ commit, getters }, { users, tag }) {
       const nicknames = users.map(user => user.nickname)
       await tagUser(nicknames, [tag], getters.authHost, getters.token)
@@ -89,6 +97,14 @@ const users = {
     async CreateNewAccount({ dispatch, getters, state }, { nickname, email, password }) {
       await createNewAccount(nickname, email, password, getters.authHost, getters.token)
       dispatch('FetchUsers', { page: state.currentPage })
+    },
+    async DeleteRight({ dispatch, getters, state }, { users, right }) {
+      const usersNicknames = users.map(user => user.nickname)
+      await deleteRight(usersNicknames, right, getters.authHost, getters.token)
+
+      dispatch('FetchUsers', { page: state.currentPage })
+      // const updatedUser = { ...user, roles: { ...user.roles, [right]: !user.roles[right] }}
+      // commit('SWAP_USER', updatedUser)
     },
     async DeleteUser({ commit, getters, state }, user) {
       const { data } = await deleteUser(user.nickname, getters.authHost, getters.token)
@@ -146,14 +162,6 @@ const users = {
       const currentFilters = { ...defaultFilters, ...filters }
       commit('SET_USERS_FILTERS', currentFilters)
       dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
-    },
-    async ToggleRight({ commit, getters }, { user, right }) {
-      user.roles[right]
-        ? await deleteRight(user.nickname, right, getters.authHost, getters.token)
-        : await addRight(user.nickname, right, getters.authHost, getters.token)
-
-      const updatedUser = { ...user, roles: { ...user.roles, [right]: !user.roles[right] }}
-      commit('SWAP_USER', updatedUser)
     }
   }
 }

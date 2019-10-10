@@ -2,12 +2,13 @@ import request from '@/utils/request'
 import { getToken } from '@/utils/auth'
 import { baseName } from './utils'
 
-export async function addRight(nickname, right, authHost, token) {
+export async function addRight(nicknames, right, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/users/${nickname}/permission_group/${right}`,
+    url: `/api/pleroma/admin/users/permission_group/${right}`,
     method: 'post',
-    headers: authHeaders(token)
+    headers: authHeaders(token),
+    data: { nicknames }
   })
 }
 
@@ -21,12 +22,13 @@ export async function createNewAccount(nickname, email, password, authHost, toke
   })
 }
 
-export async function deleteRight(nickname, right, authHost, token) {
+export async function deleteRight(nicknames, right, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/users/${nickname}/permission_group/${right}`,
+    url: `/api/pleroma/admin/users/permission_group/${right}`,
     method: 'delete',
-    headers: authHeaders(token)
+    headers: authHeaders(token),
+    data: { nicknames }
   })
 }
 

@@ -48,7 +48,7 @@ export async function searchUsers(query, filters, authHost, token, page = 1) {
   }})
 }
 
-export async function addRight(nickname, right, authHost, token) {
+export async function addRight(nicknames, right, authHost, token) {
   return Promise.resolve({ data:
     { [`is_${right}`]: true }
   })
