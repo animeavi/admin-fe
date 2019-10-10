@@ -1,5 +1,5 @@
 <template>
-  <el-collapse-item :title="name" :name="name">
+  <el-collapse-item :title="name" :name="name" class="has-background">
     <el-form label-width="120px" label-position="left" size="small">
       <el-form-item :label="$t('settings.sharePack')">
         <el-switch v-model="share" :disabled="!isLocal" />
@@ -41,10 +41,10 @@
       </el-form-item>
     </el-form>
     <el-collapse v-model="showPackContent" class="contents-collapse">
-      <el-collapse-item v-if="isLocal" :title="$t('settings.addNewEmoji')" name="addEmoji">
+      <el-collapse-item v-if="isLocal" :title="$t('settings.addNewEmoji')" name="addEmoji" class="no-background">
         <new-emoji-uploader :pack-name="name"/>
       </el-collapse-item>
-      <el-collapse-item v-if="Object.keys(pack.files).length > 0" :title="$t('settings.manageEmoji')" name="manageEmoji">
+      <el-collapse-item v-if="Object.keys(pack.files).length > 0" :title="$t('settings.manageEmoji')" name="manageEmoji" class="no-background">
         <single-emoji-editor
           v-for="(file, ename) in pack.files"
           :key="ename"
@@ -54,7 +54,7 @@
           :file="file"
           :is-local="isLocal" />
       </el-collapse-item>
-      <el-collapse-item v-if="!isLocal" :title="$t('settings.downloadPack')" name="downloadPack">
+      <el-collapse-item v-if="!isLocal" :title="$t('settings.downloadPack')" name="downloadPack" class="no-background">
         <p>
           {{ $t('settings.thisWillDownload') }} "{{ name }}" {{ $t('settings.downloadToCurrentInstance') }}
           "{{ downloadSharedAs.trim() === '' ? name : downloadSharedAs }}" ({{ $t('settings.canBeChanged') }}).
@@ -189,7 +189,7 @@ export default {
 }
 </script>
 
-<style>
+<style rel='stylesheet/scss' lang='scss'>
 .download-archive {
   width: 250px
 }
@@ -211,6 +211,12 @@ export default {
 }
 .emoji-pack-card {
   margin-top: 5px;
+}
+.has-background .el-collapse-item__header {
+  background: #f6f6f6;
+}
+.no-background .el-collapse-item__header {
+  background: white;
 }
 .save-pack-button {
   margin-bottom: 5px
