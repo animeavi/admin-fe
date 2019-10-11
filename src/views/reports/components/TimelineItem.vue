@@ -21,7 +21,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
                 v-if="showDeactivatedButton(report.account)"
-                @click.native="handleDeactivation(report.account)">
+                @click.native="toggleActivation(report.account)">
                 {{ report.account.deactivated ? $t('users.activateAccount') : $t('users.deactivateAccount') }}
               </el-dropdown-item>
               <el-dropdown-item
@@ -139,17 +139,19 @@ export default {
           return 'primary'
       }
     },
+    handleDeletion(user) {
+      this.$store.dispatch('DeleteUser', user)
+    },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('L HH:mm')
     },
     showDeactivatedButton(id) {
       return this.$store.state.user.id !== id
     },
-    handleDeactivation({ nickname }) {
-      this.$store.dispatch('ToggleUserActivation', nickname)
-    },
-    handleDeletion(user) {
-      this.$store.dispatch('DeleteUser', user)
+    toggleActivation({ deactivated, nickname }) {
+      deactivated
+        ? this.$store.dispatch('ActivateUsers', [nickname])
+        : this.$store.dispatch('DeactivateUsers', [nickname])
     },
     toggleTag(user, tag) {
       user.tags.includes(tag)

@@ -1,13 +1,14 @@
 import {
+  activateUsers,
   addRight,
   createNewAccount,
+  deactivateUsers,
   deleteRight,
   deleteUser,
   fetchUsers,
   getPasswordResetToken,
   searchUsers,
   tagUser,
-  toggleUserActivation,
   untagUser,
   requirePasswordReset
 } from '@/api/users'
@@ -76,6 +77,10 @@ const users = {
     }
   },
   actions: {
+    async ActivateUsers({ commit, getters }, nicknames) {
+      const { data } = await activateUsers(nicknames, getters.authHost, getters.token)
+      commit('SWAP_USERS', data)
+    },
     async AddRight({ dispatch, getters, state }, { users, right }) {
       const usersNicknames = users.map(user => user.nickname)
       await addRight(usersNicknames, right, getters.authHost, getters.token)
@@ -97,6 +102,10 @@ const users = {
     async CreateNewAccount({ dispatch, getters, state }, { nickname, email, password }) {
       await createNewAccount(nickname, email, password, getters.authHost, getters.token)
       dispatch('FetchUsers', { page: state.currentPage })
+    },
+    async DeactivateUsers({ commit, getters }, nicknames) {
+      const { data } = await deactivateUsers(nicknames, getters.authHost, getters.token)
+      commit('SWAP_USERS', data)
     },
     async DeleteRight({ dispatch, getters, state }, { users, right }) {
       const usersNicknames = users.map(user => user.nickname)
@@ -147,10 +156,6 @@ const users = {
 
         loadUsers(commit, page, response.data)
       }
-    },
-    async ToggleUserActivation({ commit, getters }, nickname) {
-      const { data } = await toggleUserActivation(nickname, getters.authHost, getters.token)
-      commit('SWAP_USER', data)
     },
     async ToggleUsersFilter({ commit, dispatch, state }, filters) {
       const defaultFilters = {

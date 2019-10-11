@@ -2,6 +2,16 @@ import request from '@/utils/request'
 import { getToken } from '@/utils/auth'
 import { baseName } from './utils'
 
+export async function activateUsers(nicknames, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/users/activate`,
+    method: 'patch',
+    headers: authHeaders(token),
+    data: { nicknames }
+  })
+}
+
 export async function addRight(nicknames, right, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
@@ -19,6 +29,16 @@ export async function createNewAccount(nickname, email, password, authHost, toke
     method: 'post',
     headers: authHeaders(token),
     data: { users: [{ nickname, email, password }] }
+  })
+}
+
+export async function deactivateUsers(nicknames, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/users/deactivate`,
+    method: 'patch',
+    headers: authHeaders(token),
+    data: { nicknames }
   })
 }
 
@@ -93,15 +113,6 @@ export async function tagUser(nicknames, tags, authHost, token) {
     method: 'put',
     headers: authHeaders(token),
     data: { nicknames, tags }
-  })
-}
-
-export async function toggleUserActivation(nickname, authHost, token) {
-  return await request({
-    baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/users/${nickname}/toggle_activation`,
-    method: 'patch',
-    headers: authHeaders(token)
   })
 }
 

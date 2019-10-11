@@ -80,7 +80,7 @@
               <el-dropdown-item
                 v-if="showDeactivatedButton(scope.row.id)"
                 :divided="showAdminAction(scope.row)"
-                @click.native="handleDeactivation(scope.row)">
+                @click.native="toggleActivation(scope.row)">
                 {{ scope.row.deactivated ? $t('users.activateAccount') : $t('users.deactivateAccount') }}
               </el-dropdown-item>
               <el-dropdown-item
@@ -275,8 +275,10 @@ export default {
 
       this.$store.dispatch('RequirePasswordReset', { nickname })
     },
-    handleDeactivation({ nickname }) {
-      this.$store.dispatch('ToggleUserActivation', nickname)
+    toggleActivation({ deactivated, nickname }) {
+      deactivated
+        ? this.$store.dispatch('ActivateUsers', [nickname])
+        : this.$store.dispatch('DeactivateUsers', [nickname])
     },
     handleDeletion(user) {
       this.$store.dispatch('DeleteUser', user)
