@@ -148,10 +148,10 @@ export default {
     showDeactivatedButton(id) {
       return this.$store.state.user.id !== id
     },
-    toggleActivation({ deactivated, nickname }) {
-      deactivated
-        ? this.$store.dispatch('ActivateUsers', [nickname])
-        : this.$store.dispatch('DeactivateUsers', [nickname])
+    toggleActivation(user) {
+      user.deactivated
+        ? this.$store.dispatch('ActivateUsers', [user])
+        : this.$store.dispatch('DeactivateUsers', [user])
     },
     toggleTag(user, tag) {
       user.tags.includes(tag)

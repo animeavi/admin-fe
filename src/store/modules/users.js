@@ -77,8 +77,9 @@ const users = {
     }
   },
   actions: {
-    async ActivateUsers({ commit, getters }, nicknames) {
-      const { data } = await activateUsers(nicknames, getters.authHost, getters.token)
+    async ActivateUsers({ commit, getters }, users) {
+      const usersNicknames = users.map(user => user.nickname)
+      const { data } = await activateUsers(usersNicknames, getters.authHost, getters.token)
       commit('SWAP_USERS', data)
     },
     async AddRight({ dispatch, getters, state }, { users, right }) {
@@ -103,8 +104,9 @@ const users = {
       await createNewAccount(nickname, email, password, getters.authHost, getters.token)
       dispatch('FetchUsers', { page: state.currentPage })
     },
-    async DeactivateUsers({ commit, getters }, nicknames) {
-      const { data } = await deactivateUsers(nicknames, getters.authHost, getters.token)
+    async DeactivateUsers({ commit, getters }, users) {
+      const usersNicknames = users.map(user => user.nickname)
+      const { data } = await deactivateUsers(usersNicknames, getters.authHost, getters.token)
       commit('SWAP_USERS', data)
     },
     async DeleteRight({ dispatch, getters, state }, { users, right }) {

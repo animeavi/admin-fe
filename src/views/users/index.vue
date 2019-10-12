@@ -275,10 +275,10 @@ export default {
 
       this.$store.dispatch('RequirePasswordReset', { nickname })
     },
-    toggleActivation({ deactivated, nickname }) {
-      deactivated
-        ? this.$store.dispatch('ActivateUsers', [nickname])
-        : this.$store.dispatch('DeactivateUsers', [nickname])
+    toggleActivation(user) {
+      user.deactivated
+        ? this.$store.dispatch('ActivateUsers', [user])
+        : this.$store.dispatch('DeactivateUsers', [user])
     },
     handleDeletion(user) {
       this.$store.dispatch('DeleteUser', user)
