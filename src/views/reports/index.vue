@@ -208,9 +208,6 @@ export default {
       return this.$store.state.reports.fetchedReports
     }
   },
-  created() {
-    window.addEventListener('scroll', this.handleScroll)
-  },
   methods: {
     toggleReportsGrouping() {
       this.$store.dispatch('ToggleReportsGrouping')
