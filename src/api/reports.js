@@ -24,4 +24,13 @@ export async function fetchReports(filter, page, pageSize, authHost, token) {
   })
 }
 
+export async function fetchGroupedReports(authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/grouped_reports`,
+    method: 'get',
+    headers: authHeaders(token)
+  })
+}
+
 const authHeaders = (token) => token ? { 'Authorization': `Bearer ${getToken()}` } : {}

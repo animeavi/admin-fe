@@ -1,8 +1,9 @@
-import { changeState, fetchReports } from '@/api/reports'
+import { changeState, fetchReports, fetchGroupedReports } from '@/api/reports'
 
 const reports = {
   state: {
     fetchedReports: [],
+    fetchedGroupedReports: [],
     totalReportsCount: 0,
     currentPage: 1,
     pageSize: 50,
@@ -22,6 +23,9 @@ const reports = {
     },
     SET_REPORTS: (state, reports) => {
       state.fetchedReports = reports
+    },
+    SET_GROUPED_REPORTS: (state, reports) => {
+      state.fetchedGroupedReports = reports
     },
     SET_REPORTS_COUNT: (state, total) => {
       state.totalReportsCount = total
@@ -49,6 +53,14 @@ const reports = {
       commit('SET_REPORTS', data.reports)
       commit('SET_REPORTS_COUNT', data.total)
       commit('SET_PAGE', page)
+      commit('SET_LOADING', false)
+    },
+    async FetchGroupedReports({ commit, getters }) {
+      commit('SET_LOADING', true)
+      const { data } = await fetchGroupedReports(getters.authHost, getters.token)
+      console.log(reports)
+
+      commit('SET_GROUPED_REPORTS', data.reports)
       commit('SET_LOADING', false)
     },
     SetFilter({ commit }, filter) {

@@ -70,6 +70,9 @@ export default {
       required: true
     }
   },
+  mounted() {
+    this.$store.dispatch('FetchGroupedReports', 1)
+  },
   methods: {
     changeAllReports(reportState, groupOfReports) {
       console.log(groupOfReports)
