@@ -52,12 +52,13 @@ export async function deleteRight(nicknames, right, authHost, token) {
   })
 }
 
-export async function deleteUser(nickname, authHost, token) {
+export async function deleteUsers(nicknames, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/users?nickname=${nickname}`,
+    url: `/api/pleroma/admin/users`,
     method: 'delete',
-    headers: authHeaders(token)
+    headers: authHeaders(token),
+    data: { nicknames }
   })
 }
 

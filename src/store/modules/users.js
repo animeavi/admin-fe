@@ -4,7 +4,7 @@ import {
   createNewAccount,
   deactivateUsers,
   deleteRight,
-  deleteUser,
+  deleteUsers,
   fetchUsers,
   getPasswordResetToken,
   searchUsers,
@@ -77,24 +77,20 @@ const users = {
     }
   },
   actions: {
-    async ActivateUsers({ commit, getters }, users) {
+    async ActivateUsers({ dispatch, getters, state }, users) {
       const usersNicknames = users.map(user => user.nickname)
-      const { data } = await activateUsers(usersNicknames, getters.authHost, getters.token)
-      commit('SWAP_USERS', data)
+      await activateUsers(usersNicknames, getters.authHost, getters.token)
+      dispatch('FetchUsers', { page: state.currentPage })
     },
     async AddRight({ dispatch, getters, state }, { users, right }) {
       const usersNicknames = users.map(user => user.nickname)
       await addRight(usersNicknames, right, getters.authHost, getters.token)
-
       dispatch('FetchUsers', { page: state.currentPage })
-      // const updatedUser = { ...user, roles: { ...user.roles, [right]: !user.roles[right] }}
-      // commit('SWAP_USER', updatedUser)
     },
-    async AddTag({ commit, getters }, { users, tag }) {
+    async AddTag({ dispatch, getters, state }, { users, tag }) {
       const nicknames = users.map(user => user.nickname)
       await tagUser(nicknames, [tag], getters.authHost, getters.token)
-
-      commit('SWAP_USERS', users.map(user => ({ ...user, tags: [...user.tags, tag] })))
+      dispatch('FetchUsers', { page: state.currentPage })
     },
     async ClearFilters({ commit, dispatch, state }) {
       commit('CLEAR_USERS_FILTERS')
@@ -104,46 +100,41 @@ const users = {
       await createNewAccount(nickname, email, password, getters.authHost, getters.token)
       dispatch('FetchUsers', { page: state.currentPage })
     },
-    async DeactivateUsers({ commit, getters }, users) {
+    async DeactivateUsers({ dispatch, getters, state }, users) {
       const usersNicknames = users.map(user => user.nickname)
-      const { data } = await deactivateUsers(usersNicknames, getters.authHost, getters.token)
-      commit('SWAP_USERS', data)
+      await deactivateUsers(usersNicknames, getters.authHost, getters.token)
+      dispatch('FetchUsers', { page: state.currentPage })
     },
     async DeleteRight({ dispatch, getters, state }, { users, right }) {
       const usersNicknames = users.map(user => user.nickname)
       await deleteRight(usersNicknames, right, getters.authHost, getters.token)
-
       dispatch('FetchUsers', { page: state.currentPage })
-      // const updatedUser = { ...user, roles: { ...user.roles, [right]: !user.roles[right] }}
-      // commit('SWAP_USER', updatedUser)
     },
-    async DeleteUser({ commit, getters, state }, user) {
-      const { data } = await deleteUser(user.nickname, getters.authHost, getters.token)
-      const users = state.fetchedUsers.filter(user => user.nickname !== data)
-      commit('SET_USERS', users)
+    async DeleteUsers({ dispatch, getters, state }, users) {
+      const usersNicknames = users.map(user => user.nickname)
+      await deleteUsers(usersNicknames, getters.authHost, getters.token)
     },
-    async RequirePasswordReset({ commit, getters, state }, user) {
+    async RequirePasswordReset({ getters }, user) {
       await requirePasswordReset(user.nickname, getters.authHost, getters.token)
     },
-    async FetchUsers({ commit, state, getters, dispatch }, { page }) {
+    async FetchUsers({ commit, dispatch, getters, state }, { page }) {
       commit('SET_LOADING', true)
       const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
       const response = await fetchUsers(filters, getters.authHost, getters.token, page)
-      await dispatch('GetNodeInfo')
+      // await dispatch('GetNodeInfo')
       loadUsers(commit, page, response.data)
     },
-    async GetPasswordResetToken({ commit, state, getters }, nickname) {
+    async GetPasswordResetToken({ commit, getters }, nickname) {
       const { data } = await getPasswordResetToken(nickname, getters.authHost, getters.token)
       commit('SET_PASSWORD_RESET_TOKEN', data)
     },
     RemovePasswordToken({ commit }) {
       commit('SET_PASSWORD_RESET_TOKEN', { link: '', token: '' })
     },
-    async RemoveTag({ commit, getters }, { users, tag }) {
+    async RemoveTag({ dispatch, getters, state }, { users, tag }) {
       const nicknames = users.map(user => user.nickname)
       await untagUser(nicknames, [tag], getters.authHost, getters.token)
-
-      commit('SWAP_USERS', users.map(user => ({ ...user, tags: user.tags.filter(userTag => userTag !== tag) })))
+      dispatch('FetchUsers', { page: state.currentPage })
     },
     async SearchUsers({ commit, dispatch, state, getters }, { query, page }) {
       if (query.length === 0) {

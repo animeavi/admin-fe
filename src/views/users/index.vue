@@ -281,7 +281,7 @@ export default {
         : this.$store.dispatch('DeactivateUsers', [user])
     },
     handleDeletion(user) {
-      this.$store.dispatch('DeleteUser', user)
+      this.$store.dispatch('DeleteUsers', [user])
     },
     handlePageChange(page) {
       const searchQuery = this.$store.state.users.searchQuery

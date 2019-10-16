@@ -140,7 +140,7 @@ export default {
       }
     },
     handleDeletion(user) {
-      this.$store.dispatch('DeleteUser', user)
+      this.$store.dispatch('DeleteUsers', [user])
     },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('L HH:mm')
