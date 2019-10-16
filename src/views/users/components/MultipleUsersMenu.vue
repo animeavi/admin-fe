@@ -150,9 +150,9 @@ export default {
   },
   methods: {
     mappers() {
-      const applyAction = (users, dispatchAction) => {
+      const applyAction = async(users, dispatchAction) => {
         try {
-          dispatchAction(users)
+          await dispatchAction(users)
         } catch (err) {
           console.log(err)
           return
@@ -192,7 +192,7 @@ export default {
         },
         remove: () => {
           const filtered = this.selectedUsers.filter(user => this.$store.state.user.id !== user.id)
-          const deleteAccountFn = async(user) => await this.$store.dispatch('DeleteUser', user)
+          const deleteAccountFn = async(users) => await this.$store.dispatch('DeleteUsers', users)
 
           applyAction(filtered, deleteAccountFn)
         },
