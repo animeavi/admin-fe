@@ -5,6 +5,7 @@ import errorLog from './modules/errorLog'
 import moderationLog from './modules/moderationLog'
 import invites from './modules/invites'
 import permission from './modules/permission'
+import relays from './modules/relays'
 import reports from './modules/reports'
 import settings from './modules/settings'
 import tagsView from './modules/tagsView'
@@ -23,6 +24,7 @@ const store = new Vuex.Store({
     moderationLog,
     invites,
     permission,
+    relays,
     reports,
     settings,
     tagsView,

@@ -312,6 +312,7 @@ export default {
     rateLimiters: 'Rate limiters',
     database: 'Database',
     other: 'Other',
+    relays: 'Relays',
     success: 'Settings changed successfully!'
   },
   invites: {

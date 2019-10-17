@@ -56,6 +56,9 @@
       <el-tab-pane :label="$t('settings.rateLimiters')">
         <rate-limiters/>
       </el-tab-pane>
+      <el-tab-pane :label="$t('settings.relays')">
+        <relays/>
+      </el-tab-pane>
       <el-tab-pane :label="$t('settings.upload')">
         <upload/>
       </el-tab-pane>
@@ -70,10 +73,10 @@
 </template>
 
 <script>
-import { ActivityPub, Authentication, AutoLinker, Captcha, Database, Endpoint, Esshd, Frontend, Gopher, Http, Instance, JobQueue, Logger, Mailer, MediaProxy, Metadata, Mrf, Other, RateLimiters, Upload, WebPush } from './components'
+import { ActivityPub, Authentication, AutoLinker, Captcha, Database, Endpoint, Esshd, Frontend, Gopher, Http, Instance, JobQueue, Logger, Mailer, MediaProxy, Metadata, Mrf, Other, RateLimiters, Relays, Upload, WebPush } from './components'
 
 export default {
-  components: { ActivityPub, Authentication, AutoLinker, Captcha, Database, Endpoint, Esshd, Frontend, Gopher, Http, Instance, JobQueue, Logger, Mailer, MediaProxy, Metadata, Mrf, Other, RateLimiters, Upload, WebPush },
+  components: { ActivityPub, Authentication, AutoLinker, Captcha, Database, Endpoint, Esshd, Frontend, Gopher, Http, Instance, JobQueue, Logger, Mailer, MediaProxy, Metadata, Mrf, Other, RateLimiters, Relays, Upload, WebPush },
   computed: {
     isMobile() {
       return this.$store.state.app.device === 'mobile'
