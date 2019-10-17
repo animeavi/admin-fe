@@ -38,12 +38,6 @@ const users = {
     SET_LOADING: (state, status) => {
       state.loading = status
     },
-    SWAP_USER: (state, updatedUser) => {
-      const updated = state.fetchedUsers.map(user => user.id === updatedUser.id ? updatedUser : user)
-      state.fetchedUsers = updated
-        .map(user => user.nickname ? user : { ...user, nickname: '' })
-        .sort((a, b) => a.nickname.localeCompare(b.nickname))
-    },
     SWAP_USERS: (state, users) => {
       const usersWithoutSwapped = users.reduce((acc, user) => {
         return acc.filter(u => u.id !== user.id)
@@ -77,17 +71,32 @@ const users = {
     }
   },
   actions: {
-    async ActivateUsers({ dispatch, getters, state }, users) {
+    async ActivateUsers({ commit, dispatch, getters, state }, users) {
+      const updatedUsers = users.map(user => {
+        return { ...user, deactivated: false }
+      })
+      commit('SWAP_USERS', updatedUsers)
+
       const usersNicknames = users.map(user => user.nickname)
       await activateUsers(usersNicknames, getters.authHost, getters.token)
       dispatch('FetchUsers', { page: state.currentPage })
     },
-    async AddRight({ dispatch, getters, state }, { users, right }) {
+    async AddRight({ commit, dispatch, getters, state }, { users, right }) {
+      const updatedUsers = users.map(user => {
+        return user.local ? { ...user, roles: { ...user.roles, [right]: true }} : user
+      })
+      commit('SWAP_USERS', updatedUsers)
+
       const usersNicknames = users.map(user => user.nickname)
       await addRight(usersNicknames, right, getters.authHost, getters.token)
       dispatch('FetchUsers', { page: state.currentPage })
     },
-    async AddTag({ dispatch, getters, state }, { users, tag }) {
+    async AddTag({ commit, dispatch, getters, state }, { users, tag }) {
+      const updatedUsers = users.map(user => {
+        return { ...user, tags: [...user.tags, tag] }
+      })
+      commit('SWAP_USERS', updatedUsers)
+
       const nicknames = users.map(user => user.nickname)
       await tagUser(nicknames, [tag], getters.authHost, getters.token)
       dispatch('FetchUsers', { page: state.currentPage })
@@ -100,17 +109,31 @@ const users = {
       await createNewAccount(nickname, email, password, getters.authHost, getters.token)
       dispatch('FetchUsers', { page: state.currentPage })
     },
-    async DeactivateUsers({ dispatch, getters, state }, users) {
+    async DeactivateUsers({ commit, dispatch, getters, state }, users) {
+      const updatedUsers = users.map(user => {
+        return { ...user, deactivated: true }
+      })
+      commit('SWAP_USERS', updatedUsers)
+
       const usersNicknames = users.map(user => user.nickname)
       await deactivateUsers(usersNicknames, getters.authHost, getters.token)
       dispatch('FetchUsers', { page: state.currentPage })
     },
-    async DeleteRight({ dispatch, getters, state }, { users, right }) {
+    async DeleteRight({ commit, dispatch, getters, state }, { users, right }) {
+      const updatedUsers = users.map(user => {
+        return user.local ? { ...user, roles: { ...user.roles, [right]: false }} : user
+      })
+      commit('SWAP_USERS', updatedUsers)
+
       const usersNicknames = users.map(user => user.nickname)
       await deleteRight(usersNicknames, right, getters.authHost, getters.token)
       dispatch('FetchUsers', { page: state.currentPage })
     },
-    async DeleteUsers({ dispatch, getters, state }, users) {
+    async DeleteUsers({ commit, getters, state }, users) {
+      const deletedUsersIds = users.map(deletedUser => deletedUser.id)
+      const updatedUsers = state.fetchedUsers.filter(user => !deletedUsersIds.includes(user.id))
+      commit('SET_USERS', updatedUsers)
+
       const usersNicknames = users.map(user => user.nickname)
       await deleteUsers(usersNicknames, getters.authHost, getters.token)
     },
@@ -131,7 +154,12 @@ const users = {
     RemovePasswordToken({ commit }) {
       commit('SET_PASSWORD_RESET_TOKEN', { link: '', token: '' })
     },
-    async RemoveTag({ dispatch, getters, state }, { users, tag }) {
+    async RemoveTag({ commit, dispatch, getters, state }, { users, tag }) {
+      const updatedUsers = users.map(user => {
+        return { ...user, tags: user.tags.filter(userTag => userTag !== tag) }
+      })
+      commit('SWAP_USERS', updatedUsers)
+
       const nicknames = users.map(user => user.nickname)
       await untagUser(nicknames, [tag], getters.authHost, getters.token)
       dispatch('FetchUsers', { page: state.currentPage })
