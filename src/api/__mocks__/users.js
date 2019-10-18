@@ -52,7 +52,6 @@ export async function activateUsers(nicknames, authHost, token) {
 }
 
 export async function addRight(nicknames, right, authHost, token) {
-  console.log(nicknames)
   return Promise.resolve({ data:
     { [`is_${right}`]: true }
   })
@@ -72,9 +71,9 @@ export async function deleteRight(nickname, right, authHost, token) {
   })
 }
 
-export async function deleteUser(nickname, authHost, token) {
+export async function deleteUsers(nicknames, authHost, token) {
   return Promise.resolve({ data:
-    nickname
+    nicknames
   })
 }
 
