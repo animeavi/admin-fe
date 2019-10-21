@@ -1,33 +1,61 @@
 <template>
   <el-collapse-item :title="name" :name="name" class="has-background">
-    <el-form label-width="120px" label-position="left" size="small">
+    <el-form v-if="isLocal" label-width="120px" label-position="left" size="small" class="emoji-pack-metadata">
       <el-form-item :label="$t('settings.sharePack')">
-        <el-switch v-model="share" :disabled="!isLocal" />
+        <el-switch v-model="share" />
       </el-form-item>
       <el-form-item :label="$t('settings.homepage')">
-        <el-input v-if="isLocal" v-model="homepage" />
-        <el-input v-else :value="homepage" />
+        <el-input v-model="homepage" />
       </el-form-item>
       <el-form-item :label="$t('settings.description')">
-        <el-input v-if="isLocal" v-model="description" type="textarea" />
-        <el-input v-else :value="description" type="textarea" />
+        <el-input v-model="description" type="textarea" />
       </el-form-item>
       <el-form-item :label="$t('settings.license')">
-        <el-input v-if="isLocal" v-model="license" />
-        <el-input v-else :value="license" />
+        <el-input v-model="license" />
       </el-form-item>
       <el-form-item :label="$t('settings.fallbackSrc')">
-        <el-input v-if="isLocal" v-model="fallbackSrc" />
-        <el-input v-else :value="fallbackSrc" />
+        <el-input v-model="fallbackSrc" />
       </el-form-item>
       <el-form-item
         v-if="fallbackSrc && fallbackSrc.trim() !== ''"
         :label="$t('settings.fallbackSrcSha')">
         {{ pack.pack["fallback-src-sha256"] }}
       </el-form-item>
-      <el-form-item v-if="isLocal" class="save-pack-button">
+      <el-form-item class="save-pack-button">
         <el-button type="primary" @click="savePackMetadata">{{ $t('settings.savePackMetadata') }}</el-button>
         <el-button @click="deletePack">{{ $t('settings.deletePack') }}</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-link
+          v-if="pack.pack['can-download']"
+          :href="`//${host}/api/pleroma/emoji/packs/${name}/download_shared`"
+          :underline="false"
+          type="primary"
+          target="_blank">
+          <el-button class="download-archive">{{ $t('settings.downloadPackArchive') }}</el-button>
+        </el-link>
+      </el-form-item>
+    </el-form>
+    <el-form v-if="!isLocal" label-width="120px" label-position="left" size="small" class="emoji-pack-metadata">
+      <el-form-item :label="$t('settings.sharePack')">
+        <el-switch v-model="share" disabled />
+      </el-form-item>
+      <el-form-item v-if="homepage" :label="$t('settings.homepage')">
+        <span>{{ homepage }}</span>
+      </el-form-item>
+      <el-form-item v-if="description" :label="$t('settings.description')">
+        <span>{{ description }}</span>
+      </el-form-item>
+      <el-form-item v-if="license" :label="$t('settings.license')">
+        <span>{{ license }}</span>
+      </el-form-item>
+      <el-form-item v-if="fallbackSrc" :label="$t('settings.fallbackSrc')">
+        <span>{{ fallbackSrc }}</span>
+      </el-form-item>
+      <el-form-item
+        v-if="fallbackSrc && fallbackSrc.trim() !== ''"
+        :label="$t('settings.fallbackSrcSha')">
+        {{ pack.pack["fallback-src-sha256"] }}
       </el-form-item>
       <el-form-item>
         <el-link
@@ -211,6 +239,11 @@ export default {
 }
 .emoji-pack-card {
   margin-top: 5px;
+}
+.emoji-pack-metadata {
+  .el-form-item {
+    margin-bottom: 10px;
+  }
 }
 .has-background .el-collapse-item__header {
   background: #f6f6f6;
