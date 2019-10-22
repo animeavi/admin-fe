@@ -15,9 +15,12 @@ service.interceptors.response.use(
 
     // If there's an "error" property in the json, use it
     const edata = error.response.data.error ? error.response.data.error : error.response.data
+    const message = !error.response.headers['content-type'].includes('application/json')
+      ? `${error.message}`
+      : `${error.message} - ${edata}`
 
     Message({
-      message: `${error.message} - ${edata}`,
+      message,
       type: 'error',
       duration: 5 * 1000
     })
