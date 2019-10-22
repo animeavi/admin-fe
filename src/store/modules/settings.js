@@ -1,5 +1,4 @@
 import { fetchSettings, updateSettings, uploadMedia } from '@/api/settings'
-import { initialSettings } from '@/api/initialDataForConfig'
 import { filterIgnored, parseTuples, valueHasTuples, wrapConfig } from './normalizers'
 
 const settings = {
@@ -116,11 +115,7 @@ const settings = {
     async FetchSettings({ commit, dispatch, getters }) {
       commit('SET_LOADING', true)
       const response = await fetchSettings(getters.authHost, getters.token)
-      if (response.data.configs.length === 0) {
-        dispatch('SubmitChanges', initialSettings)
-      } else {
-        commit('SET_SETTINGS', response.data.configs)
-      }
+      commit('SET_SETTINGS', response.data.configs)
       commit('SET_LOADING', false)
     },
     RewriteConfig({ commit }, { tab, data }) {

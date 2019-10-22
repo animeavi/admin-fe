@@ -33,11 +33,6 @@ export async function getPasswordResetToken(nickname, authHost, token) {
   return Promise.resolve({ data: { token: 'g05lxnBJQnL', link: 'http://url/api/pleroma/password_reset/g05lxnBJQnL' }})
 }
 
-export async function toggleUserActivation(nickname, authHost, token) {
-  const response = users.find(user => user.nickname === nickname)
-  return Promise.resolve({ data: { ...response, deactivated: !response.deactivated }})
-}
-
 export async function searchUsers(query, filters, authHost, token, page = 1) {
   const filteredUsers = filterUsers(filters)
   const response = filteredUsers.filter(user => user.nickname === query)
@@ -48,10 +43,26 @@ export async function searchUsers(query, filters, authHost, token, page = 1) {
   }})
 }
 
-export async function addRight(nickname, right, authHost, token) {
+export async function activateUsers(nicknames, authHost, token) {
+  const response = nicknames.map(nickname => {
+    const currentUser = users.find(user => user.nickname === nickname)
+    return { ...currentUser, deactivated: false }
+  })
+  return Promise.resolve({ data: response })
+}
+
+export async function addRight(nicknames, right, authHost, token) {
   return Promise.resolve({ data:
     { [`is_${right}`]: true }
   })
+}
+
+export async function deactivateUsers(nicknames, authHost, token) {
+  const response = nicknames.map(nickname => {
+    const currentUser = users.find(user => user.nickname === nickname)
+    return { ...currentUser, deactivated: true }
+  })
+  return Promise.resolve({ data: response })
 }
 
 export async function deleteRight(nickname, right, authHost, token) {
@@ -60,9 +71,9 @@ export async function deleteRight(nickname, right, authHost, token) {
   })
 }
 
-export async function deleteUser(nickname, authHost, token) {
+export async function deleteUsers(nicknames, authHost, token) {
   return Promise.resolve({ data:
-    nickname
+    nicknames
   })
 }
 

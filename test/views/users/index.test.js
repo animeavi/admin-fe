@@ -75,7 +75,7 @@ describe('Users actions', () => {
     store = new Vuex.Store(cloneDeep(storeConfig))
   })
 
-  it('grants admin and moderator rights to a local user', async (done) => {
+  it('grants admin right to a local user', async (done) => {
     const wrapper = mount(Users, {
       store,
       localVue,
@@ -87,14 +87,28 @@ describe('Users actions', () => {
     const user = store.state.users.fetchedUsers[2]
     expect(user.roles.admin).toBe(false)
     expect(user.roles.moderator).toBe(false)
-
     wrapper.find(htmlElement(3, 1)).trigger('click')
-    await flushPromises()
-    wrapper.find(htmlElement(3, 2)).trigger('click')
-    await flushPromises()
 
     const updatedUser = store.state.users.fetchedUsers[2]
     expect(updatedUser.roles.admin).toBe(true)
+    done()
+  })
+
+  it('grants moderator right to a local user', async (done) => {
+    const wrapper = mount(Users, {
+      store,
+      localVue,
+      sync: false,
+      stubs: ['router-link']
+    })
+    await flushPromises()
+
+    const user = store.state.users.fetchedUsers[2]
+    expect(user.roles.admin).toBe(false)
+    expect(user.roles.moderator).toBe(false)
+    wrapper.find(htmlElement(3, 2)).trigger('click')
+
+    const updatedUser = store.state.users.fetchedUsers[2]
     expect(updatedUser.roles.moderator).toBe(true)
     done()
   })
@@ -126,9 +140,7 @@ describe('Users actions', () => {
 
     const user = store.state.users.fetchedUsers[1]
     expect(user.deactivated).toBe(false)
-
     wrapper.find(htmlElement(2, 1)).trigger('click')
-    await flushPromises()
 
     const updatedUser = store.state.users.fetchedUsers[1]
     expect(updatedUser.deactivated).toBe(true)
@@ -166,9 +178,7 @@ describe('Users actions', () => {
     expect(user2.tags.length).toBe(1)
 
     wrapper.find(htmlElement(1, 5)).trigger('click')
-    await flushPromises()
     wrapper.find(htmlElement(2, 5)).trigger('click')
-    await flushPromises()
 
     const updatedUser1 = store.state.users.fetchedUsers[0]
     const updatedUser2 = store.state.users.fetchedUsers[1]
@@ -188,30 +198,10 @@ describe('Users actions', () => {
 
     const user = store.state.users.fetchedUsers[1]
     expect(user.tags.length).toBe(1)
-
     wrapper.find(htmlElement(2, 6)).trigger('click')
-    await flushPromises()
 
     const updatedUser = store.state.users.fetchedUsers[1]
     expect(updatedUser.tags.length).toBe(0)
-    done()
-  })
-
-  it('shows check icon when tag is added', async (done) => {
-    const wrapper = mount(Users, {
-      store,
-      localVue,
-      sync: false,
-      stubs: ['router-link']
-    })
-    await flushPromises()
-
-    expect(wrapper.find(`${htmlElement(1, 5)} i`).exists()).toBe(false)
-
-    wrapper.find(htmlElement(1, 5)).trigger('click')
-    await flushPromises()
-
-    expect(wrapper.find(`${htmlElement(1, 5)} i`).exists()).toBe(true)
     done()
   })
 
