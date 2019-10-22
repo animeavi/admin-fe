@@ -7,20 +7,20 @@
       <el-input v-model="customFileName" :placeholder="$t('settings.optional')"/>
     </el-form-item>
     <el-form-item :label="$t('settings.uploadFile')">
-      <!-- <div class="upload-file-url">
+      <div class="upload-file-url">
         <el-input v-model="imageUploadURL" :placeholder="$t('settings.url')"/>
-        <el-button :disabled="shortcodePresent" class="upload-button" @click="uploadEmoji">{{ $t('settings.upload') }}</el-button>
+        <el-button :disabled="shortcodePresent" type="primary" class="upload-button" @click="uploadEmoji">{{ $t('settings.upload') }}</el-button>
       </div>
       <div class="upload-container">
-        <p class="text">or</p>-->
-      <el-upload
-        :http-request="uploadEmoji"
-        :multiple="false"
-        :show-file-list="false"
-        action="add">
-        <el-button :disabled="shortcodePresent" type="primary">{{ $t('settings.clickToUpload') }}</el-button>
-      </el-upload>
-      <!-- </div> -->
+        <p class="text">or</p>
+        <el-upload
+          :http-request="uploadEmoji"
+          :multiple="false"
+          :show-file-list="false"
+          action="add">
+          <el-button :disabled="shortcodePresent" type="primary">{{ $t('settings.clickToUpload') }}</el-button>
+        </el-upload>
+      </div>
     </el-form-item>
   </el-form>
 </template>
@@ -75,11 +75,12 @@ export default {
         action: 'add',
         packName: this.packName,
         shortcode: this.shortcode,
-        file,
+        file: file || this.imageUploadURL,
         fileName: this.customFileName
       }).then(() => {
         this.shortcode = ''
         this.imageUploadURL = ''
+        this.customFileName = ''
 
         this.$store.dispatch('ReloadEmoji')
       })
