@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- moves emoji pack configuration from the main menu to settings tab, redesigns it and fixes bugs
 - `mailerEnabled` must be set to `true` in order to require password reset (password reset currently only works via email)
 
 ## [1.2.0] - 2019-09-27
