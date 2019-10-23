@@ -7,7 +7,7 @@ import {
   deletePack,
   savePackMetadata,
   importFromFS,
-  updatePackFile } from '@/api/emoji_packs'
+  updatePackFile } from '@/api/emojiPacks'
 
 import { Message } from 'element-ui'
 

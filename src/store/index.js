@@ -12,7 +12,7 @@ import user from './modules/user'
 import userProfile from './modules/userProfile'
 import users from './modules/users'
 import getters from './getters'
-import emoji_packs from './modules/emoji_packs.js'
+import emojiPacks from './modules/emojiPacks.js'
 
 Vue.use(Vuex)
 
@@ -29,7 +29,7 @@ const store = new Vuex.Store({
     user,
     userProfile,
     users,
-    emoji_packs
+    emojiPacks
   },
   getters
 })
