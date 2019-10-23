@@ -5,7 +5,7 @@
         <el-input v-model="newRelay" :placeholder="$t('settings.followRelay')" @keyup.enter.native="followRelay"/>
       </el-col>
       <el-col :span="8">
-        <el-button @click.native="followRelay">{{ $t('settings.follow') }}</el-button>
+        <el-button type="primary" @click.native="followRelay">{{ $t('settings.follow') }}</el-button>
       </el-col>
     </el-row>
     <el-table :data="relaysTable">
