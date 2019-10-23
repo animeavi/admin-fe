@@ -23,6 +23,9 @@
       <el-tab-pane :label="$t('settings.endpoint')">
         <endpoint/>
       </el-tab-pane>
+      <el-tab-pane :label="$t('settings.emojiPacks')">
+        <emoji-packs/>
+      </el-tab-pane>
       <el-tab-pane :label="$t('settings.frontend')">
         <frontend/>
       </el-tab-pane>
@@ -74,9 +77,10 @@
 
 <script>
 import { ActivityPub, Authentication, AutoLinker, Captcha, Database, Endpoint, Esshd, Frontend, Gopher, Http, Instance, JobQueue, Logger, Mailer, MediaProxy, Metadata, Mrf, Other, RateLimiters, Relays, Upload, WebPush } from './components'
+import EmojiPacks from '../emojiPacks/index'
 
 export default {
-  components: { ActivityPub, Authentication, AutoLinker, Captcha, Database, Endpoint, Esshd, Frontend, Gopher, Http, Instance, JobQueue, Logger, Mailer, MediaProxy, Metadata, Mrf, Other, RateLimiters, Relays, Upload, WebPush },
+  components: { ActivityPub, Authentication, AutoLinker, Captcha, Database, Endpoint, EmojiPacks, Esshd, Frontend, Gopher, Http, Instance, JobQueue, Logger, Mailer, MediaProxy, Metadata, Mrf, Other, RateLimiters, Relays, Upload, WebPush },
   computed: {
     isMobile() {
       return this.$store.state.app.device === 'mobile'

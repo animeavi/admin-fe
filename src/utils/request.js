@@ -10,14 +10,20 @@ const service = axios.create({
 service.interceptors.response.use(
   response => response,
   error => {
+    let errorMessage
     console.log(`Error ${error}`)
-    console.log(error.response.data)
 
-    // If there's an "error" property in the json, use it
-    const edata = error.response.data.error ? error.response.data.error : error.response.data
+    if (error.response) {
+      const edata = error.response.data.error ? error.response.data.error : error.response.data
+      errorMessage = !error.response.headers['content-type'].includes('application/json')
+        ? `${error.message}`
+        : `${error.message} - ${edata}`
+    } else {
+      errorMessage = error
+    }
 
     Message({
-      message: `${error.message} - ${edata}`,
+      message: errorMessage,
       type: 'error',
       duration: 5 * 1000
     })
