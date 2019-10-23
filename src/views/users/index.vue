@@ -61,7 +61,7 @@
       </el-table-column>
       <el-table-column :label="$t('users.actions')" fixed="right">
         <template slot-scope="scope">
-          <el-dropdown size="small" trigger="click">
+          <el-dropdown :hide-on-click="false" size="small" trigger="click">
             <span class="el-dropdown-link">
               {{ $t('users.moderation') }}
               <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
