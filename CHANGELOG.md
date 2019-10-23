@@ -14,7 +14,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Actions in users module (ActivateUsers, AddRight, DeactivateUsers, DeleteRight, DeleteUsers) now accept an array of users instead of one user
 
 ### Added
+
 - Optimistic update for actions in users module and fetching users after api function finished its execution
+- Relay management
 
 ## [1.2.0] - 2019-09-27
 
