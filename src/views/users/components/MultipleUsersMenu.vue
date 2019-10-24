@@ -151,16 +151,7 @@ export default {
   methods: {
     mappers() {
       const applyAction = async(users, dispatchAction) => {
-        try {
-          await dispatchAction(users)
-        } catch (err) {
-          console.log(err)
-          return
-        }
-        this.$message({
-          type: 'success',
-          message: this.$t('users.completed')
-        })
+        await dispatchAction(users)
         this.$emit('apply-action')
       }
       return {
