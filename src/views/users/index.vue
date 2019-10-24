@@ -245,17 +245,8 @@ export default {
       this.$refs.usersTable.clearSelection()
     },
     async createNewAccount(accountData) {
-      try {
-        await this.$store.dispatch('CreateNewAccount', accountData)
-      } catch (_e) {
-        return
-      } finally {
-        this.createAccountDialogOpen = false
-      }
-      this.$message({
-        type: 'success',
-        message: this.$t('users.accountCreated')
-      })
+      await this.$store.dispatch('CreateNewAccount', accountData)
+      this.createAccountDialogOpen = false
     },
     getFirstLetter(str) {
       return str.charAt(0).toUpperCase()

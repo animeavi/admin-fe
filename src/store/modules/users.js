@@ -1,3 +1,5 @@
+import { Message } from 'element-ui'
+import i18n from '@/lang'
 import {
   activateUsers,
   addRight,
@@ -78,8 +80,13 @@ const users = {
       commit('SWAP_USERS', updatedUsers)
 
       const usersNicknames = users.map(user => user.nickname)
-      await activateUsers(usersNicknames, getters.authHost, getters.token)
-      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      try {
+        await activateUsers(usersNicknames, getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      } finally {
+        dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      }
     },
     async AddRight({ commit, dispatch, getters, state }, { users, right }) {
       const updatedUsers = users.map(user => {
@@ -88,8 +95,13 @@ const users = {
       commit('SWAP_USERS', updatedUsers)
 
       const usersNicknames = users.map(user => user.nickname)
-      await addRight(usersNicknames, right, getters.authHost, getters.token)
-      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      try {
+        await addRight(usersNicknames, right, getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      } finally {
+        dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      }
     },
     async AddTag({ commit, dispatch, getters, state }, { users, tag }) {
       const updatedUsers = users.map(user => {
@@ -98,16 +110,31 @@ const users = {
       commit('SWAP_USERS', updatedUsers)
 
       const nicknames = users.map(user => user.nickname)
-      await tagUser(nicknames, [tag], getters.authHost, getters.token)
-      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      try {
+        await tagUser(nicknames, [tag], getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      } finally {
+        dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      }
     },
     async ClearFilters({ commit, dispatch, state }) {
       commit('CLEAR_USERS_FILTERS')
       dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
     },
     async CreateNewAccount({ dispatch, getters, state }, { nickname, email, password }) {
-      await createNewAccount(nickname, email, password, getters.authHost, getters.token)
-      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      try {
+        await createNewAccount(nickname, email, password, getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      } finally {
+        dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      }
+      Message({
+        message: i18n.t('users.accountCreated'),
+        type: 'success',
+        duration: 5 * 1000
+      })
     },
     async DeactivateUsers({ commit, dispatch, getters, state }, users) {
       const updatedUsers = users.map(user => {
@@ -116,8 +143,13 @@ const users = {
       commit('SWAP_USERS', updatedUsers)
 
       const usersNicknames = users.map(user => user.nickname)
-      await deactivateUsers(usersNicknames, getters.authHost, getters.token)
-      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      try {
+        await deactivateUsers(usersNicknames, getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      } finally {
+        dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      }
     },
     async DeleteRight({ commit, dispatch, getters, state }, { users, right }) {
       const updatedUsers = users.map(user => {
@@ -126,16 +158,24 @@ const users = {
       commit('SWAP_USERS', updatedUsers)
 
       const usersNicknames = users.map(user => user.nickname)
-      await deleteRight(usersNicknames, right, getters.authHost, getters.token)
-      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      try {
+        await deleteRight(usersNicknames, right, getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      } finally {
+        dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      }
     },
     async DeleteUsers({ commit, getters, state }, users) {
+      const usersNicknames = users.map(user => user.nickname)
+      try {
+        await deleteUsers(usersNicknames, getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      }
       const deletedUsersIds = users.map(deletedUser => deletedUser.id)
       const updatedUsers = state.fetchedUsers.filter(user => !deletedUsersIds.includes(user.id))
       commit('SET_USERS', updatedUsers)
-
-      const usersNicknames = users.map(user => user.nickname)
-      await deleteUsers(usersNicknames, getters.authHost, getters.token)
     },
     async RequirePasswordReset({ getters }, user) {
       await requirePasswordReset(user.nickname, getters.authHost, getters.token)
@@ -161,8 +201,13 @@ const users = {
       commit('SWAP_USERS', updatedUsers)
 
       const nicknames = users.map(user => user.nickname)
-      await untagUser(nicknames, [tag], getters.authHost, getters.token)
-      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      try {
+        await untagUser(nicknames, [tag], getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      } finally {
+        dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      }
     },
     async SearchUsers({ commit, dispatch, state, getters }, { query, page }) {
       if (query.length === 0) {
