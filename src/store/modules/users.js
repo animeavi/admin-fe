@@ -79,7 +79,7 @@ const users = {
 
       const usersNicknames = users.map(user => user.nickname)
       await activateUsers(usersNicknames, getters.authHost, getters.token)
-      dispatch('FetchUsers', { page: state.currentPage })
+      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
     },
     async AddRight({ commit, dispatch, getters, state }, { users, right }) {
       const updatedUsers = users.map(user => {
@@ -89,7 +89,7 @@ const users = {
 
       const usersNicknames = users.map(user => user.nickname)
       await addRight(usersNicknames, right, getters.authHost, getters.token)
-      dispatch('FetchUsers', { page: state.currentPage })
+      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
     },
     async AddTag({ commit, dispatch, getters, state }, { users, tag }) {
       const updatedUsers = users.map(user => {
@@ -99,7 +99,7 @@ const users = {
 
       const nicknames = users.map(user => user.nickname)
       await tagUser(nicknames, [tag], getters.authHost, getters.token)
-      dispatch('FetchUsers', { page: state.currentPage })
+      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
     },
     async ClearFilters({ commit, dispatch, state }) {
       commit('CLEAR_USERS_FILTERS')
@@ -107,7 +107,7 @@ const users = {
     },
     async CreateNewAccount({ dispatch, getters, state }, { nickname, email, password }) {
       await createNewAccount(nickname, email, password, getters.authHost, getters.token)
-      dispatch('FetchUsers', { page: state.currentPage })
+      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
     },
     async DeactivateUsers({ commit, dispatch, getters, state }, users) {
       const updatedUsers = users.map(user => {
@@ -117,7 +117,7 @@ const users = {
 
       const usersNicknames = users.map(user => user.nickname)
       await deactivateUsers(usersNicknames, getters.authHost, getters.token)
-      dispatch('FetchUsers', { page: state.currentPage })
+      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
     },
     async DeleteRight({ commit, dispatch, getters, state }, { users, right }) {
       const updatedUsers = users.map(user => {
@@ -127,7 +127,7 @@ const users = {
 
       const usersNicknames = users.map(user => user.nickname)
       await deleteRight(usersNicknames, right, getters.authHost, getters.token)
-      dispatch('FetchUsers', { page: state.currentPage })
+      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
     },
     async DeleteUsers({ commit, getters, state }, users) {
       const deletedUsersIds = users.map(deletedUser => deletedUser.id)
@@ -162,7 +162,7 @@ const users = {
 
       const nicknames = users.map(user => user.nickname)
       await untagUser(nicknames, [tag], getters.authHost, getters.token)
-      dispatch('FetchUsers', { page: state.currentPage })
+      dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
     },
     async SearchUsers({ commit, dispatch, state, getters }, { query, page }) {
       if (query.length === 0) {
