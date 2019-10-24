@@ -12,11 +12,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `mailerEnabled` must be set to `true` in order to require password reset (password reset currently only works via email)
 - remove fetching initial data for configuring server settings
 - Actions in users module (ActivateUsers, AddRight, DeactivateUsers, DeleteRight, DeleteUsers) now accept an array of users instead of one user
+- Leave dropdown menu open after clicking an action
 
 ### Added
 
 - Optimistic update for actions in users module and fetching users after api function finished its execution
 - Relay management
+
+### Fixed
+
+- Show checkmarks when tag is applied
 
 ## [1.2.0] - 2019-09-27
 
