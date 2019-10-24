@@ -210,7 +210,11 @@ const users = {
       dispatch('SuccessMessage')
     },
     async RequirePasswordReset({ dispatch, getters }, user) {
-      await requirePasswordReset(user.nickname, getters.authHost, getters.token)
+      try {
+        await requirePasswordReset(user.nickname, getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      }
       dispatch('SuccessMessage')
     },
     async SearchUsers({ commit, dispatch, state, getters }, { query, page }) {

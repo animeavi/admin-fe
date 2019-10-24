@@ -206,7 +206,9 @@ export default {
           applyAction(filtered, removeTagFn)
         },
         requirePasswordReset: () => {
-          this.selectedUsers.map(user => this.$store.dispatch('RequirePasswordReset', user))
+          const filtered = this.selectedUsers.filter(user => user.local)
+          filtered.map(user => this.$store.dispatch('RequirePasswordReset', user))
+          this.$emit('apply-action')
         }
       }
     },
