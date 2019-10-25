@@ -28,15 +28,27 @@ const relays = {
       commit('SET_RELAYS', response.data.relays)
       commit('SET_LOADING', false)
     },
-    async AddRelay({ commit, getters }, relay) {
+    async AddRelay({ commit, dispatch, getters }, relay) {
       commit('ADD_RELAY', relay)
 
-      await addRelay(relay, getters.authHost, getters.token)
+      try {
+        await addRelay(relay, getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      } finally {
+        dispatch('FetchRelays')
+      }
     },
-    async DeleteRelay({ commit, getters }, relay) {
+    async DeleteRelay({ commit, dispatch, getters }, relay) {
       commit('DELETE_RELAY', relay)
 
-      await deleteRelay(relay, getters.authHost, getters.token)
+      try {
+        await deleteRelay(relay, getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      } finally {
+        dispatch('FetchRelays')
+      }
     }
   }
 }

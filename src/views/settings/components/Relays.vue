@@ -52,22 +52,10 @@ export default {
   },
   methods: {
     followRelay() {
-      try {
-        this.$store.dispatch('AddRelay', this.newRelay)
-      } catch (_e) {
-        return
-      } finally {
-        this.$store.dispatch('FetchRelays')
-      }
+      this.$store.dispatch('AddRelay', this.newRelay)
     },
     deleteRelay(relay) {
-      try {
-        this.$store.dispatch('DeleteRelay', relay)
-      } catch (_e) {
-        return
-      } finally {
-        this.$store.dispatch('FetchRelays')
-      }
+      this.$store.dispatch('DeleteRelay', relay)
     }
   }
 }
