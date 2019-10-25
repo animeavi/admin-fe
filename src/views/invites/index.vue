@@ -192,17 +192,8 @@ export default {
     async inviteUserViaEmail() {
       this.$refs['inviteUserForm'].validate(async(valid) => {
         if (valid) {
-          try {
-            await this.$store.dispatch('InviteUserViaEmail', this.$data.inviteUserForm)
-          } catch (_e) {
-            return
-          } finally {
-            this.closeDialogWindow()
-          }
-          this.$message({
-            type: 'success',
-            message: this.$t('invites.emailSent')
-          })
+          await this.$store.dispatch('InviteUserViaEmail', this.$data.inviteUserForm)
+          this.closeDialogWindow()
         } else {
           this.$message({
             type: 'error',
