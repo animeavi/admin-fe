@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - remove fetching initial data for configuring server settings
 - Actions in users module (ActivateUsers, AddRight, DeactivateUsers, DeleteRight, DeleteUsers) now accept an array of users instead of one user
 - Leave dropdown menu open after clicking an action
+- Move current try/catch error handling from view files to module, add it where necessary
 
 ### Added
 
