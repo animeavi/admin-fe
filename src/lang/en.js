@@ -365,7 +365,13 @@ export default {
     deletePack: 'Delete pack',
     downloadSharedPack: 'Download shared pack to current instance',
     downloadAsOptional: 'Download as (optional)',
-    downloadPackArchive: 'Download pack archive'
+    downloadPackArchive: 'Download pack archive',
+    successfullyDownloaded: 'Successfully downloaded',
+    successfullyImported: 'Successfully imported',
+    nowNewPacksToImport: 'No new packs to import',
+    successfullyUpdated: 'Successfully updated',
+    metadatLowerCase: 'metadata',
+    files: 'files'
   },
   invites: {
     inviteTokens: 'Invite tokens',
