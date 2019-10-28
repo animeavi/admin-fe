@@ -151,16 +151,7 @@ export default {
   methods: {
     mappers() {
       const applyAction = async(users, dispatchAction) => {
-        try {
-          await dispatchAction(users)
-        } catch (err) {
-          console.log(err)
-          return
-        }
-        this.$message({
-          type: 'success',
-          message: this.$t('users.completed')
-        })
+        await dispatchAction(users)
         this.$emit('apply-action')
       }
       return {
@@ -215,7 +206,9 @@ export default {
           applyAction(filtered, removeTagFn)
         },
         requirePasswordReset: () => {
-          this.selectedUsers.map(user => this.$store.dispatch('RequirePasswordReset', user))
+          const filtered = this.selectedUsers.filter(user => user.local)
+          filtered.map(user => this.$store.dispatch('RequirePasswordReset', user))
+          this.$emit('apply-action')
         }
       }
     },

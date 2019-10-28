@@ -172,7 +172,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import i18n from '@/lang'
 import { options } from './options'
 import AceEditor from 'vue2-ace-editor'
 import 'brace/mode/elixir'
@@ -246,16 +245,8 @@ export default {
     updateSetting(value, tab, input) {
       this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})
     },
-    async onSubmit() {
-      try {
-        await this.$store.dispatch('SubmitChanges')
-      } catch (e) {
-        return
-      }
-      this.$message({
-        type: 'success',
-        message: i18n.t('settings.success')
-      })
+    onSubmit() {
+      this.$store.dispatch('SubmitChanges')
     }
   }
 }

@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import i18n from '@/lang'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -65,16 +64,8 @@ export default {
       }, {})
       this.updateSetting(updatedValue, 'types', 'value')
     },
-    async onSubmit() {
-      try {
-        await this.$store.dispatch('SubmitChanges')
-      } catch (e) {
-        return
-      }
-      this.$message({
-        type: 'success',
-        message: i18n.t('settings.success')
-      })
+    onSubmit() {
+      this.$store.dispatch('SubmitChanges')
     },
     parseMimeTypes(value, inputType, index) {
       const updatedValue = this.mimeTypes.reduce((acc, el, i) => {
