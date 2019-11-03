@@ -4,55 +4,32 @@
       <p class="options-paragraph">{{ settingsGroup.description }}</p>
     </el-form-item>
     <div v-for="setting in settingsGroup.children" :key="setting.key">
-      <el-form-item :label="setting.key">
-        <el-input
-          v-if="setting.type === 'string'"
-          :value="data[setting.key]"
-          :placeholder="setting.suggestions[0]"
-          @input="updateSetting($event, settingsGroup.key, setting.key)"/>
-        <el-switch
-          v-if="setting.type === 'boolean'"
-          :value="data[setting.key]"
-          @change="updateSetting($event, settingsGroup.key, setting.key)"/>
-        <el-input-number
-          v-if="setting.type === 'integer'"
-          :value="data[setting.key]"
-          :placeholder="setting.suggestions[0].toString()"
-          :step="100"
-          :min="0"
-          size="large"
-          class="top-margin"
-          @change="updateSetting($event, settingsGroup.key, setting.key)"/>
-        <el-select
-          v-if="setting.type === 'module'"
-          :value="data.value"
-          clearable
-          @change="updateSetting($event, settingsGroup.children[0].key, 'value')">
-          <el-option
-            v-for="option in settingsGroup.children[0].suggestions"
-            :value="option"
-            :key="option"/>
-        </el-select>
-        <el-select
-          v-if="Array.isArray(setting.type)
-            && setting.type.includes('list')
-          && (setting.type.includes('module') || setting.type.includes('string'))"
-          :value="data[setting.key]"
-          multiple
-          filterable
-          allow-create
-          @change="updateSetting($event, settingsGroup.key, setting.key)">
-          <el-option v-for="option in setting.suggestions[0]" :key="option" :value="option"/>
-        </el-select>
-        <p class="expl">{{ setting.description }}</p>
-      </el-form-item>
+      <div v-if="!compound(setting.type)">
+        <inputs :settings-group="settingsGroup" :setting="setting" :data="data"/>
+      </div>
+      <div v-if="compound(setting.type)">
+        <el-form-item :label="`${setting.key}:`"/>
+        <div v-for="subSetting in setting.children" :key="subSetting.key">
+          <inputs :settings-group="setting" :setting="subSetting" :data="data[setting]"/>
+        </div>
+        <div class="line"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import AceEditor from 'vue2-ace-editor'
+import Inputs from './Inputs'
+import 'brace/mode/elixir'
+import 'default-passive-events'
+
 export default {
   name: 'Setting',
+  components: {
+    editor: AceEditor,
+    Inputs
+  },
   props: {
     settingsGroup: {
       type: Object,
@@ -73,6 +50,9 @@ export default {
     }
   },
   methods: {
+    compound(type) {
+      return ['map'].includes(type)
+    },
     updateSetting(value, tab, input) {
       this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})
     }
