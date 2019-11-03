@@ -1,6 +1,6 @@
 <template>
   <div v-if="!loading">
-    <el-form-item v-if="settingsGroup.description" class="options-paragraph-container">
+    <el-form-item v-if="settingsGroup.description && settingsGroup.group !== ':esshd'" class="options-paragraph-container">
       <p class="options-paragraph">{{ settingsGroup.description }}</p>
     </el-form-item>
     <div v-for="setting in settingsGroup.children" :key="setting.key">
