@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     compound(type) {
-      return ['map'].includes(type)
+      return ['map', 'keyword'].includes(type)
     },
     updateSetting(value, tab, input) {
       this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})

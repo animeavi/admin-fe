@@ -51,11 +51,16 @@
         && setting.type.includes('list')
         && (setting.type.includes('tuple')
       )"
-      v-model="editorContentHttp"
+      v-model="editorContent"
       height="150"
       width="100%"
       lang="elixir"
       theme="chrome"/>
+    <el-input
+      v-if="setting.type === 'tuple'"
+      :placeholder="setting.key === 'ip' ? 'xxx.xxx.xxx.xx' : setting.suggestions[0]"
+      :value="data[setting.key]"
+      @input="updateSetting($event, settingsGroup.key, setting.key)"/>
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
 </template>
@@ -91,24 +96,21 @@ export default {
     }
   },
   computed: {
-    // editorContentHttp: {
-    //   get: function() {
-    //     return this.endpoint.http.dispatch ? this.endpoint.http.dispatch[0] : ''
-    //   },
-    //   set: function(value) {
-    //     this.processNestedData([value], 'Pleroma.Web.Endpoint', 'http', 'dispatch')
-    //   }
-    // },
-    // editorContentHttps: {
-    //   get: function() {
-    //     return this.endpoint.https.dispatch ? this.endpoint.https.dispatch[0] : ''
-    //   },
-    //   set: function(value) {
-    //     this.processNestedData([value], 'Pleroma.Web.Endpoint', 'https', 'dispatch')
-    //   }
-    // }
+    editorContent: {
+      get: function() {
+        return ''
+        // return data[setting.key] ? data[setting.key][0] : ''
+      },
+      set: function(value) {
+        this.processNestedData([value], this.settingsGroup.key, this.setting.key, this.data[this.setting.key])
+      }
+    }
   },
   methods: {
+    processNestedData(value, tab, inputName, childName) {
+      const updatedValue = { ...this.$store.state.settings.settings[tab][inputName], ...{ [childName]: value }}
+      this.updateSetting(updatedValue, tab, inputName)
+    },
     updateSetting(value, tab, input) {
       this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})
     }

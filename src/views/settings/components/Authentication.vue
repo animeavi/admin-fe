@@ -35,10 +35,6 @@ export default {
       'ldapData',
       'authData',
       'oauth2Data'
-      // 'facebook',
-      // 'google',
-      // 'twitter',
-      // 'microsoft'
     ]),
     auth() {
       return this.$store.state.settings.description.find(setting => setting.key === ':auth')
