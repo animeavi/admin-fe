@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <el-form ref="metadata" :model="metadata" :label-width="labelWidth">
       <el-form-item label="Providers">
         <el-select :value="metadata.providers || []" multiple filterable allow-create @change="updateSetting($event, 'Pleroma.Web.Metadata', 'providers')">
@@ -66,6 +66,9 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
+    },
+    loading() {
+      return this.$store.state.settings.loading
     }
   },
   methods: {

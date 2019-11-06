@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <el-form ref="esshdData" :model="esshdData" :label-width="labelWidth">
       <el-form-item>
         <p class="expl">Before enabling this you must:
@@ -49,6 +49,9 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
+    },
+    loading() {
+      return this.$store.state.settings.loading
     }
   },
   methods: {

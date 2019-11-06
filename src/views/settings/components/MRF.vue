@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <el-form ref="mrfSimple" :model="mrfSimple" :label-width="labelWidth">
       <el-form-item label="MRF Simple:"/>
       <el-form-item label="Media removal">
@@ -185,6 +185,9 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
+    },
+    loading() {
+      return this.$store.state.settings.loading
     }
   },
   methods: {

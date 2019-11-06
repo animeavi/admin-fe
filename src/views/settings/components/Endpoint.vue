@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="endpointData" :model="endpointData" :label-width="labelWidth">
+  <el-form v-if="!loading" ref="endpointData" :model="endpointData" :label-width="labelWidth">
     <setting :settings-group="endpoint" :data="endpointData"/>
     <div class="line"/>
     <el-form-item class="options-paragraph-container">
@@ -38,6 +38,9 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
+    },
+    loading() {
+      return this.$store.state.settings.loading
     }
   },
   methods: {

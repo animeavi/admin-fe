@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <el-form ref="activitypubData" :model="activitypubData" :label-width="labelWidth">
       <setting :settings-group="activitypub" :data="activitypubData"/>
     </el-form>
@@ -34,6 +34,9 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
+    },
+    loading() {
+      return this.$store.state.settings.loading
     },
     user() {
       return this.$store.state.settings.description.find(setting => setting.key === ':user')

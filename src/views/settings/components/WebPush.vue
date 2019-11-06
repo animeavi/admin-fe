@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="vapidDetails" :model="vapidDetails" :label-width="labelWidth">
+  <el-form v-if="!loading" ref="vapidDetails" :model="vapidDetails" :label-width="labelWidth">
     <el-form-item label="Subject">
       <el-input :value="vapidDetails.subject" @input="updateSetting($event, 'vapid_details', 'subject')"/>
       <p class="expl">A mailto link for the administrative contact. It’s best if this email is not a personal email address,
@@ -35,6 +35,9 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
+    },
+    loading() {
+      return this.$store.state.settings.loading
     }
   },
   methods: {

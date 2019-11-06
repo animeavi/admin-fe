@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <el-form ref="captchaData" :model="captchaData" :label-width="labelWidth">
       <setting :settings-group="captcha" :data="captchaData"/>
     </el-form>
@@ -37,6 +37,9 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
+    },
+    loading() {
+      return this.$store.state.settings.loading
     }
   },
   methods: {

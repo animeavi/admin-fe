@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="gopher" :model="gopher" :label-width="labelWidth">
+  <el-form v-if="!loading" ref="gopher" :model="gopher" :label-width="labelWidth">
     <el-form-item label="Enabled">
       <el-switch :value="gopher.enabled" @change="updateSetting($event, 'gopher', 'enabled')"/>
       <p class="expl">Enables the gopher interface</p>
@@ -37,6 +37,9 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
+    },
+    loading() {
+      return this.$store.state.settings.loading
     }
   },
   methods: {

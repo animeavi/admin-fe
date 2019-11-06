@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <el-form ref="instanceData" :model="instanceData" :label-width="labelWidth">
       <setting :settings-group="instance" :data="instanceData"/>
     </el-form>
@@ -69,6 +69,9 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
+    },
+    loading() {
+      return this.$store.state.settings.loading
     },
     pleromaUser() {
       return this.$store.state.settings.description.find(setting => setting.key === 'Pleroma.User')

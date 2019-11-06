@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="mediaProxy" :model="mediaProxy" :label-width="labelWidth">
+  <el-form v-if="!loading" ref="mediaProxy" :model="mediaProxy" :label-width="labelWidth">
     <el-form-item label="Enabled">
       <el-switch :value="mediaProxy.enabled" @change="updateSetting($event, 'media_proxy', 'enabled')"/>
       <p class="expl">Enables proxying of remote media to the instance’s proxy</p>
@@ -108,6 +108,9 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
+    },
+    loading() {
+      return this.$store.state.settings.loading
     }
   },
   methods: {

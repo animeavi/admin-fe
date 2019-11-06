@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <el-form ref="formatEncoders" :model="formatEncoders" :label-width="labelWidth">
       <el-form-item label="Phoenix Format encoders:"/>
       <el-form-item label="JSON">
@@ -46,6 +46,9 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
+    },
+    loading() {
+      return this.$store.state.settings.loading
     },
     mimeTypes() {
       return Object.keys(this.mimeTypesConfig.value).map(key => [key, this.mimeTypesConfig.value[key]])

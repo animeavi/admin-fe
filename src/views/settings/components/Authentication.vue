@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <el-form ref="pleromaAuthenticatorData" :model="pleromaAuthenticatorData" :label-width="labelWidth">
       <setting :settings-group="pleromaAuthenticator" :data="pleromaAuthenticatorData"/>
     </el-form>
@@ -47,6 +47,9 @@ export default {
     },
     ldap() {
       return this.$store.state.settings.description.find(setting => setting.key === ':ldap')
+    },
+    loading() {
+      return this.$store.state.settings.loading
     },
     oauth2() {
       return this.$store.state.settings.description.find(setting => setting.key === ':oauth2')

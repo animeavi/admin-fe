@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <el-form ref="mailer" :model="mailer" :label-width="labelWidth">
       <el-form-item label="Enabled">
         <el-switch :value="mailer.enabled" @change="updateSetting($event, 'Pleroma.Emails.Mailer', 'enabled')"/>
@@ -236,6 +236,9 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '210px'
+    },
+    loading() {
+      return this.$store.state.settings.loading
     }
   },
   methods: {
