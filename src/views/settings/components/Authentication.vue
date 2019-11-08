@@ -31,31 +31,40 @@ export default {
   components: { Setting },
   computed: {
     ...mapGetters([
-      'pleromaAuthenticatorData',
-      'ldapData',
-      'authData',
-      'oauth2Data'
+      'settings'
     ]),
     auth() {
-      return this.$store.state.settings.description.find(setting => setting.key === ':auth')
+      return this.settings.description.find(setting => setting.key === ':auth')
+    },
+    authData() {
+      return this.settings.settings[':auth']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '210px'
+      return this.isMobile ? '100px' : '240px'
     },
     ldap() {
-      return this.$store.state.settings.description.find(setting => setting.key === ':ldap')
+      return this.settings.description.find(setting => setting.key === ':ldap')
+    },
+    ldapData() {
+      return this.settings.settings[':ldap']
     },
     loading() {
-      return this.$store.state.settings.loading
+      return this.settings.loading
     },
     oauth2() {
-      return this.$store.state.settings.description.find(setting => setting.key === ':oauth2')
+      return this.settings.description.find(setting => setting.key === ':oauth2')
+    },
+    oauth2Data() {
+      return this.settings.settings[':oauth2']
     },
     pleromaAuthenticator() {
-      return this.$store.state.settings.description.find(setting => setting.description === 'Authenticator')
+      return this.settings.description.find(setting => setting.description === 'Authenticator')
+    },
+    pleromaAuthenticatorData() {
+      return this.settings.settings['']
     }
   },
   methods: {

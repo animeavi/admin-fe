@@ -23,23 +23,28 @@ export default {
   components: { Setting },
   computed: {
     ...mapGetters([
-      'captchaData',
-      'kocaptchaData'
+      'settings'
     ]),
     captcha() {
-      return this.$store.state.settings.description.find(setting => setting.key === 'Pleroma.Captcha')
+      return this.settings.description.find(setting => setting.key === 'Pleroma.Captcha')
+    },
+    captchaData() {
+      return this.settings.settings['Pleroma.Captcha']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     kocaptcha() {
-      return this.$store.state.settings.description.find(setting => setting.key === 'Pleroma.Captcha.Kocaptcha')
+      return this.settings.description.find(setting => setting.key === 'Pleroma.Captcha.Kocaptcha')
+    },
+    kocaptchaData() {
+      return this.settings.settings['Pleroma.Captcha.Kocaptcha']
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '210px'
+      return this.isMobile ? '100px' : '240px'
     },
     loading() {
-      return this.$store.state.settings.loading
+      return this.settings.loading
     }
   },
   methods: {

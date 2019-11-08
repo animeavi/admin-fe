@@ -23,23 +23,28 @@ export default {
   components: { Setting },
   computed: {
     ...mapGetters([
-      'activitypubData',
-      'userData'
+      'settings'
     ]),
     activitypub() {
-      return this.$store.state.settings.description.find(setting => setting.key === ':activitypub')
+      return this.settings.description.find(setting => setting.key === ':activitypub')
+    },
+    activitypubData() {
+      return this.settings.settings[':activitypub']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '210px'
+      return this.isMobile ? '100px' : '240px'
     },
     loading() {
       return this.$store.state.settings.loading
     },
     user() {
-      return this.$store.state.settings.description.find(setting => setting.key === ':user')
+      return this.settings.description.find(setting => setting.key === ':user')
+    },
+    userData() {
+      return this.settings.settings[':user']
     }
   },
   methods: {
