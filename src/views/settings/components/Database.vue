@@ -1,34 +1,20 @@
 <template>
-  <div>
-    <el-form ref="database" :model="database" :label-width="labelWidth">
-      <el-form-item label="Database settings:"/>
-      <el-form-item label="RUM enabled">
-        <el-switch :value="database.rum_enabled" @change="updateSetting($event, 'database', 'rum_enabled')"/>
-        <p class="expl">RUM indexes are an alternative indexing scheme that is not included in PostgreSQL by default.
-        While they may eventually be mainlined, for now they have to be installed as a PostgreSQL extension from
-          <a
-            href="https://github.com/postgrespro/rum"
-            rel="nofollow noreferrer noopener"
-            target="_blank">
-            https://github.com/postgrespro/rum.
-          </a>
-        </p>
-        <p class="expl">Their advantage over the standard GIN indexes is that they allow efficient ordering of search results by timestamp,
-        which makes search queries a lot faster on larger servers, by one or two orders of magnitude.
-        They take up around 3 times as much space as GIN indexes.</p>
-        <p class="expl">To enable them, both the <span class="code">rum_enabled</span> flag has to be set and the following special
-        migration has to be run: <span class="code">mix ecto.migrate --migrations-path priv/repo/optional_migrations/rum_indexing/</span></p>
+  <div v-if="!loading">
+    <el-form ref="databaseData" :model="databaseData" :label-width="labelWidth">
+      <setting :settings-group="database" :data="databaseData"/>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>
     </el-form>
     <div class="line"/>
-    <el-form ref="ectoRepos" :model="ectoRepos" :label-width="labelWidth">
+    <!-- <el-form ref="ectoRepos" :model="ectoRepos" :label-width="labelWidth">
       <el-form-item label="Ecto repos">
         <el-select :value="ectoRepos.value || []" multiple filterable allow-create @change="updateSetting($event, 'ecto_repos', 'value')">
           <el-option label="Pleroma.Repo" value="Pleroma.Repo"/>
         </el-select>
       </el-form-item>
-    </el-form>
-    <div class="line"/>
+    </el-form> -->
+    <!-- <div class="line"/>
     <el-form ref="pleromaRepo" :model="pleromaRepo" :label-width="labelWidth">
       <el-form-item label="Pleroma Repo configuration:"/>
       <el-form-item label="Name">
@@ -127,30 +113,36 @@
         <p class="expl">How to prepare queries, either <span class="code">:named</span> to use named queries or
         <span class="code">:unnamed</span> to force unnamed queries (default: :named)</p>
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Submit</el-button>
-      </el-form-item>
-    </el-form>
+    </el-form> -->
   </div>
 </template>
 
 <script>
 import i18n from '@/lang'
 import { mapGetters } from 'vuex'
+import Setting from './Setting'
 
 export default {
-  name: 'Instance',
+  name: 'Database',
+  components: { Setting },
   computed: {
     ...mapGetters([
-      'database',
-      'ectoRepos',
-      'pleromaRepo'
+      'settings'
     ]),
+    database() {
+      return this.settings.description.find(setting => setting.key === ':database')
+    },
+    databaseData() {
+      return this.settings.settings[':database']
+    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '210px'
+      return this.isMobile ? '100px' : '240px'
+    },
+    loading() {
+      return this.settings.loading
     }
   },
   methods: {

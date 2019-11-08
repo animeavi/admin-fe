@@ -35,14 +35,17 @@ import { mapGetters } from 'vuex'
 import Setting from './Setting'
 
 export default {
-  name: 'Instance',
+  name: 'Esshd',
   components: { Setting },
   computed: {
     ...mapGetters([
-      'esshdData'
+      'settings'
     ]),
     esshd() {
-      return this.$store.state.settings.description.find(setting => setting.group === ':esshd')
+      return this.settings.description.find(setting => setting.group === ':esshd')
+    },
+    esshdData() {
+      return this.settings.settings[':esshd']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
@@ -51,7 +54,7 @@ export default {
       return this.isMobile ? '100px' : '240px'
     },
     loading() {
-      return this.$store.state.settings.loading
+      return this.settings.loading
     }
   },
   methods: {
