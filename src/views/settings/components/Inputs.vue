@@ -1,5 +1,5 @@
 <template>
-  <el-form-item :label="setting.key">
+  <el-form-item :label="setting.label">
     <el-input
       v-if="setting.type === 'string'"
       :value="data[setting.key]"

@@ -8,7 +8,7 @@
         <inputs :settings-group="settingsGroup" :setting="setting" :data="data"/>
       </div>
       <div v-if="compound(setting.type)">
-        <el-form-item :label="`${setting.key}:`"/>
+        <el-form-item :label="`${setting.label}:`"/>
         <div v-for="subSetting in setting.children" :key="subSetting.key">
           <inputs :settings-group="setting" :setting="subSetting" :data="data[setting]"/>
         </div>
