@@ -70,7 +70,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '210px'
+      return this.isMobile ? '100px' : '240px'
     },
     localPacks() {
       return this.$store.state.emojiPacks.localPacks

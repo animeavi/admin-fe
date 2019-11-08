@@ -104,24 +104,24 @@ export const filterIgnored = (settings, ignored) => {
 export const parseTuples = (tuples, key) => {
   return tuples.reduce((accum, item) => {
     if (key === 'rate_limit') {
-      accum[item.tuple[0].substr(1)] = item.tuple[1]
+      accum[item.tuple[0]] = item.tuple[1]
     } else if (Array.isArray(item.tuple[1]) &&
        (typeof item.tuple[1][0] === 'object' && !Array.isArray(item.tuple[1][0])) && item.tuple[1][0]['tuple']) {
       nonAtomsTuples.includes(item.tuple[0])
-        ? accum[item.tuple[0].substr(1)] = parseNonAtomTuples(item.tuple[1])
-        : accum[item.tuple[0].substr(1)] = parseTuples(item.tuple[1])
+        ? accum[item.tuple[0]] = parseNonAtomTuples(item.tuple[1])
+        : accum[item.tuple[0]] = parseTuples(item.tuple[1])
     } else if (Array.isArray(item.tuple[1])) {
-      accum[item.tuple[0].substr(1)] = item.tuple[1]
+      accum[item.tuple[0]] = item.tuple[1]
     } else if (item.tuple[1] && typeof item.tuple[1] === 'object' && 'tuple' in item.tuple[1]) {
-      accum[item.tuple[0].substr(1)] = item.tuple[1]['tuple'].join('.')
+      accum[item.tuple[0]] = item.tuple[1]['tuple'].join('.')
     } else if (item.tuple[1] && typeof item.tuple[1] === 'object') {
       nonAtomsObjects.includes(item.tuple[0])
-        ? accum[item.tuple[0].substr(1)] = parseNonAtomObject(item.tuple[1])
-        : accum[item.tuple[0].substr(1)] = parseObject(item.tuple[1])
+        ? accum[item.tuple[0]] = parseNonAtomObject(item.tuple[1])
+        : accum[item.tuple[0]] = parseObject(item.tuple[1])
     } else {
       key === 'mrf_user_allowlist'
         ? accum[item.tuple[0]] = item.tuple[1]
-        : accum[item.tuple[0].substr(1)] = item.tuple[1]
+        : accum[item.tuple[0]] = item.tuple[1]
     }
     return accum
   }, {})
@@ -143,18 +143,21 @@ const parseNonAtomObject = (object) => {
 
 const parseObject = (object) => {
   return Object.keys(object).reduce((acc, item) => {
-    acc[item.substr(1)] = object[item]
+    acc[item] = object[item]
     return acc
   }, {})
 }
 
 export const valueHasTuples = (key, value) => {
   const valueIsArrayOfNonObjects = Array.isArray(value) && value.length > 0 && typeof value[0] !== 'object'
-  return key === 'meta' ||
-    key === 'types' ||
+  return key === ':meta' ||
+    key === ':types' ||
+    key === ':compiled_template_engines' ||
+    key === ':compiled_format_encoders' ||
     typeof value === 'string' ||
     typeof value === 'number' ||
     typeof value === 'boolean' ||
+    value === null ||
     valueIsArrayOfNonObjects
 }
 
