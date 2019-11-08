@@ -20,16 +20,17 @@
       @change="updateSetting($event, settingsGroup.key, setting.key)"/>
     <el-select
       v-if="setting.type === 'module'"
-      :value="data.value"
+      :value="data[setting.key]"
       clearable
-      @change="updateSetting($event, settingsGroup.key, 'value')">
+      @change="updateSetting($event, settingsGroup.key, setting.key)">
       <el-option
         v-for="option in setting.suggestions"
         :value="option"
         :key="option"/>
     </el-select>
     <el-select
-      v-if="Array.isArray(setting.type) && setting.type.includes('list') && setting.type.includes('module')"
+      v-if="Array.isArray(setting.type) && (
+      (setting.type.includes('list') && setting.type.includes('module')) || (setting.type.includes('module') && setting.type.includes('atom')))"
       :value="data[setting.key]"
       multiple
       filterable
@@ -61,6 +62,13 @@
       :placeholder="setting.key === 'ip' ? 'xxx.xxx.xxx.xx' : setting.suggestions[0]"
       :value="data[setting.key]"
       @input="updateSetting($event, settingsGroup.key, setting.key)"/>
+    <el-input
+      v-if="setting.type === 'atom'"
+      :value="data[setting.key]"
+      :placeholder="setting.suggestions[0]"
+      @input="updateSetting($event, settingsGroup.key, setting.key)">
+      <template slot="prepend">:</template>
+    </el-input>
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
 </template>
