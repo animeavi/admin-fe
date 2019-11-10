@@ -1,19 +1,6 @@
 <template>
   <div v-if="!loading">
     <el-form ref="esshdData" :model="esshdData" :label-width="labelWidth">
-      <el-form-item>
-        <p class="expl">Before enabling this you must:
-          <ol class="esshd-list">
-            <li>Add <span class="code">:esshd</span> to <span class="code">mix.exs</span> as one of the
-              <span class="code">extra_applications</span>
-            </li>
-            <li>Generate host keys in your
-              <span class="code">priv</span> dir with
-              <span class="code">ssh-keygen -m PEM -N "" -b 2048 -t rsa -f ssh_host_rsa_key</span>
-            </li>
-          </ol>
-        </p>
-      </el-form-item>
       <setting :settings-group="esshd" :data="esshdData"/>
       <el-form-item>
         <p class="expl">Feel free to adjust the priv_dir and port number.

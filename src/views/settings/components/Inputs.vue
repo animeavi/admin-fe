@@ -36,7 +36,7 @@
       filterable
       allow-create
       @change="updateSetting($event, settingsGroup.key, setting.key)">
-      <el-option v-for="option in setting.suggestions[0]" :key="option" :value="option"/>
+      <el-option v-for="option in setting.suggestions" :key="option" :value="option"/>
     </el-select>
     <el-select
       v-if="Array.isArray(setting.type) && setting.type.includes('list') && setting.type.includes('string')"
@@ -59,7 +59,7 @@
       theme="chrome"/>
     <el-input
       v-if="setting.type === 'tuple'"
-      :placeholder="setting.key === 'ip' ? 'xxx.xxx.xxx.xx' : setting.suggestions[0]"
+      :placeholder="setting.key === ':ip' ? 'xxx.xxx.xxx.xx' : setting.suggestions[0]"
       :value="data[setting.key]"
       @input="updateSetting($event, settingsGroup.key, setting.key)"/>
     <el-input
@@ -91,7 +91,7 @@ export default {
       }
     },
     data: {
-      type: Object,
+      type: Object || Array,
       default: function() {
         return {}
       }
@@ -106,8 +106,7 @@ export default {
   computed: {
     editorContent: {
       get: function() {
-        return ''
-        // return data[setting.key] ? data[setting.key][0] : ''
+        return this.data[this.setting.key] ? this.data[this.setting.key][0] : ''
       },
       set: function(value) {
         this.processNestedData([value], this.settingsGroup.key, this.setting.key, this.data[this.setting.key])

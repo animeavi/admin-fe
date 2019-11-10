@@ -1,6 +1,6 @@
 <template>
   <div v-if="!loading">
-    <el-form-item v-if="settingsGroup.description && settingsGroup.group !== ':esshd'" class="options-paragraph-container">
+    <el-form-item v-if="settingsGroup.description" class="options-paragraph-container">
       <p class="options-paragraph">{{ settingsGroup.description }}</p>
     </el-form-item>
     <div v-for="setting in settingsGroup.children" :key="setting.key">
@@ -10,7 +10,7 @@
       <div v-if="compound(setting.type)">
         <el-form-item :label="`${setting.label}:`"/>
         <div v-for="subSetting in setting.children" :key="subSetting.key">
-          <inputs :settings-group="setting" :setting="subSetting" :data="data[setting]"/>
+          <inputs :settings-group="setting" :setting="subSetting" :data="data[setting.key]"/>
         </div>
         <div class="line"/>
       </div>
@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     compound(type) {
-      return ['map', 'keyword'].includes(type)
+      return ['map', 'keyword'].includes(type) || type.includes('keyword')
     },
     updateSetting(value, tab, input) {
       this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})

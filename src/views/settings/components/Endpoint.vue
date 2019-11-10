@@ -28,10 +28,13 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'endpointData'
+      'settings'
     ]),
     endpoint() {
-      return this.$store.state.settings.description.find(setting => setting.key === 'Pleroma.Web.Endpoint')
+      return this.settings.description.find(setting => setting.key === 'Pleroma.Web.Endpoint')
+    },
+    endpointData() {
+      return this.settings.settings['Pleroma.Web.Endpoint']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
@@ -40,7 +43,7 @@ export default {
       return this.isMobile ? '100px' : '240px'
     },
     loading() {
-      return this.$store.state.settings.loading
+      return this.settings.loading
     }
   },
   methods: {
