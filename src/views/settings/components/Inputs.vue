@@ -69,6 +69,14 @@
       @input="updateSetting($event, settingsGroup.key, setting.key)">
       <template slot="prepend">:</template>
     </el-input>
+    <div v-if="editableKeyword(setting.type)">
+      <div v-for="([key, value], index) in editableKeywordData(data)" :key="index" class="setting-input">
+        <el-input :value="key" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', index)"/> :
+        <el-select :value="value" multiple filterable allow-create class="value-input" @change="parseEditableKeyword($event, 'value', index)"/>
+        <el-button icon="el-icon-minus" circle @click="deleteEditableKeywordRow(index)"/>
+      </div>
+      <el-button icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
+    </div>
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
 </template>
@@ -114,6 +122,39 @@ export default {
     }
   },
   methods: {
+    addRowToEditableKeyword() {
+      console.log(this.settingsGroup.key, this.setting.key)
+      const updatedValue = this.editableKeywordData(this.data).reduce((acc, el, i) => {
+        return { ...acc, [el[0]]: el[1] }
+      }, {})
+      this.updateSetting({ ...updatedValue, '': [] }, this.settingsGroup.key, this.setting.key)
+    },
+    deleteEditableKeywordRow(index) {
+      const filteredValues = this.editableKeywordData(this.data).filter((el, i) => index !== i)
+      const updatedValue = filteredValues.reduce((acc, el, i) => {
+        return { ...acc, [el[0]]: el[1] }
+      }, {})
+      console.log(updatedValue)
+      this.updateSetting(updatedValue, this.settingsGroup.key, this.setting.key)
+    },
+    editableKeyword(type) {
+      return Array.isArray(type)
+        ? type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1
+        : false
+    },
+    editableKeywordData(data) {
+      return Object.keys(data).map(key => [key, data[key]])
+    },
+    parseEditableKeyword(value, inputType, index) {
+      const updatedValue = this.editableKeywordData(this.data).reduce((acc, el, i) => {
+        if (index === i) {
+          return inputType === 'key' ? { ...acc, [value]: el[1] } : { ...acc, [el[0]]: value }
+        }
+        return { ...acc, [el[0]]: el[1] }
+      }, {})
+      console.log(updatedValue)
+      this.updateSetting(updatedValue, this.settingsGroup.key, this.setting.key)
+    },
     processNestedData(value, tab, inputName, childName) {
       const updatedValue = { ...this.$store.state.settings.settings[tab][inputName], ...{ [childName]: value }}
       this.updateSetting(updatedValue, tab, inputName)

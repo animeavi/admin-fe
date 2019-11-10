@@ -12,6 +12,9 @@
         <div v-for="subSetting in setting.children" :key="subSetting.key">
           <inputs :settings-group="setting" :setting="subSetting" :data="data[setting.key]"/>
         </div>
+        <div v-if="!setting.children">
+          <inputs :settings-group="settingsGroup" :setting="setting" :data="data[setting.key]"/>
+        </div>
         <div class="line"/>
       </div>
     </div>
