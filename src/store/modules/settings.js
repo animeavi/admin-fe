@@ -4,8 +4,7 @@ import { filterIgnored, parseTuples, valueHasTuples, wrapConfig } from './normal
 const settings = {
   state: {
     description: [],
-    settings: {
-    },
+    settings: {},
     ignoredIfNotEnabled: ['enabled', 'handler', 'password_authenticator', 'port', 'priv_dir'],
     loading: true
   },
@@ -20,9 +19,13 @@ const settings = {
       state.loading = status
     },
     SET_SETTINGS: (state, data) => {
-      const newSettings = data.reduce((acc, { key, value }) => {
-        const parsedValue = valueHasTuples(key, value) ? { value } : parseTuples(value, key)
-        acc[key] = { ...acc[key], ...parsedValue }
+      const newSettings = data.reduce((acc, { group, key, value }) => {
+        if (group === 'cors_plug') {
+          acc[':cors_plug'] = { ...acc[':cors_plug'], [key]: value }
+        } else {
+          const parsedValue = valueHasTuples(key, value) ? { value } : parseTuples(value, key)
+          acc[key] = { ...acc[key], ...parsedValue }
+        }
         return acc
       }, state.settings)
       state.settings = newSettings
