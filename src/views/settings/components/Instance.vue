@@ -37,7 +37,6 @@
 <script>
 import i18n from '@/lang'
 import { mapGetters } from 'vuex'
-import { options } from './options'
 import Setting from './Setting'
 
 export default {
@@ -47,22 +46,25 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'adminTokenData',
-      'fetchInitialPostsData',
-      'instanceData',
-      'pleromaUserData',
-      'scheduledActivityData',
-      'suggestionsData',
-      'uriSchemesData'
+      'settings'
     ]),
     adminToken() {
-      return this.$store.state.settings.description.find(setting => setting.description === `Allows to set a token that can be used to authenticate with the admin api without using an actual user by giving it as the 'admin_token' parameter`)
+      return this.settings.description.find(setting => setting.description === `Allows to set a token that can be used to authenticate with the admin api without using an actual user by giving it as the 'admin_token' parameter`)
+    },
+    adminTokenData() {
+      return this.settings.settings[':admin_token']
     },
     fetchInitialPosts() {
-      return this.$store.state.settings.description.find(setting => setting.key === ':fetch_initial_posts')
+      return this.settings.description.find(setting => setting.key === ':fetch_initial_posts')
+    },
+    fetchInitialPostsData() {
+      return this.settings.settings[':fetch_initial_posts']
     },
     instance() {
-      return this.$store.state.settings.description.find(setting => setting.key === ':instance')
+      return this.settings.description.find(setting => setting.key === ':instance')
+    },
+    instanceData() {
+      return this.settings.settings[':instance']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
@@ -71,33 +73,34 @@ export default {
       return this.isMobile ? '100px' : '240px'
     },
     loading() {
-      return this.$store.state.settings.loading
+      return this.settings.loading
     },
     pleromaUser() {
-      return this.$store.state.settings.description.find(setting => setting.key === 'Pleroma.User')
+      return this.settings.description.find(setting => setting.key === 'Pleroma.User')
+    },
+    pleromaUserData() {
+      return this.settings.settings['Pleroma.User']
     },
     scheduledActivity() {
       return this.$store.state.settings.description.find(setting => setting.key === 'Pleroma.ScheduledActivity')
     },
+    scheduledActivityData() {
+      return this.settings.settings['Pleroma.ScheduledActivity']
+    },
     suggestions() {
       return this.$store.state.settings.description.find(setting => setting.key === ':suggestions')
     },
+    suggestionsData() {
+      return this.settings.settings[':suggestions']
+    },
     uriSchemes() {
       return this.$store.state.settings.description.find(setting => setting.key === ':uri_schemes')
+    },
+    uriSchemesData() {
+      return this.settings.settings[':uri_schemes']
     }
   },
   methods: {
-    getRewritePolicyExpl(value) {
-      const policy = options.rewritePolicyOptions.find(el => el.value === value)
-      return policy.expl
-    },
-    processNestedData(value, tab, inputName, childName) {
-      const updatedValue = { ...this.$store.state.settings.settings[tab][inputName], ...{ [childName]: value }}
-      this.updateSetting(updatedValue, tab, inputName)
-    },
-    updateSetting(value, tab, input) {
-      this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})
-    },
     async onSubmit() {
       try {
         await this.$store.dispatch('SubmitChanges')

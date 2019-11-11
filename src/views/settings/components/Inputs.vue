@@ -19,14 +19,14 @@
       class="top-margin"
       @change="updateSetting($event, settingsGroup.key, setting.key)"/>
     <el-select
-      v-if="setting.type === 'module'"
+      v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes(false))"
       :value="data[setting.key]"
       clearable
       @change="updateSetting($event, settingsGroup.key, setting.key)">
       <el-option
-        v-for="option in setting.suggestions"
+        v-for="(option, index) in setting.suggestions"
         :value="option"
-        :key="option"/>
+        :key="index"/>
     </el-select>
     <el-select
       v-if="Array.isArray(setting.type) && (
@@ -36,7 +36,7 @@
       filterable
       allow-create
       @change="updateSetting($event, settingsGroup.key, setting.key)">
-      <el-option v-for="option in setting.suggestions" :key="option" :value="option"/>
+      <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
     </el-select>
     <el-select
       v-if="Array.isArray(setting.type) && setting.type.includes('list') && setting.type.includes('string')"
@@ -45,7 +45,7 @@
       filterable
       allow-create
       @change="updateSetting($event, settingsGroup.key, setting.key)">
-      <el-option v-for="option in setting.suggestions" :key="option" :value="option"/>
+      <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
     </el-select>
     <editor
       v-if="Array.isArray(setting.type)
