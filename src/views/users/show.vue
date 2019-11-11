@@ -61,7 +61,9 @@
         </div>
       </el-col>
       <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="18"><h2>{{ $t('userProfile.recentStatuses') }}</h2></el-col>
+        <el-col :span="18">
+          <h2 class="recent-statuses">{{ $t('userProfile.recentStatuses') }}</h2>
+        </el-col>
         <el-col :span="6" class="show-private">
           <el-checkbox v-model="showPrivate" @change="onTogglePrivate">
             {{ $t('userProfile.showPrivateStatuses') }}
@@ -175,5 +177,8 @@ table {
   text-align: right;
   line-height: 67px;
   padding-right: 20px;
+}
+.recent-statuses {
+  margin-left: 40px;
 }
 </style>
