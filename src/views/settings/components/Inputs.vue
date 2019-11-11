@@ -13,7 +13,6 @@
       v-if="setting.type === 'integer'"
       :value="data[setting.key]"
       :placeholder="setting.suggestions[0].toString()"
-      :step="100"
       :min="0"
       size="large"
       class="top-margin"
@@ -69,13 +68,46 @@
       @input="updateSetting($event, settingsGroup.key, setting.key)">
       <template slot="prepend">:</template>
     </el-input>
-    <div v-if="editableKeyword(setting.type)">
+    <div v-if="editableKeywordWithSelect(setting.type)">
       <div v-for="([key, value], index) in editableKeywordData(data)" :key="index" class="setting-input">
         <el-input :value="key" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', index)"/> :
         <el-select :value="value" multiple filterable allow-create class="value-input" @change="parseEditableKeyword($event, 'value', index)"/>
         <el-button icon="el-icon-minus" circle @click="deleteEditableKeywordRow(index)"/>
       </div>
       <el-button icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
+    </div>
+    <div v-if="editableKeywordWithInteger(setting.type)">
+      <div v-for="([key, value], index) in editableKeywordData(data)" :key="index" class="setting-input">
+        <el-input :value="key" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', index)"/> :
+        <el-input-number :value="value" :min="0" size="large" class="value-input" @change="parseEditableKeyword($event, 'value', index)"/>
+        <el-button icon="el-icon-minus" circle @click="deleteEditableKeywordRow(index)"/>
+      </div>
+      <el-button icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
+    </div>
+    <div v-if="setting.key === ':prune'">
+      <el-radio-group v-model="prune">
+        <el-radio label=":disabled">Disabled</el-radio>
+        <el-radio label=":maxlen">Limit-based</el-radio>
+        <el-radio label=":maxage">Time-based</el-radio>
+      </el-radio-group>
+      <el-form-item v-if="prune === ':maxlen'" label="max length" label-width="100" label-position="left">
+        <el-input-number
+          :value="data[setting.key][':maxlen']"
+          :min="0"
+          placeholder="1500"
+          size="large"
+          class="top-margin"
+          @change="updateSetting($event, settingsGroup.key, setting.key)"/>
+      </el-form-item>
+      <el-form-item v-if="prune === ':maxage'" label="max age" label-width="100" label-position="left">
+        <el-input-number
+          :value="data[setting.key][':maxage']"
+          :min="0"
+          placeholder="3600"
+          size="large"
+          class="top-margin"
+          @change="updateSetting($event, settingsGroup.key, setting.key)"/>
+      </el-form-item>
     </div>
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
@@ -119,6 +151,11 @@ export default {
       set: function(value) {
         this.processNestedData([value], this.settingsGroup.key, this.setting.key, this.data[this.setting.key])
       }
+    },
+    prune() {
+      return this.data[this.setting.key] === ':disabled'
+        ? ':disabled'
+        : Object.keys(this.data[this.setting.key])[0]
     }
   },
   methods: {
@@ -137,7 +174,12 @@ export default {
       console.log(updatedValue)
       this.updateSetting(updatedValue, this.settingsGroup.key, this.setting.key)
     },
-    editableKeyword(type) {
+    editableKeywordWithInteger(type) {
+      return Array.isArray(type)
+        ? type.includes('keyword') && type.includes('integer')
+        : false
+    },
+    editableKeywordWithSelect(type) {
       return Array.isArray(type)
         ? type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1
         : false
@@ -158,6 +200,9 @@ export default {
     processNestedData(value, tab, inputName, childName) {
       const updatedValue = { ...this.$store.state.settings.settings[tab][inputName], ...{ [childName]: value }}
       this.updateSetting(updatedValue, tab, inputName)
+    },
+    toggleAtomTuple(value, tab, input) {
+      console.log(value)
     },
     updateSetting(value, tab, input) {
       this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})

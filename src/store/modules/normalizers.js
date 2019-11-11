@@ -105,15 +105,20 @@ export const parseTuples = (tuples, key) => {
   return tuples.reduce((accum, item) => {
     if (key === 'rate_limit') {
       accum[item.tuple[0]] = item.tuple[1]
+    } else if ((item.tuple[0] === ':sslopts' && item.tuple[1].length === 0) || // should be removed
+      (item.tuple[0] === ':tlsopts' && item.tuple[1].length === 0)) {
+      accum[item.tuple[0]] = {}
     } else if (Array.isArray(item.tuple[1]) &&
-       (typeof item.tuple[1][0] === 'object' && !Array.isArray(item.tuple[1][0])) && item.tuple[1][0]['tuple']) {
+      (typeof item.tuple[1][0] === 'object' && !Array.isArray(item.tuple[1][0])) && item.tuple[1][0]['tuple']) {
       nonAtomsTuples.includes(item.tuple[0])
         ? accum[item.tuple[0]] = parseNonAtomTuples(item.tuple[1])
         : accum[item.tuple[0]] = parseTuples(item.tuple[1])
     } else if (Array.isArray(item.tuple[1])) {
       accum[item.tuple[0]] = item.tuple[1]
+    } else if (item.tuple[0] === ':ip') {
+      accum[item.tuple[0]] = item.tuple[1].tuple.join('.')
     } else if (item.tuple[1] && typeof item.tuple[1] === 'object' && 'tuple' in item.tuple[1]) {
-      accum[item.tuple[0]] = item.tuple[1]['tuple'].join('.')
+      accum[item.tuple[0]] = { [item.tuple[1].tuple[0]]: item.tuple[1].tuple[1] }
     } else if (item.tuple[1] && typeof item.tuple[1] === 'object') {
       nonAtomsObjects.includes(item.tuple[0])
         ? accum[item.tuple[0]] = parseNonAtomObject(item.tuple[1])
