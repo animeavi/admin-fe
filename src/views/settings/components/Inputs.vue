@@ -28,17 +28,7 @@
         :key="index"/>
     </el-select>
     <el-select
-      v-if="Array.isArray(setting.type) && (
-      (setting.type.includes('list') && setting.type.includes('module')) || (setting.type.includes('module') && setting.type.includes('atom')))"
-      :value="data[setting.key]"
-      multiple
-      filterable
-      allow-create
-      @change="updateSetting($event, settingsGroup.key, setting.key)">
-      <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
-    </el-select>
-    <el-select
-      v-if="Array.isArray(setting.type) && setting.type.includes('list') && setting.type.includes('string')"
+      v-if="renderMultipleSelect(setting.type)"
       :value="data[setting.key]"
       multiple
       filterable
@@ -200,6 +190,14 @@ export default {
     processNestedData(value, tab, inputName, childName) {
       const updatedValue = { ...this.$store.state.settings.settings[tab][inputName], ...{ [childName]: value }}
       this.updateSetting(updatedValue, tab, inputName)
+    },
+    renderMultipleSelect(type) {
+      return Array.isArray(type) && (
+        (type.includes('list') && type.includes('string')) ||
+        (type.includes('list') && type.includes('atom')) ||
+        (type.includes('list') && type.includes('module')) ||
+        (type.includes('module') && type.includes('atom'))
+      )
     },
     toggleAtomTuple(value, tab, input) {
       console.log(value)
