@@ -1,6 +1,6 @@
 <template>
   <el-form v-if="!loading" ref="vapidDetailsData" :model="vapidDetailsData" :label-width="labelWidth">
-    <setting :settings-group="vapidDetails" :data="vapidDetailsData"/>
+    <setting :setting-group="vapidDetails" :data="vapidDetailsData"/>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">Submit</el-button>
     </el-form-item>

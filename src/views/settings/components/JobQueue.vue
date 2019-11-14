@@ -1,10 +1,10 @@
 <template>
   <div v-if="!loading">
     <el-form ref="obanQueuesData" :model="obanQueuesData" :label-width="labelWidth">
-      <setting :settings-group="obanQueues" :data="obanQueuesData"/>
+      <setting :setting-group="obanQueues" :data="obanQueuesData"/>
     </el-form>
     <el-form ref="workersData" :model="workersData" :label-width="labelWidth">
-      <setting :settings-group="workers" :data="workersData"/>
+      <setting :setting-group="workers" :data="workersData"/>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>

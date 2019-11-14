@@ -1,20 +1,20 @@
 <template>
   <div v-if="!loading">
     <el-form ref="loggerData" :model="loggerData" :label-width="labelWidth">
-      <setting :settings-group="logger" :data="loggerData"/>
+      <setting :setting-group="logger" :data="loggerData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="consoleData" :model="consoleData" :label-width="labelWidth">
-      <setting :settings-group="console" :data="consoleData"/>
+      <setting :setting-group="console" :data="consoleData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="exsysloggerData" :model="exsysloggerData" :label-width="labelWidth">
-      <setting :settings-group="exsyslogger" :data="exsysloggerData"/>
+      <setting :setting-group="exsyslogger" :data="exsysloggerData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="quackData" :model="quackData" :label-width="labelWidth">
       <el-form-item label="Quack logger:"/>
-      <setting :settings-group="quack" :data="quackData"/>
+      <setting :setting-group="quack" :data="quackData"/>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>

@@ -6,11 +6,11 @@
         By default, settings for <span class="code">pleroma_fe</span> and <span class="code">masto_fe</span> are configured.
         If you want to add your own configuration your settings need to be complete as they will override the defaults.</p>
       </el-form-item>
-      <setting :settings-group="frontend" :data="frontendData"/>
+      <setting :setting-group="frontend" :data="frontendData"/>
     </el-form>
     <el-form ref="assetsData" :model="assetsData" :label-width="labelWidth">
       <el-form-item label="Assets:"/>
-      <setting :settings-group="assets" :data="assetsData"/>
+      <setting :setting-group="assets" :data="assetsData"/>
       <!-- <el-form-item label="Default mascot">
         <el-select :value="assets.default_mascot" clearable @change="updateSetting($event, 'assets', 'default_mascot')"/>
         <p class="expl">An element from mascots - This will be used as the default mascot on MastoFE
@@ -31,16 +31,16 @@
     <div class="line"/>
     <el-form ref="emojiData" :model="emojiData" :label-width="labelWidth">
       <el-form-item label="Emoji:"/>
-      <setting :settings-group="emoji" :data="emojiData"/>
+      <setting :setting-group="emoji" :data="emojiData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="chatData" :model="chatData" :label-width="labelWidth">
-      <setting :settings-group="chat" :data="chatData"/>
+      <setting :setting-group="chat" :data="chatData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="markupData" :model="markupData" :label-width="labelWidth">
       <el-form-item label="Markup settings:"/>
-      <setting :settings-group="markup" :data="markupData"/>
+      <setting :setting-group="markup" :data="markupData"/>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>

@@ -1,11 +1,11 @@
 <template>
   <div v-if="!loading">
     <el-form ref="captchaData" :model="captchaData" :label-width="labelWidth">
-      <setting :settings-group="captcha" :data="captchaData"/>
+      <setting :setting-group="captcha" :data="captchaData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="kocaptchaData" :model="kocaptchaData" :label-width="labelWidth">
-      <setting :settings-group="kocaptcha" :data="kocaptchaData"/>
+      <setting :setting-group="kocaptcha" :data="kocaptchaData"/>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>

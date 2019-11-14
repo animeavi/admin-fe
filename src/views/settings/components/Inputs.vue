@@ -4,11 +4,11 @@
       v-if="setting.type === 'string'"
       :value="data[setting.key]"
       :placeholder="setting.suggestions[0]"
-      @input="updateSetting($event, settingsGroup.key, setting.key)"/>
+      @input="updateSetting($event, settingGroup.key, setting.key)"/>
     <el-switch
       v-if="setting.type === 'boolean'"
       :value="data[setting.key]"
-      @change="updateSetting($event, settingsGroup.key, setting.key)"/>
+      @change="updateSetting($event, settingGroup.key, setting.key)"/>
     <el-input-number
       v-if="setting.type === 'integer'"
       :value="data[setting.key]"
@@ -16,12 +16,12 @@
       :min="0"
       size="large"
       class="top-margin"
-      @change="updateSetting($event, settingsGroup.key, setting.key)"/>
+      @change="updateSetting($event, settingGroup.key, setting.key)"/>
     <el-select
       v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes(false))"
       :value="data[setting.key]"
       clearable
-      @change="updateSetting($event, settingsGroup.key, setting.key)">
+      @change="updateSetting($event, settingGroup.key, setting.key)">
       <el-option
         v-for="(option, index) in setting.suggestions"
         :value="option"
@@ -33,7 +33,7 @@
       multiple
       filterable
       allow-create
-      @change="updateSetting($event, settingsGroup.key, setting.key)">
+      @change="updateSetting($event, settingGroup.key, setting.key)">
       <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
     </el-select>
     <editor
@@ -50,12 +50,12 @@
       v-if="setting.type === 'tuple'"
       :placeholder="setting.key === ':ip' ? 'xxx.xxx.xxx.xx' : setting.suggestions[0]"
       :value="data[setting.key]"
-      @input="updateSetting($event, settingsGroup.key, setting.key)"/>
+      @input="updateSetting($event, settingGroup.key, setting.key)"/>
     <el-input
       v-if="setting.type === 'atom'"
       :value="data[setting.key]"
       :placeholder="setting.suggestions[0]"
-      @input="updateSetting($event, settingsGroup.key, setting.key)">
+      @input="updateSetting($event, settingGroup.key, setting.key)">
       <template slot="prepend">:</template>
     </el-input>
     <div v-if="editableKeywordWithSelect(setting.type)">
@@ -87,7 +87,7 @@
           placeholder="1500"
           size="large"
           class="top-margin"
-          @change="updateSetting($event, settingsGroup.key, setting.key)"/>
+          @change="updateSetting($event, settingGroup.key, setting.key)"/>
       </el-form-item>
       <el-form-item v-if="prune === ':maxage'" label="max age" label-width="100" label-position="left">
         <el-input-number
@@ -96,7 +96,7 @@
           placeholder="3600"
           size="large"
           class="top-margin"
-          @change="updateSetting($event, settingsGroup.key, setting.key)"/>
+          @change="updateSetting($event, settingGroup.key, setting.key)"/>
       </el-form-item>
     </div>
     <p class="expl">{{ setting.description }}</p>
@@ -114,12 +114,6 @@ export default {
     editor: AceEditor
   },
   props: {
-    settingsGroup: {
-      type: Object,
-      default: function() {
-        return {}
-      }
-    },
     data: {
       type: Object || Array,
       default: function() {
@@ -131,6 +125,19 @@ export default {
       default: function() {
         return {}
       }
+    },
+    settingGroup: {
+      type: Object,
+      default: function() {
+        return {}
+      }
+    },
+    settingParent: {
+      type: Object,
+      default: function() {
+        return {}
+      },
+      required: false
     }
   },
   computed: {
@@ -139,7 +146,7 @@ export default {
         return this.data[this.setting.key] ? this.data[this.setting.key][0] : ''
       },
       set: function(value) {
-        this.processNestedData([value], this.settingsGroup.key, this.setting.key, this.data[this.setting.key])
+        this.processNestedData([value], this.settingGroup.key, this.setting.key, this.data[this.setting.key])
       }
     },
     prune() {
@@ -150,11 +157,11 @@ export default {
   },
   methods: {
     addRowToEditableKeyword() {
-      console.log(this.settingsGroup.key, this.setting.key)
+      console.log(this.settingGroup.key, this.setting.key)
       const updatedValue = this.editableKeywordData(this.data).reduce((acc, el, i) => {
         return { ...acc, [el[0]]: el[1] }
       }, {})
-      this.updateSetting({ ...updatedValue, '': [] }, this.settingsGroup.key, this.setting.key)
+      this.updateSetting({ ...updatedValue, '': [] }, this.settingGroup.key, this.setting.key)
     },
     deleteEditableKeywordRow(index) {
       const filteredValues = this.editableKeywordData(this.data).filter((el, i) => index !== i)
@@ -162,7 +169,7 @@ export default {
         return { ...acc, [el[0]]: el[1] }
       }, {})
       console.log(updatedValue)
-      this.updateSetting(updatedValue, this.settingsGroup.key, this.setting.key)
+      this.updateSetting(updatedValue, this.settingGroup.key, this.setting.key)
     },
     editableKeywordWithInteger(type) {
       return Array.isArray(type)
@@ -185,7 +192,7 @@ export default {
         return { ...acc, [el[0]]: el[1] }
       }, {})
       console.log(updatedValue)
-      this.updateSetting(updatedValue, this.settingsGroup.key, this.setting.key)
+      this.updateSetting(updatedValue, this.settingGroup.key, this.setting.key)
     },
     processNestedData(value, tab, inputName, childName) {
       const updatedValue = { ...this.$store.state.settings.settings[tab][inputName], ...{ [childName]: value }}

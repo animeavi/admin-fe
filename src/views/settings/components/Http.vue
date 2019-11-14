@@ -1,15 +1,15 @@
 <template>
   <div v-if="!loading">
     <el-form ref="httpData" :model="httpData" :label-width="labelWidth">
-      <setting :settings-group="http" :data="httpData"/>
+      <setting :setting-group="http" :data="httpData"/>
     </el-form>
     <el-form ref="corsPlugData" :model="corsPlugData" :label-width="labelWidth">
       <el-form-item label="Cors plug config:"/>
-      <setting :settings-group="corsPlug" :data="corsPlugData"/>
+      <setting :setting-group="corsPlug" :data="corsPlugData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="httpSecurityData" :model="httpSecurityData" :label-width="labelWidth">
-      <setting :settings-group="httpSecurity" :data="httpSecurityData"/>
+      <setting :setting-group="httpSecurity" :data="httpSecurityData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="hackneyPoolsData" :model="hackneyPoolsData" :label-width="labelWidth">

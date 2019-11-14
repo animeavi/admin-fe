@@ -1,32 +1,32 @@
 <template>
   <div v-if="!loading">
     <el-form ref="instanceData" :model="instanceData" :label-width="labelWidth">
-      <setting :settings-group="instance" :data="instanceData"/>
+      <setting :setting-group="instance" :data="instanceData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="uriSchemesData" :model="uriSchemesData" :label-width="labelWidth">
-      <setting :settings-group="uriSchemes" :data="uriSchemesData"/>
+      <setting :setting-group="uriSchemes" :data="uriSchemesData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="adminTokenData" :model="adminTokenData" :label-width="labelWidth">
-      <setting :settings-group="adminToken" :data="adminTokenData"/>
+      <setting :setting-group="adminToken" :data="adminTokenData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="scheduledActivityData" :model="scheduledActivityData" :label-width="labelWidth">
-      <setting :settings-group="scheduledActivity" :data="scheduledActivityData"/>
+      <setting :setting-group="scheduledActivity" :data="scheduledActivityData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="fetchInitialPostsData" :model="fetchInitialPostsData" :label-width="labelWidth">
-      <setting :settings-group="fetchInitialPosts" :data="fetchInitialPostsData"/>
+      <setting :setting-group="fetchInitialPosts" :data="fetchInitialPostsData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="suggestionsData" :model="suggestionsData" :label-width="labelWidth">
       <el-form-item label="Suggestions:"/>
-      <setting :settings-group="suggestions" :data="suggestionsData"/>
+      <setting :setting-group="suggestions" :data="suggestionsData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="pleromaUserData" :model="pleromaUserData" :label-width="labelWidth">
-      <setting :settings-group="pleromaUser" :data="pleromaUserData"/>
+      <setting :setting-group="pleromaUser" :data="pleromaUserData"/>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>

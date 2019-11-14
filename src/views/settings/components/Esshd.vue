@@ -1,7 +1,7 @@
 <template>
   <div v-if="!loading">
     <el-form ref="esshdData" :model="esshdData" :label-width="labelWidth">
-      <setting :settings-group="esshd" :data="esshdData"/>
+      <setting :setting-group="esshd" :data="esshdData"/>
       <el-form-item>
         <p class="expl">Feel free to adjust the priv_dir and port number.
         Then you will have to create the key for the keys (in the example <span class="code">priv/ssh_keys</span>) and create the host keys with

@@ -1,6 +1,6 @@
 <template>
   <el-form v-if="!loading" ref="endpointData" :model="endpointData" :label-width="labelWidth">
-    <setting :settings-group="endpoint" :data="endpointData"/>
+    <setting :setting-group="endpoint" :data="endpointData"/>
     <div class="line"/>
     <el-form-item class="options-paragraph-container">
       <p class="options-paragraph">Only common options are listed here. You can add more (all configuration options can be viewed

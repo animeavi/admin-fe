@@ -1,19 +1,19 @@
 <template>
   <div v-if="!loading">
     <el-form ref="pleromaAuthenticatorData" :model="pleromaAuthenticatorData" :label-width="labelWidth">
-      <setting :settings-group="pleromaAuthenticator" :data="pleromaAuthenticatorData"/>
+      <setting :setting-group="pleromaAuthenticator" :data="pleromaAuthenticatorData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="authData" :model="authData" :label-width="labelWidth">
-      <setting :settings-group="auth" :data="authData"/>
+      <setting :setting-group="auth" :data="authData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="ldapData" :model="ldapData" :label-width="labelWidth">
-      <setting :settings-group="ldap" :data="ldapData"/>
+      <setting :setting-group="ldap" :data="ldapData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="oauth2" :model="oauth2Data" :label-width="labelWidth">
-      <setting :settings-group="oauth2" :data="oauth2Data"/>
+      <setting :setting-group="oauth2" :data="oauth2Data"/>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>
