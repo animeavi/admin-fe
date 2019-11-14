@@ -230,6 +230,10 @@ export default {
     passwordResetTokenCreated: 'Password reset token was created',
     accountCreated: 'New account was created!'
   },
+  statuses: {
+    statuses: 'Statuses',
+    instanceFilter: 'Instance filter'
+  },
   userProfile: {
     tags: 'Tags',
     moderator: 'Moderator',

@@ -21,6 +21,20 @@ const settings = {
   ]
 }
 
+const statusesDisabled = disabledFeatures.includes('statuses')
+const statuses = {
+  path: '/statuses',
+  component: Layout,
+  children: [
+    {
+      path: 'index',
+      component: () => import('@/views/statuses/index'),
+      name: 'Statuses',
+      meta: { title: 'Statuses', icon: 'form', noCache: true }
+    }
+  ]
+}
+
 const reportsDisabled = disabledFeatures.includes('reports')
 const reports = {
   path: '/reports',
@@ -126,6 +140,7 @@ export const asyncRouterMap = [
       }
     ]
   },
+  ...(statusesDisabled ? [] : [statuses]),
   ...(settingsDisabled ? [] : [settings]),
   ...(reportsDisabled ? [] : [reports]),
   ...(invitesDisabled ? [] : [invites]),

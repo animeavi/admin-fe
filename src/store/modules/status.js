@@ -1,6 +1,18 @@
-import { changeStatusScope, deleteStatus } from '@/api/status'
+import { changeStatusScope, deleteStatus, fetchStatusesByInstance } from '@/api/status'
 
 const status = {
+  state: {
+    fetchedStatuses: [],
+    loading: false
+  },
+  mutations: {
+    SET_STATUSES: (state, statuses) => {
+      state.fetchedStatuses = statuses
+    },
+    SET_LOADING: (state, status) => {
+      state.loading = status
+    }
+  },
   actions: {
     async ChangeStatusScope({ dispatch, getters }, { statusId, isSensitive, visibility, reportCurrentPage, userId, godmode }) {
       await changeStatusScope(statusId, isSensitive, visibility, getters.authHost, getters.token)
@@ -17,6 +29,13 @@ const status = {
       } else if (userId.length > 0) {
         dispatch('FetchUserStatuses', { userId, godmode })
       }
+    },
+    async FetchStatusesByInstance({ commit, getters }, instance) {
+      commit('SET_LOADING', true)
+      const statuses = await fetchStatusesByInstance(instance, getters.authHost, getters.token)
+
+      commit('SET_STATUSES', statuses.data)
+      commit('SET_LOADING', false)
     }
   }
 }
