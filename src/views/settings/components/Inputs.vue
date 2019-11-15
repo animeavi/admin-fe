@@ -99,6 +99,30 @@
           @change="updateSetting($event, settingGroup.key, setting.key)"/>
       </el-form-item>
     </div>
+    <div v-if="settingGroup.key === ':rate_limit'">
+      <div v-if="!rateLimitAuthUsers">
+        <el-input :value="rateLimitAllUsers[0]" placeholder="scale" class="scale-input" @input="parseRateLimiter($event, setting.key, 'scale', 'oneLimit', rateLimitAllUsers)"/> :
+        <el-input :value="rateLimitAllUsers[1]" placeholder="limit" class="limit-input" @input="parseRateLimiter($event, setting.key, 'limit', 'oneLimit', rateLimitAllUsers)"/>
+        <div class="limit-button-container">
+          <el-button icon="el-icon-plus" circle @click="toggleLimits([{ 'tuple': [null, null] }, { 'tuple': [null, null] }], setting.key)"/>
+          <p class="expl limit-expl">Set different limits for unauthenticated and authenticated users</p>
+        </div>
+      </div>
+      <div v-if="rateLimitAuthUsers">
+        <el-form-item label="Authenticated users:">
+          <el-input :value="rateLimitAuthUsers[0]" placeholder="scale" class="scale-input" @input="parseRateLimiter($event, setting.key, 'scale', 'authUserslimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/> :
+          <el-input :value="rateLimitAuthUsers[1]" placeholder="limit" class="limit-input" @input="parseRateLimiter($event, setting.key, 'limit', 'authUserslimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
+        </el-form-item>
+        <el-form-item label="Unauthenticated users:">
+          <el-input :value="rateLimitUnauthUsers[0]" placeholder="scale" class="scale-input" @input="parseRateLimiter($event, setting.key, 'scale', 'unauthUsersLimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/> :
+          <el-input :value="rateLimitUnauthUsers[1]" placeholder="limit" class="limit-input" @input="parseRateLimiter($event, setting.key, 'limit', 'unauthUsersLimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
+        </el-form-item>
+        <div class="limit-button-container">
+          <el-button icon="el-icon-minus" circle @click="toggleLimits({ 'tuple': [null, null] }, setting.key)"/>
+          <p class="expl limit-expl">Set limit for all users</p>
+        </div>
+      </div>
+    </div>
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
 </template>
@@ -153,6 +177,19 @@ export default {
       return this.data[this.setting.key] === ':disabled'
         ? ':disabled'
         : Object.keys(this.data[this.setting.key])[0]
+    },
+    rateLimitAllUsers() {
+      return this.data[this.setting.key] ? Object.entries(this.data[this.setting.key])[0] : [null, null]
+    },
+    rateLimitAuthUsers() {
+      return Array.isArray(this.data[this.setting.key])
+        ? Object.entries(this.data[this.setting.key][1])[0]
+        : false
+    },
+    rateLimitUnauthUsers() {
+      return Array.isArray(this.data[this.setting.key])
+        ? Object.entries(this.data[this.setting.key][0])[0]
+        : false
     }
   },
   methods: {
@@ -194,6 +231,22 @@ export default {
       console.log(updatedValue)
       this.updateSetting(updatedValue, this.settingGroup.key, this.setting.key)
     },
+    parseRateLimiter(value, input, typeOfInput, typeOfLimit, currentValue) {
+      if (typeOfLimit === 'oneLimit') {
+        const valueToSend = typeOfInput === 'scale' ? { 'tuple': [value, currentValue[1]] } : { 'tuple': [currentValue[0], value] }
+        this.updateSetting(valueToSend, 'rate_limit', input)
+      } else if (typeOfLimit === 'authUserslimit') {
+        const valueToSend = typeOfInput === 'scale'
+          ? [{ 'tuple': [currentValue[0][0], currentValue[0][1]] }, { 'tuple': [value, currentValue[1][1]] }]
+          : [{ 'tuple': [currentValue[0][0], currentValue[0][1]] }, { 'tuple': [currentValue[1][0], value] }]
+        this.updateSetting(valueToSend, 'rate_limit', input)
+      } else if (typeOfLimit === 'unauthUsersLimit') {
+        const valueToSend = typeOfInput === 'scale'
+          ? [{ 'tuple': [value, currentValue[0][1]] }, { 'tuple': [currentValue[1][0], currentValue[1][1]] }]
+          : [{ 'tuple': [currentValue[0][0], value] }, { 'tuple': [currentValue[1][0], currentValue[1][1]] }]
+        this.updateSetting(valueToSend, 'rate_limit', input)
+      }
+    },
     processNestedData(value, tab, inputName, childName) {
       const updatedValue = { ...this.$store.state.settings.settings[tab][inputName], ...{ [childName]: value }}
       this.updateSetting(updatedValue, tab, inputName)
@@ -208,6 +261,9 @@ export default {
     },
     toggleAtomTuple(value, tab, input) {
       console.log(value)
+    },
+    toggleLimits(value, input) {
+      this.updateSetting(value, 'rate_limit', input)
     },
     updateSetting(value, tab, input) {
       this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})
