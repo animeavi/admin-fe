@@ -1,9 +1,9 @@
 <template>
-  <el-form-item :label="setting.label">
+  <el-form-item :label="setting.label" :label-width="customLabelWidth">
     <el-input
       v-if="setting.type === 'string'"
       :value="data[setting.key]"
-      :placeholder="setting.suggestions[0]"
+      :placeholder="setting.suggestions ? setting.suggestions[0] : null"
       @input="updateSetting($event, settingGroup.key, setting.key)"/>
     <el-switch
       v-if="setting.type === 'boolean'"
@@ -12,7 +12,7 @@
     <el-input-number
       v-if="setting.type === 'integer'"
       :value="data[setting.key]"
-      :placeholder="setting.suggestions[0].toString()"
+      :placeholder="setting.suggestions ? setting.suggestions[0].toString() : null"
       :min="0"
       size="large"
       class="top-margin"
@@ -27,6 +27,15 @@
         :value="option"
         :key="index"/>
     </el-select>
+    <div v-if="setting.type === 'keyword'">
+      <div v-for="subSetting in setting.children" :key="subSetting.key">
+        <inputs
+          :setting-group="settingGroup"
+          :setting="subSetting"
+          :data="data[setting.key]"
+          :custom-label-width="'100px'"/>
+      </div>
+    </div>
     <el-select
       v-if="renderMultipleSelect(setting.type)"
       :value="data[setting.key]"
@@ -123,6 +132,14 @@
         </div>
       </div>
     </div>
+    <div v-if="setting.key === ':proxy_url'" class="setting-input">
+      <el-checkbox v-model="proxyUrlTypeSocks5" class="name-input" border>Socks5</el-checkbox>
+      <el-input
+        :value="proxyUrlData"
+        :placeholder="setting.suggestions ? setting.suggestions[0] : ''"
+        class="value-input"
+        @input="updateSetting($event, settingGroup.key, setting.key)"/>
+    </div>
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
 </template>
@@ -138,6 +155,13 @@ export default {
     editor: AceEditor
   },
   props: {
+    customLabelWidth: {
+      type: String,
+      default: function() {
+        return this.labelWidth
+      },
+      required: false
+    },
     data: {
       type: Object || Array,
       default: function() {
@@ -172,6 +196,21 @@ export default {
       set: function(value) {
         this.processNestedData([value], this.settingGroup.key, this.setting.key, this.data[this.setting.key])
       }
+    },
+    labelWidth() {
+      return this.isMobile ? '100px' : '240px'
+    },
+    proxyUrlData() {
+      if (!this.data[this.setting.key]) {
+        return null
+      } else {
+        return typeof this.data[this.setting.key] === 'string'
+          ? this.data[this.setting.key]
+          : `${this.data[this.setting.key][1]}:${this.data[this.setting.key][2]}`
+      }
+    },
+    proxyUrlTypeSocks5() {
+      return Array.isArray(this.data[this.setting.key]) && this.data[this.setting.key][0] === 'socks5'
     },
     prune() {
       return this.data[this.setting.key] === ':disabled'
@@ -256,7 +295,8 @@ export default {
         (type.includes('list') && type.includes('string')) ||
         (type.includes('list') && type.includes('atom')) ||
         (type.includes('list') && type.includes('module')) ||
-        (type.includes('module') && type.includes('atom'))
+        (type.includes('module') && type.includes('atom')) ||
+        this.setting.key === ':args'
       )
     },
     toggleAtomTuple(value, tab, input) {
