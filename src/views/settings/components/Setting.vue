@@ -3,27 +3,46 @@
     <el-form-item v-if="settingGroup.description" class="options-paragraph-container">
       <p class="options-paragraph">{{ settingGroup.description }}</p>
     </el-form-item>
-    <div v-for="setting in settingGroup.children" :key="setting.key">
-      <div v-if="!compound(setting.type)">
+    <div v-if="settingGroup.key === 'Pleroma.Emails.Mailer'">
+      <div v-for="setting in settingGroup.children.filter(setting => !setting.group)" :key="setting.key">
         <inputs
           :setting-group="settingGroup"
           :setting="setting"
           :data="data"/>
       </div>
-      <div v-if="compound(setting.type)">
-        <el-form-item :label="`${setting.label}:`"/>
-        <div v-for="subSetting in setting.children" :key="subSetting.key">
+      <div
+        v-for="setting in settingGroup.children.filter(setting => setting.group && setting.group.includes(setting.key))"
+        :key="setting.key">
+        <div class="line"/>
+        <inputs
+          :setting-group="settingGroup"
+          :setting="setting"
+          :data="data"/>
+      </div>
+    </div>
+    <div v-else>
+      <div v-for="setting in settingGroup.children" :key="setting.key">
+        <div v-if="!compound(setting.type)">
           <inputs
             :setting-group="settingGroup"
-            :setting-parent="setting"
-            :setting="subSetting"
-            :data="data[setting.key]"
-          />
+            :setting="setting"
+            :data="data"/>
         </div>
-        <div v-if="!setting.children">
-          <inputs :setting-group="settingGroup" :setting="setting" :data="data[setting.key]"/>
+        <div v-if="compound(setting.type)">
+          <el-form-item :label="`${setting.label}:`"/>
+          <div v-for="subSetting in setting.children" :key="subSetting.key">
+            <inputs
+              :setting-group="settingGroup"
+              :setting-parent="setting"
+              :setting="subSetting"
+              :data="data[setting.key]"
+            />
+          </div>
+          <div v-if="!setting.children">
+            <inputs :setting-group="settingGroup" :setting="setting" :data="data[setting.key]"/>
+          </div>
+          <div class="line"/>
         </div>
-        <div class="line"/>
       </div>
     </div>
   </div>
