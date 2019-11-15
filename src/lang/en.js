@@ -232,7 +232,8 @@ export default {
   },
   statuses: {
     statuses: 'Statuses',
-    instanceFilter: 'Instance filter'
+    instanceFilter: 'Instance filter',
+    loadMore: 'Load more'
   },
   userProfile: {
     tags: 'Tags',

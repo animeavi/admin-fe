@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading" class="statuses-container">
+  <div v-if="!loadingPeers" class="statuses-container">
     <h1>
       {{ $t('statuses.statuses') }}
     </h1>
@@ -13,6 +13,9 @@
       </el-select>
     </div>
     <status v-for="status in statuses" :key="status.id" :status="status" />
+    <div v-if="statuses.length > 0" class="statuses-pagination">
+      <el-button @click="handleLoadMore">{{ $t('statuses.loadMore') }}</el-button>
+    </div>
   </div>
 </template>
 
@@ -28,11 +31,12 @@ export default {
   data() {
     return {
       selectedInstance: '',
-      page: 1
+      page: 1,
+      pageSize: 2
     }
   },
   computed: {
-    loading() {
+    loadingPeers() {
       return this.$store.state.peers.loading
     },
     ...mapGetters([
@@ -47,7 +51,18 @@ export default {
   },
   methods: {
     handleFilterChange(instance) {
-      this.$store.dispatch('FetchStatusesByInstance', instance)
+      this.page = 1
+
+      this.$store.dispatch('FetchStatusesByInstance', { instance, page: this.page, pageSize: this.pageSize })
+    },
+    handleLoadMore() {
+      this.page = this.page + 1
+
+      this.$store.dispatch('FetchStatusesPageByInstance', {
+        instance: this.selectedInstance,
+        page: this.page,
+        pageSize: this.pageSize
+      })
     }
   }
 }
@@ -59,6 +74,10 @@ export default {
 }
 .filter-container {
   margin: 22px 15px 15px 0;
+}
+.statuses-pagination {
+  padding: 15px 0;
+  text-align: center;
 }
 h1 {
   margin: 22px 0 0 0;

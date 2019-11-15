@@ -9,6 +9,9 @@ const status = {
     SET_STATUSES: (state, statuses) => {
       state.fetchedStatuses = statuses
     },
+    PUSH_STATUSES: (state, statuses) => {
+      state.fetchedStatuses = [...state.fetchedStatuses, ...statuses]
+    },
     SET_LOADING: (state, status) => {
       state.loading = status
     }
@@ -30,11 +33,18 @@ const status = {
         dispatch('FetchUserStatuses', { userId, godmode })
       }
     },
-    async FetchStatusesByInstance({ commit, getters }, instance) {
+    async FetchStatusesByInstance({ commit, getters }, { instance, page, pageSize }) {
       commit('SET_LOADING', true)
-      const statuses = await fetchStatusesByInstance(instance, getters.authHost, getters.token)
+      const statuses = await fetchStatusesByInstance(instance, getters.authHost, getters.token, pageSize, page)
 
       commit('SET_STATUSES', statuses.data)
+      commit('SET_LOADING', false)
+    },
+    async FetchStatusesPageByInstance({ commit, getters }, { instance, page, pageSize }) {
+      commit('SET_LOADING', true)
+      const statuses = await fetchStatusesByInstance(instance, getters.authHost, getters.token, pageSize, page)
+
+      commit('PUSH_STATUSES', statuses.data)
       commit('SET_LOADING', false)
     }
   }
