@@ -5,10 +5,10 @@ import { baseName } from './utils'
 export async function changeState(state, id, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/reports/${id}`,
-    method: 'put',
+    url: `/api/pleroma/admin/reports`,
+    method: 'patch',
     headers: authHeaders(token),
-    data: { state }
+    data: { reports: [{ id, state }] }
   })
 }
 

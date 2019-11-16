@@ -24,8 +24,12 @@ const reports = {
   },
   actions: {
     async ChangeReportState({ commit, getters, state }, { reportState, reportId }) {
-      const { data } = await changeState(reportState, reportId, getters.authHost, getters.token)
-      const updatedReports = state.fetchedReports.map(report => report.id === reportId ? data : report)
+      changeState(reportState, reportId, getters.authHost, getters.token)
+
+      const updatedReports = state.fetchedReports.map(report => {
+        return report.id === reportId ? { ...report, state: reportState } : report
+      })
+
       commit('SET_REPORTS', updatedReports)
     },
     async ChangeStatusScope({ commit, getters, state }, { statusId, isSensitive, visibility, reportId }) {
