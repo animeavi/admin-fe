@@ -23,8 +23,7 @@ export async function filterReports(filter, limit, max_id, authHost, token) {
 }
 
 export async function changeState(state, id, authHost, token) {
-  const report = reports.find(report => report.id === id)
-  return Promise.resolve({ data: { ...report, state }})
+  return Promise.resolve({ data: '' })
 }
 
 export async function changeStatusScope(id, sensitive, visibility, authHost, token) {
