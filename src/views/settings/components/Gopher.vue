@@ -32,7 +32,7 @@ export default {
       return this.isMobile ? '100px' : '240px'
     },
     loading() {
-      return this.$store.state.settings.loading
+      return this.settings.loading
     }
   },
   methods: {
