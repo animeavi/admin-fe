@@ -22,13 +22,13 @@
     </div>
     <div v-else>
       <div v-for="setting in settingGroup.children" :key="setting.key">
-        <div v-if="!compound(setting.type)">
+        <div v-if="!compound(setting)">
           <inputs
             :setting-group="settingGroup"
             :setting="setting"
             :data="data"/>
         </div>
-        <div v-if="compound(setting.type)">
+        <div v-if="compound(setting)">
           <el-form-item :label="`${setting.label}:`"/>
           <div v-for="subSetting in setting.children" :key="subSetting.key">
             <inputs
@@ -80,8 +80,11 @@ export default {
     }
   },
   methods: {
-    compound(type) {
-      return ['map', 'keyword'].includes(type) || type.includes('keyword')
+    compound({ type, key, children }) {
+      return type === 'keyword' ||
+        type === 'map' ||
+        type.includes('keyword') ||
+        key === ':replace'
     },
     updateSetting(value, tab, input) {
       this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})

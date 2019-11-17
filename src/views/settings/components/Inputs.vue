@@ -67,6 +67,14 @@
       @input="updateSetting($event, settingGroup.key, setting.key)">
       <template slot="prepend">:</template>
     </el-input>
+    <div v-if="editableKeywordWithInput(setting.key)">
+      <div v-for="([key, value], index) in editableKeywordData(data)" :key="index" class="setting-input">
+        <el-input :value="key" placeholder="pattern" class="name-input" @input="parseEditableKeyword($event, 'key', index)"/> :
+        <el-input :value="value" placeholder="replacement" class="value-input" @input="parseEditableKeyword($event, 'value', index)"/>
+        <el-button icon="el-icon-minus" circle @click="deleteEditableKeywordRow(index)"/>
+      </div>
+      <el-button icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
+    </div>
     <div v-if="editableKeywordWithSelect(setting.type)">
       <div v-for="([key, value], index) in editableKeywordData(data)" :key="index" class="setting-input">
         <el-input :value="key" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', index)"/> :
@@ -233,7 +241,6 @@ export default {
   },
   methods: {
     addRowToEditableKeyword() {
-      console.log(this.settingGroup.key, this.setting.key)
       const updatedValue = this.editableKeywordData(this.data).reduce((acc, el, i) => {
         return { ...acc, [el[0]]: el[1] }
       }, {})
@@ -247,15 +254,17 @@ export default {
       console.log(updatedValue)
       this.updateSetting(updatedValue, this.settingGroup.key, this.setting.key)
     },
+    editableKeywordWithInput(key) {
+      return key === ':replace'
+    },
     editableKeywordWithInteger(type) {
       return Array.isArray(type)
         ? type.includes('keyword') && type.includes('integer')
         : false
     },
     editableKeywordWithSelect(type) {
-      return Array.isArray(type)
-        ? type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1
-        : false
+      return type === 'map' ||
+      (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
     },
     editableKeywordData(data) {
       return Object.keys(data).map(key => [key, data[key]])
@@ -296,6 +305,7 @@ export default {
         (type.includes('list') && type.includes('atom')) ||
         (type.includes('list') && type.includes('module')) ||
         (type.includes('module') && type.includes('atom')) ||
+        (type.includes('regex') && type.includes('string')) ||
         this.setting.key === ':args'
       )
     },
