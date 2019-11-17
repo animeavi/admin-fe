@@ -22,6 +22,12 @@ const settings = {
       const newSettings = data.reduce((acc, { group, key, value }) => {
         if (group === 'cors_plug') {
           acc[':cors_plug'] = { ...acc[':cors_plug'], [key]: value }
+        } else if (group === 'logger') {
+          const parsedValue = valueHasTuples(key, value) ? value : parseTuples(value, key)
+          acc[':logger'] = acc[':logger'] ? { ...acc[':logger'], [key]: parsedValue } : { [key]: parsedValue }
+        } else if (group === 'quack') {
+          const parsedValue = valueHasTuples(key, value) ? value : parseTuples(value, key)
+          acc[':quack'] = acc[':quack'] ? { ...acc[':quack'], [key]: parsedValue } : { [key]: parsedValue }
         } else {
           const parsedValue = valueHasTuples(key, value) ? { value } : parseTuples(value, key)
           acc[key] = { ...acc[key], ...parsedValue }
