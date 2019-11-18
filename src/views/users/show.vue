@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import Status from '../status/Status'
+import Status from '@/components/Status'
 
 export default {
   name: 'UsersShow',

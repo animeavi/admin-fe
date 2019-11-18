@@ -64,7 +64,7 @@
 import moment from 'moment'
 import ModerateUserDropdown from './ModerateUserDropdown'
 import ReportCard from './ReportCard'
-import Status from '../../status/Status'
+import Status from '@/components/Status'
 
 export default {
   name: 'Report',

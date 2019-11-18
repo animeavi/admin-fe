@@ -81,7 +81,7 @@
 
 <script>
 import moment from 'moment'
-import Status from '../../status/Status'
+import Status from '@/components/Status'
 import ModerateUserDropdown from './ModerateUserDropdown'
 
 export default {
