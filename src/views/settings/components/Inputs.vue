@@ -148,6 +148,14 @@
         class="value-input"
         @input="updateSetting($event, settingGroup.key, setting.key)"/>
     </div>
+    <div v-if="settingGroup.group === ':auto_linker' && (setting.key === ':class' || setting.key === ':rel')">
+      <el-switch :value="autoLinkerBooleanValue(setting.key)" @change="processAutoLinker($event, 'auto_linker', 'opts', 'class')"/>
+      <el-input v-if="autoLinkerBooleanValue(setting.key)" :value="autoLinkerStringValue(setting.key)" @input="processAutoLinker($event, settingGroup.key, ':opts', setting.key)"/>
+    </div>
+    <div v-if="settingGroup.group === ':auto_linker' && (setting.key === ':truncate')">
+      <el-switch :value="autoLinkerBooleanValue(setting.key)" @change="processAutoLinker($event, 'auto_linker', 'opts', 'class')"/>
+      <el-input-number v-if="autoLinkerBooleanValue(setting.key)" :value="autoLinkerIntegerValue(setting.key)" @input="processAutoLinker($event, settingGroup.key, ':opts', setting.key)"/>
+    </div>
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
 </template>
@@ -246,6 +254,18 @@ export default {
       }, {})
       this.updateSetting({ ...updatedValue, '': [] }, this.settingGroup.key, this.setting.key)
     },
+    autoLinkerBooleanValue(key) {
+      const value = this.data[this.setting.key]
+      return typeof value === 'string' || typeof value === 'number'
+    },
+    autoLinkerIntegerValue(key) {
+      const value = this.data[this.setting.key]
+      return value || 0
+    },
+    autoLinkerStringValue(key) {
+      const value = this.data[this.setting.key]
+      return value || ''
+    },
     deleteEditableKeywordRow(index) {
       const filteredValues = this.editableKeywordData(this.data).filter((el, i) => index !== i)
       const updatedValue = filteredValues.reduce((acc, el, i) => {
@@ -294,6 +314,8 @@ export default {
           : [{ 'tuple': [currentValue[0][0], value] }, { 'tuple': [currentValue[1][0], currentValue[1][1]] }]
         this.updateSetting(valueToSend, 'rate_limit', input)
       }
+    },
+    processAutoLinker(value, tab, inputName, childName) {
     },
     processNestedData(value, tab, inputName, childName) {
       const updatedValue = { ...this.$store.state.settings.settings[tab][inputName], ...{ [childName]: value }}
