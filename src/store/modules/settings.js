@@ -4,7 +4,21 @@ import { filterIgnored, parseTuples, valueHasTuples, wrapConfig } from './normal
 const settings = {
   state: {
     description: [],
-    settings: {},
+    settings: {
+      auto_linker: {},
+      cors_plug: {},
+      esshd: {},
+      http_signatures: {},
+      logger: {},
+      mime: {},
+      phoenix: {},
+      pleroma: {},
+      prometheus: {},
+      quack: {},
+      tesla: {},
+      ueberauth: {},
+      web_push_encryption: {}
+    },
     ignoredIfNotEnabled: ['enabled', 'handler', 'password_authenticator', 'port', 'priv_dir'],
     loading: true
   },
@@ -20,18 +34,8 @@ const settings = {
     },
     SET_SETTINGS: (state, data) => {
       const newSettings = data.reduce((acc, { group, key, value }) => {
-        if (group === 'cors_plug') {
-          acc[':cors_plug'] = { ...acc[':cors_plug'], [key]: value }
-        } else if (group === 'logger') {
-          const parsedValue = valueHasTuples(key, value) ? value : parseTuples(value, key)
-          acc[':logger'] = acc[':logger'] ? { ...acc[':logger'], [key]: parsedValue } : { [key]: parsedValue }
-        } else if (group === 'quack') {
-          const parsedValue = valueHasTuples(key, value) ? value : parseTuples(value, key)
-          acc[':quack'] = acc[':quack'] ? { ...acc[':quack'], [key]: parsedValue } : { [key]: parsedValue }
-        } else {
-          const parsedValue = valueHasTuples(key, value) ? { value } : parseTuples(value, key)
-          acc[key] = { ...acc[key], ...parsedValue }
-        }
+        const parsedValue = valueHasTuples(key, value) ? { value } : parseTuples(value, key)
+        acc[group][key] = { ...acc[group][key], ...parsedValue }
         return acc
       }, state.settings)
       state.settings = newSettings

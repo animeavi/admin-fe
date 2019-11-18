@@ -29,7 +29,7 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Captcha')
     },
     captchaData() {
-      return this.settings.settings['Pleroma.Captcha']
+      return this.settings.settings.pleroma['Pleroma.Captcha']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
@@ -38,7 +38,7 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Captcha.Kocaptcha')
     },
     kocaptchaData() {
-      return this.settings.settings['Pleroma.Captcha.Kocaptcha']
+      return this.settings.settings.pleroma['Pleroma.Captcha.Kocaptcha']
     },
     labelWidth() {
       return this.isMobile ? '100px' : '240px'

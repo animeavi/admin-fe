@@ -29,7 +29,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':activitypub')
     },
     activitypubData() {
-      return this.settings.settings[':activitypub']
+      return this.settings.settings.pleroma[':activitypub']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
@@ -44,7 +44,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':user')
     },
     userData() {
-      return this.settings.settings[':user']
+      return this.settings.settings.pleroma[':user']
     }
   },
   methods: {

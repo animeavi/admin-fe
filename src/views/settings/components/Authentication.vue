@@ -37,7 +37,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':auth')
     },
     authData() {
-      return this.settings.settings[':auth']
+      return this.settings.settings.pleroma[':auth']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
@@ -49,7 +49,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':ldap')
     },
     ldapData() {
-      return this.settings.settings[':ldap']
+      return this.settings.settings.pleroma[':ldap']
     },
     loading() {
       return this.settings.loading
@@ -58,13 +58,13 @@ export default {
       return this.settings.description.find(setting => setting.key === ':oauth2')
     },
     oauth2Data() {
-      return this.settings.settings[':oauth2']
+      return this.settings.settings.pleroma[':oauth2']
     },
     pleromaAuthenticator() {
       return this.settings.description.find(setting => setting.description === 'Authenticator')
     },
     pleromaAuthenticatorData() {
-      return this.settings.settings['']
+      return this.settings.settings.pleroma['Pleroma.Web.Auth.Authenticator']
     }
   },
   methods: {
