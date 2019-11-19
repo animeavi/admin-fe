@@ -2,16 +2,16 @@
   <el-form-item :label="setting.label" :label-width="customLabelWidth">
     <el-input
       v-if="setting.type === 'string'"
-      :value="data[setting.key]"
+      :value="inputValue"
       :placeholder="setting.suggestions ? setting.suggestions[0] : null"
       @input="updateSetting($event, settingGroup.key, setting.key)"/>
     <el-switch
       v-if="setting.type === 'boolean'"
-      :value="data[setting.key]"
+      :value="inputValue"
       @change="updateSetting($event, settingGroup.key, setting.key)"/>
     <el-input-number
       v-if="setting.type === 'integer'"
-      :value="data[setting.key]"
+      :value="inputValue"
       :placeholder="setting.suggestions ? setting.suggestions[0].toString() : null"
       :min="0"
       size="large"
@@ -212,6 +212,11 @@ export default {
       set: function(value) {
         this.processNestedData([value], this.settingGroup.key, this.setting.key, this.data[this.setting.key])
       }
+    },
+    inputValue() {
+      return ([':esshd'].includes(this.settingGroup.group) && this.data[this.setting.key])
+        ? this.data[this.setting.key].value
+        : this.data[this.setting.key]
     },
     labelWidth() {
       return this.isMobile ? '100px' : '240px'

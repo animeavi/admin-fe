@@ -25,7 +25,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':database')
     },
     databaseData() {
-      return this.settings.settings[':database']
+      return this.settings.settings.pleroma[':database']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'

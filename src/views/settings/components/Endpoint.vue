@@ -1,19 +1,16 @@
 <template>
-  <el-form v-if="!loading" ref="endpointData" :model="endpointData" :label-width="labelWidth">
-    <setting :setting-group="endpoint" :data="endpointData"/>
+  <div v-if="!loading">
+    <el-form ref="endpointData" :model="endpointData" :label-width="labelWidth">
+      <setting :setting-group="endpoint" :data="endpointData"/>
+    </el-form>
     <div class="line"/>
-    <el-form-item class="options-paragraph-container">
-      <p class="options-paragraph">Only common options are listed here. You can add more (all configuration options can be viewed
-        <a
-          href="https://hexdocs.pm/phoenix/Phoenix.Endpoint.html#module-dynamic-configuration"
-          rel="nofollow noreferrer noopener"
-          target="_blank">here</a>)
-      </p>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">Submit</el-button>
-    </el-form-item>
-  </el-form>
+    <el-form v-if="!loading" ref="endpointMetricsExporter" :model="endpointMetricsExporterData" :label-width="labelWidth">
+      <setting :setting-group="endpointMetricsExporter" :data="endpointMetricsExporterData"/>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">Submit</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 
 <script>
@@ -34,7 +31,13 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Web.Endpoint')
     },
     endpointData() {
-      return this.settings.settings['Pleroma.Web.Endpoint']
+      return this.settings.settings.pleroma['Pleroma.Web.Endpoint']
+    },
+    endpointMetricsExporter() {
+      return this.settings.description.find(setting => setting.key === 'Pleroma.Web.Endpoint.MetricsExporter')
+    },
+    endpointMetricsExporterData() {
+      return this.settings.settings.prometheus['Pleroma.Web.Endpoint.MetricsExporter']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
