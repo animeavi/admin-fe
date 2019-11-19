@@ -175,6 +175,7 @@ export default {
     external: 'external',
     deactivated: 'deactivated',
     active: 'active',
+    unconfirmed: 'unconfirmed',
     actions: 'Actions',
     activate: 'Activate',
     deactivate: 'Deactivate',
@@ -213,6 +214,8 @@ export default {
     addTagForMultipleUsersConfirmation: 'Are you sure you want to apply tag to all selected users?',
     removeTagFromMultipleUsersConfirmation: 'Are you sure you want to remove tag from all selected users?',
     requirePasswordResetConfirmation: 'Are you sure you want to require password reset for all selected users?',
+    confirmAccountsConfirmation: 'Are you sure you want to confirm emails for all selected users?',
+    resendEmailConfirmation: 'Are you sure you want to resend confirmation email for all selected users?',
     mailerMustBeEnabled: 'To require user\'s password reset you must enable mailer.',
     ok: 'Okay',
     completed: 'Completed',
@@ -230,7 +233,11 @@ export default {
     invalidNicknameError: 'Username can include "a-z", "A-Z" and "0-9" characters',
     getPasswordResetToken: 'Get password reset token',
     passwordResetTokenCreated: 'Password reset token was created',
-    accountCreated: 'New account was created!'
+    accountCreated: 'New account was created!',
+    unconfirmedEmail: 'User didn\'t confirm the email',
+    confirmAccount: 'Confirm account',
+    confirmAccounts: 'Confirm accounts',
+    resendConfirmation: 'Resend confirmation email'
   },
   statuses: {
     statuses: 'Statuses',

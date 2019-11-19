@@ -12,7 +12,9 @@ import {
   searchUsers,
   tagUser,
   untagUser,
-  requirePasswordReset
+  requirePasswordReset,
+  confirmUserEmail,
+  resendConfirmationEmail
 } from '@/api/users'
 
 const users = {
@@ -148,6 +150,31 @@ const users = {
         return
       } finally {
         dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      }
+      dispatch('SuccessMessage')
+    },
+    async ConfirmUsersEmail({ commit, dispatch, getters, state }, users) {
+      const updatedUsers = users.map(user => {
+        return { ...user, confirmation_pending: false }
+      })
+      commit('SWAP_USERS', updatedUsers)
+
+      const usersNicknames = users.map(user => user.nickname)
+      try {
+        await confirmUserEmail(usersNicknames, getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      } finally {
+        dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
+      }
+      dispatch('SuccessMessage')
+    },
+    async ResendConfirmationEmail({ dispatch, getters }, users) {
+      const usersNicknames = users.map(user => user.nickname)
+      try {
+        await resendConfirmationEmail(usersNicknames, getters.authHost, getters.token)
+      } catch (_e) {
+        return
       }
       dispatch('SuccessMessage')
     },
