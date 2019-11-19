@@ -62,7 +62,7 @@
       @input="updateSetting($event, settingGroup.key, setting.key)"/>
     <el-input
       v-if="setting.type === 'atom'"
-      :value="data[setting.key]"
+      :value="data[setting.key] ? data[setting.key].substr(1) : null"
       :placeholder="setting.suggestions[0]"
       @input="updateSetting($event, settingGroup.key, setting.key)">
       <template slot="prepend">:</template>
@@ -156,6 +156,17 @@
       <el-switch :value="autoLinkerBooleanValue(setting.key)" @change="processAutoLinker($event, 'auto_linker', 'opts', 'class')"/>
       <el-input-number v-if="autoLinkerBooleanValue(setting.key)" :value="autoLinkerIntegerValue(setting.key)" @input="processAutoLinker($event, settingGroup.key, ':opts', setting.key)"/>
     </div>
+    <div v-if="setting.key === ':mascots'">
+      <div v-for="([name, url, mimeType], index) in mascotsValue" :key="index" class="mascot-container">
+        <div class="mascot-name-container">
+          <el-input :value="name" placeholder="Name" class="mascot-name-input" @input="parseMascots($event, 'name', index)"/>
+          <el-button icon="el-icon-minus" circle @click="deleteMascotsRow(index, 'emoji', 'groups')"/>
+        </div>
+        <el-input :value="url" placeholder="URL" class="mascot-input" @input="parseMascots($event, 'url', index)"/>
+        <el-input :value="mimeType" placeholder="Mime type" class="mascot-input" @input="parseMascots($event, 'mimeType', index)"/>
+      </div>
+      <el-button icon="el-icon-plus" circle @click="addRowToMascots"/>
+    </div>
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
 </template>
@@ -221,6 +232,11 @@ export default {
     labelWidth() {
       return this.isMobile ? '100px' : '240px'
     },
+    mascotsValue() {
+      return Object.keys(this.data)
+        .map(mascotName =>
+          [mascotName, this.data[mascotName][':url'], this.data[mascotName][':mime_type']])
+    },
     proxyUrlData() {
       if (!this.data[this.setting.key]) {
         return null
@@ -259,6 +275,12 @@ export default {
       }, {})
       this.updateSetting({ ...updatedValue, '': [] }, this.settingGroup.key, this.setting.key)
     },
+    addRowToMascots() {
+      const updatedValue = this.data[':mascots'].reduce((acc, el, i) => {
+        return { ...acc, [el[0]]: { url: el[1], mime_type: el[2] }}
+      }, {})
+      this.updateSetting({ ...updatedValue, '': { url: '', mime_type: '' }}, 'assets', 'mascots')
+    },
     autoLinkerBooleanValue(key) {
       const value = this.data[this.setting.key]
       return typeof value === 'string' || typeof value === 'number'
@@ -278,6 +300,13 @@ export default {
       }, {})
       console.log(updatedValue)
       this.updateSetting(updatedValue, this.settingGroup.key, this.setting.key)
+    },
+    deleteMascotsRow(index) {
+      const filteredValues = this.data[':mascots'].filter((el, i) => index !== i)
+      const updatedValue = filteredValues.reduce((acc, el, i) => {
+        return { ...acc, [el[0]]: { url: el[1], mime_type: el[2] }}
+      }, {})
+      this.updateSetting(updatedValue, 'assets', 'mascots')
     },
     editableKeywordWithInput(key) {
       return key === ':replace'
@@ -303,6 +332,21 @@ export default {
       }, {})
       console.log(updatedValue)
       this.updateSetting(updatedValue, this.settingGroup.key, this.setting.key)
+    },
+    parseMascots(value, inputType, index) {
+      const updatedValue = this.data[':mascots'].reduce((acc, el, i) => {
+        if (index === i) {
+          if (inputType === 'name') {
+            return { ...acc, [value]: { url: el[1], mime_type: el[2] }}
+          } else if (inputType === 'url') {
+            return { ...acc, [el[0]]: { url: value, mime_type: el[2] }}
+          } else {
+            return { ...acc, [el[0]]: { url: el[1], mime_type: value }}
+          }
+        }
+        return { ...acc, [el[0]]: { url: el[1], mime_type: el[2] }}
+      }, {})
+      this.updateSetting(updatedValue, 'assets', 'mascots')
     },
     parseRateLimiter(value, input, typeOfInput, typeOfLimit, currentValue) {
       if (typeOfLimit === 'oneLimit') {
