@@ -38,17 +38,14 @@ export default {
       return this.settings.description.find(setting => setting.key === ':console')
     },
     consoleData() {
-      return this.settings.settings[':logger'][':console']
+      return this.settings.settings.logger[':console']
     },
     exsyslogger() {
       return this.settings.description.find(setting => setting.key === ':ex_syslogger')
     },
     exsysloggerData() {
-      return this.settings.settings[':logger'][':ex_syslogger']
+      return this.settings.settings.logger[':ex_syslogger']
     },
-    // loggerBackendsValue() {
-    //   return this.loggerBackends.value ? this.loggerBackends.value.map(el => JSON.stringify(el)) : []
-    // },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
@@ -62,20 +59,16 @@ export default {
       return this.settings.description.find(setting => setting.group === ':logger')
     },
     loggerData() {
-      return this.settings.settings[':logger']
+      return this.settings.settings.logger[':backends']
     },
     quack() {
       return this.settings.description.find(setting => setting.group === ':quack')
     },
     quackData() {
-      return this.settings.settings[':quack']
+      return this.settings.settings.quack
     }
   },
   methods: {
-    // updateloggerBackends(value, tab, input) {
-    //   const parseValue = value.map(el => JSON.parse(el))
-    //   this.$store.dispatch('UpdateSettings', { tab, data: { [input]: parseValue }})
-    // },
     async onSubmit() {
       try {
         await this.$store.dispatch('SubmitChanges')

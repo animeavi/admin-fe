@@ -37,19 +37,16 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Oban')
     },
     obanQueuesData() {
-      return this.settings.settings['Oban']
+      return this.settings.settings.pleroma['Oban']
     },
     workers() {
       return this.settings.description.find(setting => setting.key === ':workers')
     },
     workersData() {
-      return this.settings.settings[':workers']
+      return this.settings.settings.pleroma[':workers']
     }
   },
   methods: {
-    updateSetting(value, tab, input) {
-      this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})
-    },
     async onSubmit() {
       try {
         await this.$store.dispatch('SubmitChanges')

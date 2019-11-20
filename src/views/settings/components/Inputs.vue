@@ -62,7 +62,7 @@
       @input="updateSetting($event, settingGroup.key, setting.key)"/>
     <el-input
       v-if="setting.type === 'atom'"
-      :value="data[setting.key] ? data[setting.key].substr(1) : null"
+      :value="inputValue ? inputValue.substr(1) : null"
       :placeholder="setting.suggestions[0]"
       @input="updateSetting($event, settingGroup.key, setting.key)">
       <template slot="prepend">:</template>
@@ -225,9 +225,13 @@ export default {
       }
     },
     inputValue() {
-      return ([':esshd', ':cors_plug'].includes(this.settingGroup.group) && this.data[this.setting.key])
-        ? this.data[this.setting.key].value
-        : this.data[this.setting.key]
+      if ([':esshd', ':cors_plug', ':quack'].includes(this.settingGroup.group) && this.data[this.setting.key]) {
+        return this.data[this.setting.key].value
+      } else if (this.settingGroup.group === ':logger' && this.setting.key === ':backends') {
+        return this.data.value
+      } else {
+        return this.data[this.setting.key]
+      }
     },
     labelWidth() {
       return this.isMobile ? '100px' : '240px'
