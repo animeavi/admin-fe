@@ -34,7 +34,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':email_notifications')
     },
     emailNotificationsData() {
-      return this.settings.settings[':email_notifications']
+      return this.settings.settings.pleroma[':email_notifications']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
@@ -49,13 +49,13 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Emails.Mailer')
     },
     mailerData() {
-      return this.settings.settings['Pleroma.Emails.Mailer']
+      return this.settings.settings.pleroma['Pleroma.Emails.Mailer']
     },
     userEmail() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Emails.UserEmail')
     },
     userEmailData() {
-      return this.settings.settings['Pleroma.Emails.UserEmail']
+      return this.settings.settings.pleroma['Pleroma.Emails.UserEmail']
     }
   },
   methods: {

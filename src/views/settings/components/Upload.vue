@@ -53,37 +53,37 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Upload')
     },
     uploadData() {
-      return this.settings.settings['Pleroma.Upload']
+      return this.settings.settings.pleroma['Pleroma.Upload']
     },
     uploadersLocal() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Uploaders.Local')
     },
     uploadersLocalData() {
-      return this.settings.settings['Pleroma.Uploaders.Local']
+      return this.settings.settings.pleroma['Pleroma.Uploaders.Local']
     },
     uploadersS3() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Uploaders.S3')
     },
     uploadersS3Data() {
-      return this.settings.settings['Pleroma.Uploaders.S3']
+      return this.settings.settings.pleroma['Pleroma.Uploaders.S3']
     },
     uploadersMDII() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Uploaders.MDII')
     },
     uploadersMDIIData() {
-      return this.settings.settings['Pleroma.Uploaders.MDII']
+      return this.settings.settings.pleroma['Pleroma.Uploaders.MDII']
     },
     uploadFilterMogrify() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Upload.Filter.Mogrify')
     },
     uploadFilterMogrifyData() {
-      return this.settings.settings['Pleroma.Upload.Filter.Mogrify']
+      return this.settings.settings.pleroma['Pleroma.Upload.Filter.Mogrify']
     },
     uploadAnonymizeFilename() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Upload.Filter.AnonymizeFilename')
     },
     uploadAnonymizeFilenameData() {
-      return this.settings.settings['Pleroma.Upload.Filter.AnonymizeFilename']
+      return this.settings.settings.pleroma['Pleroma.Upload.Filter.AnonymizeFilename']
     }
   },
   methods: {

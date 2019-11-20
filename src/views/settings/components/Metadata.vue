@@ -38,13 +38,13 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Web.Metadata')
     },
     metadataData() {
-      return this.settings.settings['Pleroma.Web.Metadata']
+      return this.settings.settings.pleroma['Pleroma.Web.Metadata']
     },
     richMedia() {
       return this.settings.description.find(setting => setting.key === ':rich_media')
     },
     richMediaData() {
-      return this.settings.settings[':rich_media']
+      return this.settings.settings.pleroma[':rich_media']
     }
   },
   methods: {
