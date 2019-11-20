@@ -10,9 +10,6 @@
     <div class="line"/>
     <el-form ref="httpSecurityData" :model="httpSecurityData" :label-width="labelWidth">
       <setting :setting-group="httpSecurity" :data="httpSecurityData"/>
-    </el-form>
-    <div class="line"/>
-    <el-form ref="hackneyPoolsData" :model="hackneyPoolsData" :label-width="labelWidth">
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>
@@ -36,25 +33,19 @@ export default {
       return this.settings.description.find(setting => setting.group === ':cors_plug')
     },
     corsPlugData() {
-      return this.settings.settings[':cors_plug']
-    },
-    hackneyPools() {
-      return this.settings.description.find(setting => setting.key === ':hackney_pools')
-    },
-    hackneyPoolsData() {
-      return this.settings.settings[':hackney_pools']
+      return this.settings.settings.cors_plug
     },
     http() {
       return this.settings.description.find(setting => setting.key === ':http')
     },
     httpData() {
-      return this.settings.settings[':http']
+      return this.settings.settings.pleroma[':http']
     },
     httpSecurity() {
       return this.settings.description.find(setting => setting.key === ':http_security')
     },
     httpSecurityData() {
-      return this.settings.settings[':http_security']
+      return this.settings.settings.pleroma[':http_security']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'

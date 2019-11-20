@@ -38,7 +38,7 @@
     </div>
     <el-select
       v-if="renderMultipleSelect(setting.type)"
-      :value="data[setting.key]"
+      :value="setting.key === ':rewrite_policy' ? rewritePolicyValue : inputValue"
       multiple
       filterable
       allow-create
@@ -225,7 +225,7 @@ export default {
       }
     },
     inputValue() {
-      return ([':esshd'].includes(this.settingGroup.group) && this.data[this.setting.key])
+      return ([':esshd', ':cors_plug'].includes(this.settingGroup.group) && this.data[this.setting.key])
         ? this.data[this.setting.key].value
         : this.data[this.setting.key]
     },
@@ -266,6 +266,9 @@ export default {
       return Array.isArray(this.data[this.setting.key])
         ? Object.entries(this.data[this.setting.key][0])[0]
         : false
+    },
+    rewritePolicyValue() {
+      return typeof this.data[this.setting.key] === 'string' ? [this.data[this.setting.key]] : this.data[this.setting.key]
     }
   },
   methods: {
@@ -372,10 +375,9 @@ export default {
     },
     renderMultipleSelect(type) {
       return Array.isArray(type) && (
+        type.includes('module') ||
         (type.includes('list') && type.includes('string')) ||
         (type.includes('list') && type.includes('atom')) ||
-        (type.includes('list') && type.includes('module')) ||
-        (type.includes('module') && type.includes('atom')) ||
         (type.includes('regex') && type.includes('string')) ||
         this.setting.key === ':args'
       )

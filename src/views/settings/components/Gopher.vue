@@ -23,7 +23,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':gopher')
     },
     gopherData() {
-      return this.settings.settings[':gopher']
+      return this.settings.settings.pleroma[':gopher']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
