@@ -19,7 +19,7 @@
       @change="updateSetting($event, settingGroup.key, setting.key)"/>
     <el-select
       v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes(false))"
-      :value="data[setting.key]"
+      :value="inputValue"
       clearable
       @change="updateSetting($event, settingGroup.key, setting.key)">
       <el-option
@@ -225,7 +225,7 @@ export default {
       }
     },
     inputValue() {
-      if ([':esshd', ':cors_plug', ':quack'].includes(this.settingGroup.group) && this.data[this.setting.key]) {
+      if ([':esshd', ':cors_plug', ':quack', ':http_signatures'].includes(this.settingGroup.group) && this.data[this.setting.key]) {
         return this.data[this.setting.key].value
       } else if (this.settingGroup.group === ':logger' && this.setting.key === ':backends') {
         return this.data.value

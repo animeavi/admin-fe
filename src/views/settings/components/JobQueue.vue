@@ -5,6 +5,9 @@
     </el-form>
     <el-form ref="workersData" :model="workersData" :label-width="labelWidth">
       <setting :setting-group="workers" :data="workersData"/>
+    </el-form>
+    <el-form ref="activityExpiration" :model="activityExpirationData" :label-width="labelWidth">
+      <setting :setting-group="activityExpiration" :data="activityExpirationData"/>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>
@@ -24,6 +27,12 @@ export default {
     ...mapGetters([
       'settings'
     ]),
+    activityExpiration() {
+      return this.settings.description.find(setting => setting.key === 'Pleroma.ActivityExpiration')
+    },
+    activityExpirationData() {
+      return this.settings.settings.pleroma['Pleroma.ActivityExpiration']
+    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },

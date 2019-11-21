@@ -8,6 +8,10 @@
       <setting :setting-group="corsPlug" :data="corsPlugData"/>
     </el-form>
     <div class="line"/>
+    <el-form ref="httpSignatures" :model="httpSignaturesData" :label-width="labelWidth">
+      <setting :setting-group="httpSignatures" :data="httpSignaturesData"/>
+    </el-form>
+    <div class="line"/>
     <el-form ref="httpSecurityData" :model="httpSecurityData" :label-width="labelWidth">
       <setting :setting-group="httpSecurity" :data="httpSecurityData"/>
       <el-form-item>
@@ -46,6 +50,12 @@ export default {
     },
     httpSecurityData() {
       return this.settings.settings.pleroma[':http_security']
+    },
+    httpSignatures() {
+      return this.settings.description.find(setting => setting.group === ':http_signatures')
+    },
+    httpSignaturesData() {
+      return this.settings.settings.http_signatures
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
