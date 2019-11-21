@@ -5,11 +5,11 @@
       <el-tab-pane :label="$t('settings.activityPub')">
         <activity-pub/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.auth')">
-        <authentication/>
-      </el-tab-pane>
       <el-tab-pane :label="$t('settings.autoLinker')">
         <auto-linker/>
+      </el-tab-pane>
+      <el-tab-pane :label="$t('settings.auth')">
+        <authentication/>
       </el-tab-pane>
       <el-tab-pane :label="$t('settings.esshd')">
         <esshd/>
@@ -20,11 +20,11 @@
       <el-tab-pane :label="$t('settings.database')">
         <database/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.endpoint')">
-        <endpoint/>
-      </el-tab-pane>
       <el-tab-pane :label="$t('settings.emojiPacks')">
         <emoji-packs/>
+      </el-tab-pane>
+      <el-tab-pane :label="$t('settings.endpoint')">
+        <endpoint/>
       </el-tab-pane>
       <el-tab-pane :label="$t('settings.frontend')">
         <frontend/>
