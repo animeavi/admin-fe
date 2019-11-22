@@ -4,28 +4,32 @@
       <setting :setting-group="instance" :data="instanceData"/>
     </el-form>
     <div class="line"/>
-    <el-form ref="uriSchemesData" :model="uriSchemesData" :label-width="labelWidth">
+    <el-form ref="uriSchemes" :model="uriSchemesData" :label-width="labelWidth">
       <setting :setting-group="uriSchemes" :data="uriSchemesData"/>
     </el-form>
     <div class="line"/>
-    <el-form ref="adminTokenData" :model="adminTokenData" :label-width="labelWidth">
+    <el-form ref="adminToken" :model="adminTokenData" :label-width="labelWidth">
       <setting :setting-group="adminToken" :data="adminTokenData"/>
     </el-form>
     <div class="line"/>
-    <el-form ref="scheduledActivityData" :model="scheduledActivityData" :label-width="labelWidth">
+    <el-form ref="scheduledActivity" :model="scheduledActivityData" :label-width="labelWidth">
       <setting :setting-group="scheduledActivity" :data="scheduledActivityData"/>
     </el-form>
     <div class="line"/>
-    <el-form ref="fetchInitialPostsData" :model="fetchInitialPostsData" :label-width="labelWidth">
+    <el-form ref="fetchInitialPosts" :model="fetchInitialPostsData" :label-width="labelWidth">
       <setting :setting-group="fetchInitialPosts" :data="fetchInitialPostsData"/>
     </el-form>
     <div class="line"/>
-    <el-form ref="suggestionsData" :model="suggestionsData" :label-width="labelWidth">
+    <el-form ref="manifest" :model="manifestData" :label-width="labelWidth">
+      <setting :setting-group="manifest" :data="manifestData"/>
+    </el-form>
+    <div class="line"/>
+    <el-form ref="suggestions" :model="suggestionsData" :label-width="labelWidth">
       <el-form-item label="Suggestions:"/>
       <setting :setting-group="suggestions" :data="suggestionsData"/>
     </el-form>
     <div class="line"/>
-    <el-form ref="pleromaUserData" :model="pleromaUserData" :label-width="labelWidth">
+    <el-form ref="pleromaUser" :model="pleromaUserData" :label-width="labelWidth">
       <setting :setting-group="pleromaUser" :data="pleromaUserData"/>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
@@ -74,6 +78,12 @@ export default {
     },
     loading() {
       return this.settings.loading
+    },
+    manifest() {
+      return this.settings.description.find(setting => setting.key === ':manifest')
+    },
+    manifestData() {
+      return this.settings.settings.pleroma[':manifest']
     },
     pleromaUser() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.User')

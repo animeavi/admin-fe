@@ -1,7 +1,7 @@
 <template>
   <div v-if="!loading">
-    <el-form-item v-if="settingGroup.description" class="options-paragraph-container">
-      <p class="options-paragraph">{{ settingGroup.description }}</p>
+    <el-form-item v-if="settingGroup.description" class="description-container">
+      <p class="description">{{ settingGroup.description }}</p>
     </el-form-item>
     <div v-if="settingGroup.key === 'Pleroma.Emails.Mailer'">
       <div v-for="setting in settingGroup.children.filter(setting => !setting.group)" :key="setting.key">

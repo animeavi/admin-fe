@@ -8,6 +8,18 @@
     font-family: monospace;
     padding: 0 3px 0 3px;
   }
+  .description {
+    font-size: 14px;
+    color: #606266;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
+    font-weight: 700;
+    line-height: 20px;
+    margin: 0 0 14px 0;
+  }
+  .description-container {
+    overflow-wrap: break-word;
+    margin-bottom: 0;
+  }
   .el-form-item {
     margin-right: 30px;
   }
@@ -30,6 +42,16 @@
   }
   .highlight {
   background-color: #e6e6e6;
+  }
+  .icons-button-container {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+  .icons-button-desc {
+    font-size: 14px;
+    color: #606266;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
+    margin-left: 5px;
   }
   label {
     white-space: nowrap;
@@ -69,18 +91,6 @@
   .name-input {
     width: 30%;
     margin-right: 8px
-  }
-  .options-paragraph {
-    font-size: 14px;
-    color: #606266;
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
-    font-weight: 700;
-    line-height: 20px;
-    margin: 0 0 14px 0;
-  }
-  .options-paragraph-container {
-    overflow-wrap: break-word;
-    margin-bottom: 0;
   }
   .pattern-input {
     width: 20%;

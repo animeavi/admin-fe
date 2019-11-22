@@ -167,6 +167,23 @@
       </div>
       <el-button icon="el-icon-plus" circle @click="addRowToMascots"/>
     </div>
+    <div v-if="setting.key === ':icons'">
+      <div v-for="(icon, index) in iconsValue" :key="index" class="mascot-container">
+        <div v-for="([key, value], index) in icon" :key="index" class="setting-input">
+          <el-input :value="key" placeholder="key" class="name-input" @input="parseIcons($event, 'key', index)"/> :
+          <el-input :value="value" placeholder="value" class="value-input" @input="parseIcons($event, 'value', index)"/>
+          <el-button icon="el-icon-minus" circle @click="deleteIcondRow(index)"/>
+        </div>
+        <div class="icons-button-container">
+          <el-button icon="el-icon-plus" circle @click="addValueToIcons"/>
+          <span class="icons-button-desc">Add another `key - value` pair to this icon</span>
+        </div>
+        <div class="icons-button-container">
+          <el-button icon="el-icon-plus" circle @click="addIconToIcons"/>
+          <span class="icons-button-desc">Add another icon configuration</span>
+        </div>
+      </div>
+    </div>
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
 </template>
@@ -224,6 +241,9 @@ export default {
         this.processNestedData([value], this.settingGroup.key, this.setting.key, this.data[this.setting.key])
       }
     },
+    iconsValue() {
+      return this.data[':icons'].map(icon => Object.keys(icon).map(key => [key, icon[key]]))
+    },
     inputValue() {
       if ([':esshd', ':cors_plug', ':quack', ':http_signatures'].includes(this.settingGroup.group) && this.data[this.setting.key]) {
         return this.data[this.setting.key].value
@@ -276,6 +296,8 @@ export default {
     }
   },
   methods: {
+    addIconToIcons() {},
+    addValueToIcons() {},
     addRowToEditableKeyword() {
       const updatedValue = this.editableKeywordData(this.data).reduce((acc, el, i) => {
         return { ...acc, [el[0]]: el[1] }
@@ -308,6 +330,7 @@ export default {
       console.log(updatedValue)
       this.updateSetting(updatedValue, this.settingGroup.key, this.setting.key)
     },
+    deleteIcondRow(index) {},
     deleteMascotsRow(index) {
       const filteredValues = this.data[':mascots'].filter((el, i) => index !== i)
       const updatedValue = filteredValues.reduce((acc, el, i) => {
@@ -340,6 +363,7 @@ export default {
       console.log(updatedValue)
       this.updateSetting(updatedValue, this.settingGroup.key, this.setting.key)
     },
+    parseIcons(value, inputType, index) {},
     parseMascots(value, inputType, index) {
       const updatedValue = this.data[':mascots'].reduce((acc, el, i) => {
         if (index === i) {
