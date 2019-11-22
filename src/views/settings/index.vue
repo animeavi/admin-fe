@@ -1,74 +1,74 @@
 <template>
   <div class="settings-container">
     <h1>{{ $t('settings.settings') }}</h1>
-    <el-tabs :tab-position="tabPosition">
-      <el-tab-pane :label="$t('settings.activityPub')">
+    <el-tabs v-model="activeTab" :tab-position="tabPosition">
+      <el-tab-pane :label="$t('settings.activityPub')" lazy>
         <activity-pub/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.autoLinker')">
+      <el-tab-pane :label="$t('settings.autoLinker')" lazy>
         <auto-linker/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.auth')">
+      <el-tab-pane :label="$t('settings.auth')" lazy>
         <authentication/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.esshd')">
+      <el-tab-pane :label="$t('settings.esshd')" lazy>
         <esshd/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.captcha')">
+      <el-tab-pane :label="$t('settings.captcha')" lazy>
         <captcha/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.database')">
+      <el-tab-pane :label="$t('settings.database')" lazy>
         <database/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.emojiPacks')">
+      <el-tab-pane :label="$t('settings.emojiPacks')" lazy>
         <emoji-packs/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.endpoint')">
+      <el-tab-pane :label="$t('settings.endpoint')" lazy>
         <endpoint/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.frontend')">
+      <el-tab-pane :label="$t('settings.frontend')" lazy>
         <frontend/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.gopher')">
+      <el-tab-pane :label="$t('settings.gopher')" lazy>
         <gopher/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.http')">
+      <el-tab-pane :label="$t('settings.http')" lazy>
         <http/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.instance')">
+      <el-tab-pane :label="$t('settings.instance')" name="instance">
         <instance/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.jobQueue')">
+      <el-tab-pane :label="$t('settings.jobQueue')" lazy>
         <job-queue/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.logger')">
+      <el-tab-pane :label="$t('settings.logger')" lazy>
         <logger/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.mailer')">
+      <el-tab-pane :label="$t('settings.mailer')" lazy>
         <mailer/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.mediaProxy')">
+      <el-tab-pane :label="$t('settings.mediaProxy')" lazy>
         <media-proxy/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.metadata')">
+      <el-tab-pane :label="$t('settings.metadata')" lazy>
         <metadata/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.mrf')">
+      <el-tab-pane :label="$t('settings.mrf')" lazy>
         <mrf/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.rateLimiters')">
+      <el-tab-pane :label="$t('settings.rateLimiters')" lazy>
         <rate-limiters/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.relays')">
+      <el-tab-pane :label="$t('settings.relays')" lazy>
         <relays/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.upload')">
+      <el-tab-pane :label="$t('settings.upload')" lazy>
         <upload/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.webPush')">
+      <el-tab-pane :label="$t('settings.webPush')" lazy>
         <web-push/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.other')">
+      <el-tab-pane :label="$t('settings.other')" lazy>
         <other/>
       </el-tab-pane>
     </el-tabs>
@@ -81,6 +81,11 @@ import EmojiPacks from '../emojiPacks/index'
 
 export default {
   components: { ActivityPub, Authentication, AutoLinker, Captcha, Database, Endpoint, EmojiPacks, Esshd, Frontend, Gopher, Http, Instance, JobQueue, Logger, Mailer, MediaProxy, Metadata, Mrf, Other, RateLimiters, Relays, Upload, WebPush },
+  data() {
+    return {
+      activeTab: 'instance'
+    }
+  },
   computed: {
     isMobile() {
       return this.$store.state.app.device === 'mobile'
