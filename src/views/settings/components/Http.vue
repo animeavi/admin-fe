@@ -14,6 +14,10 @@
     <div class="line"/>
     <el-form ref="httpSecurityData" :model="httpSecurityData" :label-width="labelWidth">
       <setting :setting-group="httpSecurity" :data="httpSecurityData"/>
+    </el-form>
+    <div class="line"/>
+    <el-form ref="webCacheTtl" :model="webCacheTtlData" :label-width="labelWidth">
+      <setting :setting-group="webCacheTtl" :data="webCacheTtlData"/>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>
@@ -65,6 +69,12 @@ export default {
     },
     loading() {
       return this.settings.loading
+    },
+    webCacheTtl() {
+      return this.settings.description.find(setting => setting.key === ':web_cache_ttl')
+    },
+    webCacheTtlData() {
+      return this.settings.settings.pleroma[':web_cache_ttl']
     }
   },
   methods: {

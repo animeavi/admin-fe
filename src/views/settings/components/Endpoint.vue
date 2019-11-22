@@ -4,8 +4,12 @@
       <setting :setting-group="endpoint" :data="endpointData"/>
     </el-form>
     <div class="line"/>
-    <el-form v-if="!loading" ref="endpointMetricsExporter" :model="endpointMetricsExporterData" :label-width="labelWidth">
+    <el-form ref="endpointMetricsExporter" :model="endpointMetricsExporterData" :label-width="labelWidth">
       <setting :setting-group="endpointMetricsExporter" :data="endpointMetricsExporterData"/>
+    </el-form>
+    <div class="line"/>
+    <el-form ref="remoteIp" :model="remoteIpData" :label-width="labelWidth">
+      <setting :setting-group="remoteIp" :data="remoteIpData"/>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>
@@ -47,6 +51,12 @@ export default {
     },
     loading() {
       return this.settings.loading
+    },
+    remoteIp() {
+      return this.settings.description.find(setting => setting.key === 'Pleroma.Plugs.RemoteIp')
+    },
+    remoteIpData() {
+      return this.settings.settings.pleroma['Pleroma.Plugs.RemoteIp']
     }
   },
   methods: {
