@@ -24,11 +24,11 @@ describe('Reports filter', () => {
   })
 
   it('shows open reports when "Open" filter is applied', async (done) => {
-    expect(store.state.reports.fetchedReports.length).toEqual(5)
+    expect(store.state.reports.fetchedReports.length).toEqual(7)
 
     store.dispatch('SetFilter', 'open')
     store.dispatch('ClearFetchedReports')
-    store.dispatch('FetchReports')
+    store.dispatch('FetchReports', 1)
     await flushPromises()
     expect(store.state.reports.fetchedReports.length).toEqual(2)
 
@@ -36,7 +36,7 @@ describe('Reports filter', () => {
   })
 
   it('shows resolved reports when "Resolved" filter is applied', async (done) => {
-    expect(store.state.reports.fetchedReports.length).toEqual(5)
+    expect(store.state.reports.fetchedReports.length).toEqual(7)
 
     store.dispatch('SetFilter', 'resolved')
     store.dispatch('ClearFetchedReports')
@@ -48,7 +48,7 @@ describe('Reports filter', () => {
   })
 
   it('shows closed reports when "Closed" filter is applied', async (done) => {
-    expect(store.state.reports.fetchedReports.length).toEqual(5)
+    expect(store.state.reports.fetchedReports.length).toEqual(7)
 
     store.dispatch('SetFilter', 'closed')
     store.dispatch('ClearFetchedReports')
@@ -60,7 +60,7 @@ describe('Reports filter', () => {
   })
 
   it('shows all users after removing filters', async (done) => {
-    expect(store.state.reports.fetchedReports.length).toEqual(5)
+    expect(store.state.reports.fetchedReports.length).toEqual(7)
 
     store.dispatch('SetFilter', 'open')
     store.dispatch('ClearFetchedReports')
@@ -72,7 +72,7 @@ describe('Reports filter', () => {
     store.dispatch('ClearFetchedReports')
     store.dispatch('FetchReports')
     await flushPromises()
-    expect(store.state.reports.fetchedReports.length).toEqual(5)
+    expect(store.state.reports.fetchedReports.length).toEqual(7)
 
     done()
   })
