@@ -44,7 +44,7 @@ export default {
     toggleFilters() {
       this.$store.dispatch('SetFilter', this.$data.filter)
       this.$store.dispatch('ClearFetchedReports')
-      this.$store.dispatch('FetchReports')
+      this.$store.dispatch('FetchReports', 1)
     }
   }
 }
