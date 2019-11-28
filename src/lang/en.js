@@ -245,7 +245,8 @@ export default {
     roles: 'Roles',
     activeUppercase: 'Active',
     active: 'active',
-    deactivated: 'deactivated'
+    deactivated: 'deactivated',
+    noStatuses: 'No statuses to show'
   },
   usersFilter: {
     inputPlaceholder: 'Select filter',

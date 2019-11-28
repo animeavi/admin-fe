@@ -61,7 +61,7 @@
         </el-card>
       </el-col>
       <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="16">
+        <el-col :span="18">
           <h2 class="recent-statuses">{{ $t('userProfile.recentStatuses') }}</h2>
         </el-col>
         <el-col :span="6" class="show-private">
@@ -70,11 +70,12 @@
           </el-checkbox>
         </el-col>
       </el-row>
-      <el-col :span="18">
+      <el-col :span="16">
         <el-timeline v-if="!statusesLoading" class="statuses">
           <el-timeline-item v-for="status in statuses" :key="status.id">
             <status :status="status" :user-id="user.id" :godmode="showPrivate"/>
           </el-timeline-item>
+          <p v-if="statuses.length === 0" class="no-statuses">{{ $t('userProfile.noStatuses') }}</p>
         </el-timeline>
       </el-col>
     </el-row>
@@ -147,6 +148,11 @@ table {
     width: 100%;
   }
 }
+.no-statuses {
+  margin-left: 28px;
+  color: #606266;
+
+}
 .recent-statuses-header {
   margin-top: 10px;
 }
@@ -159,7 +165,7 @@ table {
   padding-right: 20px;
 }
 .recent-statuses {
-  margin-left: 40px;
+  margin-left: 28px;
 }
 .user-profile-card {
   margin-left: 15px;
