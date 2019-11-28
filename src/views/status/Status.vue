@@ -185,54 +185,56 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
-.account {
-  text-decoration: underline;
-  line-height: 26px;
-  font-size: 13px;
-}
-.image {
-  width: 20%;
-  img {
-    width: 100%;
-  }
-}
-.show-more-button {
-  margin-left: 5px;
-}
-.status-account {
-  display: flex;
-  align-items: center;
-}
-.status-avatar-img {
-  width: 15px;
-  height: 15px;
-  margin-right: 5px;
-}
-.status-account-name {
-  margin: 0;
-  height: 22px;
-}
-.status-body {
-  display: flex;
-  flex-direction: column;
-}
-.status-content {
-  font-size: 15px;
-  line-height: 26px;
-}
 .status-card {
-  margin-bottom: 15px;
-}
-.status-deleted {
-  font-style: italic;
-  margin-top: 3px;
-}
-.status-header {
-  display: flex;
-  justify-content: space-between;
-}
-.status-without-content {
-  font-style: italic;
+  .account {
+    text-decoration: underline;
+    line-height: 26px;
+    font-size: 13px;
+  }
+  .image {
+    width: 20%;
+    img {
+      width: 100%;
+    }
+  }
+  .show-more-button {
+    margin-left: 5px;
+  }
+  .status-account {
+    display: flex;
+    align-items: center;
+  }
+  .status-avatar-img {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+  }
+  .status-account-name {
+    margin: 0;
+    height: 22px;
+  }
+  .status-body {
+    display: flex;
+    flex-direction: column;
+  }
+  .status-content {
+    font-size: 15px;
+    line-height: 26px;
+  }
+  .status-card {
+    margin-bottom: 15px;
+  }
+  .status-deleted {
+    font-style: italic;
+    margin-top: 3px;
+  }
+  .status-header {
+    display: flex;
+    justify-content: space-between;
+  }
+  .status-without-content {
+    font-style: italic;
+  }
 }
 @media
 only screen and (max-width: 760px),
