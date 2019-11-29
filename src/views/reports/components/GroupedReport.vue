@@ -1,62 +1,67 @@
 <template>
   <el-timeline class="timeline">
-    <el-card v-for="group in groups" :key="group.id">
-      <div class="header-container">
-        <div>
-          <h3 class="report-title">{{ $t('reports.reportsOn') }} {{ group.account.display_name }}</h3>
+    <el-timeline-item
+      v-for="groupedReport in groupedReports"
+      :key="groupedReport.id"
+      :timestamp="parseTimestamp(groupedReport.date)"
+      placement="top"
+      class="timeline-item-container">
+      <el-card class="grouped-report">
+        <div class="header-container">
+          <div>
+            <h3 class="report-title">{{ $t('reports.reportsOn') }} {{ groupedReport.account.display_name }}</h3>
+          </div>
+          <div>
+            <el-dropdown trigger="click">
+              <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeAllReports') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item @click.native="changeAllReports('resolved', groupedReport.reports)">{{ $t('reports.resolveAll') }}</el-dropdown-item>
+                <el-dropdown-item @click.native="changeAllReports('open', groupedReport.reports)">{{ $t('reports.reopenAll') }}</el-dropdown-item>
+                <el-dropdown-item @click.native="changeAllReports('closed', groupedReport.reports)">{{ $t('reports.closeAll') }}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <moderate-user-dropdown :account="groupedReport.account"/>
+          </div>
         </div>
         <div>
-          <el-dropdown trigger="click">
-            <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeAllReports') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="changeAllReports('resolved', group.reports)">{{ $t('reports.resolveAll') }}</el-dropdown-item>
-              <el-dropdown-item @click.native="changeAllReports('open', group.reports)">{{ $t('reports.reopenAll') }}</el-dropdown-item>
-              <el-dropdown-item @click.native="changeAllReports('closed', group.reports)">{{ $t('reports.closeAll') }}</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <moderate-user-dropdown :account="group.account"/>
-        </div>
-      </div>
-      <div>
-        <div class="line"/>
-        <span class="report-row-key">{{ $t('reports.account') }}:</span>
-        <img
-          :src="group.account.avatar"
-          alt="avatar"
-          class="avatar-img">
-        <a :href="group.account.url" target="_blank">
-          <span>{{ group.account.acct }}</span>
-        </a>
-      </div>
-      <div>
-        <div class="line"/>
-        <span class="report-row-key">{{ $t('reports.actors') }}:</span>
-        <span v-for="actor in group.actors" :key="actor.id">
-          <a :href="actor.url" target="_blank">
-            <span>{{ actor.acct }}, </span>
+          <div class="line"/>
+          <span class="report-row-key">{{ $t('reports.account') }}:</span>
+          <img
+            :src="groupedReport.account.avatar"
+            alt="avatar"
+            class="avatar-img">
+          <a :href="groupedReport.account.url" target="_blank">
+            <span>{{ groupedReport.account.nickname }}</span>
           </a>
-        </span>
-      </div>
-      <div v-if="group.status">
-        <div class="line"/>
-        <span class="report-row-key">{{ $t('reports.reportedStatus') }}:</span>
-        <div v-for="status in group.status" :key="status.id">
-          <status :status="status" :page="1" class="reported-status"/> <!-- Change page value when pagination is implemented -->
         </div>
-      </div>
-      <div v-if="group.reports">
-        <div class="line"/>
-        <el-collapse>
-          <el-collapse-item :title="$t('reports.reports')">
-            <report-card :reports="group.reports"/>
-          </el-collapse-item>
-        </el-collapse>
-      </div>
-    </el-card>
+        <div>
+          <div class="line"/>
+          <span class="report-row-key">{{ $t('reports.actors') }}:</span>
+          <span v-for="(actor, index) in groupedReport.actors" :key="actor.id">
+            <a :href="actor.url" target="_blank">
+              {{ actor.acct }}<span v-if="index < groupedReport.actors.length - 1">, </span>
+            </a>
+          </span>
+        </div>
+        <div v-if="groupedReport.status">
+          <div class="line"/>
+          <span class="report-row-key">{{ $t('reports.reportedStatus') }}:</span>
+          <status :status="groupedReport.status" class="reported-status"/>
+        </div>
+        <div v-if="groupedReport.reports">
+          <el-collapse>
+            <el-collapse-item :title="$t('reports.reports')">
+              <report-card :reports="groupedReport.reports"/>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
+      </el-card>
+    </el-timeline-item>
   </el-timeline>
 </template>
 
 <script>
+import moment from 'moment'
 import ModerateUserDropdown from './ModerateUserDropdown'
 import ReportCard from './ReportCard'
 import Status from '../../status/Status'
@@ -65,17 +70,20 @@ export default {
   name: 'Report',
   components: { ModerateUserDropdown, ReportCard, Status },
   props: {
-    groups: {
+    groupedReports: {
       type: Array,
       required: true
     }
   },
-  mounted() {
-    this.$store.dispatch('FetchGroupedReports', 1)
-  },
   methods: {
     changeAllReports(reportState, groupOfReports) {
-      console.log(groupOfReports)
+      const reportsData = groupOfReports.map(report => {
+        return { id: report.id, state: reportState }
+      })
+      this.$store.dispatch('ChangeReportState', reportsData)
+    },
+    parseTimestamp(timestamp) {
+      return moment(timestamp).format('L HH:mm')
     }
   }
 }

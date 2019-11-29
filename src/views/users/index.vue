@@ -61,7 +61,7 @@
       </el-table-column>
       <el-table-column :label="$t('users.actions')" fixed="right">
         <template slot-scope="scope">
-          <el-dropdown size="small" trigger="click">
+          <el-dropdown :hide-on-click="false" size="small" trigger="click">
             <span class="el-dropdown-link">
               {{ $t('users.moderation') }}
               <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
@@ -80,7 +80,7 @@
               <el-dropdown-item
                 v-if="showDeactivatedButton(scope.row.id)"
                 :divided="showAdminAction(scope.row)"
-                @click.native="handleDeactivation(scope.row)">
+                @click.native="toggleActivation(scope.row)">
                 {{ scope.row.deactivated ? $t('users.activateAccount') : $t('users.deactivateAccount') }}
               </el-dropdown-item>
               <el-dropdown-item
@@ -133,6 +133,11 @@
                 @click.native="getPasswordResetToken(scope.row.nickname)">
                 {{ $t('users.getPasswordResetToken') }}
               </el-dropdown-item>
+              <el-dropdown-item
+                v-if="scope.row.local"
+                @click.native="requirePasswordReset(scope.row.nickname)">
+                {{ $t('users.requirePasswordReset') }}
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -151,9 +156,6 @@
         </p>
       </div>
     </el-dialog>
-    <div v-if="users.length === 0" class="no-users-message">
-      <p>There are no users to display</p>
-    </div>
     <div v-if="!loading" class="pagination">
       <el-pagination
         :total="usersCount"
@@ -240,17 +242,8 @@ export default {
       this.$refs.usersTable.clearSelection()
     },
     async createNewAccount(accountData) {
-      try {
-        await this.$store.dispatch('CreateNewAccount', accountData)
-      } catch (_e) {
-        return
-      } finally {
-        this.createAccountDialogOpen = false
-      }
-      this.$message({
-        type: 'success',
-        message: this.$t('users.accountCreated')
-      })
+      await this.$store.dispatch('CreateNewAccount', accountData)
+      this.createAccountDialogOpen = false
     },
     getFirstLetter(str) {
       return str.charAt(0).toUpperCase()
@@ -259,11 +252,24 @@ export default {
       this.resetPasswordDialogOpen = true
       this.$store.dispatch('GetPasswordResetToken', nickname)
     },
-    handleDeactivation({ nickname }) {
-      this.$store.dispatch('ToggleUserActivation', nickname)
+    requirePasswordReset(nickname) {
+      const mailerEnabled = this.$store.state.user.nodeInfo.metadata.mailerEnabled
+
+      if (!mailerEnabled) {
+        this.$alert(this.$t('users.mailerMustBeEnabled'), 'Error', { type: 'error' })
+
+        return
+      }
+
+      this.$store.dispatch('RequirePasswordReset', { nickname })
+    },
+    toggleActivation(user) {
+      user.deactivated
+        ? this.$store.dispatch('ActivateUsers', [user])
+        : this.$store.dispatch('DeactivateUsers', [user])
     },
     handleDeletion(user) {
-      this.$store.dispatch('DeleteUser', user)
+      this.$store.dispatch('DeleteUsers', [user])
     },
     handlePageChange(page) {
       const searchQuery = this.$store.state.users.searchQuery
@@ -292,7 +298,9 @@ export default {
         : this.$store.dispatch('AddTag', { users: [user], tag })
     },
     toggleUserRight(user, right) {
-      this.$store.dispatch('ToggleRight', { user, right })
+      user.roles[right]
+        ? this.$store.dispatch('DeleteRight', { users: [user], right })
+        : this.$store.dispatch('AddRight', { users: [user], right })
     }
   }
 }

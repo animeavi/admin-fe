@@ -1,4 +1,5 @@
 import { loginByUsername, getUserInfo } from '@/api/login'
+import { getNodeInfo } from '@/api/nodeInfo'
 import { getToken, setToken, removeToken, getAuthHost, setAuthHost, removeAuthHost } from '@/utils/auth'
 
 const user = {
@@ -15,7 +16,8 @@ const user = {
     roles: [],
     setting: {
       articlePlatform: []
-    }
+    },
+    nodeInfo: {}
   },
 
   mutations: {
@@ -48,6 +50,9 @@ const user = {
     },
     SET_AUTH_HOST: (state, authHost) => {
       state.authHost = authHost
+    },
+    SET_NODE_INFO: (state, nodeInfo) => {
+      state.nodeInfo = nodeInfo
     }
   },
 
@@ -67,7 +72,11 @@ const user = {
         })
       })
     },
+    async GetNodeInfo({ commit, state }) {
+      const nodeInfo = await getNodeInfo(state.authHost)
 
+      commit('SET_NODE_INFO', nodeInfo.data)
+    },
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token, state.authHost).then(response => {

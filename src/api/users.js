@@ -2,12 +2,23 @@ import request from '@/utils/request'
 import { getToken } from '@/utils/auth'
 import { baseName } from './utils'
 
-export async function addRight(nickname, right, authHost, token) {
+export async function activateUsers(nicknames, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/users/${nickname}/permission_group/${right}`,
+    url: `/api/pleroma/admin/users/activate`,
+    method: 'patch',
+    headers: authHeaders(token),
+    data: { nicknames }
+  })
+}
+
+export async function addRight(nicknames, right, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/users/permission_group/${right}`,
     method: 'post',
-    headers: authHeaders(token)
+    headers: authHeaders(token),
+    data: { nicknames }
   })
 }
 
@@ -21,21 +32,33 @@ export async function createNewAccount(nickname, email, password, authHost, toke
   })
 }
 
-export async function deleteRight(nickname, right, authHost, token) {
+export async function deactivateUsers(nicknames, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/users/${nickname}/permission_group/${right}`,
-    method: 'delete',
-    headers: authHeaders(token)
+    url: `/api/pleroma/admin/users/deactivate`,
+    method: 'patch',
+    headers: authHeaders(token),
+    data: { nicknames }
   })
 }
 
-export async function deleteUser(nickname, authHost, token) {
+export async function deleteRight(nicknames, right, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/users?nickname=${nickname}`,
+    url: `/api/pleroma/admin/users/permission_group/${right}`,
     method: 'delete',
-    headers: authHeaders(token)
+    headers: authHeaders(token),
+    data: { nicknames }
+  })
+}
+
+export async function deleteUsers(nicknames, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/users`,
+    method: 'delete',
+    headers: authHeaders(token),
+    data: { nicknames }
   })
 }
 
@@ -66,6 +89,15 @@ export async function getPasswordResetToken(nickname, authHost, token) {
   })
 }
 
+export async function requirePasswordReset(nickname, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/users/${nickname}/force_password_reset`,
+    method: 'patch',
+    headers: authHeaders(token)
+  })
+}
+
 export async function searchUsers(query, filters, authHost, token, page = 1) {
   return await request({
     baseURL: baseName(authHost),
@@ -82,15 +114,6 @@ export async function tagUser(nicknames, tags, authHost, token) {
     method: 'put',
     headers: authHeaders(token),
     data: { nicknames, tags }
-  })
-}
-
-export async function toggleUserActivation(nickname, authHost, token) {
-  return await request({
-    baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/users/${nickname}/toggle_activation`,
-    method: 'patch',
-    headers: authHeaders(token)
   })
 }
 

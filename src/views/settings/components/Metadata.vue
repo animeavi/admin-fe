@@ -52,7 +52,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import i18n from '@/lang'
 
 export default {
   name: 'Metadata',
@@ -72,16 +71,8 @@ export default {
     updateSetting(value, tab, input) {
       this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})
     },
-    async onSubmit() {
-      try {
-        await this.$store.dispatch('SubmitChanges')
-      } catch (e) {
-        return
-      }
-      this.$message({
-        type: 'success',
-        message: i18n.t('settings.success')
-      })
+    onSubmit() {
+      this.$store.dispatch('SubmitChanges')
     }
   }
 }

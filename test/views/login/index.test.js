@@ -16,6 +16,7 @@ localVue.use(Vuex)
 localVue.use(VueRouter)
 localVue.use(Element)
 
+jest.mock('@/api/nodeInfo')
 jest.mock('@/api/login')
 
 describe('Login', () => {

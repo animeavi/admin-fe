@@ -13,6 +13,7 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(Element)
 
+jest.mock('@/api/nodeInfo')
 jest.mock('@/api/users')
 
 describe('Apply users actions to multiple users', () => {
@@ -50,7 +51,6 @@ describe('Apply users actions to multiple users', () => {
     expect(user2.roles.admin).toBe(false)
     expect(user3.roles.admin).toBe(false)
     grantRight('admin')()
-    await flushPromises()
 
     const updatedUser1 = store.state.users.fetchedUsers[0]
     const updatedUser2 = store.state.users.fetchedUsers[1]
@@ -87,7 +87,6 @@ describe('Apply users actions to multiple users', () => {
     expect(user2.roles.moderator).toBe(false)
     expect(user3.roles.moderator).toBe(false)
     grantRight('moderator')()
-    await flushPromises()
 
     const updatedUser1 = store.state.users.fetchedUsers[0]
     const updatedUser2 = store.state.users.fetchedUsers[1]
@@ -122,7 +121,6 @@ describe('Apply users actions to multiple users', () => {
     expect(user1.roles.admin).toBe(true)
     expect(user2.roles.admin).toBe(false)
     revokeRight('admin')()
-    await flushPromises()
 
     const updatedUser1 = store.state.users.fetchedUsers[0]
     const updatedUser2 = store.state.users.fetchedUsers[2]
@@ -172,7 +170,6 @@ describe('Apply users actions to multiple users', () => {
     const user = store.state.users.fetchedUsers[2]
     expect(user.deactivated).toBe(true)
     activate()
-    await flushPromises()
 
     const updatedUser = store.state.users.fetchedUsers[2]
     expect(updatedUser.deactivated).toBe(false)
@@ -202,7 +199,6 @@ describe('Apply users actions to multiple users', () => {
     expect(user1.deactivated).toBe(false)
     expect(user2.deactivated).toBe(false)
     deactivate()
-    await flushPromises()
 
     const updatedUser1 = store.state.users.fetchedUsers[0]
     const updatedUser2 = store.state.users.fetchedUsers[1]
@@ -251,15 +247,15 @@ describe('Apply users actions to multiple users', () => {
     const addTagForMultipleUsersStub = jest.fn()
     wrapper.setMethods({ addTagForMultipleUsers: addTagForMultipleUsersStub })
 
-    wrapper.find(`.el-dropdown-menu__item:nth-child(8) button:nth-child(1)`).trigger('click')
+    wrapper.find(`.el-dropdown-menu__item:nth-child(9) button:nth-child(1)`).trigger('click')
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalled()
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalledWith('force_nsfw')
 
-    wrapper.find(`.el-dropdown-menu__item:nth-child(10) button:nth-child(1)`).trigger('click')
+    wrapper.find(`.el-dropdown-menu__item:nth-child(11) button:nth-child(1)`).trigger('click')
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalled()
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalledWith('force_unlisted')
 
-    wrapper.find(`.el-dropdown-menu__item:nth-child(12) button:nth-child(1)`).trigger('click')
+    wrapper.find(`.el-dropdown-menu__item:nth-child(13) button:nth-child(1)`).trigger('click')
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalled()
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalledWith('disable_remote_subscription')
 
@@ -269,7 +265,6 @@ describe('Apply users actions to multiple users', () => {
     expect(user1.tags.length).toBe(0)
     expect(user2.tags.length).toBe(1)
     addTag('strip_media')()
-    await flushPromises()
 
     const updatedUser1 = store.state.users.fetchedUsers[0]
     const updatedUser2 = store.state.users.fetchedUsers[1]
@@ -292,15 +287,15 @@ describe('Apply users actions to multiple users', () => {
     const removeTagFromMultipleUsersStub = jest.fn()
     wrapper.setMethods({ removeTagFromMultipleUsers: removeTagFromMultipleUsersStub })
 
-    wrapper.find(`.el-dropdown-menu__item:nth-child(9) button:nth-child(2)`).trigger('click')
+    wrapper.find(`.el-dropdown-menu__item:nth-child(10) button:nth-child(2)`).trigger('click')
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalled()
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalledWith('strip_media')
 
-    wrapper.find(`.el-dropdown-menu__item:nth-child(11) button:nth-child(2)`).trigger('click')
+    wrapper.find(`.el-dropdown-menu__item:nth-child(12) button:nth-child(2)`).trigger('click')
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalled()
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalledWith('sandbox')
 
-    wrapper.find(`.el-dropdown-menu__item:nth-child(13) button:nth-child(2)`).trigger('click')
+    wrapper.find(`.el-dropdown-menu__item:nth-child(14) button:nth-child(2)`).trigger('click')
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalled()
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalledWith('disable_any_subscription')
 
@@ -310,7 +305,6 @@ describe('Apply users actions to multiple users', () => {
     expect(user1.tags.length).toBe(1)
     expect(user2.tags.length).toBe(1)
     removeTag('strip_media')()
-    await flushPromises()
 
     const updatedUser1 = store.state.users.fetchedUsers[1]
     const updatedUser2 = store.state.users.fetchedUsers[2]

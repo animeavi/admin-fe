@@ -1,6 +1,7 @@
+import i18n from '@/lang'
 import { fetchSettings, updateSettings, uploadMedia } from '@/api/settings'
-import { initialSettings } from '@/api/initialDataForConfig'
 import { filterIgnored, parseTuples, valueHasTuples, wrapConfig } from './normalizers'
+import { Message } from 'element-ui'
 
 const settings = {
   state: {
@@ -116,11 +117,7 @@ const settings = {
     async FetchSettings({ commit, dispatch, getters }) {
       commit('SET_LOADING', true)
       const response = await fetchSettings(getters.authHost, getters.token)
-      if (response.data.configs.length === 0) {
-        dispatch('SubmitChanges', initialSettings)
-      } else {
-        commit('SET_SETTINGS', response.data.configs)
-      }
+      commit('SET_SETTINGS', response.data.configs)
       commit('SET_LOADING', false)
     },
     RewriteConfig({ commit }, { tab, data }) {
@@ -129,10 +126,17 @@ const settings = {
     async SubmitChanges({ getters, commit, state }, data) {
       const filteredSettings = filterIgnored(state.settings, state.ignoredIfNotEnabled)
       const configs = data || wrapConfig(filteredSettings)
-      const response = await updateSettings(configs, getters.authHost, getters.token)
-      if (data) {
+      try {
+        const response = await updateSettings(configs, getters.authHost, getters.token)
         commit('SET_SETTINGS', response.data.configs)
+      } catch (_e) {
+        return
       }
+      Message({
+        message: i18n.t('settings.success'),
+        type: 'success',
+        duration: 5 * 1000
+      })
     },
     UpdateSettings({ commit }, { tab, data }) {
       commit('UPDATE_SETTINGS', { tab, data })

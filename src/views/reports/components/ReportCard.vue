@@ -48,8 +48,8 @@ export default {
     capitalizeFirstLetter(str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
     },
-    changeReportState(reportState, reportId) {
-      this.$store.dispatch('ChangeReportState', { reportState, reportId })
+    changeReportState(state, id) {
+      this.$store.dispatch('ChangeReportState', [{ state, id }])
     },
     getStateType(state) {
       switch (state) {

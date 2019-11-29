@@ -107,12 +107,9 @@ export default {
       return this.$store.state.reports.currentPage
     }
   },
-  mounted() {
-    this.$store.dispatch('FetchReports', 1)
-  },
   methods: {
-    changeReportState(reportState, reportId) {
-      this.$store.dispatch('ChangeReportState', { reportState, reportId })
+    changeReportState(state, id) {
+      this.$store.dispatch('ChangeReportState', [{ state, id }])
     },
     capitalizeFirstLetter(str) {
       return str.charAt(0).toUpperCase() + str.slice(1)

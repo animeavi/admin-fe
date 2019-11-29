@@ -38,13 +38,25 @@ const reports = {
     }
   },
   actions: {
-    async ChangeReportState({ dispatch, getters, state }, { reportState, reportId }) {
-      await changeState(reportState, reportId, getters.authHost, getters.token)
-      dispatch('FetchReports', state.currentPage)
+    async ChangeReportState({ commit, getters, state }, reportsData) {
+      changeState(reportsData, getters.authHost, getters.token)
+
+      const updatedReports = state.fetchedReports.map(report => {
+        const updatedReportsIds = reportsData.map(({ id }) => id)
+        return updatedReportsIds.includes(report.id) ? { ...report, state: reportsData[0].state } : report
+      })
+
+      const updatedGroupedReports = state.fetchedGroupedReports.map(group => {
+        const updatedReportsIds = reportsData.map(({ id }) => id)
+        const updatedReports = group.reports.map(report => updatedReportsIds.includes(report.id) ? { ...report, state: reportsData[0].state } : report)
+        return { ...group, reports: updatedReports }
+      })
+
+      commit('SET_REPORTS', updatedReports)
+      commit('SET_GROUPED_REPORTS', updatedGroupedReports)
     },
     ClearFetchedReports({ commit }) {
       commit('SET_REPORTS', [])
-      commit('SET_LAST_REPORT_ID', '')
     },
     async FetchReports({ commit, getters, state }, page) {
       commit('SET_LOADING', true)
@@ -58,7 +70,6 @@ const reports = {
     async FetchGroupedReports({ commit, getters }) {
       commit('SET_LOADING', true)
       const { data } = await fetchGroupedReports(getters.authHost, getters.token)
-      console.log(reports)
 
       commit('SET_GROUPED_REPORTS', data.reports)
       commit('SET_LOADING', false)
