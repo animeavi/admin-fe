@@ -4,11 +4,11 @@
       v-if="setting.type === 'string'"
       :value="inputValue"
       :placeholder="setting.suggestions ? setting.suggestions[0] : null"
-      @input="updateSetting($event, settingGroup.key, setting.key)"/>
+      @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
     <el-switch
       v-if="setting.type === 'boolean'"
       :value="inputValue"
-      @change="updateSetting($event, settingGroup.key, setting.key)"/>
+      @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
     <el-input-number
       v-if="setting.type === 'integer'"
       :value="inputValue"
@@ -16,12 +16,12 @@
       :min="0"
       size="large"
       class="top-margin"
-      @change="updateSetting($event, settingGroup.key, setting.key)"/>
+      @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
     <el-select
       v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes(false))"
       :value="inputValue"
       clearable
-      @change="updateSetting($event, settingGroup.key, setting.key)">
+      @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)">
       <el-option
         v-for="(option, index) in setting.suggestions"
         :value="option"
@@ -42,7 +42,7 @@
       multiple
       filterable
       allow-create
-      @change="updateSetting($event, settingGroup.key, setting.key)">
+      @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)">
       <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
     </el-select>
     <editor
@@ -59,12 +59,12 @@
       v-if="setting.type === 'tuple'"
       :placeholder="setting.key === ':ip' ? 'xxx.xxx.xxx.xx' : setting.suggestions[0]"
       :value="data[setting.key]"
-      @input="updateSetting($event, settingGroup.key, setting.key)"/>
+      @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
     <el-input
       v-if="setting.type === 'atom'"
       :value="inputValue ? inputValue.substr(1) : null"
       :placeholder="setting.suggestions[0]"
-      @input="updateSetting($event, settingGroup.key, setting.key)">
+      @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)">
       <template slot="prepend">:</template>
     </el-input>
     <div v-if="editableKeywordWithInput(setting.key)">
@@ -104,7 +104,7 @@
           placeholder="1500"
           size="large"
           class="top-margin"
-          @change="updateSetting($event, settingGroup.key, setting.key)"/>
+          @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
       </el-form-item>
       <el-form-item v-if="prune === ':maxage'" label="max age" label-width="100" label-position="left">
         <el-input-number
@@ -113,7 +113,7 @@
           placeholder="3600"
           size="large"
           class="top-margin"
-          @change="updateSetting($event, settingGroup.key, setting.key)"/>
+          @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
       </el-form-item>
     </div>
     <div v-if="settingGroup.key === ':rate_limit'">
@@ -146,7 +146,7 @@
         :value="proxyUrlData"
         :placeholder="setting.suggestions ? setting.suggestions[0] : ''"
         class="value-input"
-        @input="updateSetting($event, settingGroup.key, setting.key)"/>
+        @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
     </div>
     <div v-if="settingGroup.group === ':auto_linker' && (setting.key === ':class' || setting.key === ':rel')">
       <el-switch :value="autoLinkerBooleanValue(setting.key)" @change="processAutoLinker($event, 'auto_linker', 'opts', 'class')"/>
@@ -242,7 +242,9 @@ export default {
       }
     },
     iconsValue() {
-      return this.data[':icons'].map(icon => Object.keys(icon).map(key => [key, icon[key]]))
+      return this.data[':icons']
+        ? this.data[':icons'].map(icon => Object.keys(icon).map(key => [key, icon[key]]))
+        : null
     },
     inputValue() {
       if ([':esshd', ':cors_plug', ':quack', ':http_signatures'].includes(this.settingGroup.group) && this.data[this.setting.key]) {
@@ -302,13 +304,13 @@ export default {
       const updatedValue = this.editableKeywordData(this.data).reduce((acc, el, i) => {
         return { ...acc, [el[0]]: el[1] }
       }, {})
-      this.updateSetting({ ...updatedValue, '': [] }, this.settingGroup.key, this.setting.key)
+      this.updateSetting({ ...updatedValue, '': [] }, this.settingGroup.group, this.settingGroup.key, this.setting.key)
     },
     addRowToMascots() {
       const updatedValue = this.data[':mascots'].reduce((acc, el, i) => {
         return { ...acc, [el[0]]: { url: el[1], mime_type: el[2] }}
       }, {})
-      this.updateSetting({ ...updatedValue, '': { url: '', mime_type: '' }}, 'assets', 'mascots')
+      this.updateSetting({ ...updatedValue, '': { url: '', mime_type: '' }}, this.settingGroup.group, 'assets', 'mascots')
     },
     autoLinkerBooleanValue(key) {
       const value = this.data[this.setting.key]
@@ -328,7 +330,7 @@ export default {
         return { ...acc, [el[0]]: el[1] }
       }, {})
       console.log(updatedValue)
-      this.updateSetting(updatedValue, this.settingGroup.key, this.setting.key)
+      this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key)
     },
     deleteIcondRow(index) {},
     deleteMascotsRow(index) {
@@ -336,7 +338,7 @@ export default {
       const updatedValue = filteredValues.reduce((acc, el, i) => {
         return { ...acc, [el[0]]: { url: el[1], mime_type: el[2] }}
       }, {})
-      this.updateSetting(updatedValue, 'assets', 'mascots')
+      this.updateSetting(updatedValue, this.settingGroup.group, 'assets', 'mascots')
     },
     editableKeywordWithInput(key) {
       return key === ':replace'
@@ -361,7 +363,7 @@ export default {
         return { ...acc, [el[0]]: el[1] }
       }, {})
       console.log(updatedValue)
-      this.updateSetting(updatedValue, this.settingGroup.key, this.setting.key)
+      this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key)
     },
     parseIcons(value, inputType, index) {},
     parseMascots(value, inputType, index) {
@@ -377,29 +379,29 @@ export default {
         }
         return { ...acc, [el[0]]: { url: el[1], mime_type: el[2] }}
       }, {})
-      this.updateSetting(updatedValue, 'assets', 'mascots')
+      this.updateSetting(updatedValue, this.settingGroup.group, 'assets', 'mascots')
     },
     parseRateLimiter(value, input, typeOfInput, typeOfLimit, currentValue) {
       if (typeOfLimit === 'oneLimit') {
         const valueToSend = typeOfInput === 'scale' ? { 'tuple': [value, currentValue[1]] } : { 'tuple': [currentValue[0], value] }
-        this.updateSetting(valueToSend, 'rate_limit', input)
+        this.updateSetting(valueToSend, this.settingGroup.group, 'rate_limit', input)
       } else if (typeOfLimit === 'authUserslimit') {
         const valueToSend = typeOfInput === 'scale'
           ? [{ 'tuple': [currentValue[0][0], currentValue[0][1]] }, { 'tuple': [value, currentValue[1][1]] }]
           : [{ 'tuple': [currentValue[0][0], currentValue[0][1]] }, { 'tuple': [currentValue[1][0], value] }]
-        this.updateSetting(valueToSend, 'rate_limit', input)
+        this.updateSetting(valueToSend, this.settingGroup.group, 'rate_limit', input)
       } else if (typeOfLimit === 'unauthUsersLimit') {
         const valueToSend = typeOfInput === 'scale'
           ? [{ 'tuple': [value, currentValue[0][1]] }, { 'tuple': [currentValue[1][0], currentValue[1][1]] }]
           : [{ 'tuple': [currentValue[0][0], value] }, { 'tuple': [currentValue[1][0], currentValue[1][1]] }]
-        this.updateSetting(valueToSend, 'rate_limit', input)
+        this.updateSetting(valueToSend, this.settingGroup.group, 'rate_limit', input)
       }
     },
     processAutoLinker(value, tab, inputName, childName) {
     },
     processNestedData(value, tab, inputName, childName) {
       const updatedValue = { ...this.$store.state.settings.settings[tab][inputName], ...{ [childName]: value }}
-      this.updateSetting(updatedValue, tab, inputName)
+      this.updateSetting(updatedValue, this.settingGroup.group, tab, inputName)
     },
     renderMultipleSelect(type) {
       return Array.isArray(type) && (
@@ -414,10 +416,10 @@ export default {
       console.log(value)
     },
     toggleLimits(value, input) {
-      this.updateSetting(value, 'rate_limit', input)
+      this.updateSetting(value, this.settingGroup.group, 'rate_limit', input)
     },
-    updateSetting(value, tab, input) {
-      this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})
+    updateSetting(value, group, tab, input) {
+      this.$store.dispatch('UpdateSettings', { group, tab, data: { [input]: value }})
     }
   }
 }

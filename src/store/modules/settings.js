@@ -40,10 +40,13 @@ const settings = {
       }, state.settings)
       state.settings = newSettings
     },
-    UPDATE_SETTINGS: (state, { tab, data }) => {
-      Object.keys(state.settings).map(configName => {
+    UPDATE_SETTINGS: (state, { group, tab, data }) => {
+      const groupUPD = group.substr(1)
+      Object.keys(state.settings[groupUPD]).map(configName => {
         if (configName === tab) {
-          state.settings[configName] = { ...state.settings[configName], ...data }
+          const updatedSetting = { [configName]: { ...state.settings[groupUPD][configName], ...data }}
+          const updatedGroup = { ...state.settings[groupUPD], ...updatedSetting }
+          state.settings[groupUPD] = updatedGroup
         }
       })
     }
@@ -75,8 +78,8 @@ const settings = {
         commit('SET_SETTINGS', response.data.configs)
       }
     },
-    UpdateSettings({ commit }, { tab, data }) {
-      commit('UPDATE_SETTINGS', { tab, data })
+    UpdateSettings({ commit }, { group, tab, data }) {
+      commit('UPDATE_SETTINGS', { group, tab, data })
     },
     async UploadMedia({ dispatch, getters, state }, { file, tab, inputName, childName }) {
       const response = await uploadMedia(file, getters.authHost, getters.token)
