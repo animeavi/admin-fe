@@ -60,49 +60,49 @@ export default {
       return this.settings.description.find(setting => setting.key === ':mrf_simple')
     },
     mrfSimpleData() {
-      return this.settings.settings.pleroma[':mrf_simple']
+      return this.settings.settings[':pleroma'][':mrf_simple']
     },
     mrfRejectnonpublic() {
       return this.settings.description.find(setting => setting.key === ':mrf_rejectnonpublic')
     },
     mrfRejectnonpublicData() {
-      return this.settings.settings.pleroma[':mrf_rejectnonpublic']
+      return this.settings.settings[':pleroma'][':mrf_rejectnonpublic']
     },
     mrfHellthread() {
       return this.settings.description.find(setting => setting.key === ':mrf_hellthread')
     },
     mrfHellthreadData() {
-      return this.settings.settings.pleroma[':mrf_hellthread']
+      return this.settings.settings[':pleroma'][':mrf_hellthread']
     },
     mrfKeyword() {
       return this.settings.description.find(setting => setting.key === ':mrf_keyword')
     },
     mrfKeywordData() {
-      return this.settings.settings.pleroma[':mrf_keyword']
+      return this.settings.settings[':pleroma'][':mrf_keyword']
     },
     mrfSubchain() {
       return this.settings.description.find(setting => setting.key === ':mrf_subchain')
     },
     mrfSubchainData() {
-      return this.settings.settings.pleroma[':mrf_subchain']
+      return this.settings.settings[':pleroma'][':mrf_subchain']
     },
     mrfMention() {
       return this.settings.description.find(setting => setting.key === ':mrf_mention')
     },
     mrfMentionData() {
-      return this.settings.settings.pleroma[':mrf_mention']
+      return this.settings.settings[':pleroma'][':mrf_mention']
     },
     mrfNormalizeMarkup() {
       return this.settings.description.find(setting => setting.key === ':mrf_normalize_markup')
     },
     mrfNormalizeMarkupData() {
-      return this.settings.settings.pleroma[':mrf_normalize_markup']
+      return this.settings.settings[':pleroma'][':mrf_normalize_markup']
     },
     mrfVocabulary() {
       return this.settings.description.find(setting => setting.key === ':mrf_vocabulary')
     },
     mrfVocabularyData() {
-      return this.settings.settings.pleroma[':mrf_vocabulary']
+      return this.settings.settings[':pleroma'][':mrf_vocabulary']
     }
   },
   methods: {

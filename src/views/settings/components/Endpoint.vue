@@ -35,13 +35,13 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Web.Endpoint')
     },
     endpointData() {
-      return this.settings.settings.pleroma['Pleroma.Web.Endpoint']
+      return this.settings.settings[':pleroma']['Pleroma.Web.Endpoint']
     },
     endpointMetricsExporter() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Web.Endpoint.MetricsExporter')
     },
     endpointMetricsExporterData() {
-      return this.settings.settings.prometheus['Pleroma.Web.Endpoint.MetricsExporter']
+      return this.settings.settings[':prometheus']['Pleroma.Web.Endpoint.MetricsExporter']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
@@ -56,7 +56,7 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Plugs.RemoteIp')
     },
     remoteIpData() {
-      return this.settings.settings.pleroma['Pleroma.Plugs.RemoteIp']
+      return this.settings.settings[':pleroma']['Pleroma.Plugs.RemoteIp']
     }
   },
   methods: {

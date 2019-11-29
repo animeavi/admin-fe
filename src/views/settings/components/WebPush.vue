@@ -32,7 +32,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':vapid_details')
     },
     vapidDetailsData() {
-      return this.settings.settings.web_push_encryption[':vapid_details']
+      return this.settings.settings[':web_push_encryption'][':vapid_details']
     }
   },
   methods: {

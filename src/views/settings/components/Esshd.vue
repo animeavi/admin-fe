@@ -32,7 +32,7 @@ export default {
       return this.settings.description.find(setting => setting.group === ':esshd')
     },
     esshdData() {
-      return this.settings.settings.esshd
+      return this.settings.settings[':esshd']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'

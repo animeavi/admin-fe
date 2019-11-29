@@ -23,7 +23,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':rate_limit')
     },
     rateLimitersData() {
-      return this.settings.settings.pleroma[':rate_limit']
+      return this.settings.settings[':pleroma'][':rate_limit']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'

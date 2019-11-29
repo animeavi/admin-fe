@@ -56,19 +56,19 @@ export default {
       return this.settings.description.find(setting => setting.description === `Allows to set a token that can be used to authenticate with the admin api without using an actual user by giving it as the 'admin_token' parameter`)
     },
     adminTokenData() {
-      return this.settings.settings.pleroma[':admin_token']
+      return this.settings.settings[':pleroma'][':admin_token']
     },
     fetchInitialPosts() {
       return this.settings.description.find(setting => setting.key === ':fetch_initial_posts')
     },
     fetchInitialPostsData() {
-      return this.settings.settings.pleroma[':fetch_initial_posts']
+      return this.settings.settings[':pleroma'][':fetch_initial_posts']
     },
     instance() {
       return this.settings.description.find(setting => setting.key === ':instance')
     },
     instanceData() {
-      return this.settings.settings.pleroma[':instance']
+      return this.settings.settings[':pleroma'][':instance']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
@@ -83,31 +83,31 @@ export default {
       return this.settings.description.find(setting => setting.key === ':manifest')
     },
     manifestData() {
-      return this.settings.settings.pleroma[':manifest']
+      return this.settings.settings[':pleroma'][':manifest']
     },
     pleromaUser() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.User')
     },
     pleromaUserData() {
-      return this.settings.settings.pleroma['Pleroma.User']
+      return this.settings.settings[':pleroma']['Pleroma.User']
     },
     scheduledActivity() {
       return this.$store.state.settings.description.find(setting => setting.key === 'Pleroma.ScheduledActivity')
     },
     scheduledActivityData() {
-      return this.settings.settings.pleroma['Pleroma.ScheduledActivity']
+      return this.settings.settings[':pleroma']['Pleroma.ScheduledActivity']
     },
     suggestions() {
       return this.$store.state.settings.description.find(setting => setting.key === ':suggestions')
     },
     suggestionsData() {
-      return this.settings.settings.pleroma[':suggestions']
+      return this.settings.settings[':pleroma'][':suggestions']
     },
     uriSchemes() {
       return this.$store.state.settings.description.find(setting => setting.key === ':uri_schemes')
     },
     uriSchemesData() {
-      return this.settings.settings.pleroma[':uri_schemes']
+      return this.settings.settings[':pleroma'][':uri_schemes']
     }
   },
   methods: {

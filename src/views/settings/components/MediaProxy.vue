@@ -32,7 +32,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':media_proxy')
     },
     mediaProxyData() {
-      return this.settings.settings.pleroma[':media_proxy']
+      return this.settings.settings[':pleroma'][':media_proxy']
     }
   },
   methods: {

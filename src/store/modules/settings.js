@@ -5,19 +5,19 @@ const settings = {
   state: {
     description: [],
     settings: {
-      auto_linker: {},
-      cors_plug: {},
-      esshd: {},
-      http_signatures: {},
-      logger: {},
-      mime: {},
-      phoenix: {},
-      pleroma: {},
-      prometheus: {},
-      quack: {},
-      tesla: {},
-      ueberauth: {},
-      web_push_encryption: {}
+      ':auto_linker': {},
+      ':cors_plug': {},
+      ':esshd': {},
+      ':http_signatures': {},
+      ':logger': {},
+      ':mime': {},
+      ':phoenix': {},
+      ':pleroma': {},
+      ':prometheus': {},
+      ':quack': {},
+      ':tesla': {},
+      ':ueberauth': {},
+      ':web_push_encryption': {}
     },
     updatedSettings: {},
     ignoredIfNotEnabled: ['enabled', 'handler', 'password_authenticator', 'port', 'priv_dir'],
@@ -42,13 +42,12 @@ const settings = {
       state.settings = newSettings
     },
     UPDATE_SETTINGS: (state, { group, tab, data }) => {
-      const groupUPD = group.substr(1)
-      const updatedState = { [tab]: { ...state.settings[groupUPD][tab], ...data }}
-      const updatedSetting = state.updatedSettings[groupUPD]
-        ? { [tab]: { ...state.updatedSettings[groupUPD][tab], ...data }}
+      const updatedState = { [tab]: { ...state.settings[group][tab], ...data }}
+      const updatedSetting = state.updatedSettings[group]
+        ? { [tab]: { ...state.updatedSettings[group][tab], ...data }}
         : { [tab]: data }
-      state.settings[groupUPD] = { ...state.settings[groupUPD], ...updatedState }
-      state.updatedSettings[groupUPD] = { ...state.updatedSettings[groupUPD], ...updatedSetting }
+      state.settings[group] = { ...state.settings[group], ...updatedState }
+      state.updatedSettings[group] = { ...state.updatedSettings[group], ...updatedSetting }
     }
   },
   actions: {

@@ -38,13 +38,13 @@ export default {
       return this.settings.description.find(setting => setting.group === ':mime')
     },
     mimeTypesData() {
-      return this.settings.settings.mime[':types']
+      return this.settings.settings[':mime'][':types']
     },
     teslaAdapter() {
       return this.settings.description.find(setting => setting.group === ':tesla')
     },
     teslaAdapterData() {
-      return this.settings.settings.tesla[':adapter']
+      return this.settings.settings[':tesla'][':adapter']
     }
   },
   methods: {

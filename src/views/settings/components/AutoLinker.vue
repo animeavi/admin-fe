@@ -23,7 +23,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':opts')
     },
     autoLinkerData() {
-      return this.settings.settings.auto_linker[':opts']
+      return this.settings.settings[':auto_linker'][':opts']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'

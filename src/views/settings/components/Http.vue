@@ -41,19 +41,19 @@ export default {
       return this.settings.description.find(setting => setting.group === ':cors_plug')
     },
     corsPlugData() {
-      return this.settings.settings.cors_plug
+      return this.settings.settings[':cors_plug']
     },
     http() {
       return this.settings.description.find(setting => setting.key === ':http')
     },
     httpData() {
-      return this.settings.settings.pleroma[':http']
+      return this.settings.settings[':pleroma'][':http']
     },
     httpSecurity() {
       return this.settings.description.find(setting => setting.key === ':http_security')
     },
     httpSecurityData() {
-      return this.settings.settings.pleroma[':http_security']
+      return this.settings.settings[':pleroma'][':http_security']
     },
     httpSignatures() {
       return this.settings.description.find(setting => setting.group === ':http_signatures')
@@ -74,7 +74,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':web_cache_ttl')
     },
     webCacheTtlData() {
-      return this.settings.settings.pleroma[':web_cache_ttl']
+      return this.settings.settings[':pleroma'][':web_cache_ttl']
     }
   },
   methods: {

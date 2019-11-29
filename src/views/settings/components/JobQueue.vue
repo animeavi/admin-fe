@@ -31,7 +31,7 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Pleroma.ActivityExpiration')
     },
     activityExpirationData() {
-      return this.settings.settings.pleroma['Pleroma.ActivityExpiration']
+      return this.settings.settings[':pleroma']['Pleroma.ActivityExpiration']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
@@ -46,13 +46,13 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Oban')
     },
     obanQueuesData() {
-      return this.settings.settings.pleroma['Oban']
+      return this.settings.settings[':pleroma']['Oban']
     },
     workers() {
       return this.settings.description.find(setting => setting.key === ':workers')
     },
     workersData() {
-      return this.settings.settings.pleroma[':workers']
+      return this.settings.settings[':pleroma'][':workers']
     }
   },
   methods: {

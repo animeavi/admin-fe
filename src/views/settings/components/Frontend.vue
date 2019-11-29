@@ -48,31 +48,31 @@ export default {
       return this.settings.description.find(setting => setting.key === ':assets')
     },
     assetsData() {
-      return this.settings.settings.pleroma[':assets']
+      return this.settings.settings[':pleroma'][':assets']
     },
     chat() {
       return this.settings.description.find(setting => setting.key === ':chat')
     },
     chatData() {
-      return this.settings.settings.pleroma[':chat']
+      return this.settings.settings[':pleroma'][':chat']
     },
     emoji() {
       return this.settings.description.find(setting => setting.key === ':emoji')
     },
     emojiData() {
-      return this.settings.settings.pleroma[':emoji']
+      return this.settings.settings[':pleroma'][':emoji']
     },
     frontend() {
       return this.settings.description.find(setting => setting.key === ':frontend_configurations')
     },
     frontendData() {
-      return this.settings.settings.pleroma[':frontend_configurations']
+      return this.settings.settings[':pleroma'][':frontend_configurations']
     },
     markup() {
       return this.settings.description.find(setting => setting.key === ':markup')
     },
     markupData() {
-      return this.settings.settings.pleroma[':markup']
+      return this.settings.settings[':pleroma'][':markup']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
