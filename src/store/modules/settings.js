@@ -1,5 +1,5 @@
 import { fetchDescription, fetchSettings, migrateToDB, updateSettings, uploadMedia } from '@/api/settings'
-import { filterIgnored, parseTuples, valueHasTuples, wrapConfig } from './normalizers'
+import { parseTuples, valueHasTuples, wrapConfig } from './normalizers'
 
 const settings = {
   state: {
@@ -19,6 +19,7 @@ const settings = {
       ueberauth: {},
       web_push_encryption: {}
     },
+    updatedSettings: {},
     ignoredIfNotEnabled: ['enabled', 'handler', 'password_authenticator', 'port', 'priv_dir'],
     loading: true
   },
@@ -42,13 +43,12 @@ const settings = {
     },
     UPDATE_SETTINGS: (state, { group, tab, data }) => {
       const groupUPD = group.substr(1)
-      Object.keys(state.settings[groupUPD]).map(configName => {
-        if (configName === tab) {
-          const updatedSetting = { [configName]: { ...state.settings[groupUPD][configName], ...data }}
-          const updatedGroup = { ...state.settings[groupUPD], ...updatedSetting }
-          state.settings[groupUPD] = updatedGroup
-        }
-      })
+      const updatedState = { [tab]: { ...state.settings[groupUPD][tab], ...data }}
+      const updatedSetting = state.updatedSettings[groupUPD]
+        ? { [tab]: { ...state.updatedSettings[groupUPD][tab], ...data }}
+        : { [tab]: data }
+      state.settings[groupUPD] = { ...state.settings[groupUPD], ...updatedState }
+      state.updatedSettings[groupUPD] = { ...state.updatedSettings[groupUPD], ...updatedSetting }
     }
   },
   actions: {
@@ -71,14 +71,13 @@ const settings = {
       commit('REWRITE_CONFIG', { tab, data })
     },
     async SubmitChanges({ getters, commit, state }, data) {
-      const filteredSettings = filterIgnored(state.settings, state.ignoredIfNotEnabled)
-      const configs = data || wrapConfig(filteredSettings)
+      const configs = data || wrapConfig(state.updatedSettings)
       const response = await updateSettings(configs, getters.authHost, getters.token)
       if (data) {
         commit('SET_SETTINGS', response.data.configs)
       }
     },
-    UpdateSettings({ commit }, { group, tab, data }) {
+    UpdateSettings({ commit, state }, { group, tab, data }) {
       commit('UPDATE_SETTINGS', { group, tab, data })
     },
     async UploadMedia({ dispatch, getters, state }, { file, tab, inputName, childName }) {
