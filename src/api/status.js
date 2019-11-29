@@ -21,4 +21,13 @@ export async function deleteStatus(id, authHost, token) {
   })
 }
 
+export async function fetchStatusesByInstance(instance, authHost, token, pageSize, page = 1) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/instances/${instance}/statuses?page=${page}&page_size=${pageSize}`,
+    method: 'get',
+    headers: authHeaders(token)
+  })
+}
+
 const authHeaders = (token) => token ? { 'Authorization': `Bearer ${getToken()}` } : {}

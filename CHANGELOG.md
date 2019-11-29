@@ -30,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Emoji pack configuration
+- Statuses page: fetch all statuses from a given instance
 - Ability to require user's password reset
 – Ability to track admin/moderator actions, a.k.a. "the moderation log"
 
