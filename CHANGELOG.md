@@ -8,9 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- moves emoji pack configuration from the main menu to settings tab, redesigns it and fixes bugs
+- Moves emoji pack configuration from the main menu to settings tab, redesigns it and fixes bugs
 - `mailerEnabled` must be set to `true` in order to require password reset (password reset currently only works via email)
-- remove fetching initial data for configuring server settings
+- Remove fetching initial data for configuring server settings
 - Actions in users module (ActivateUsers, AddRight, DeactivateUsers, DeleteRight, DeleteUsers) now accept an array of users instead of one user
 - Leave dropdown menu open after clicking an action
 - Move current try/catch error handling from view files to module, add it where necessary
@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Optimistic update for actions in users module and fetching users after api function finished its execution
 - Relay management
+- Ability to fetch all statuses from a given instance
 
 ### Fixed
 
