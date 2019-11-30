@@ -21,7 +21,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Status from '../status/Status'
+import Status from '@/components/Status'
 
 export default {
   name: 'Statuses',

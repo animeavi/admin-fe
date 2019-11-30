@@ -57,6 +57,11 @@
           <el-tag v-if="scope.row.roles.moderator">
             <span>{{ isDesktop ? $t('users.moderator') : getFirstLetter($t('users.moderator')) }}</span>
           </el-tag>
+          <el-tooltip :content="$t('users.unconfirmedEmail')" effect="dark">
+            <el-tag v-if="scope.row.confirmation_pending" type="info">
+              {{ isDesktop ? $t('users.unconfirmed') : getFirstLetter($t('users.unconfirmed')) }}
+            </el-tag>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column :label="$t('users.actions')" fixed="right">
@@ -87,6 +92,17 @@
                 v-if="showDeactivatedButton(scope.row.id)"
                 @click.native="handleDeletion(scope.row)">
                 {{ $t('users.deleteAccount') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="scope.row.local && scope.row.confirmation_pending"
+                divided
+                @click.native="handleEmailConfirmation(scope.row)">
+                {{ $t('users.confirmAccount') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="scope.row.local && scope.row.confirmation_pending"
+                @click.native="handleConfirmationResend(scope.row)">
+                {{ $t('users.resendConfirmation') }}
               </el-dropdown-item>
               <el-dropdown-item
                 :divided="showAdminAction(scope.row)"
@@ -301,6 +317,12 @@ export default {
       user.roles[right]
         ? this.$store.dispatch('DeleteRight', { users: [user], right })
         : this.$store.dispatch('AddRight', { users: [user], right })
+    },
+    handleEmailConfirmation(user) {
+      this.$store.dispatch('ConfirmUsersEmail', [user])
+    },
+    handleConfirmationResend(user) {
+      this.$store.dispatch('ResendConfirmationEmail', [user])
     }
   }
 }

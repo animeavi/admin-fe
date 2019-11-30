@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import SvgIcon from '@/components/SvgIcon'
+import SvgIcon from '@/components/element-ui/SvgIcon'
 import localforage from 'localforage'
 import _ from 'lodash'
 import i18n from '@/lang'
