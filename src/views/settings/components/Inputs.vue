@@ -4,11 +4,11 @@
       v-if="setting.type === 'string'"
       :value="inputValue"
       :placeholder="setting.suggestions ? setting.suggestions[0] : null"
-      @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
+      @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key, setting.type)"/>
     <el-switch
       v-if="setting.type === 'boolean'"
       :value="inputValue"
-      @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
+      @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key, setting.type)"/>
     <el-input-number
       v-if="setting.type === 'integer'"
       :value="inputValue"
@@ -16,7 +16,7 @@
       :min="0"
       size="large"
       class="top-margin"
-      @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
+      @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key, setting.type)"/>
     <el-select
       v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes(false))"
       :value="inputValue"
@@ -418,8 +418,8 @@ export default {
     toggleLimits(value, input) {
       this.updateSetting(value, this.settingGroup.group, 'rate_limit', input)
     },
-    updateSetting(value, group, tab, input) {
-      this.$store.dispatch('UpdateSettings', { group, tab, data: { [input]: value }})
+    updateSetting(value, group, key, input, type) {
+      this.$store.dispatch('UpdateSettings', { group, key, input, value, type })
     }
   }
 }
