@@ -26,7 +26,8 @@
           <inputs
             :setting-group="settingGroup"
             :setting="setting"
-            :data="data"/>
+            :data="data"
+            :nested="false"/>
         </div>
         <div v-if="compound(setting)">
           <el-form-item :label="`${setting.label}:`"/>
@@ -36,7 +37,7 @@
               :setting-parent="setting"
               :setting="subSetting"
               :data="data[setting.key]"
-            />
+              :nested="true"/>
           </div>
           <div v-if="!setting.children">
             <inputs :setting-group="settingGroup" :setting="setting" :data="data[setting.key]"/>

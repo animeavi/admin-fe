@@ -1,5 +1,5 @@
 import { fetchDescription, fetchSettings, migrateToDB, updateSettings, uploadMedia } from '@/api/settings'
-import { parseTuples, parseValue, valueHasTuples } from './normalizers'
+import { parseTuples, valueHasTuples } from './normalizers'
 
 const settings = {
   state: {
@@ -42,14 +42,14 @@ const settings = {
       state.settings = newSettings
     },
     UPDATE_SETTINGS: (state, { group, key, input, value, type }) => {
+      const updatedSetting = state.updatedSettings[group]
+        ? { [key]: { ...state.updatedSettings[group][key], ...{ [input]: [type, value] }}}
+        : { [key]: { [input]: [type, value] }}
+      state.updatedSettings[group] = { ...state.updatedSettings[group], ...updatedSetting }
+    },
+    UPDATE_STATE: (state, { group, key, input, value }) => {
       const updatedState = { [key]: { ...state.settings[group][key], ...{ [input]: value }}}
       state.settings[group] = { ...state.settings[group], ...updatedState }
-
-      const settingKey = `${group}/${key}/${input}`
-      state.updatedSettings = {
-        ...state.updatedSettings,
-        ...{ [settingKey]: { group, key, value: parseValue(input, value, type) }}
-      }
     }
   },
   actions: {
@@ -72,12 +72,19 @@ const settings = {
       commit('REWRITE_CONFIG', { tab, data })
     },
     async SubmitChanges({ getters, commit, state }) {
-      const configs = Object.values(state.updatedSettings)
+      const configs = state.updatedSettings
       const response = await updateSettings(configs, getters.authHost, getters.token)
       commit('SET_SETTINGS', response.data.configs)
     },
     UpdateSettings({ commit }, { group, key, input, value, type }) {
-      commit('UPDATE_SETTINGS', { group, key, input, value, type })
+      key
+        ? commit('UPDATE_SETTINGS', { group, key, input, value, type })
+        : commit('UPDATE_SETTINGS', { group, key: input, input: 'value', value, type })
+    },
+    UpdateState({ commit }, { group, key, input, value }) {
+      key
+        ? commit('UPDATE_STATE', { group, key, input, value })
+        : commit('UPDATE_STATE', { group, key: input, input: 'value', value })
     },
     async UploadMedia({ dispatch, getters, state }, { file, tab, inputName, childName }) {
       const response = await uploadMedia(file, getters.authHost, getters.token)

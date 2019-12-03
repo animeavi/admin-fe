@@ -4,11 +4,11 @@
       v-if="setting.type === 'string'"
       :value="inputValue"
       :placeholder="setting.suggestions ? setting.suggestions[0] : null"
-      @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key, setting.type)"/>
+      @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
     <el-switch
       v-if="setting.type === 'boolean'"
       :value="inputValue"
-      @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key, setting.type)"/>
+      @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
     <el-input-number
       v-if="setting.type === 'integer'"
       :value="inputValue"
@@ -16,33 +16,33 @@
       :min="0"
       size="large"
       class="top-margin"
-      @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key, setting.type)"/>
+      @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
     <el-select
       v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes(false))"
       :value="inputValue"
       clearable
-      @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)">
+      @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
       <el-option
         v-for="(option, index) in setting.suggestions"
         :value="option"
         :key="index"/>
     </el-select>
-    <div v-if="setting.type === 'keyword'">
+    <!-- <div v-if="setting.type === 'keyword'">
       <div v-for="subSetting in setting.children" :key="subSetting.key">
         <inputs
           :setting-group="settingGroup"
           :setting="subSetting"
-          :data="data[setting.key]"
+          :data="data"
           :custom-label-width="'100px'"/>
       </div>
-    </div>
+    </div> -->
     <el-select
       v-if="renderMultipleSelect(setting.type)"
       :value="setting.key === ':rewrite_policy' ? rewritePolicyValue : inputValue"
       multiple
       filterable
       allow-create
-      @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)">
+      @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
       <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
     </el-select>
     <editor
@@ -62,9 +62,9 @@
       @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
     <el-input
       v-if="setting.type === 'atom'"
-      :value="inputValue ? inputValue.substr(1) : null"
-      :placeholder="setting.suggestions[0]"
-      @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)">
+      :value="inputValue"
+      :placeholder="setting.suggestions[0] ? setting.suggestions[0].substr(1) : ''"
+      @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
       <template slot="prepend">:</template>
     </el-input>
     <div v-if="editableKeywordWithInput(setting.key)">
@@ -212,6 +212,12 @@ export default {
         return {}
       }
     },
+    nested: {
+      type: Boolean,
+      default: function() {
+        return false
+      }
+    },
     setting: {
       type: Object,
       default: function() {
@@ -247,9 +253,11 @@ export default {
         : null
     },
     inputValue() {
-      if ([':esshd', ':cors_plug', ':quack', ':http_signatures'].includes(this.settingGroup.group) && this.data[this.setting.key]) {
+      if ([':esshd', ':cors_plug', ':quack', ':http_signatures'].includes(this.settingGroup.group) &&
+        this.data[this.setting.key]) {
         return this.data[this.setting.key].value
-      } else if (this.settingGroup.group === ':logger' && this.setting.key === ':backends') {
+      } else if ((this.settingGroup.group === ':logger' && this.setting.key === ':backends') ||
+        this.setting.key === 'Pleroma.Web.Auth.Authenticator') {
         return this.data.value
       } else {
         return this.data[this.setting.key]
@@ -399,9 +407,13 @@ export default {
     },
     processAutoLinker(value, tab, inputName, childName) {
     },
-    processNestedData(value, tab, inputName, childName) {
-      const updatedValue = { ...this.$store.state.settings.settings[tab][inputName], ...{ [childName]: value }}
-      this.updateSetting(updatedValue, this.settingGroup.group, tab, inputName)
+    processNestedData(value, group, key, parentInput, parentType, childInput, childType) {
+      const updatedValueForState = { ...this.$store.state.settings.settings[group][key][parentInput], ...{ [childInput]: value }}
+      const updatedValue = this.$store.state.settings.updatedSettings[group]
+        ? { ...this.$store.state.settings.updatedSettings[group][key][parentInput][1], ...{ [childInput]: [childType, value] }}
+        : { [childInput]: [childType, value] }
+      this.$store.dispatch('UpdateSettings', { group, key, input: parentInput, value: updatedValue, type: parentType })
+      this.$store.dispatch('UpdateState', { group, key, input: parentInput, value: updatedValueForState })
     },
     renderMultipleSelect(type) {
       return Array.isArray(type) && (
@@ -418,8 +430,14 @@ export default {
     toggleLimits(value, input) {
       this.updateSetting(value, this.settingGroup.group, 'rate_limit', input)
     },
+    update(value, group, key, parent, input, type, nested) {
+      nested
+        ? this.processNestedData(value, group, key, parent.key, parent.type, input, type)
+        : this.updateSetting(value, group, key, input, type)
+    },
     updateSetting(value, group, key, input, type) {
       this.$store.dispatch('UpdateSettings', { group, key, input, value, type })
+      this.$store.dispatch('UpdateState', { group, key, input, value })
     }
   }
 }
