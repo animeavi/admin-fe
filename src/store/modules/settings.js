@@ -1,5 +1,5 @@
 import { fetchDescription, fetchSettings, migrateToDB, updateSettings, uploadMedia } from '@/api/settings'
-import { parseTuples, valueHasTuples } from './normalizers'
+import { parseTuples, valueHasTuples, wrapUpdatedSettings } from './normalizers'
 
 const settings = {
   state: {
@@ -72,7 +72,9 @@ const settings = {
       commit('REWRITE_CONFIG', { tab, data })
     },
     async SubmitChanges({ getters, commit, state }) {
-      const configs = state.updatedSettings
+      const configs = Object.keys(state.updatedSettings).reduce((acc, group) => {
+        return [...acc, ...wrapUpdatedSettings(group, state.updatedSettings[group])]
+      }, [])
       const response = await updateSettings(configs, getters.authHost, getters.token)
       commit('SET_SETTINGS', response.data.configs)
     },

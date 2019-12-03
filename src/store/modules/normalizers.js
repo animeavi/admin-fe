@@ -56,12 +56,6 @@ const parseObject = (object) => {
   }, {})
 }
 
-export const parseValue = (input, value, type) => {
-  if (type === 'string' || type === 'boolean' || type === 'integer') {
-    return [{ tuple: [input, value] }]
-  }
-}
-
 export const valueHasTuples = (key, value) => {
   const valueIsArrayOfNonObjects = Array.isArray(value) && value.length > 0 && typeof value[0] !== 'object'
   return key === ':meta' ||
@@ -73,6 +67,24 @@ export const valueHasTuples = (key, value) => {
     typeof value === 'boolean' ||
     value === null ||
     valueIsArrayOfNonObjects
+}
+
+export const wrapUpdatedSettings = (group, settings) => {
+  return Object.keys(settings).map((key) => {
+    const value = wrapValues(settings[key])
+    return { group, key, value }
+  })
+}
+
+const wrapValues = settings => {
+  return Object.keys(settings).map(setting => {
+    const [type, value] = settings[setting]
+    if (type === 'keyword') {
+      return { 'tuple': [setting, wrapValues(setting, value)] }
+    } else {
+      return { 'tuple': [setting, value] }
+    }
+  })
 }
 
 const wrapNestedTuples = setting => {
