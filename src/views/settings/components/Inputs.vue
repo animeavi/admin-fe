@@ -259,6 +259,8 @@ export default {
       } else if ((this.settingGroup.group === ':logger' && this.setting.key === ':backends') ||
         this.setting.key === 'Pleroma.Web.Auth.Authenticator') {
         return this.data.value
+      } else if (this.setting.type === 'atom') {
+        return this.data[this.setting.key] && this.data[this.setting.key][0] === ':' ? this.data[this.setting.key].substr(1) : this.data[this.setting.key]
       } else {
         return this.data[this.setting.key]
       }
@@ -303,6 +305,12 @@ export default {
     },
     rewritePolicyValue() {
       return typeof this.data[this.setting.key] === 'string' ? [this.data[this.setting.key]] : this.data[this.setting.key]
+    },
+    settings() {
+      return this.$store.state.settings.settings
+    },
+    updatedSettings() {
+      return this.$store.state.settings.updatedSettings
     }
   },
   methods: {
@@ -408,9 +416,12 @@ export default {
     processAutoLinker(value, tab, inputName, childName) {
     },
     processNestedData(value, group, key, parentInput, parentType, childInput, childType) {
-      const updatedValueForState = { ...this.$store.state.settings.settings[group][key][parentInput], ...{ [childInput]: value }}
-      const updatedValue = this.$store.state.settings.updatedSettings[group]
-        ? { ...this.$store.state.settings.updatedSettings[group][key][parentInput][1], ...{ [childInput]: [childType, value] }}
+      const valueExists = value => value[group] && value[group][key] && value[group][key][parentInput]
+      const updatedValueForState = valueExists(this.settings)
+        ? { ...this.settings[group][key][parentInput], ...{ [childInput]: value }}
+        : { [childInput]: value }
+      const updatedValue = valueExists(this.updatedSettings)
+        ? { ...this.updatedSettings[group][key][parentInput][1], ...{ [childInput]: [childType, value] }}
         : { [childInput]: [childType, value] }
       this.$store.dispatch('UpdateSettings', { group, key, input: parentInput, value: updatedValue, type: parentType })
       this.$store.dispatch('UpdateState', { group, key, input: parentInput, value: updatedValueForState })

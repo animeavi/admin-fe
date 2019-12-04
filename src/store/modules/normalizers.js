@@ -80,7 +80,9 @@ const wrapValues = settings => {
   return Object.keys(settings).map(setting => {
     const [type, value] = settings[setting]
     if (type === 'keyword') {
-      return { 'tuple': [setting, wrapValues(setting, value)] }
+      return { 'tuple': [setting, wrapValues(value)] }
+    } else if (type === 'atom') {
+      return { 'tuple': [setting, `:${value}`] }
     } else {
       return { 'tuple': [setting, value] }
     }
