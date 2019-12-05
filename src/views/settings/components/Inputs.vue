@@ -148,13 +148,8 @@
         class="value-input"
         @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
     </div>
-    <div v-if="settingGroup.group === ':auto_linker' && (setting.key === ':class' || setting.key === ':rel')">
-      <el-switch :value="autoLinkerBooleanValue(setting.key)" @change="processAutoLinker($event, 'auto_linker', 'opts', 'class')"/>
-      <el-input v-if="autoLinkerBooleanValue(setting.key)" :value="autoLinkerStringValue(setting.key)" @input="processAutoLinker($event, settingGroup.key, ':opts', setting.key)"/>
-    </div>
-    <div v-if="settingGroup.group === ':auto_linker' && (setting.key === ':truncate')">
-      <el-switch :value="autoLinkerBooleanValue(setting.key)" @change="processAutoLinker($event, 'auto_linker', 'opts', 'class')"/>
-      <el-input-number v-if="autoLinkerBooleanValue(setting.key)" :value="autoLinkerIntegerValue(setting.key)" @input="processAutoLinker($event, settingGroup.key, ':opts', setting.key)"/>
+    <div v-if="settingGroup.group === ':auto_linker'">
+      <auto-linker-input :setting-group="settingGroup" :setting="setting" :data="data"/>
     </div>
     <div v-if="setting.key === ':mascots'">
       <div v-for="([name, url, mimeType], index) in mascotsValue" :key="index" class="mascot-container">
@@ -192,11 +187,13 @@
 import AceEditor from 'vue2-ace-editor'
 import 'brace/mode/elixir'
 import 'default-passive-events'
+import AutoLinkerInput from './inputComponents/AutoLinkerInput'
 
 export default {
   name: 'Inputs',
   components: {
-    editor: AceEditor
+    editor: AceEditor,
+    AutoLinkerInput
   },
   props: {
     customLabelWidth: {
@@ -328,18 +325,6 @@ export default {
       }, {})
       this.updateSetting({ ...updatedValue, '': { url: '', mime_type: '' }}, this.settingGroup.group, 'assets', 'mascots')
     },
-    autoLinkerBooleanValue(key) {
-      const value = this.data[this.setting.key]
-      return typeof value === 'string' || typeof value === 'number'
-    },
-    autoLinkerIntegerValue(key) {
-      const value = this.data[this.setting.key]
-      return value || 0
-    },
-    autoLinkerStringValue(key) {
-      const value = this.data[this.setting.key]
-      return value || ''
-    },
     deleteEditableKeywordRow(index) {
       const filteredValues = this.editableKeywordData(this.data).filter((el, i) => index !== i)
       const updatedValue = filteredValues.reduce((acc, el, i) => {
@@ -412,8 +397,6 @@ export default {
           : [{ 'tuple': [currentValue[0][0], value] }, { 'tuple': [currentValue[1][0], currentValue[1][1]] }]
         this.updateSetting(valueToSend, this.settingGroup.group, 'rate_limit', input)
       }
-    },
-    processAutoLinker(value, tab, inputName, childName) {
     },
     processNestedData(value, group, key, parentInput, parentType, childInput, childType) {
       const valueExists = value => value[group] && value[group][key] && value[group][key][parentInput]
