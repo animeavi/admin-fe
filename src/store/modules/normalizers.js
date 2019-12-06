@@ -3,6 +3,8 @@ const nonAtomsObjects = ['match_actor', ':match_actor']
 const objects = ['digest', 'pleroma_fe', 'masto_fe', 'poll_limits', 'styling']
 const objectParents = ['mascots']
 
+const groupWithoutKey = settings => settings.noKey ? settings.noKey[1] : false
+
 // REFACTOR
 export const parseTuples = (tuples, key) => {
   return tuples.reduce((accum, item) => {
@@ -69,7 +71,7 @@ export const valueHasTuples = (key, value) => {
 
 export const wrapUpdatedSettings = (group, settings) => {
   return Object.keys(settings).map((key) => {
-    const value = wrapValues(settings[key])
+    const value = groupWithoutKey(settings[key]) || wrapValues(settings[key])
     return { group, key, value }
   })
 }
