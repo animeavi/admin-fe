@@ -85,7 +85,7 @@ const settings = {
     UpdateSettings({ commit }, { group, key, input, value, type }) {
       key
         ? commit('UPDATE_SETTINGS', { group, key, input, value, type })
-        : commit('UPDATE_SETTINGS', { group, key: input, input: 'noKey', value, type })
+        : commit('UPDATE_SETTINGS', { group, key: input, input: '_value', value, type })
     },
     UpdateState({ commit }, { group, key, input, value }) {
       key

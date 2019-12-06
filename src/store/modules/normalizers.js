@@ -3,7 +3,7 @@ const nonAtomsObjects = ['match_actor', ':match_actor']
 const objects = ['digest', 'pleroma_fe', 'masto_fe', 'poll_limits', 'styling']
 const objectParents = ['mascots']
 
-const groupWithoutKey = settings => settings.noKey ? settings.noKey[1] : false
+const groupWithoutKey = settings => settings._value ? settings._value[1] : false
 
 // REFACTOR
 export const parseTuples = (tuples, key) => {
@@ -83,6 +83,12 @@ const wrapValues = settings => {
       return { 'tuple': [setting, wrapValues(value)] }
     } else if (type === 'atom') {
       return { 'tuple': [setting, `:${value}`] }
+    } else if (type === 'map') {
+      const objectValue = Object.keys(value).reduce((acc, key) => {
+        acc[key] = value[key][1]
+        return acc
+      }, {})
+      return { 'tuple': [setting, objectValue] }
     } else if (setting === ':ip') {
       const ip = value.split('.').map(s => parseInt(s, 10))
       return { 'tuple': [setting, { 'tuple': ip }] }
