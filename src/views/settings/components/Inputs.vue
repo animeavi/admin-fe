@@ -56,10 +56,10 @@
       lang="elixir"
       theme="chrome"/>
     <el-input
-      v-if="setting.type === 'tuple'"
-      :placeholder="setting.key === ':ip' ? 'xxx.xxx.xxx.xx' : setting.suggestions[0]"
-      :value="data[setting.key]"
-      @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
+      v-if="setting.key === ':ip'"
+      :value="inputValue"
+      placeholder="xxx.xxx.xxx.xx"
+      @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
     <el-input
       v-if="setting.type === 'atom'"
       :value="inputValue"
@@ -187,7 +187,7 @@
 import AceEditor from 'vue2-ace-editor'
 import 'brace/mode/elixir'
 import 'default-passive-events'
-import AutoLinkerInput from './inputComponents/AutoLinkerInput'
+import { AutoLinkerInput } from './inputComponents'
 
 export default {
   name: 'Inputs',

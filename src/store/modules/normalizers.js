@@ -27,9 +27,7 @@ export const parseTuples = (tuples, key) => {
         ? accum[item.tuple[0]] = parseNonAtomObject(item.tuple[1])
         : accum[item.tuple[0]] = parseObject(item.tuple[1])
     } else {
-      key === 'mrf_user_allowlist'
-        ? accum[item.tuple[0]] = item.tuple[1]
-        : accum[item.tuple[0]] = item.tuple[1]
+      accum[item.tuple[0]] = item.tuple[1]
     }
     return accum
   }, {})
@@ -79,10 +77,13 @@ export const wrapUpdatedSettings = (group, settings) => {
 const wrapValues = settings => {
   return Object.keys(settings).map(setting => {
     const [type, value] = settings[setting]
-    if (type === 'keyword') {
+    if (type === 'keyword' || type.includes('keyword')) {
       return { 'tuple': [setting, wrapValues(value)] }
     } else if (type === 'atom') {
       return { 'tuple': [setting, `:${value}`] }
+    } else if (setting === ':ip') {
+      const ip = value.split('.').map(s => parseInt(s, 10))
+      return { 'tuple': [setting, { 'tuple': ip }] }
     } else {
       return { 'tuple': [setting, value] }
     }

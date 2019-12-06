@@ -24,6 +24,9 @@ const settings = {
     loading: true
   },
   mutations: {
+    CLEAR_UPDATED_SETTINGS: (state) => {
+      state.updatedSettings = {}
+    },
     REWRITE_CONFIG: (state, { tab, data }) => {
       state.settings[tab] = data
     },
@@ -77,6 +80,7 @@ const settings = {
       }, [])
       const response = await updateSettings(configs, getters.authHost, getters.token)
       commit('SET_SETTINGS', response.data.configs)
+      commit('CLEAR_UPDATED_SETTINGS')
     },
     UpdateSettings({ commit }, { group, key, input, value, type }) {
       key
