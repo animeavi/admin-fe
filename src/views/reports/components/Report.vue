@@ -150,7 +150,7 @@ export default {
     getStatusesTitle(statuses) {
       return `Reported statuses: ${statuses.length} item(s)`
     },
-    getNotesTitle(notes) {
+    getNotesTitle(notes = []) {
       return `Notes: ${notes.length} item(s)`
     },
     handlePageChange(page) {
