@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div v-for="([name, url, mimeType, id], index) in mascotsValue" :key="id" :data-id="id" class="mascot-container">
+    <div v-for="(mascot, name) in data" :key="mascot.id" class="mascot-container">
       <el-form-item label="Name" label-width="100px">
         <div class="mascot-name-container">
-          <el-input :value="name" placeholder="Name" class="mascot-name-input" @input="parseMascots($event, 'name', id)"/>
-          <el-button icon="el-icon-minus" circle @click="deleteMascotsRow(id)"/>
+          <el-input :value="name" placeholder="Name" class="mascot-name-input" @input="parseMascots($event, 'name', mascot.id)"/>
+          <el-button icon="el-icon-minus" circle @click="deleteMascotsRow(mascot.id)"/>
         </div>
       </el-form-item>
       <el-form-item label="URL" label-width="100px">
-        <el-input :value="url" :ref="generateRef('url', index)" placeholder="URL" class="mascot-input" @input.native="parseMascots($event, 'url', id, index)"/>
+        <el-input :value="mascot[':url']" placeholder="URL" class="mascot-input" @input="parseMascots($event, 'url', mascot.id)"/>
       </el-form-item>
       <el-form-item label="Mime type" label-width="100px">
-        <el-input :value="mimeType" placeholder="Mime type" class="mascot-input" @input="parseMascots($event, 'mimeType', id)"/>
+        <el-input :value="mascot[':mime_type']" placeholder="Mime type" class="mascot-input" @input="parseMascots($event, 'mimeType', mascot.id)"/>
       </el-form-item>
     </div>
     <el-button icon="el-icon-plus" circle @click="addRowToMascots"/>
@@ -42,56 +42,41 @@ export default {
       }
     }
   },
-  computed: {
-    mascotsValue() {
-      return Object.keys(this.data).map(mascotName =>
-        [mascotName, this.data[mascotName][':url'], this.data[mascotName][':mime_type'], this.generateID()]
-      )
-    }
-  },
   methods: {
     addRowToMascots() {
-      const updatedValue = { ...this.data, '': { ':url': '', ':mime_type': '' }}
+      const updatedValue = { ...this.data, '': { ':url': '', ':mime_type': '', id: this.generateID() }}
       this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
     deleteMascotsRow(id) {
-      const filteredValues = this.mascotsValue.filter(mascot => mascot[3] !== id)
-      const updatedValue = filteredValues.reduce((acc, mascot) => {
-        return { ...acc, ...{ [mascot[0]]: { ':url': mascot[1], ':mime_type': mascot[2] }}}
+      const filteredValues = Object.keys(this.data).reduce((acc, mascot) => {
+        return this.data[mascot].id !== id
+          ? { ...acc, ...{ [mascot]: this.data[mascot] }}
+          : acc
       }, {})
-      this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
+      this.updateSetting(filteredValues, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
     generateID() {
       return `f${(~~(Math.random() * 1e8)).toString(16)}`
     },
-    parseMascots(event, inputType, id, index) {
-      const value = `${event.target.value}${event.data}` // FIXME deletion
-      const updatedValue = this.mascotsValue.map(mascot => {
-        if (mascot[3] === id) {
+    parseMascots(value, inputType, id, index) {
+      const updatedValue = Object.keys(this.data).reduce((acc, mascot) => {
+        if (this.data[mascot].id === id) {
           if (inputType === 'name') {
-            mascot[0] = value
+            return { ...acc, ...{ [value]: this.data[mascot] }}
           } else if (inputType === 'url') {
-            mascot[1] = value
+            return { ...acc, ...{ [mascot]: { ...this.data[mascot], ':url': value }}}
           } else {
-            mascot[2] = value
+            return { ...acc, ...{ [mascot]: { ...this.data[mascot], ':mime_type': value }}}
           }
         }
-        return mascot
-      })
-      const parsedMascots = updatedValue.reduce((acc, mascot) => {
-        return { ...acc, ...{ [mascot[0]]: { ':url': mascot[1], ':mime_type': mascot[2] }}}
+        return { ...acc, ...{ [mascot]: this.data[mascot] }}
       }, {})
 
-      this.updateSetting(parsedMascots, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
-
-      this.$nextTick(() => this.$refs[`${inputType}${index}`][0].focus())
+      this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
     updateSetting(value, group, key, input, type) {
       this.$store.dispatch('UpdateSettings', { group, key, input, value, type })
       this.$store.dispatch('UpdateState', { group, key, input, value })
-    },
-    generateRef(field, index) {
-      return `${field}${index}`
     }
   }
 }
