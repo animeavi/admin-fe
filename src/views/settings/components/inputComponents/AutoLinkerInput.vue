@@ -34,7 +34,6 @@ export default {
       }
     }
   },
-  computed: {},
   methods: {
     autoLinkerBooleanValue(key) {
       const value = this.data[this.setting.key]

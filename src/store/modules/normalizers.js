@@ -70,6 +70,7 @@ export const valueHasTuples = (key, value) => {
 }
 
 export const wrapUpdatedSettings = (group, settings) => {
+  console.log(group, settings)
   return Object.keys(settings).map((key) => {
     const value = groupWithoutKey(settings[key]) || wrapValues(settings[key])
     return { group, key, value }
@@ -78,7 +79,8 @@ export const wrapUpdatedSettings = (group, settings) => {
 
 const wrapValues = settings => {
   return Object.keys(settings).map(setting => {
-    const [type, value] = settings[setting]
+    console.log(settings[setting])
+    const [type, value] = Array.isArray(settings[setting]) ? settings[setting] : ['', settings[setting]]
     if (type === 'keyword' || type.includes('keyword')) {
       return { 'tuple': [setting, wrapValues(value)] }
     } else if (type === 'atom') {

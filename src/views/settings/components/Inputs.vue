@@ -148,20 +148,10 @@
         class="value-input"
         @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
     </div>
-    <div v-if="settingGroup.group === ':auto_linker'">
-      <auto-linker-input :setting-group="settingGroup" :setting="setting" :data="data"/>
-    </div>
-    <div v-if="setting.key === ':mascots'">
-      <div v-for="([name, url, mimeType], index) in mascotsValue" :key="index" class="mascot-container">
-        <div class="mascot-name-container">
-          <el-input :value="name" placeholder="Name" class="mascot-name-input" @input="parseMascots($event, 'name', index)"/>
-          <el-button icon="el-icon-minus" circle @click="deleteMascotsRow(index, 'emoji', 'groups')"/>
-        </div>
-        <el-input :value="url" placeholder="URL" class="mascot-input" @input="parseMascots($event, 'url', index)"/>
-        <el-input :value="mimeType" placeholder="Mime type" class="mascot-input" @input="parseMascots($event, 'mimeType', index)"/>
-      </div>
-      <el-button icon="el-icon-plus" circle @click="addRowToMascots"/>
-    </div>
+    <!-- special inputs -->
+    <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :setting-group="settingGroup" :setting="setting" :data="data"/>
+    <mascots-input v-if="setting.key === ':mascots'" :setting-group="settingGroup" :setting="setting" :data="data"/>
+    <!-------------------->
     <div v-if="setting.key === ':icons'">
       <div v-for="(icon, index) in iconsValue" :key="index" class="mascot-container">
         <div v-for="([key, value], index) in icon" :key="index" class="setting-input">
@@ -187,13 +177,14 @@
 import AceEditor from 'vue2-ace-editor'
 import 'brace/mode/elixir'
 import 'default-passive-events'
-import { AutoLinkerInput } from './inputComponents'
+import { AutoLinkerInput, MascotsInput } from './inputComponents'
 
 export default {
   name: 'Inputs',
   components: {
     editor: AceEditor,
-    AutoLinkerInput
+    AutoLinkerInput,
+    MascotsInput
   },
   props: {
     customLabelWidth: {
@@ -265,11 +256,6 @@ export default {
     labelWidth() {
       return this.isMobile ? '100px' : '240px'
     },
-    mascotsValue() {
-      return Object.keys(this.data)
-        .map(mascotName =>
-          [mascotName, this.data[mascotName][':url'], this.data[mascotName][':mime_type']])
-    },
     proxyUrlData() {
       if (!this.data[this.setting.key]) {
         return null
@@ -319,12 +305,6 @@ export default {
       }, {})
       this.updateSetting({ ...updatedValue, '': [] }, this.settingGroup.group, this.settingGroup.key, this.setting.key)
     },
-    addRowToMascots() {
-      const updatedValue = this.data[':mascots'].reduce((acc, el, i) => {
-        return { ...acc, [el[0]]: { url: el[1], mime_type: el[2] }}
-      }, {})
-      this.updateSetting({ ...updatedValue, '': { url: '', mime_type: '' }}, this.settingGroup.group, 'assets', 'mascots')
-    },
     deleteEditableKeywordRow(index) {
       const filteredValues = this.editableKeywordData(this.data).filter((el, i) => index !== i)
       const updatedValue = filteredValues.reduce((acc, el, i) => {
@@ -334,13 +314,6 @@ export default {
       this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key)
     },
     deleteIcondRow(index) {},
-    deleteMascotsRow(index) {
-      const filteredValues = this.data[':mascots'].filter((el, i) => index !== i)
-      const updatedValue = filteredValues.reduce((acc, el, i) => {
-        return { ...acc, [el[0]]: { url: el[1], mime_type: el[2] }}
-      }, {})
-      this.updateSetting(updatedValue, this.settingGroup.group, 'assets', 'mascots')
-    },
     editableKeywordWithInput(key) {
       return key === ':replace'
     },
@@ -367,21 +340,6 @@ export default {
       this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key)
     },
     parseIcons(value, inputType, index) {},
-    parseMascots(value, inputType, index) {
-      const updatedValue = this.data[':mascots'].reduce((acc, el, i) => {
-        if (index === i) {
-          if (inputType === 'name') {
-            return { ...acc, [value]: { url: el[1], mime_type: el[2] }}
-          } else if (inputType === 'url') {
-            return { ...acc, [el[0]]: { url: value, mime_type: el[2] }}
-          } else {
-            return { ...acc, [el[0]]: { url: el[1], mime_type: value }}
-          }
-        }
-        return { ...acc, [el[0]]: { url: el[1], mime_type: el[2] }}
-      }, {})
-      this.updateSetting(updatedValue, this.settingGroup.group, 'assets', 'mascots')
-    },
     parseRateLimiter(value, input, typeOfInput, typeOfLimit, currentValue) {
       if (typeOfLimit === 'oneLimit') {
         const valueToSend = typeOfInput === 'scale' ? { 'tuple': [value, currentValue[1]] } : { 'tuple': [currentValue[0], value] }
