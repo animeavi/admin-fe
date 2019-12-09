@@ -71,11 +71,13 @@ export default {
         }
         return { ...acc, ...{ [mascot]: this.data[mascot] }}
       }, {})
-
       this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
     updateSetting(value, group, key, input, type) {
-      this.$store.dispatch('UpdateSettings', { group, key, input, value, type })
+      const mascotsWithoutIDs = Object.keys(value).reduce((acc, name) => {
+        return { ...acc, ...{ [name]: { ':url': value[name][':url'], ':mime_type': value[name][':mime_type'] }}}
+      }, {})
+      this.$store.dispatch('UpdateSettings', { group, key, input, value: mascotsWithoutIDs, type })
       this.$store.dispatch('UpdateState', { group, key, input, value })
     }
   }

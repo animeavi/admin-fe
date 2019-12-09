@@ -10,12 +10,14 @@ export const parseTuples = (tuples, key) => {
   return tuples.reduce((accum, item) => {
     if (key === 'rate_limit') {
       accum[item.tuple[0]] = item.tuple[1]
+    } else if (key === ':mascots') {
+      accum[item.tuple[0]] = { ...item.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }
     } else if ((item.tuple[0] === ':sslopts' && item.tuple[1].length === 0) || // should be removed
       (item.tuple[0] === ':tlsopts' && item.tuple[1].length === 0)) {
       accum[item.tuple[0]] = {}
     } else if (Array.isArray(item.tuple[1]) &&
       (typeof item.tuple[1][0] === 'object' && !Array.isArray(item.tuple[1][0])) && item.tuple[1][0]['tuple']) {
-      accum[item.tuple[0]] = parseTuples(item.tuple[1])
+      accum[item.tuple[0]] = parseTuples(item.tuple[1], item.tuple[0])
     } else if (Array.isArray(item.tuple[1])) {
       nonAtomsTuples.includes(item.tuple[0])
         ? accum[item.tuple[0]] = parseNonAtomTuples(item.tuple[1])
@@ -27,7 +29,7 @@ export const parseTuples = (tuples, key) => {
     } else if (item.tuple[1] && typeof item.tuple[1] === 'object') {
       nonAtomsObjects.includes(item.tuple[0])
         ? accum[item.tuple[0]] = parseNonAtomObject(item.tuple[1])
-        : accum[item.tuple[0]] = parseObject(item.tuple)
+        : accum[item.tuple[0]] = parseObject(item.tuple[1])
     } else {
       accum[item.tuple[0]] = item.tuple[1]
     }
@@ -49,16 +51,11 @@ const parseNonAtomObject = (object) => {
   }, {})
 }
 
-const parseObject = tuple => {
-  return tuple[0] === ':mascots'
-    ? Object.keys(tuple[1]).reduce((acc, item) => {
-      acc[item] = { ...tuple[1][item], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }
-      return acc
-    }, {})
-    : Object.keys(tuple[1]).reduce((acc, item) => {
-      acc[item] = tuple[1][item]
-      return acc
-    }, {})
+const parseObject = object => {
+  return Object.keys(object).reduce((acc, item) => {
+    acc[item] = object[item]
+    return acc
+  }, {})
 }
 
 export const valueHasTuples = (key, value) => {
