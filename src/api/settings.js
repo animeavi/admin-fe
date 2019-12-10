@@ -20,15 +20,6 @@ export async function fetchSettings(authHost, token) {
   })
 }
 
-export async function migrateToDB(authHost, token) {
-  return await request({
-    baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/config/migrate_to_db`,
-    method: 'get',
-    headers: authHeaders(token)
-  })
-}
-
 export async function updateSettings(configs, authHost, token) {
   return await request({
     baseURL: baseName(authHost),

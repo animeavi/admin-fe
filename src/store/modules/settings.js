@@ -1,4 +1,4 @@
-import { fetchDescription, fetchSettings, migrateToDB, updateSettings, uploadMedia } from '@/api/settings'
+import { fetchDescription, fetchSettings, updateSettings, uploadMedia } from '@/api/settings'
 import { parseTuples, valueHasTuples, wrapUpdatedSettings } from './normalizers'
 
 const settings = {
@@ -60,16 +60,10 @@ const settings = {
       commit('SET_LOADING', true)
       const response = await fetchSettings(getters.authHost, getters.token)
       const description = await fetchDescription(getters.authHost, getters.token)
-      if (response.data.configs.length === 0) {
-        dispatch('MigrateToDB')
-        dispatch('FetchSettings')
-      }
+
       commit('SET_DESCRIPTION', description.data)
       commit('SET_SETTINGS', response.data.configs)
       commit('SET_LOADING', false)
-    },
-    async MigrateToDB({ getters }) {
-      await migrateToDB(getters.authHost, getters.token)
     },
     RewriteConfig({ commit }, { tab, data }) {
       commit('REWRITE_CONFIG', { tab, data })

@@ -5,11 +5,11 @@
       <el-tab-pane :label="$t('settings.activityPub')" lazy>
         <activity-pub/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.autoLinker')" lazy>
-        <auto-linker/>
-      </el-tab-pane>
       <el-tab-pane :label="$t('settings.auth')" lazy>
         <authentication/>
+      </el-tab-pane>
+      <el-tab-pane :label="$t('settings.autoLinker')" lazy>
+        <auto-linker/>
       </el-tab-pane>
       <el-tab-pane :label="$t('settings.esshd')" lazy>
         <esshd/>
@@ -29,6 +29,7 @@
       <el-tab-pane :label="$t('settings.frontend')" lazy>
         <frontend/>
       </el-tab-pane>
+      <!--
       <el-tab-pane :label="$t('settings.gopher')" lazy>
         <gopher/>
       </el-tab-pane>
@@ -70,7 +71,7 @@
       </el-tab-pane>
       <el-tab-pane :label="$t('settings.other')" lazy>
         <other/>
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
