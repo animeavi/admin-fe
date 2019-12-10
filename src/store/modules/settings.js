@@ -1,5 +1,5 @@
 import { fetchDescription, fetchSettings, updateSettings, uploadMedia } from '@/api/settings'
-import { parseTuples, valueHasTuples, wrapUpdatedSettings } from './normalizers'
+import { parseTuples, partialUpdate, valueHasTuples, wrapUpdatedSettings } from './normalizers'
 
 const settings = {
   state: {
@@ -56,7 +56,7 @@ const settings = {
     }
   },
   actions: {
-    async FetchSettings({ commit, dispatch, getters }) {
+    async FetchSettings({ commit, getters }) {
       commit('SET_LOADING', true)
       const response = await fetchSettings(getters.authHost, getters.token)
       const description = await fetchDescription(getters.authHost, getters.token)
@@ -69,8 +69,24 @@ const settings = {
       commit('REWRITE_CONFIG', { tab, data })
     },
     async SubmitChanges({ getters, commit, state }) {
-      const configs = Object.keys(state.updatedSettings).reduce((acc, group) => {
-        return [...acc, ...wrapUpdatedSettings(group, state.updatedSettings[group])]
+      const updatedData = Object.keys(state.updatedSettings).reduce((acc, group) => {
+        acc[group] = Object.keys(state.updatedSettings[group]).reduce((acc, key) => {
+          if (!partialUpdate(group, key)) {
+            const updated = Object.keys(state.settings[group][key]).reduce((acc, settingName) => {
+              acc[settingName] = ['', state.settings[group][key][settingName]]
+              return acc
+            }, {})
+            acc[key] = updated
+            return acc
+          }
+          acc[key] = state.updatedSettings[group][key]
+          return acc
+        }, {})
+        return acc
+      }, {})
+
+      const configs = Object.keys(updatedData).reduce((acc, group) => {
+        return [...acc, ...wrapUpdatedSettings(group, updatedData[group])]
       }, [])
       const response = await updateSettings(configs, getters.authHost, getters.token)
       commit('SET_SETTINGS', response.data.configs)

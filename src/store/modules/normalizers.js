@@ -58,6 +58,18 @@ const parseObject = object => {
   }, {})
 }
 
+export const partialUpdate = (group, key) => {
+  if ((group === ':pleroma' && key === ':ecto_repos') ||
+      (group === ':quack' && key === ':meta') ||
+      (group === ':mime' && key === ':types') ||
+      (group === ':auto_linker' && key === ':opts') ||
+      (group === ':swarm' && key === ':node_blacklist') ||
+      (group === ':cors_plug' && [':max_age', ':methods', ':expose', ':headers'].includes(key))) {
+    return false
+  }
+  return true
+}
+
 export const valueHasTuples = (key, value) => {
   const valueIsArrayOfNonObjects = Array.isArray(value) && value.length > 0 && typeof value[0] !== 'object'
   return key === ':meta' ||
@@ -72,7 +84,6 @@ export const valueHasTuples = (key, value) => {
 }
 
 export const wrapUpdatedSettings = (group, settings) => {
-  console.log(group, settings)
   return Object.keys(settings).map((key) => {
     const value = groupWithoutKey(settings[key]) || wrapValues(settings[key])
     return { group, key, value }
@@ -81,7 +92,6 @@ export const wrapUpdatedSettings = (group, settings) => {
 
 const wrapValues = settings => {
   return Object.keys(settings).map(setting => {
-    console.log(settings[setting])
     const [type, value] = Array.isArray(settings[setting]) ? settings[setting] : ['', settings[setting]]
     if (type === 'keyword' || type.includes('keyword')) {
       return { 'tuple': [setting, wrapValues(value)] }
