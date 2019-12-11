@@ -33,4 +33,23 @@ export async function fetchGroupedReports(authHost, token) {
   })
 }
 
+export async function createNote(content, reportID, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/reports/${reportID}/notes`,
+    method: `post`,
+    headers: authHeaders(token),
+    data: { content }
+  })
+}
+
+export async function deleteNote(noteID, reportID, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/reports/${reportID}/notes/${noteID}`,
+    method: `delete`,
+    headers: authHeaders(token)
+  })
+}
+
 const authHeaders = (token) => token ? { 'Authorization': `Bearer ${getToken()}` } : {}

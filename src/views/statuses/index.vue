@@ -4,7 +4,11 @@
       {{ $t('statuses.statuses') }}
     </h1>
     <div class="filter-container">
-      <el-select v-model="selectedInstance" :placeholder="$t('statuses.instanceFilter')" @change="handleFilterChange">
+      <el-select
+        v-model="selectedInstance"
+        :placeholder="$t('statuses.instanceFilter')"
+        :no-data-text="$t('statuses.noInstances')"
+        @change="handleFilterChange">
         <el-option
           v-for="(instance,index) in instances"
           :key="index"

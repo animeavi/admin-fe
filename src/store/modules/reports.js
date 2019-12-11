@@ -1,4 +1,5 @@
-import { changeState, fetchReports, fetchGroupedReports } from '@/api/reports'
+import { Message } from 'element-ui'
+import { changeState, fetchReports, fetchGroupedReports, createNote, deleteNote } from '@/api/reports'
 
 const reports = {
   state: {
@@ -79,6 +80,50 @@ const reports = {
     },
     ToggleReportsGrouping({ commit }) {
       commit('SET_REPORTS_GROUPING')
+    },
+    CreateReportNote({ commit, getters, state, rootState }, { content, reportID }) {
+      createNote(content, reportID, getters.authHost, getters.token)
+
+      const optimisticNote = {
+        user: {
+          avatar: rootState.user.avatar,
+          display_name: rootState.user.name,
+          url: `${rootState.user.authHost}/${rootState.user.name}`,
+          acct: rootState.user.name
+        },
+        content: content,
+        created_at: new Date().getTime()
+      }
+
+      const updatedReports = state.fetchedReports.map(report => {
+        if (report.id === reportID) {
+          report.notes = [...report.notes, optimisticNote]
+        }
+
+        return report
+      })
+
+      commit('SET_REPORTS', updatedReports)
+    },
+    DeleteReportNote({ commit, getters, state }, { noteID, reportID }) {
+      deleteNote(noteID, reportID, getters.authHost, getters.token)
+
+      const updatedReports = state.fetchedReports.map(report => {
+        if (report.id === reportID) {
+          report.notes = report.notes.filter(note => note.id !== noteID)
+        }
+
+        return report
+      })
+
+      commit('SET_REPORTS', updatedReports)
+    },
+    SuccessMessage(text) {
+      return Message({
+        message: text,
+        type: 'success',
+        duration: 5 * 1000
+      })
     }
   }
 }
