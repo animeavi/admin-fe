@@ -9,7 +9,7 @@ export async function loginByUsername(username, password, authHost) {
     data: {
       client_name: `AdminFE_${Math.random()}`,
       redirect_uris: `${window.location.origin}/oauth-callback`,
-      scopes: 'read write follow'
+      scopes: 'read write follow push admin'
     }
   })
 
