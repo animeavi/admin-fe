@@ -41,6 +41,7 @@
       <el-button :loading="loading" class="login-button" type="primary" @click.native.prevent="handleLogin">
         {{ $t('login.logIn') }}
       </el-button>
+      <!-- Note: PleromaFE login feature relies on admin scope presence in PleromaFE token (older versions of PleromaFE don't support it) -->
       <el-button v-if="pleromaFEToken" :loading="loadingPleromaFE" class="login-button" type="primary" @click.native.prevent="handlePleromaFELogin">
         {{ $t('login.logInViaPleromaFE') }}
       </el-button>
