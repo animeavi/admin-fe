@@ -32,7 +32,7 @@ export default {
     return {
       selectedInstance: '',
       page: 1,
-      pageSize: 2
+      pageSize: 30
     }
   },
   computed: {
