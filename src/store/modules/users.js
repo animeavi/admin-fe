@@ -47,6 +47,10 @@ const users = {
         return acc.filter(u => u.id !== user.id)
       }, state.fetchedUsers)
 
+      if (state.fetchedUsers.length === 0) {
+        return
+      }
+
       state.fetchedUsers = [...usersWithoutSwapped, ...users].sort((a, b) =>
         a.nickname.localeCompare(b.nickname)
       )

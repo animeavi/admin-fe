@@ -11,8 +11,13 @@
           :label="instance"
           :value="instance"/>
       </el-select>
+      <multiple-users-menu
+        :selected-users="selectedUsers"
+        @apply-action="clearSelection"/>
     </div>
-    <status v-for="status in statuses" :key="status.id" :status="status" />
+    <div v-for="status in statuses" :key="status.id" class="status-container">
+      <status :status="status" @status-selection="handleStatusSelection" />
+    </div>
     <div v-if="statuses.length > 0" class="statuses-pagination">
       <el-button @click="handleLoadMore">{{ $t('statuses.loadMore') }}</el-button>
     </div>
@@ -21,16 +26,19 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import MultipleUsersMenu from '@/views/users/components/MultipleUsersMenu'
 import Status from '@/components/Status'
 
 export default {
   name: 'Statuses',
   components: {
+    MultipleUsersMenu,
     Status
   },
   data() {
     return {
       selectedInstance: '',
+      selectedUsers: [],
       page: 1,
       pageSize: 30
     }
@@ -63,6 +71,16 @@ export default {
         page: this.page,
         pageSize: this.pageSize
       })
+    },
+    clearSelection() {
+      // TODO
+    },
+    handleStatusSelection(user) {
+      if (this.selectedUsers.find(selectedUser => user.id === selectedUser.id) !== undefined) {
+        return
+      }
+
+      this.selectedUsers = [...this.selectedUsers, user]
     }
   }
 }
@@ -71,6 +89,9 @@ export default {
 <style rel='stylesheet/scss' lang='scss'>
 .statuses-container {
   padding: 0 15px;
+  .status-container {
+    margin: 0 0 10px;
+  }
 }
 .filter-container {
   margin: 22px 15px 15px 0;

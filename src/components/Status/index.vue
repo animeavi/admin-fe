@@ -5,8 +5,10 @@
         <div class="status-header">
           <div class="status-account-container">
             <div class="status-account">
-              <img :src="status.account.avatar" class="status-avatar-img">
-              <h3 class="status-account-name">{{ status.account.display_name }}</h3>
+              <el-checkbox @change="handleStatusSelection(status.account)">
+                <img :src="status.account.avatar" class="status-avatar-img">
+                <h3 class="status-account-name">{{ status.account.display_name }}</h3>
+              </el-checkbox>
             </div>
             <a :href="status.account.url" target="_blank" class="account">
               @{{ status.account.acct }}
@@ -179,6 +181,9 @@ export default {
     },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('YYYY-MM-DD HH:mm')
+    },
+    handleStatusSelection(account) {
+      this.$emit('status-selection', account)
     }
   }
 }
@@ -205,11 +210,13 @@ export default {
     align-items: center;
   }
   .status-avatar-img {
+    display: inline-block;
     width: 15px;
     height: 15px;
     margin-right: 5px;
   }
   .status-account-name {
+    display: inline-block;
     margin: 0;
     height: 22px;
   }
