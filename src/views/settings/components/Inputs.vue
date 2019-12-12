@@ -27,15 +27,6 @@
         :value="option"
         :key="index"/>
     </el-select>
-    <!-- <div v-if="setting.type === 'keyword'">
-      <div v-for="subSetting in setting.children" :key="subSetting.key">
-        <inputs
-          :setting-group="settingGroup"
-          :setting="subSetting"
-          :data="data"
-          :custom-label-width="'100px'"/>
-      </div>
-    </div> -->
     <el-select
       v-if="renderMultipleSelect(setting.type)"
       :value="setting.key === ':rewrite_policy' ? rewritePolicyValue : inputValue"
@@ -46,10 +37,7 @@
       <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
     </el-select>
     <editor
-      v-if="Array.isArray(setting.type)
-        && setting.type.includes('list')
-        && (setting.type.includes('tuple')
-      )"
+      v-if="setting.key === ':dispatch'"
       v-model="editorContent"
       height="150"
       width="100%"
@@ -232,7 +220,7 @@ export default {
         return this.data[this.setting.key] ? this.data[this.setting.key][0] : ''
       },
       set: function(value) {
-        this.processNestedData([value], this.settingGroup.key, this.setting.key, this.data[this.setting.key])
+        this.processNestedData([value], this.settingGroup.group, this.settingGroup.key, this.settingParent.key, this.settingParent.type, this.setting.key, this.setting.type)
       }
     },
     iconsValue() {
@@ -310,7 +298,6 @@ export default {
       const updatedValue = filteredValues.reduce((acc, el, i) => {
         return { ...acc, [el[0]]: el[1] }
       }, {})
-      console.log(updatedValue)
       this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key)
     },
     deleteIcondRow(index) {},
@@ -336,7 +323,6 @@ export default {
         }
         return { ...acc, [el[0]]: el[1] }
       }, {})
-      console.log(updatedValue)
       this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key)
     },
     parseIcons(value, inputType, index) {},
@@ -377,7 +363,6 @@ export default {
       )
     },
     toggleAtomTuple(value, tab, input) {
-      console.log(value)
     },
     toggleLimits(value, input) {
       this.updateSetting(value, this.settingGroup.group, 'rate_limit', input)
