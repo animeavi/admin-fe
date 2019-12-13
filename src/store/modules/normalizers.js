@@ -10,8 +10,10 @@ export const parseTuples = (tuples, key) => {
   return tuples.reduce((accum, item) => {
     if (key === 'rate_limit') {
       accum[item.tuple[0]] = item.tuple[1]
-    } else if (key === ':mascots') {
-      accum[item.tuple[0]] = { ...item.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }
+    } else if (item.tuple[0] === ':mascots') {
+      accum[item.tuple[0]] = item.tuple[1].reduce((acc, mascot) => {
+        return [...acc, { [mascot.tuple[0]]: { ...mascot.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
+      }, [])
     } else if (item.tuple[0] === ':groups') {
       accum[item.tuple[0]] = item.tuple[1].reduce((acc, group) => {
         return [...acc, { [group.tuple[0]]: { value: group.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
