@@ -55,30 +55,6 @@
       @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
       <template slot="prepend">:</template>
     </el-input>
-    <div v-if="editableKeywordWithInput(setting.key)">
-      <div v-for="([key, value], index) in editableKeywordData(data)" :key="index" class="setting-input">
-        <el-input :value="key" placeholder="pattern" class="name-input" @input="parseEditableKeyword($event, 'key', index)"/> :
-        <el-input :value="value" placeholder="replacement" class="value-input" @input="parseEditableKeyword($event, 'value', index)"/>
-        <el-button icon="el-icon-minus" circle @click="deleteEditableKeywordRow(index)"/>
-      </div>
-      <el-button icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
-    </div>
-    <div v-if="editableKeywordWithSelect(setting.type)">
-      <div v-for="([key, value], index) in editableKeywordData(data)" :key="index" class="setting-input">
-        <el-input :value="key" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', index)"/> :
-        <el-select :value="value" multiple filterable allow-create class="value-input" @change="parseEditableKeyword($event, 'value', index)"/>
-        <el-button icon="el-icon-minus" circle @click="deleteEditableKeywordRow(index)"/>
-      </div>
-      <el-button icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
-    </div>
-    <div v-if="editableKeywordWithInteger(setting.type)">
-      <div v-for="([key, value], index) in editableKeywordData(data)" :key="index" class="setting-input">
-        <el-input :value="key" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', index)"/> :
-        <el-input-number :value="value" :min="0" size="large" class="value-input" @change="parseEditableKeyword($event, 'value', index)"/>
-        <el-button icon="el-icon-minus" circle @click="deleteEditableKeywordRow(index)"/>
-      </div>
-      <el-button icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
-    </div>
     <div v-if="setting.key === ':prune'">
       <el-radio-group v-model="prune">
         <el-radio label=":disabled">Disabled</el-radio>
@@ -137,8 +113,9 @@
         @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
     </div>
     <!-- special inputs -->
-    <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :setting-group="settingGroup" :setting="setting" :data="data"/>
-    <mascots-input v-if="setting.key === ':mascots'" :setting-group="settingGroup" :setting="setting" :data="data"/>
+    <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :data="data" :setting-group="settingGroup" :setting="setting"/>
+    <mascots-input v-if="setting.key === ':mascots'" :data="data" :setting-group="settingGroup" :setting="setting"/>
+    <editable-keyword v-if="editableKeyword(setting.key, setting.type)" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <!-------------------->
     <div v-if="setting.key === ':icons'">
       <div v-for="(icon, index) in iconsValue" :key="index" class="mascot-container">
@@ -165,13 +142,14 @@
 import AceEditor from 'vue2-ace-editor'
 import 'brace/mode/elixir'
 import 'default-passive-events'
-import { AutoLinkerInput, MascotsInput } from './inputComponents'
+import { AutoLinkerInput, EditableKeyword, MascotsInput } from './inputComponents'
 
 export default {
   name: 'Inputs',
   components: {
     editor: AceEditor,
     AutoLinkerInput,
+    EditableKeyword,
     MascotsInput
   },
   props: {
@@ -183,7 +161,7 @@ export default {
       required: false
     },
     data: {
-      type: Object || Array,
+      type: [Object, Array],
       default: function() {
         return {}
       }
@@ -287,43 +265,12 @@ export default {
   methods: {
     addIconToIcons() {},
     addValueToIcons() {},
-    addRowToEditableKeyword() {
-      const updatedValue = this.editableKeywordData(this.data).reduce((acc, el, i) => {
-        return { ...acc, [el[0]]: el[1] }
-      }, {})
-      this.updateSetting({ ...updatedValue, '': [] }, this.settingGroup.group, this.settingGroup.key, this.setting.key)
-    },
-    deleteEditableKeywordRow(index) {
-      const filteredValues = this.editableKeywordData(this.data).filter((el, i) => index !== i)
-      const updatedValue = filteredValues.reduce((acc, el, i) => {
-        return { ...acc, [el[0]]: el[1] }
-      }, {})
-      this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key)
-    },
     deleteIcondRow(index) {},
-    editableKeywordWithInput(key) {
-      return key === ':replace'
-    },
-    editableKeywordWithInteger(type) {
-      return Array.isArray(type)
-        ? type.includes('keyword') && type.includes('integer')
-        : false
-    },
-    editableKeywordWithSelect(type) {
-      return type === 'map' ||
-      (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
-    },
-    editableKeywordData(data) {
-      return Object.keys(data).map(key => [key, data[key]])
-    },
-    parseEditableKeyword(value, inputType, index) {
-      const updatedValue = this.editableKeywordData(this.data).reduce((acc, el, i) => {
-        if (index === i) {
-          return inputType === 'key' ? { ...acc, [value]: el[1] } : { ...acc, [el[0]]: value }
-        }
-        return { ...acc, [el[0]]: el[1] }
-      }, {})
-      this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key)
+    editableKeyword(key, type) {
+      return key === ':replace' ||
+        (Array.isArray(type) && type.includes('keyword') && type.includes('integer')) ||
+        type === 'map' ||
+        (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
     },
     parseIcons(value, inputType, index) {},
     parseRateLimiter(value, input, typeOfInput, typeOfLimit, currentValue) {
