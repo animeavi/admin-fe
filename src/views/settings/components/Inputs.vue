@@ -115,7 +115,7 @@
     <!-- special inputs -->
     <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <mascots-input v-if="setting.key === ':mascots'" :data="data" :setting-group="settingGroup" :setting="setting"/>
-    <editable-keyword v-if="editableKeyword(setting.key, setting.type)" :data="data" :setting-group="settingGroup" :setting="setting"/>
+    <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <!-------------------->
     <div v-if="setting.key === ':icons'">
       <div v-for="(icon, index) in iconsValue" :key="index" class="mascot-container">
@@ -142,14 +142,14 @@
 import AceEditor from 'vue2-ace-editor'
 import 'brace/mode/elixir'
 import 'default-passive-events'
-import { AutoLinkerInput, EditableKeyword, MascotsInput } from './inputComponents'
+import { AutoLinkerInput, EditableKeywordInput, MascotsInput } from './inputComponents'
 
 export default {
   name: 'Inputs',
   components: {
     editor: AceEditor,
     AutoLinkerInput,
-    EditableKeyword,
+    EditableKeywordInput,
     MascotsInput
   },
   props: {

@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  name: 'EditableKeyword',
+  name: 'EditableKeywordInput',
   props: {
     data: {
       type: [Object, Array],
