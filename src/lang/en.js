@@ -240,9 +240,10 @@ export default {
     resendConfirmation: 'Resend confirmation email'
   },
   statuses: {
-    statuses: 'Statuses',
+    statuses: 'Statuses by instance',
     instanceFilter: 'Instance filter',
-    loadMore: 'Load more'
+    loadMore: 'Load more',
+    noInstances: 'No other instances found'
   },
   userProfile: {
     tags: 'Tags',
@@ -308,7 +309,10 @@ export default {
     actors: 'Actors',
     content: 'Content',
     reportedStatus: 'Reported status',
-    statusDeleted: 'This status has been deleted'
+    statusDeleted: 'This status has been deleted',
+    leaveNote: 'Leave a note',
+    postNote: 'Send',
+    deleteNote: 'Delete'
   },
   reportsFilter: {
     inputPlaceholder: 'Select filter',

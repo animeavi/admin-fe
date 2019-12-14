@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Ability to fetch all statuses from a given instance
 - Grouped reports: now you can view reports, which are grouped by status (pagination is not implemented yet, though)
 - Ability to confirm users' emails and resend confirmation emails
+- Report notes
 - Ability to moderate users on the statuses page
 
 ### Fixed

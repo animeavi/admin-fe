@@ -63,6 +63,23 @@
               </el-collapse-item>
             </el-collapse>
           </div>
+          <div class="report-notes">
+            <el-collapse>
+              <el-collapse-item :title="getNotesTitle(report.notes)">
+                <note-card v-for="(note, index) in report.notes" :key="index" :note="note" :report="report"/>
+              </el-collapse-item>
+            </el-collapse>
+            <div class="report-note-form">
+              <el-input
+                v-model="notes[report.id]"
+                :placeholder="$t('reports.leaveNote')"
+                type="textarea"
+                rows="3"/>
+              <div class="report-post-note">
+                <el-button @click="handleNewNote(report.id)">{{ $t('reports.postNote') }}</el-button>
+              </div>
+            </div>
+          </div>
         </el-card>
       </el-timeline-item>
     </el-timeline>
@@ -81,16 +98,22 @@
 
 <script>
 import moment from 'moment'
+import NoteCard from './NoteCard'
 import Status from '@/components/Status'
 import ModerateUserDropdown from './ModerateUserDropdown'
 
 export default {
   name: 'Report',
-  components: { Status, ModerateUserDropdown },
+  components: { Status, ModerateUserDropdown, NoteCard },
   props: {
     reports: {
       type: Array,
       required: true
+    }
+  },
+  data() {
+    return {
+      notes: {}
     }
   },
   computed: {
@@ -127,11 +150,18 @@ export default {
     getStatusesTitle(statuses) {
       return `Reported statuses: ${statuses.length} item(s)`
     },
+    getNotesTitle(notes = []) {
+      return `Notes: ${notes.length} item(s)`
+    },
     handlePageChange(page) {
       this.$store.dispatch('FetchReports', page)
     },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('L HH:mm')
+    },
+    handleNewNote(reportID) {
+      this.$store.dispatch('CreateReportNote', { content: this.notes[reportID], reportID })
+      this.notes[reportID] = ''
     }
   }
 }
@@ -216,6 +246,13 @@ export default {
   }
   .report-title {
     margin: 0;
+  }
+  .report-note-form {
+    margin: 15px 0 0 0;
+  }
+  .report-post-note {
+    margin: 5px 0 0 0;
+    text-align: right;
   }
   .reports-pagination {
     margin: 25px 0;
