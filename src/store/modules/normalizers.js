@@ -18,6 +18,12 @@ export const parseTuples = (tuples, key) => {
       accum[item.tuple[0]] = item.tuple[1].reduce((acc, group) => {
         return [...acc, { [group.tuple[0]]: { value: group.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
       }, [])
+    } else if (item.tuple[0] === ':icons') {
+      accum[item.tuple[0]] = item.tuple[1].map(icon => {
+        return Object.keys(icon).map(name => {
+          return { key: name, value: icon[name], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }
+        })
+      }, [])
     } else if ((item.tuple[0] === ':sslopts' && item.tuple[1].length === 0) || // should be removed
       (item.tuple[0] === ':tlsopts' && item.tuple[1].length === 0)) {
       accum[item.tuple[0]] = {}

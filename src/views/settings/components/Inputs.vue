@@ -116,24 +116,8 @@
     <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <mascots-input v-if="setting.key === ':mascots'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="data" :setting-group="settingGroup" :setting="setting"/>
+    <icons-input v-if="setting.key === ':icons'" :data="data[':icons']" :setting-group="settingGroup" :setting="setting"/>
     <!-------------------->
-    <div v-if="setting.key === ':icons'">
-      <div v-for="(icon, index) in iconsValue" :key="index" class="mascot-container">
-        <div v-for="([key, value], index) in icon" :key="index" class="setting-input">
-          <el-input :value="key" placeholder="key" class="name-input" @input="parseIcons($event, 'key', index)"/> :
-          <el-input :value="value" placeholder="value" class="value-input" @input="parseIcons($event, 'value', index)"/>
-          <el-button icon="el-icon-minus" circle @click="deleteIcondRow(index)"/>
-        </div>
-        <div class="icons-button-container">
-          <el-button icon="el-icon-plus" circle @click="addValueToIcons"/>
-          <span class="icons-button-desc">Add another `key - value` pair to this icon</span>
-        </div>
-        <div class="icons-button-container">
-          <el-button icon="el-icon-plus" circle @click="addIconToIcons"/>
-          <span class="icons-button-desc">Add another icon configuration</span>
-        </div>
-      </div>
-    </div>
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
 </template>
@@ -142,7 +126,7 @@
 import AceEditor from 'vue2-ace-editor'
 import 'brace/mode/elixir'
 import 'default-passive-events'
-import { AutoLinkerInput, EditableKeywordInput, MascotsInput } from './inputComponents'
+import { AutoLinkerInput, EditableKeywordInput, IconsInput, MascotsInput } from './inputComponents'
 
 export default {
   name: 'Inputs',
@@ -150,6 +134,7 @@ export default {
     editor: AceEditor,
     AutoLinkerInput,
     EditableKeywordInput,
+    IconsInput,
     MascotsInput
   },
   props: {
@@ -201,17 +186,13 @@ export default {
         this.processNestedData([value], this.settingGroup.group, this.settingGroup.key, this.settingParent.key, this.settingParent.type, this.setting.key, this.setting.type)
       }
     },
-    iconsValue() {
-      return this.data[':icons']
-        ? this.data[':icons'].map(icon => Object.keys(icon).map(key => [key, icon[key]]))
-        : null
-    },
     inputValue() {
       if ([':esshd', ':cors_plug', ':quack', ':http_signatures'].includes(this.settingGroup.group) &&
         this.data[this.setting.key]) {
         return this.data[this.setting.key].value
       } else if ((this.settingGroup.group === ':logger' && this.setting.key === ':backends') ||
-        this.setting.key === 'Pleroma.Web.Auth.Authenticator') {
+        this.setting.key === 'Pleroma.Web.Auth.Authenticator' ||
+        this.setting.key === ':admin_token') {
         return this.data.value
       } else if (this.setting.type === 'atom') {
         return this.data[this.setting.key] && this.data[this.setting.key][0] === ':' ? this.data[this.setting.key].substr(1) : this.data[this.setting.key]
@@ -263,16 +244,12 @@ export default {
     }
   },
   methods: {
-    addIconToIcons() {},
-    addValueToIcons() {},
-    deleteIcondRow(index) {},
     editableKeyword(key, type) {
       return key === ':replace' ||
         (Array.isArray(type) && type.includes('keyword') && type.includes('integer')) ||
         type === 'map' ||
         (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
     },
-    parseIcons(value, inputType, index) {},
     parseRateLimiter(value, input, typeOfInput, typeOfLimit, currentValue) {
       if (typeOfLimit === 'oneLimit') {
         const valueToSend = typeOfInput === 'scale' ? { 'tuple': [value, currentValue[1]] } : { 'tuple': [currentValue[0], value] }
@@ -308,8 +285,6 @@ export default {
         (type.includes('regex') && type.includes('string')) ||
         this.setting.key === ':args'
       )
-    },
-    toggleAtomTuple(value, tab, input) {
     },
     toggleLimits(value, input) {
       this.updateSetting(value, this.settingGroup.group, 'rate_limit', input)

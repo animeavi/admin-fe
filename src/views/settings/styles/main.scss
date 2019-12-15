@@ -45,13 +45,36 @@
   }
   .icons-button-container {
     width: 100%;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
   }
   .icons-button-desc {
     font-size: 14px;
     color: #606266;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
     margin-left: 5px;
+  }
+  .icon-container {
+    flex-direction: column;
+    width: 95%;
+  }
+  .icon-values-container {
+    display: flex;
+    margin: 0 10px 10px 0;
+  }
+  .icon-key-input {
+    width: 30%;
+    margin-right: 8px
+  }
+  .icon-minus-button {
+    width: 36px;
+    height: 36px;
+  }
+  .icon-value-input {
+    width: 70%;
+    margin-left: 8px;
+  }
+  .icons-container {
+    display: flex;
   }
   label {
     white-space: nowrap;
