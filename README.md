@@ -25,13 +25,17 @@ You can have any combination of these features (i.e. you can disable anything, b
 
 ## Usage
 
+### Bundled
+
+AdminFE is bundled with Pleroma, i.e. you can just visit `https://your.instance/pleroma/admin/` to try it out.
+
 ### Development
 
 To run AdminFE locally execute `yarn dev`
 
 ### Build
 
-To compile everything for production run `yarn build:prod`.
+To compile everything for production run `yarn build:prod`, this will build admin-fe into `dist` folder, which you will need to upload to your server and/or point your webserver of choice to.
 
 #### Disabling features
 
