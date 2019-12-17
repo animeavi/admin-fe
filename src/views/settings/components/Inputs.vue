@@ -104,19 +104,12 @@
         </div>
       </div>
     </div>
-    <div v-if="setting.key === ':proxy_url'" class="setting-input">
-      <el-checkbox v-model="proxyUrlTypeSocks5" class="name-input" border>Socks5</el-checkbox>
-      <el-input
-        :value="proxyUrlData"
-        :placeholder="setting.suggestions ? setting.suggestions[0] : ''"
-        class="value-input"
-        @input="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
-    </div>
     <!-- special inputs -->
     <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <mascots-input v-if="setting.key === ':mascots'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <icons-input v-if="setting.key === ':icons'" :data="data[':icons']" :setting-group="settingGroup" :setting="setting"/>
+    <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
     <!-------------------->
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
@@ -126,7 +119,7 @@
 import AceEditor from 'vue2-ace-editor'
 import 'brace/mode/elixir'
 import 'default-passive-events'
-import { AutoLinkerInput, EditableKeywordInput, IconsInput, MascotsInput } from './inputComponents'
+import { AutoLinkerInput, EditableKeywordInput, IconsInput, MascotsInput, ProxyUrlInput } from './inputComponents'
 
 export default {
   name: 'Inputs',
@@ -135,7 +128,8 @@ export default {
     AutoLinkerInput,
     EditableKeywordInput,
     IconsInput,
-    MascotsInput
+    MascotsInput,
+    ProxyUrlInput
   },
   props: {
     customLabelWidth: {
@@ -202,18 +196,6 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '240px'
-    },
-    proxyUrlData() {
-      if (!this.data[this.setting.key]) {
-        return null
-      } else {
-        return typeof this.data[this.setting.key] === 'string'
-          ? this.data[this.setting.key]
-          : `${this.data[this.setting.key][1]}:${this.data[this.setting.key][2]}`
-      }
-    },
-    proxyUrlTypeSocks5() {
-      return Array.isArray(this.data[this.setting.key]) && this.data[this.setting.key][0] === 'socks5'
     },
     prune() {
       return this.data[this.setting.key] === ':disabled'

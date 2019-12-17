@@ -24,6 +24,8 @@ export const parseTuples = (tuples, key) => {
           return { key: name, value: icon[name], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }
         })
       }, [])
+    } else if (item.tuple[0] === ':proxy_url') {
+      accum[item.tuple[0]] = parseProxyUrl(item.tuple[1])
     } else if ((item.tuple[0] === ':sslopts' && item.tuple[1].length === 0) || // should be removed
       (item.tuple[0] === ':tlsopts' && item.tuple[1].length === 0)) {
       accum[item.tuple[0]] = {}
@@ -70,6 +72,17 @@ const parseObject = object => {
   }, {})
 }
 
+const parseProxyUrl = value => {
+  if (!Array.isArray(value) && typeof value === 'object' && value.tuple.length === 3 && value.tuple[0] === ':socks5') {
+    const [, host, port] = value.tuple
+    return { socks5: true, host, port }
+  } else if (typeof value === 'string') {
+    const [host, port] = value.split(':')
+    return { socks5: false, host, port }
+  }
+  return { socks5: false, host: null, port: null }
+}
+
 export const partialUpdate = (group, key) => {
   if ((group === ':pleroma' && key === ':ecto_repos') ||
       (group === ':quack' && key === ':meta') ||
@@ -109,6 +122,8 @@ const wrapValues = settings => {
       return { 'tuple': [setting, wrapValues(value)] }
     } else if (type === 'atom') {
       return { 'tuple': [setting, `:${value}`] }
+    } else if (type.includes('tuple') && Array.isArray(value)) {
+      return { 'tuple': [setting, { 'tuple': value }] }
     } else if (type === 'map') {
       const objectValue = Object.keys(value).reduce((acc, key) => {
         acc[key] = value[key][1]
