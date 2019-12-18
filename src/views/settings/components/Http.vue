@@ -59,7 +59,7 @@ export default {
       return this.settings.description.find(setting => setting.group === ':http_signatures')
     },
     httpSignaturesData() {
-      return this.settings.settings.http_signatures
+      return this.settings.settings[':http_signatures']
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'

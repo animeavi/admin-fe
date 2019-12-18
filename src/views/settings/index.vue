@@ -32,14 +32,13 @@
       <el-tab-pane :label="$t('settings.gopher')" lazy>
         <gopher/>
       </el-tab-pane>
+      <el-tab-pane :label="$t('settings.http')" lazy>
+        <http/>
+      </el-tab-pane>
       <el-tab-pane :label="$t('settings.instance')" name="instance">
         <instance/>
       </el-tab-pane>
       <!--
-      <el-tab-pane :label="$t('settings.http')" lazy>
-        <http/>
-      </el-tab-pane>
-
       <el-tab-pane :label="$t('settings.jobQueue')" lazy>
         <job-queue/>
       </el-tab-pane>

@@ -3,8 +3,6 @@ const nonAtomsObjects = ['match_actor', ':match_actor']
 const objects = ['digest', 'pleroma_fe', 'masto_fe', 'poll_limits', 'styling']
 const objectParents = ['mascots']
 
-const groupWithoutKey = settings => settings._value ? settings._value[1] : false
-
 // REFACTOR
 export const parseTuples = (tuples, key) => {
   return tuples.reduce((accum, item) => {
@@ -88,8 +86,7 @@ export const partialUpdate = (group, key) => {
       (group === ':quack' && key === ':meta') ||
       (group === ':mime' && key === ':types') ||
       (group === ':auto_linker' && key === ':opts') ||
-      (group === ':swarm' && key === ':node_blacklist') ||
-      (group === ':cors_plug' && [':max_age', ':methods', ':expose', ':headers'].includes(key))) {
+      (group === ':swarm' && key === ':node_blacklist')) {
     return false
   }
   return true
@@ -110,7 +107,7 @@ export const valueHasTuples = (key, value) => {
 
 export const wrapUpdatedSettings = (group, settings) => {
   return Object.keys(settings).map((key) => {
-    const value = groupWithoutKey(settings[key]) || wrapValues(settings[key])
+    const value = settings[key]._value ? settings[key]._value[1] : wrapValues(settings[key])
     return { group, key, value }
   })
 }
@@ -133,6 +130,8 @@ const wrapValues = settings => {
     } else if (setting === ':ip') {
       const ip = value.split('.').map(s => parseInt(s, 10))
       return { 'tuple': [setting, { 'tuple': ip }] }
+    } else if (setting === ':ssl_options') {
+      return { 'tuple': [setting, wrapValues(value)] }
     } else {
       return { 'tuple': [setting, value] }
     }

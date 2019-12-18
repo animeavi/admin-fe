@@ -11,7 +11,7 @@
       @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
     <el-input-number
       v-if="setting.type === 'integer'"
-      :value="inputValue"
+      :value="inputValue === null ? 0 : inputValue"
       :placeholder="setting.suggestions ? setting.suggestions[0].toString() : null"
       :min="0"
       size="large"
@@ -110,6 +110,7 @@
     <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <icons-input v-if="setting.key === ':icons'" :data="data[':icons']" :setting-group="settingGroup" :setting="setting"/>
     <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
+    <ssl-options-input v-if="setting.key === ':ssl_options'" :setting-group="settingGroup" :setting-parent="settingParent" :setting="setting" :data="data" :nested="true" :custom-label-width="'100px'"/>
     <!-------------------->
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
@@ -119,7 +120,7 @@
 import AceEditor from 'vue2-ace-editor'
 import 'brace/mode/elixir'
 import 'default-passive-events'
-import { AutoLinkerInput, EditableKeywordInput, IconsInput, MascotsInput, ProxyUrlInput } from './inputComponents'
+import { AutoLinkerInput, EditableKeywordInput, IconsInput, MascotsInput, ProxyUrlInput, SslOptionsInput } from './inputComponents'
 
 export default {
   name: 'Inputs',
@@ -129,7 +130,8 @@ export default {
     EditableKeywordInput,
     IconsInput,
     MascotsInput,
-    ProxyUrlInput
+    ProxyUrlInput,
+    SslOptionsInput
   },
   props: {
     customLabelWidth: {
