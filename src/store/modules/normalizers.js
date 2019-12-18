@@ -71,7 +71,10 @@ const parseObject = object => {
 }
 
 const parseProxyUrl = value => {
-  if (!Array.isArray(value) && typeof value === 'object' && value.tuple.length === 3 && value.tuple[0] === ':socks5') {
+  if (value && !Array.isArray(value) &&
+    typeof value === 'object' &&
+    value.tuple.length === 3 &&
+    value.tuple[0] === ':socks5') {
     const [, host, port] = value.tuple
     return { socks5: true, host, port }
   } else if (typeof value === 'string') {
@@ -83,7 +86,6 @@ const parseProxyUrl = value => {
 
 export const partialUpdate = (group, key) => {
   if ((group === ':pleroma' && key === ':ecto_repos') ||
-      (group === ':quack' && key === ':meta') ||
       (group === ':mime' && key === ':types') ||
       (group === ':auto_linker' && key === ':opts') ||
       (group === ':swarm' && key === ':node_blacklist')) {
@@ -107,8 +109,13 @@ export const valueHasTuples = (key, value) => {
 
 export const wrapUpdatedSettings = (group, settings) => {
   return Object.keys(settings).map((key) => {
-    const value = settings[key]._value ? settings[key]._value[1] : wrapValues(settings[key])
-    return { group, key, value }
+    if (settings[key]._value) {
+      const value = settings[key]._value[0] === 'atom' && settings[key]._value[1].length > 1
+        ? `:${settings[key]._value[1]}`
+        : settings[key]._value[1]
+      return { group, key, value }
+    }
+    return { group, key, value: wrapValues(settings[key]) }
   })
 }
 
@@ -117,7 +124,7 @@ const wrapValues = settings => {
     const [type, value] = Array.isArray(settings[setting]) ? settings[setting] : ['', settings[setting]]
     if (type === 'keyword' || type.includes('keyword')) {
       return { 'tuple': [setting, wrapValues(value)] }
-    } else if (type === 'atom') {
+    } else if (type === 'atom' && value.length > 0) {
       return { 'tuple': [setting, `:${value}`] }
     } else if (type.includes('tuple') && Array.isArray(value)) {
       return { 'tuple': [setting, { 'tuple': value }] }

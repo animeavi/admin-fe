@@ -185,7 +185,9 @@ export default {
     inputValue() {
       if ([':esshd', ':cors_plug', ':quack', ':http_signatures'].includes(this.settingGroup.group) &&
         this.data[this.setting.key]) {
-        return this.data[this.setting.key].value
+        return this.setting.type === 'atom' && this.data[this.setting.key].value[0] === ':'
+          ? this.data[this.setting.key].value.substr(1)
+          : this.data[this.setting.key].value
       } else if ((this.settingGroup.group === ':logger' && this.setting.key === ':backends') ||
         this.setting.key === 'Pleroma.Web.Auth.Authenticator' ||
         this.setting.key === ':admin_token') {
