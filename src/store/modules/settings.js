@@ -86,7 +86,7 @@ const settings = {
       }, {})
 
       const configs = Object.keys(updatedData).reduce((acc, group) => {
-        return [...acc, ...wrapUpdatedSettings(group, updatedData[group])]
+        return [...acc, ...wrapUpdatedSettings(group, updatedData[group], state.settings)]
       }, [])
       const response = await updateSettings(configs, getters.authHost, getters.token)
       commit('SET_SETTINGS', response.data.configs)

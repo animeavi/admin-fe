@@ -107,7 +107,7 @@ export const valueHasTuples = (key, value) => {
     valueIsArrayOfNonObjects
 }
 
-export const wrapUpdatedSettings = (group, settings) => {
+export const wrapUpdatedSettings = (group, settings, currentState) => {
   return Object.keys(settings).map((key) => {
     if (settings[key]._value) {
       const value = settings[key]._value[0] === 'atom' && settings[key]._value[1].length > 1
@@ -115,11 +115,11 @@ export const wrapUpdatedSettings = (group, settings) => {
         : settings[key]._value[1]
       return { group, key, value }
     }
-    return { group, key, value: wrapValues(settings[key]) }
+    return { group, key, value: wrapValues(settings[key], currentState[group][key]) }
   })
 }
 
-const wrapValues = settings => {
+const wrapValues = (settings, currentState) => {
   return Object.keys(settings).map(setting => {
     const [type, value] = Array.isArray(settings[setting]) ? settings[setting] : ['', settings[setting]]
     if (type === 'keyword' || type.includes('keyword')) {
@@ -129,11 +129,11 @@ const wrapValues = settings => {
     } else if (type.includes('tuple') && Array.isArray(value)) {
       return { 'tuple': [setting, { 'tuple': value }] }
     } else if (type === 'map') {
-      const objectValue = Object.keys(value).reduce((acc, key) => {
+      const mapValue = Object.keys(value).reduce((acc, key) => {
         acc[key] = value[key][1]
         return acc
       }, {})
-      return { 'tuple': [setting, objectValue] }
+      return { 'tuple': [setting, { ...currentState[setting], ...mapValue }] }
     } else if (setting === ':ip') {
       const ip = value.split('.').map(s => parseInt(s, 10))
       return { 'tuple': [setting, { 'tuple': ip }] }
