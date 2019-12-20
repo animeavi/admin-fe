@@ -30,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Show checkmarks when tag is applied
 - Reports update (also, now it's optimistic)
+- Remove duplicated success message
 
 ## [1.2.0] - 2019-09-27
 
