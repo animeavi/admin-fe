@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     loadingPeers() {
-      return this.$store.state.peers.loading
+      return this.$store.state.instance.peersLoading
     },
     ...mapGetters([
       'instances',

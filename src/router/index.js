@@ -77,6 +77,20 @@ const moderationLog = {
   ]
 }
 
+const statsDisabled = disabledFeatures.includes('stats')
+const stats = {
+  path: '/stats',
+  component: Layout,
+  children: [
+    {
+      path: 'index',
+      component: () => import('@/views/stats/index'),
+      name: 'Stats',
+      meta: { title: 'stats', icon: 'chart', noCache: true }
+    }
+  ]
+}
+
 export const constantRouterMap = [
   {
     path: '/redirect',
@@ -145,6 +159,7 @@ export const asyncRouterMap = [
   ...(invitesDisabled ? [] : [invites]),
   ...(moderationLogDisabled ? [] : [moderationLog]),
   ...(settingsDisabled ? [] : [settings]),
+  ...(statsDisabled ? [] : [stats]),
   {
     path: '/users/:id',
     component: Layout,
