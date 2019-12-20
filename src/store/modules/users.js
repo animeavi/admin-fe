@@ -263,9 +263,8 @@ const users = {
       }
     },
     SuccessMessage() {
-      return Message({
+      Message.success({
         message: i18n.t('users.completed'),
-        type: 'success',
         duration: 5 * 1000
       })
     },

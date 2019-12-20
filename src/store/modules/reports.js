@@ -1,4 +1,3 @@
-import { Message } from 'element-ui'
 import { changeState, fetchReports, fetchGroupedReports, createNote, deleteNote } from '@/api/reports'
 
 const reports = {
@@ -117,13 +116,6 @@ const reports = {
       })
 
       commit('SET_REPORTS', updatedReports)
-    },
-    SuccessMessage(text) {
-      return Message({
-        message: text,
-        type: 'success',
-        duration: 5 * 1000
-      })
     }
   }
 }
