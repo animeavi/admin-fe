@@ -45,13 +45,15 @@ const settings = {
       state.settings = newSettings
     },
     UPDATE_SETTINGS: (state, { group, key, input, value, type }) => {
-      const updatedSetting = state.updatedSettings[group]
-        ? { [key]: { ...state.updatedSettings[group][key], ...{ [input]: [type, value] }}}
-        : { [key]: { [input]: [type, value] }}
+      const updatedSetting = !state.updatedSettings[group] || (key === 'Pleroma.Emails.Mailer' && input === ':adapter')
+        ? { [key]: { [input]: [type, value] }}
+        : { [key]: { ...state.updatedSettings[group][key], ...{ [input]: [type, value] }}}
       state.updatedSettings[group] = { ...state.updatedSettings[group], ...updatedSetting }
     },
     UPDATE_STATE: (state, { group, key, input, value }) => {
-      const updatedState = { [key]: { ...state.settings[group][key], ...{ [input]: value }}}
+      const updatedState = key === 'Pleroma.Emails.Mailer' && input === ':adapter'
+        ? { [key]: { [input]: value }}
+        : { [key]: { ...state.settings[group][key], ...{ [input]: value }}}
       state.settings[group] = { ...state.settings[group], ...updatedState }
     }
   },

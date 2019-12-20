@@ -41,6 +41,9 @@
       <el-tab-pane :label="$t('settings.logger')" lazy>
         <logger/>
       </el-tab-pane>
+      <el-tab-pane :label="$t('settings.mailer')" lazy>
+        <mailer/>
+      </el-tab-pane>
       <!--
       <el-tab-pane :label="$t('settings.jobQueue')" lazy>
         <job-queue/>

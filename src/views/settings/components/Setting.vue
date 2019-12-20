@@ -11,9 +11,8 @@
           :data="data"/>
       </div>
       <div
-        v-for="setting in settingGroup.children.filter(setting => setting.group && setting.group.includes(setting.key))"
+        v-for="setting in emailAdapterChildren"
         :key="setting.key">
-        <div class="line"/>
         <inputs
           :setting-group="settingGroup"
           :setting="setting"
@@ -76,6 +75,10 @@ export default {
     }
   },
   computed: {
+    emailAdapterChildren() {
+      const adapter = this.$store.state.settings.settings[':pleroma']['Pleroma.Emails.Mailer'][':adapter']
+      return this.settingGroup.children.filter(child => child.group && child.group.includes(adapter))
+    },
     loading() {
       return this.$store.state.settings.loading
     }
