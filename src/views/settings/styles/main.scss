@@ -119,6 +119,11 @@
     width: 20%;
     margin-right: 8px
   }
+  .proxy-url-value-input {
+    width: 35%;
+    margin-left: 8px;
+    margin-right: 10px
+  }
   .setting-input {
     display: flex;
     margin-bottom: 10px;
@@ -147,7 +152,7 @@
     align-items: baseline;
   }
   .value-input {
-    width: 35%;
+    width: 70%;
     margin-left: 8px;
     margin-right: 10px
   }

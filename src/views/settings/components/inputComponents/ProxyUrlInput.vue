@@ -3,12 +3,12 @@
     <el-input
       :value="data.host"
       placeholder="host (e.g. localhost or 127.0.0.1)"
-      class="value-input"
+      class="proxy-url-value-input"
       @input="updateProxyUrl($event, 'host')"/> :
     <el-input
       :value="data.port"
       placeholder="port (e.g 9020 or 3090)"
-      class="value-input"
+      class="proxy-url-value-input"
       @input="updateProxyUrl($event, 'port')"/>
     <el-checkbox :value="data.socks5" class="name-input" @change="updateProxyUrl($event, 'socks5')">Socks5</el-checkbox>
   </div>
