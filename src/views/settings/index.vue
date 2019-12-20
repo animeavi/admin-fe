@@ -44,23 +44,20 @@
       <el-tab-pane :label="$t('settings.mailer')" lazy>
         <mailer/>
       </el-tab-pane>
-      <!--
-      <el-tab-pane :label="$t('settings.jobQueue')" lazy>
-        <job-queue/>
-      </el-tab-pane>
-
-      <el-tab-pane :label="$t('settings.mailer')" lazy>
-        <mailer/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.mediaProxy')" lazy>
-        <media-proxy/>
-      </el-tab-pane>
       <el-tab-pane :label="$t('settings.metadata')" lazy>
         <metadata/>
       </el-tab-pane>
       <el-tab-pane :label="$t('settings.mrf')" lazy>
         <mrf/>
       </el-tab-pane>
+      <!-- <el-tab-pane :label="$t('settings.mediaProxy')" lazy>
+        <media-proxy/>
+      </el-tab-pane> -->
+      <!--
+      <el-tab-pane :label="$t('settings.jobQueue')" lazy>
+        <job-queue/>
+      </el-tab-pane>
+
       <el-tab-pane :label="$t('settings.rateLimiters')" lazy>
         <rate-limiters/>
       </el-tab-pane>
