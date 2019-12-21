@@ -19,7 +19,7 @@ export default {
   name: 'ProxyUrlInput',
   props: {
     data: {
-      type: Object || Array,
+      type: [Object, Array],
       default: function() {
         return {}
       }

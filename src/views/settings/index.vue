@@ -38,6 +38,9 @@
       <el-tab-pane :label="$t('settings.instance')" name="instance">
         <instance/>
       </el-tab-pane>
+      <el-tab-pane :label="$t('settings.jobQueue')" lazy>
+        <job-queue/>
+      </el-tab-pane>
       <el-tab-pane :label="$t('settings.logger')" lazy>
         <logger/>
       </el-tab-pane>
@@ -50,14 +53,10 @@
       <el-tab-pane :label="$t('settings.mrf')" lazy>
         <mrf/>
       </el-tab-pane>
-      <!-- <el-tab-pane :label="$t('settings.mediaProxy')" lazy>
-        <media-proxy/>
-      </el-tab-pane> -->
       <!--
-      <el-tab-pane :label="$t('settings.jobQueue')" lazy>
-        <job-queue/>
+      <el-tab-pane :label="$t('settings.mediaProxy')" lazy>
+        <media-proxy/>
       </el-tab-pane>
-
       <el-tab-pane :label="$t('settings.rateLimiters')" lazy>
         <rate-limiters/>
       </el-tab-pane>

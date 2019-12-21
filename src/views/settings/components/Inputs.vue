@@ -55,31 +55,6 @@
       @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
       <template slot="prepend">:</template>
     </el-input>
-    <div v-if="setting.key === ':prune'">
-      <el-radio-group v-model="prune">
-        <el-radio label=":disabled">Disabled</el-radio>
-        <el-radio label=":maxlen">Limit-based</el-radio>
-        <el-radio label=":maxage">Time-based</el-radio>
-      </el-radio-group>
-      <el-form-item v-if="prune === ':maxlen'" label="max length" label-width="100" label-position="left">
-        <el-input-number
-          :value="data[setting.key][':maxlen']"
-          :min="0"
-          placeholder="1500"
-          size="large"
-          class="top-margin"
-          @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
-      </el-form-item>
-      <el-form-item v-if="prune === ':maxage'" label="max age" label-width="100" label-position="left">
-        <el-input-number
-          :value="data[setting.key][':maxage']"
-          :min="0"
-          placeholder="3600"
-          size="large"
-          class="top-margin"
-          @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key)"/>
-      </el-form-item>
-    </div>
     <div v-if="settingGroup.key === ':rate_limit'">
       <div v-if="!rateLimitAuthUsers">
         <el-input :value="rateLimitAllUsers[0]" placeholder="scale" class="scale-input" @input="parseRateLimiter($event, setting.key, 'scale', 'oneLimit', rateLimitAllUsers)"/> :
@@ -112,6 +87,7 @@
     <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
     <ssl-options-input v-if="setting.key === ':ssl_options'" :setting-group="settingGroup" :setting-parent="settingParent" :setting="setting" :data="data" :nested="true" :custom-label-width="'100px'"/>
     <backends-logger-input v-if="setting.key === ':backends'" :data="data" :setting-group="settingGroup" :setting="setting"/>
+    <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
     <!-------------------->
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
@@ -121,7 +97,7 @@
 import AceEditor from 'vue2-ace-editor'
 import 'brace/mode/elixir'
 import 'default-passive-events'
-import { AutoLinkerInput, BackendsLoggerInput, EditableKeywordInput, IconsInput, MascotsInput, ProxyUrlInput, SslOptionsInput } from './inputComponents'
+import { AutoLinkerInput, BackendsLoggerInput, EditableKeywordInput, IconsInput, MascotsInput, ProxyUrlInput, PruneInput, SslOptionsInput } from './inputComponents'
 
 export default {
   name: 'Inputs',
@@ -133,6 +109,7 @@ export default {
     IconsInput,
     MascotsInput,
     ProxyUrlInput,
+    PruneInput,
     SslOptionsInput
   },
   props: {
@@ -202,11 +179,6 @@ export default {
     },
     labelWidth() {
       return this.isMobile ? '100px' : '240px'
-    },
-    prune() {
-      return this.data[this.setting.key] === ':disabled'
-        ? ':disabled'
-        : Object.keys(this.data[this.setting.key])[0]
     },
     rateLimitAllUsers() {
       return this.data[this.setting.key] ? Object.entries(this.data[this.setting.key])[0] : [null, null]

@@ -15,13 +15,8 @@
 </template>
 
 <script>
-import Inputs from '../Inputs'
-
 export default {
   name: 'SslOptionsInput',
-  components: {
-    Inputs
-  },
   props: {
     customLabelWidth: {
       type: String,

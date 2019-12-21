@@ -16,7 +16,7 @@ export default {
   name: 'AutoLinkerInput',
   props: {
     data: {
-      type: Object || Array,
+      type: [Object, Array],
       default: function() {
         return {}
       }

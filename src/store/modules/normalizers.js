@@ -26,6 +26,8 @@ export const parseTuples = (tuples, key) => {
           return { key: name, value: icon[name], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }
         })
       }, [])
+    } else if (item.tuple[0] === ':prune') {
+      accum[item.tuple[0]] = item.tuple[1] === ':disabled' ? [item.tuple[1]] : item.tuple[1].tuple
     } else if (item.tuple[0] === ':proxy_url') {
       accum[item.tuple[0]] = parseProxyUrl(item.tuple[1])
     } else if ((item.tuple[0] === ':sslopts' && item.tuple[1].length === 0) || // should be removed
