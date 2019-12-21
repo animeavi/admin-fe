@@ -11,13 +11,4 @@ export async function fetchPeers(authHost, token) {
   })
 }
 
-export async function fetchInstanceInfo(authHost, token) {
-  return await request({
-    baseURL: baseName(authHost),
-    url: `/api/v1/instance`,
-    method: 'get',
-    headers: authHeaders(token)
-  })
-}
-
 const authHeaders = (token) => token ? { 'Authorization': `Bearer ${getToken()}` } : {}

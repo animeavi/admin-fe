@@ -48,7 +48,6 @@ Features, that can be disabled:
 - moderation log: `DISABLED_FEATURES: '["moderationLog"]'`
 - settings: `DISABLED_FEATURES: '["settings"]'`
 - emoji packs: `DISABLED_FEATURES: '["emojiPacks"]'`
-- stats: `DISABLED_FEATURES: '["stats"]'`
 
 Of course, you can disable multiple features just by adding to the array, e.g. `DISABLED_FEATURES: '["emojiPacks", "settings"]'` will have both emoji packs and settings disabled.
 

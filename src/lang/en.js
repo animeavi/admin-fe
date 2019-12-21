@@ -67,8 +67,7 @@ export default {
     reports: 'Reports',
     settings: 'Settings',
     moderationLog: 'Moderation Log',
-    'emoji-packs': 'Emoji packs',
-    stats: 'Stats'
+    'emoji-packs': 'Emoji packs'
   },
   navbar: {
     logOut: 'Log Out',
@@ -433,14 +432,5 @@ export default {
     emailSent: 'Invite was sent',
     submitFormError: 'There are invalid values in the form. Please fix them before continuing.',
     inviteViaEmailAlert: 'To send invite via email make sure to enable `invites_enabled` and disable `registrations_open`'
-  },
-  stats: {
-    stats: 'Instance stats',
-    statusCounts: 'Status counts',
-    all: 'All',
-    public: 'Public',
-    unlisted: 'Unlisted',
-    direct: 'Direct',
-    private: 'Private'
   }
 }

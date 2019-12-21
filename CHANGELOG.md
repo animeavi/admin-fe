@@ -25,7 +25,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Ability to confirm users' emails and resend confirmation emails
 - Report notes
 - Ability to moderate users on the statuses page
-- Stats page: status counts are displayed here
 
 ### Fixed
 
