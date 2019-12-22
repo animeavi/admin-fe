@@ -58,12 +58,12 @@ export default {
   methods: {
     addRowToEditableKeyword() {
       const updatedValue = [...this.data, { '': { value: '', id: this.generateID() }}]
-      this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key)
+      this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
     deleteEditableKeywordRow(element) {
       const deletedId = this.getId(element)
       const filteredValues = this.data.filter(element => Object.values(element)[0].id !== deletedId)
-      this.updateSetting(filteredValues, this.settingGroup.group, this.settingGroup.key, this.setting.key)
+      this.updateSetting(filteredValues, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
     generateID() {
       return `f${(~~(Math.random() * 1e8)).toString(16)}`
@@ -95,7 +95,7 @@ export default {
     updateSetting(value, group, key, input, type) {
       const updatedSettings = type !== 'map'
         ? value.reduce((acc, element) => {
-          return { ...acc, [Object.keys(element)[0]]: [['list', 'string'], Object.values(element)[0].value] }
+          return { ...acc, [Object.keys(element)[0]]: [['list'], Object.values(element)[0].value] }
         }, {})
         : value.reduce((acc, element) => {
           return { ...acc, [Object.keys(element)[0]]: Object.values(element)[0].value }

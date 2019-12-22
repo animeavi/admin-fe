@@ -75,7 +75,10 @@ const settings = {
         acc[group] = Object.keys(state.updatedSettings[group]).reduce((acc, key) => {
           if (!partialUpdate(group, key)) {
             const updated = Object.keys(state.settings[group][key]).reduce((acc, settingName) => {
-              acc[settingName] = ['', state.settings[group][key][settingName]]
+              const settingType = state.description
+                .find(element => element.group === group && element.key === key).children
+                .find(child => child.key === settingName).type
+              acc[settingName] = [settingType, state.settings[group][key][settingName]]
               return acc
             }, {})
             acc[key] = updated
@@ -86,7 +89,6 @@ const settings = {
         }, {})
         return acc
       }, {})
-
       const configs = Object.keys(updatedData).reduce((acc, group) => {
         return [...acc, ...wrapUpdatedSettings(group, updatedData[group], state.settings)]
       }, [])

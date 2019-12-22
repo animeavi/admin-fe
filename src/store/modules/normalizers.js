@@ -12,7 +12,7 @@ export const parseTuples = (tuples, key) => {
       accum[item.tuple[0]] = item.tuple[1].reduce((acc, mascot) => {
         return [...acc, { [mascot.tuple[0]]: { ...mascot.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
       }, [])
-    } else if (item.tuple[0] === ':groups' || item.tuple[0] === ':replace') {
+    } else if (item.tuple[0] === ':groups' || item.tuple[0] === ':replace' || item.tuple[0] === ':retries') {
       accum[item.tuple[0]] = item.tuple[1].reduce((acc, group) => {
         return [...acc, { [group.tuple[0]]: { value: group.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
       }, [])
@@ -91,10 +91,9 @@ const parseProxyUrl = value => {
 }
 
 export const partialUpdate = (group, key) => {
-  if ((group === ':pleroma' && key === ':ecto_repos') ||
-      (group === ':mime' && key === ':types') ||
-      (group === ':auto_linker' && key === ':opts') ||
-      (group === ':swarm' && key === ':node_blacklist')) {
+  if ((group === ':pleroma' && key === 'Oban') ||
+    (group === ':mime' && key === ':types') ||
+    (group === ':auto_linker' && key === ':opts')) {
     return false
   }
   return true
@@ -129,7 +128,7 @@ const wrapValues = (settings, currentState) => {
   return Object.keys(settings).map(setting => {
     const [type, value] = Array.isArray(settings[setting]) ? settings[setting] : ['', settings[setting]]
     if (type === 'keyword' || type.includes('keyword') || setting === ':replace') {
-      return { 'tuple': [setting, wrapValues(value)] }
+      return { 'tuple': [setting, wrapValues(value, currentState)] }
     } else if (type === 'atom' && value.length > 0) {
       return { 'tuple': [setting, `:${value}`] }
     } else if (type.includes('tuple') && Array.isArray(value)) {
@@ -149,7 +148,7 @@ const wrapValues = (settings, currentState) => {
       const ip = value.split('.').map(s => parseInt(s, 10))
       return { 'tuple': [setting, { 'tuple': ip }] }
     } else if (setting === ':ssl_options') {
-      return { 'tuple': [setting, wrapValues(value)] }
+      return { 'tuple': [setting, wrapValues(value, currentState)] }
     } else {
       return { 'tuple': [setting, value] }
     }
