@@ -3,6 +3,14 @@ const nonAtomsObjects = ['match_actor', ':match_actor']
 const objects = ['digest', 'pleroma_fe', 'masto_fe', 'poll_limits', 'styling']
 const objectParents = ['mascots']
 
+export const parseNonTuples = (key, value) => {
+  if (key === ':backends') {
+    const index = value.findIndex(el => Array.isArray(el) && el.includes(':ex_syslogger'))
+    const updated = value.map((el, i) => i === index ? ':ex_syslogger' : el)
+    return { value: updated }
+  }
+  return { value }
+}
 // REFACTOR
 export const parseTuples = (tuples, key) => {
   return tuples.reduce((accum, item) => {

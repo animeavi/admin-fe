@@ -1,5 +1,5 @@
 import { fetchDescription, fetchSettings, updateSettings, uploadMedia } from '@/api/settings'
-import { parseTuples, partialUpdate, valueHasTuples, wrapUpdatedSettings } from './normalizers'
+import { parseNonTuples, parseTuples, partialUpdate, valueHasTuples, wrapUpdatedSettings } from './normalizers'
 
 const settings = {
   state: {
@@ -38,7 +38,9 @@ const settings = {
     },
     SET_SETTINGS: (state, data) => {
       const newSettings = data.reduce((acc, { group, key, value }) => {
-        const parsedValue = valueHasTuples(key, value) ? { value } : parseTuples(value, key)
+        const parsedValue = valueHasTuples(key, value)
+          ? parseNonTuples(key, value)
+          : parseTuples(value, key)
         acc[group][key] = { ...acc[group][key], ...parsedValue }
         return acc
       }, state.settings)
