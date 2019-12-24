@@ -3,9 +3,23 @@ const nonAtomsObjects = ['match_actor', ':match_actor']
 const objects = ['digest', 'pleroma_fe', 'masto_fe', 'poll_limits', 'styling']
 const objectParents = ['mascots']
 
+const getValueWithoutKey = (key, [type, value]) => {
+  if (type === 'atom' && value.length > 1) {
+    return `:${value}`
+  } else if (key === ':backends') {
+    const index = value.findIndex(el => el === ':ex_syslogger')
+    const updatedArray = value.slice()
+    if (index !== -1) {
+      updatedArray[index] = { 'tuple': ['ExSyslogger', ':ex_syslogger'] }
+    }
+    return updatedArray
+  }
+  return value
+}
+
 export const parseNonTuples = (key, value) => {
   if (key === ':backends') {
-    const index = value.findIndex(el => Array.isArray(el) && el.includes(':ex_syslogger'))
+    const index = value.findIndex(el => typeof el === 'object' && el.tuple.includes(':ex_syslogger'))
     const updated = value.map((el, i) => i === index ? ':ex_syslogger' : el)
     return { value: updated }
   }
@@ -108,9 +122,10 @@ export const partialUpdate = (group, key) => {
 }
 
 export const valueHasTuples = (key, value) => {
-  const valueIsArrayOfNonObjects = Array.isArray(value) && value.length > 0 && typeof value[0] !== 'object'
+  const valueIsArrayOfNonObjects = Array.isArray(value) && value.length > 0 && value.every(el => typeof el !== 'object')
   return key === ':meta' ||
     key === ':types' ||
+    key === ':backends' ||
     key === ':compiled_template_engines' ||
     key === ':compiled_format_encoders' ||
     typeof value === 'string' ||
@@ -122,13 +137,9 @@ export const valueHasTuples = (key, value) => {
 
 export const wrapUpdatedSettings = (group, settings, currentState) => {
   return Object.keys(settings).map((key) => {
-    if (settings[key]._value) {
-      const value = settings[key]._value[0] === 'atom' && settings[key]._value[1].length > 1
-        ? `:${settings[key]._value[1]}`
-        : settings[key]._value[1]
-      return { group, key, value }
-    }
-    return { group, key, value: wrapValues(settings[key], currentState[group][key]) }
+    return settings[key]._value
+      ? { group, key, value: getValueWithoutKey(key, settings[key]._value) }
+      : { group, key, value: wrapValues(settings[key], currentState[group][key]) }
   })
 }
 

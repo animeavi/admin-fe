@@ -36,16 +36,7 @@ export default {
   },
   methods: {
     updateSetting(value, group, key, input, type) {
-      const updatedValue = () => {
-        const index = value.findIndex(el => el === ':ex_syslogger')
-        const updatedArray = value.slice()
-        if (index !== -1) {
-          updatedArray[index] = ['ExSyslogger', ':ex_syslogger']
-        }
-        return updatedArray
-      }
-
-      this.$store.dispatch('UpdateSettings', { group, key, input, value: updatedValue(), type })
+      this.$store.dispatch('UpdateSettings', { group, key, input, value, type })
       this.$store.dispatch('UpdateState', { group, key, input, value })
     }
   }
