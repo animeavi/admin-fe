@@ -28,8 +28,10 @@ export const parseNonTuples = (key, value) => {
 // REFACTOR
 export const parseTuples = (tuples, key) => {
   return tuples.reduce((accum, item) => {
-    if (key === 'rate_limit') {
-      accum[item.tuple[0]] = item.tuple[1]
+    if (key === ':rate_limit') {
+      accum[item.tuple[0]] = Array.isArray(item.tuple[1])
+        ? item.tuple[1].map(el => el.tuple)
+        : item.tuple[1].tuple
     } else if (item.tuple[0] === ':mascots') {
       accum[item.tuple[0]] = item.tuple[1].reduce((acc, mascot) => {
         return [...acc, { [mascot.tuple[0]]: { ...mascot.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
@@ -150,7 +152,7 @@ const wrapValues = (settings, currentState) => {
       return { 'tuple': [setting, wrapValues(value, currentState)] }
     } else if (type === 'atom' && value.length > 0) {
       return { 'tuple': [setting, `:${value}`] }
-    } else if (type.includes('tuple') && Array.isArray(value)) {
+    } else if (type.includes('tuple') && (type.includes('string') || type.includes('list') || type.includes('atom'))) {
       return { 'tuple': [setting, { 'tuple': value }] }
     } else if (type === 'map') {
       const mapValue = Object.keys(value).reduce((acc, key) => {

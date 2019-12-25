@@ -55,30 +55,6 @@
       @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
       <template slot="prepend">:</template>
     </el-input>
-    <div v-if="settingGroup.key === ':rate_limit'">
-      <div v-if="!rateLimitAuthUsers">
-        <el-input :value="rateLimitAllUsers[0]" placeholder="scale" class="scale-input" @input="parseRateLimiter($event, setting.key, 'scale', 'oneLimit', rateLimitAllUsers)"/> :
-        <el-input :value="rateLimitAllUsers[1]" placeholder="limit" class="limit-input" @input="parseRateLimiter($event, setting.key, 'limit', 'oneLimit', rateLimitAllUsers)"/>
-        <div class="limit-button-container">
-          <el-button icon="el-icon-plus" circle @click="toggleLimits([{ 'tuple': [null, null] }, { 'tuple': [null, null] }], setting.key)"/>
-          <p class="expl limit-expl">Set different limits for unauthenticated and authenticated users</p>
-        </div>
-      </div>
-      <div v-if="rateLimitAuthUsers">
-        <el-form-item label="Authenticated users:">
-          <el-input :value="rateLimitAuthUsers[0]" placeholder="scale" class="scale-input" @input="parseRateLimiter($event, setting.key, 'scale', 'authUserslimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/> :
-          <el-input :value="rateLimitAuthUsers[1]" placeholder="limit" class="limit-input" @input="parseRateLimiter($event, setting.key, 'limit', 'authUserslimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
-        </el-form-item>
-        <el-form-item label="Unauthenticated users:">
-          <el-input :value="rateLimitUnauthUsers[0]" placeholder="scale" class="scale-input" @input="parseRateLimiter($event, setting.key, 'scale', 'unauthUsersLimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/> :
-          <el-input :value="rateLimitUnauthUsers[1]" placeholder="limit" class="limit-input" @input="parseRateLimiter($event, setting.key, 'limit', 'unauthUsersLimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
-        </el-form-item>
-        <div class="limit-button-container">
-          <el-button icon="el-icon-minus" circle @click="toggleLimits({ 'tuple': [null, null] }, setting.key)"/>
-          <p class="expl limit-expl">Set limit for all users</p>
-        </div>
-      </div>
-    </div>
     <!-- special inputs -->
     <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <mascots-input v-if="setting.key === ':mascots'" :data="data" :setting-group="settingGroup" :setting="setting"/>
@@ -88,6 +64,7 @@
     <ssl-options-input v-if="setting.key === ':ssl_options'" :setting-group="settingGroup" :setting-parent="settingParent" :setting="setting" :data="data" :nested="true" :custom-label-width="'100px'"/>
     <backends-logger-input v-if="setting.key === ':backends'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
+    <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <!-------------------->
     <p class="expl">{{ setting.description }}</p>
   </el-form-item>
@@ -97,7 +74,7 @@
 import AceEditor from 'vue2-ace-editor'
 import 'brace/mode/elixir'
 import 'default-passive-events'
-import { AutoLinkerInput, BackendsLoggerInput, EditableKeywordInput, IconsInput, MascotsInput, ProxyUrlInput, PruneInput, SslOptionsInput } from './inputComponents'
+import { AutoLinkerInput, BackendsLoggerInput, EditableKeywordInput, IconsInput, MascotsInput, ProxyUrlInput, PruneInput, RateLimitInput, SslOptionsInput } from './inputComponents'
 
 export default {
   name: 'Inputs',
@@ -110,6 +87,7 @@ export default {
     MascotsInput,
     ProxyUrlInput,
     PruneInput,
+    RateLimitInput,
     SslOptionsInput
   },
   props: {
@@ -180,19 +158,6 @@ export default {
     labelWidth() {
       return this.isMobile ? '100px' : '240px'
     },
-    rateLimitAllUsers() {
-      return this.data[this.setting.key] ? Object.entries(this.data[this.setting.key])[0] : [null, null]
-    },
-    rateLimitAuthUsers() {
-      return Array.isArray(this.data[this.setting.key])
-        ? Object.entries(this.data[this.setting.key][1])[0]
-        : false
-    },
-    rateLimitUnauthUsers() {
-      return Array.isArray(this.data[this.setting.key])
-        ? Object.entries(this.data[this.setting.key][0])[0]
-        : false
-    },
     rewritePolicyValue() {
       return typeof this.data[this.setting.key] === 'string' ? [this.data[this.setting.key]] : this.data[this.setting.key]
     },
@@ -209,22 +174,6 @@ export default {
         (Array.isArray(type) && type.includes('keyword') && type.includes('integer')) ||
         type === 'map' ||
         (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
-    },
-    parseRateLimiter(value, input, typeOfInput, typeOfLimit, currentValue) {
-      if (typeOfLimit === 'oneLimit') {
-        const valueToSend = typeOfInput === 'scale' ? { 'tuple': [value, currentValue[1]] } : { 'tuple': [currentValue[0], value] }
-        this.updateSetting(valueToSend, this.settingGroup.group, 'rate_limit', input)
-      } else if (typeOfLimit === 'authUserslimit') {
-        const valueToSend = typeOfInput === 'scale'
-          ? [{ 'tuple': [currentValue[0][0], currentValue[0][1]] }, { 'tuple': [value, currentValue[1][1]] }]
-          : [{ 'tuple': [currentValue[0][0], currentValue[0][1]] }, { 'tuple': [currentValue[1][0], value] }]
-        this.updateSetting(valueToSend, this.settingGroup.group, 'rate_limit', input)
-      } else if (typeOfLimit === 'unauthUsersLimit') {
-        const valueToSend = typeOfInput === 'scale'
-          ? [{ 'tuple': [value, currentValue[0][1]] }, { 'tuple': [currentValue[1][0], currentValue[1][1]] }]
-          : [{ 'tuple': [currentValue[0][0], value] }, { 'tuple': [currentValue[1][0], currentValue[1][1]] }]
-        this.updateSetting(valueToSend, this.settingGroup.group, 'rate_limit', input)
-      }
     },
     processNestedData(value, group, key, parentInput, parentType, childInput, childType) {
       const valueExists = value => value[group] && value[group][key] && value[group][key][parentInput]
@@ -245,9 +194,6 @@ export default {
         (type.includes('regex') && type.includes('string')) ||
         this.setting.key === ':args'
       )
-    },
-    toggleLimits(value, input) {
-      this.updateSetting(value, this.settingGroup.group, 'rate_limit', input)
     },
     update(value, group, key, parent, input, type, nested) {
       nested
