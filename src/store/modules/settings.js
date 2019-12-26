@@ -1,4 +1,4 @@
-import { fetchDescription, fetchSettings, updateSettings, uploadMedia } from '@/api/settings'
+import { fetchDescription, fetchSettings, removeSettings, updateSettings, uploadMedia } from '@/api/settings'
 import { parseNonTuples, parseTuples, partialUpdate, valueHasTuples, wrapUpdatedSettings } from './normalizers'
 
 const settings = {
@@ -26,9 +26,6 @@ const settings = {
   mutations: {
     CLEAR_UPDATED_SETTINGS: (state) => {
       state.updatedSettings = {}
-    },
-    REWRITE_CONFIG: (state, { tab, data }) => {
-      state.settings[tab] = data
     },
     SET_DESCRIPTION: (state, data) => {
       state.description = data
@@ -69,8 +66,8 @@ const settings = {
       commit('SET_SETTINGS', response.data.configs)
       commit('SET_LOADING', false)
     },
-    RewriteConfig({ commit }, { tab, data }) {
-      commit('REWRITE_CONFIG', { tab, data })
+    async RemoveSetting({ getters }, configs) {
+      await removeSettings(configs, getters.authHost, getters.token)
     },
     async SubmitChanges({ getters, commit, state }) {
       const updatedData = Object.keys(state.updatedSettings).reduce((acc, group) => {
@@ -103,7 +100,14 @@ const settings = {
         ? commit('UPDATE_SETTINGS', { group, key, input, value, type })
         : commit('UPDATE_SETTINGS', { group, key: input, input: '_value', value, type })
     },
-    UpdateState({ commit }, { group, key, input, value }) {
+    UpdateState({ commit, dispatch, state }, { group, key, input, value }) {
+      if (key === 'Pleroma.Emails.Mailer' && input === ':adapter') {
+        const subkeys = Object.keys(state.settings[group][key]).filter(el => el !== ':adapter')
+        const emailsValue = subkeys.map(el => {
+          return { 'tuple': [el, state.settings[group][key][el]] }
+        })
+        dispatch('RemoveSetting', [{ group, key, value: emailsValue, delete: true, subkeys }])
+      }
       key
         ? commit('UPDATE_STATE', { group, key, input, value })
         : commit('UPDATE_STATE', { group, key: input, input: 'value', value })

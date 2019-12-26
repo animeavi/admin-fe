@@ -30,6 +30,16 @@ export async function updateSettings(configs, authHost, token) {
   })
 }
 
+export async function removeSettings(configs, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/config`,
+    method: 'post',
+    headers: authHeaders(token),
+    data: { configs }
+  })
+}
+
 export async function uploadMedia(file, authHost, token) {
   const formData = new FormData()
   formData.append('file', file)
