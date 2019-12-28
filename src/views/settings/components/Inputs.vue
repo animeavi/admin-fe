@@ -140,7 +140,7 @@ export default {
       }
     },
     inputValue() {
-      if ([':esshd', ':cors_plug', ':quack', ':http_signatures'].includes(this.settingGroup.group) &&
+      if ([':esshd', ':cors_plug', ':quack', ':http_signatures', ':tesla'].includes(this.settingGroup.group) &&
         this.data[this.setting.key]) {
         return this.setting.type === 'atom' && this.data[this.setting.key].value[0] === ':'
           ? this.data[this.setting.key].value.substr(1)
@@ -149,6 +149,8 @@ export default {
         this.setting.key === 'Pleroma.Web.Auth.Authenticator' ||
         this.setting.key === ':admin_token') {
         return this.data.value
+      } else if (this.settingGroup.group === ':mime' && this.settingParent.key === ':types') {
+        return this.data.value[this.setting.key]
       } else if (this.setting.type === 'atom') {
         return this.data[this.setting.key] && this.data[this.setting.key][0] === ':' ? this.data[this.setting.key].substr(1) : this.data[this.setting.key]
       } else {
@@ -177,12 +179,23 @@ export default {
     },
     processNestedData(value, group, key, parentInput, parentType, childInput, childType) {
       const valueExists = value => value[group] && value[group][key] && value[group][key][parentInput]
-      const updatedValueForState = valueExists(this.settings)
+      let updatedValueForState = valueExists(this.settings)
         ? { ...this.settings[group][key][parentInput], ...{ [childInput]: value }}
         : { [childInput]: value }
-      const updatedValue = valueExists(this.updatedSettings)
+      let updatedValue = valueExists(this.updatedSettings)
         ? { ...this.updatedSettings[group][key][parentInput][1], ...{ [childInput]: [childType, value] }}
         : { [childInput]: [childType, value] }
+
+      if (group === ':mime' && parentInput === ':types') {
+        updatedValueForState = { ...this.settings[group][parentInput].value, ...updatedValueForState }
+        updatedValue = {
+          ...Object.keys(this.settings[group][parentInput].value)
+            .reduce((acc, el) => {
+              return { ...acc, [el]: [['list', 'string'], this.settings[group][parentInput].value[el]] }
+            }, {}),
+          ...updatedValue
+        }
+      }
       this.$store.dispatch('UpdateSettings', { group, key, input: parentInput, value: updatedValue, type: parentType })
       this.$store.dispatch('UpdateState', { group, key, input: parentInput, value: updatedValueForState })
     },

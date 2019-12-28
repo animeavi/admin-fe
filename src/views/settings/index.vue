@@ -56,21 +56,20 @@
       <el-tab-pane :label="$t('settings.rateLimiters')" lazy>
         <rate-limiters/>
       </el-tab-pane>
-      <!--
-      <el-tab-pane :label="$t('settings.mediaProxy')" lazy>
-        <media-proxy/>
-      </el-tab-pane>
       <el-tab-pane :label="$t('settings.relays')" lazy>
         <relays/>
+      </el-tab-pane>
+      <el-tab-pane :label="$t('settings.other')" lazy>
+        <other/>
+      </el-tab-pane>
+      <!-- <el-tab-pane :label="$t('settings.mediaProxy')" lazy>
+        <media-proxy/>
       </el-tab-pane>
       <el-tab-pane :label="$t('settings.upload')" lazy>
         <upload/>
       </el-tab-pane>
       <el-tab-pane :label="$t('settings.webPush')" lazy>
         <web-push/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.other')" lazy>
-        <other/>
       </el-tab-pane> -->
     </el-tabs>
   </div>

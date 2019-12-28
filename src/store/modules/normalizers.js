@@ -13,6 +13,8 @@ const getValueWithoutKey = (key, [type, value]) => {
       updatedArray[index] = { 'tuple': ['ExSyslogger', ':ex_syslogger'] }
     }
     return updatedArray
+  } else if (key === ':types') {
+    return Object.keys(value).reduce((acc, key) => { return { ...acc, [key]: value[key][1] } }, {})
   }
   return value
 }
@@ -116,7 +118,6 @@ const parseProxyUrl = value => {
 
 export const partialUpdate = (group, key) => {
   if ((group === ':pleroma' && key === 'Oban') ||
-    (group === ':mime' && key === ':types') ||
     (group === ':auto_linker' && key === ':opts')) {
     return false
   }
