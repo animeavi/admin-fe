@@ -23,6 +23,9 @@
   .el-form-item {
     margin-right: 30px;
   }
+  .center-label label {
+    text-align: center;
+  }
   .el-input-group__prepend {
     padding-left: 10px;
     padding-right: 10px;
@@ -75,6 +78,9 @@
   }
   .icons-container {
     display: flex;
+  }
+  .keyword-inner-input {
+    margin-bottom: 22px;
   }
   label {
     white-space: nowrap;

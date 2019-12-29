@@ -1,5 +1,5 @@
 <template>
-  <el-form-item :label="setting.label" :label-width="customLabelWidth">
+  <el-form-item :label="setting.label" :label-width="customLabelWidth" :class="labelClass">
     <el-input
       v-if="setting.type === 'string'"
       :value="inputValue"
@@ -55,18 +55,29 @@
       @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
       <template slot="prepend">:</template>
     </el-input>
+    <div v-if="setting.type === 'keyword'">
+      <div v-for="subSetting in setting.children" :key="subSetting.key">
+        <inputs
+          :setting-group="settingGroup"
+          :setting="subSetting"
+          :data="data[setting.key]"
+          :custom-label-width="'100px'"
+          :label-class="'center-label'"
+          :input-class="'keyword-inner-input'"/>
+      </div>
+    </div>
     <!-- special inputs -->
     <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <mascots-input v-if="setting.key === ':mascots'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <icons-input v-if="setting.key === ':icons'" :data="data[':icons']" :setting-group="settingGroup" :setting="setting"/>
     <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
-    <ssl-options-input v-if="setting.key === ':ssl_options'" :setting-group="settingGroup" :setting-parent="settingParent" :setting="setting" :data="data" :nested="true" :custom-label-width="'100px'"/>
+    <!-- <ssl-options-input v-if="setting.key === ':ssl_options'" :setting-group="settingGroup" :setting-parent="settingParent" :setting="setting" :data="data" :nested="true" :custom-label-width="'100px'"/> -->
     <backends-logger-input v-if="setting.key === ':backends'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
     <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <!-------------------->
-    <p class="expl">{{ setting.description }}</p>
+    <p v-if="setting.type !== 'keyword'" :class="inputClass" class="expl">{{ setting.description }}</p>
   </el-form-item>
 </template>
 
@@ -103,6 +114,20 @@ export default {
       default: function() {
         return {}
       }
+    },
+    inputClass: {
+      type: String,
+      default: function() {
+        return 'input-class'
+      },
+      required: false
+    },
+    labelClass: {
+      type: String,
+      default: function() {
+        return 'label'
+      },
+      required: false
     },
     nested: {
       type: Boolean,
