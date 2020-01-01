@@ -4,7 +4,7 @@
       <el-form-item :label="subSetting.label" :label-width="customLabelWidth">
         <el-select
           v-if="subSetting.type.includes('list') && subSetting.type.includes('atom')"
-          :value="data[setting.key][subSetting.key]"
+          :value="subSettingValue(subSetting)"
           multiple
           filterable
           allow-create
@@ -63,6 +63,9 @@ export default {
   methods: {
     inputValue(key) {
       return this.data[this.setting.key][key]
+    },
+    subSettingValue(subSetting) {
+      return this.data && this.data[this.setting.key] ? this.data[this.setting.key][subSetting.key] : []
     },
     update(value, childKey) {
       const [group, key, parentKey, input] = [this.settingGroup.group, this.settingGroup.key, this.setting.key, this.settingParent.key]

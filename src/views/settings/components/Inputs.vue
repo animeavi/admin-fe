@@ -59,11 +59,13 @@
       <div v-for="subSetting in setting.children" :key="subSetting.key">
         <inputs
           :setting-group="settingGroup"
+          :setting-parent="[...settingParent, setting, subSetting]"
           :setting="subSetting"
           :data="data[setting.key]"
           :custom-label-width="'100px'"
           :label-class="'center-label'"
-          :input-class="'keyword-inner-input'"/>
+          :input-class="'keyword-inner-input'"
+          :nested="true"/>
       </div>
     </div>
     <!-- special inputs -->
@@ -86,6 +88,7 @@ import AceEditor from 'vue2-ace-editor'
 import 'brace/mode/elixir'
 import 'default-passive-events'
 import { AutoLinkerInput, BackendsLoggerInput, EditableKeywordInput, IconsInput, MascotsInput, ProxyUrlInput, PruneInput, RateLimitInput, SslOptionsInput } from './inputComponents'
+import { processNested } from '@/store/modules/normalizers'
 
 export default {
   name: 'Inputs',
@@ -148,9 +151,9 @@ export default {
       }
     },
     settingParent: {
-      type: Object,
+      type: Array,
       default: function() {
-        return {}
+        return []
       },
       required: false
     }
@@ -161,7 +164,7 @@ export default {
         return this.data[this.setting.key] ? this.data[this.setting.key][0] : ''
       },
       set: function(value) {
-        this.processNestedData([value], this.settingGroup.group, this.settingGroup.key, this.settingParent.key, this.settingParent.type, this.setting.key, this.setting.type)
+        this.processNestedData([value], this.settingGroup.group, this.settingGroup.key, this.settingParent[0].key, this.settingParent[0].type)
       }
     },
     inputValue() {
@@ -174,7 +177,7 @@ export default {
         this.setting.key === 'Pleroma.Web.Auth.Authenticator' ||
         this.setting.key === ':admin_token') {
         return this.data.value
-      } else if (this.settingGroup.group === ':mime' && this.settingParent.key === ':types') {
+      } else if (this.settingGroup.group === ':mime' && this.settingParent[0].key === ':types') {
         return this.data.value[this.setting.key]
       } else if (this.setting.type === 'atom') {
         return this.data[this.setting.key] && this.data[this.setting.key][0] === ':' ? this.data[this.setting.key].substr(1) : this.data[this.setting.key]
@@ -202,27 +205,15 @@ export default {
         type === 'map' ||
         (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
     },
-    processNestedData(value, group, key, parentInput, parentType, childInput, childType) {
-      const valueExists = value => value[group] && value[group][key] && value[group][key][parentInput]
-      let updatedValueForState = valueExists(this.settings)
-        ? { ...this.settings[group][key][parentInput], ...{ [childInput]: value }}
-        : { [childInput]: value }
-      let updatedValue = valueExists(this.updatedSettings)
-        ? { ...this.updatedSettings[group][key][parentInput][1], ...{ [childInput]: [childType, value] }}
-        : { [childInput]: [childType, value] }
+    processNestedData(value, group, parentKey, parents) {
+      const { valueForState,
+        valueForUpdatedSettings,
+        setting } = processNested(value, value, group, parentKey, parents.reverse(), this.settings, this.updatedSettings)
 
-      if (group === ':mime' && parentInput === ':types') {
-        updatedValueForState = { ...this.settings[group][parentInput].value, ...updatedValueForState }
-        updatedValue = {
-          ...Object.keys(this.settings[group][parentInput].value)
-            .reduce((acc, el) => {
-              return { ...acc, [el]: [['list', 'string'], this.settings[group][parentInput].value[el]] }
-            }, {}),
-          ...updatedValue
-        }
-      }
-      this.$store.dispatch('UpdateSettings', { group, key, input: parentInput, value: updatedValue, type: parentType })
-      this.$store.dispatch('UpdateState', { group, key, input: parentInput, value: updatedValueForState })
+      this.$store.dispatch('UpdateSettings',
+        { group, key: parentKey, input: setting.key, value: valueForUpdatedSettings, type: setting.type })
+      this.$store.dispatch('UpdateState',
+        { group, key: parentKey, input: setting.key, value: valueForState })
     },
     renderMultipleSelect(type) {
       return Array.isArray(type) && this.setting.key !== ':backends' && (
@@ -233,9 +224,9 @@ export default {
         this.setting.key === ':args'
       )
     },
-    update(value, group, key, parent, input, type, nested) {
+    update(value, group, key, parents, input, type, nested) {
       nested
-        ? this.processNestedData(value, group, key, parent.key, parent.type, input, type)
+        ? this.processNestedData(value, group, key, parents)
         : this.updateSetting(value, group, key, input, type)
     },
     updateSetting(value, group, key, input, type) {
