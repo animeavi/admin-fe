@@ -31,9 +31,14 @@ export const parseNonTuples = (key, value) => {
   if (key === ':backends') {
     const index = value.findIndex(el => typeof el === 'object' && el.tuple.includes(':ex_syslogger'))
     const updated = value.map((el, i) => i === index ? ':ex_syslogger' : el)
-    return { value: updated }
+    return updated
   }
-  return { value }
+  if (key === ':args') {
+    const index = value.findIndex(el => typeof el === 'object' && el.tuple.includes('implode'))
+    const updated = value.map((el, i) => i === index ? 'implode' : el)
+    return updated
+  }
+  return value
 }
 // REFACTOR
 export const parseTuples = (tuples, key) => {
@@ -64,9 +69,11 @@ export const parseTuples = (tuples, key) => {
       accum[item.tuple[0]] = item.tuple[1] === ':disabled' ? [item.tuple[1]] : item.tuple[1].tuple
     } else if (item.tuple[0] === ':proxy_url') {
       accum[item.tuple[0]] = parseProxyUrl(item.tuple[1])
-    } else if ((item.tuple[0] === ':sslopts' && item.tuple[1].length === 0) || // should be removed
+    } else if ((item.tuple[0] === ':sslopts' && item.tuple[1].length === 0) ||
       (item.tuple[0] === ':tlsopts' && item.tuple[1].length === 0)) {
       accum[item.tuple[0]] = {}
+    } else if (item.tuple[0] === ':args') {
+      accum[item.tuple[0]] = parseNonTuples(item.tuple[0], item.tuple[1])
     } else if (Array.isArray(item.tuple[1]) &&
       (typeof item.tuple[1][0] === 'object' && !Array.isArray(item.tuple[1][0])) && item.tuple[1][0]['tuple']) {
       accum[item.tuple[0]] = parseTuples(item.tuple[1], item.tuple[0])
@@ -193,7 +200,7 @@ export const wrapUpdatedSettings = (group, settings, currentState) => {
 
 const wrapValues = (settings, currentState) => {
   return Object.keys(settings).map(setting => {
-    const [type, value] = Array.isArray(settings[setting]) ? settings[setting] : ['', settings[setting]]
+    const [type, value] = settings[setting]
     if (type === 'keyword' || type.includes('keyword') || setting === ':replace') {
       return { 'tuple': [setting, wrapValues(value, currentState)] }
     } else if (type === 'atom' && value.length > 0) {
@@ -218,6 +225,13 @@ const wrapValues = (settings, currentState) => {
       return { 'tuple': [setting, { 'tuple': ip }] }
     } else if (setting === ':ssl_options') {
       return { 'tuple': [setting, wrapValues(value, currentState)] }
+    } else if (setting === ':args') {
+      const index = value.findIndex(el => el === 'implode')
+      const updatedArray = value.slice()
+      if (index !== -1) {
+        updatedArray[index] = { 'tuple': ['implode', '1'] }
+      }
+      return { 'tuple': [setting, updatedArray] }
     } else {
       return { 'tuple': [setting, value] }
     }

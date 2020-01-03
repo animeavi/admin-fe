@@ -36,7 +36,7 @@ const settings = {
     SET_SETTINGS: (state, data) => {
       const newSettings = data.reduce((acc, { group, key, value }) => {
         const parsedValue = valueHasTuples(key, value)
-          ? parseNonTuples(key, value)
+          ? { value: parseNonTuples(key, value) }
           : parseTuples(value, key)
         acc[group][key] = { ...acc[group][key], ...parsedValue }
         return acc

@@ -75,7 +75,7 @@
     <icons-input v-if="setting.key === ':icons'" :data="data[':icons']" :setting-group="settingGroup" :setting="setting"/>
     <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
     <!-- <ssl-options-input v-if="setting.key === ':ssl_options'" :setting-group="settingGroup" :setting-parent="settingParent" :setting="setting" :data="data" :nested="true" :custom-label-width="'100px'"/> -->
-    <backends-logger-input v-if="setting.key === ':backends'" :data="data" :setting-group="settingGroup" :setting="setting"/>
+    <multiple-select v-if="setting.key === ':backends' || setting.key === ':args'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
     <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <!-------------------->
@@ -87,7 +87,7 @@
 import AceEditor from 'vue2-ace-editor'
 import 'brace/mode/elixir'
 import 'default-passive-events'
-import { AutoLinkerInput, BackendsLoggerInput, EditableKeywordInput, IconsInput, MascotsInput, ProxyUrlInput, PruneInput, RateLimitInput, SslOptionsInput } from './inputComponents'
+import { AutoLinkerInput, EditableKeywordInput, IconsInput, MascotsInput, MultipleSelect, ProxyUrlInput, PruneInput, RateLimitInput, SslOptionsInput } from './inputComponents'
 import { processNested } from '@/store/modules/normalizers'
 
 export default {
@@ -95,10 +95,10 @@ export default {
   components: {
     editor: AceEditor,
     AutoLinkerInput,
-    BackendsLoggerInput,
     EditableKeywordInput,
     IconsInput,
     MascotsInput,
+    MultipleSelect,
     ProxyUrlInput,
     PruneInput,
     RateLimitInput,
@@ -216,7 +216,7 @@ export default {
         { group, key: parentKey, input: setting.key, value: valueForState })
     },
     renderMultipleSelect(type) {
-      return Array.isArray(type) && this.setting.key !== ':backends' && (
+      return Array.isArray(type) && this.setting.key !== ':backends' && this.setting.key !== ':args' && (
         type.includes('module') ||
         (type.includes('list') && type.includes('string')) ||
         (type.includes('list') && type.includes('atom')) ||
