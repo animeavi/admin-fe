@@ -136,25 +136,26 @@ export const processNested = (valueForState, valueForUpdatedSettings, group, par
   const [{ key, type }, ...otherParents] = parents
   const path = [group, parentKey, ...parents.reverse().map(parent => parent.key).slice(0, -1)]
 
-  const updatedValueForState = valueExists(settings, path)
+  let updatedValueForState = valueExists(settings, path)
     ? { ...getCurrentValue(settings[group][parentKey], parents.map(el => el.key).slice(0, -1)),
       ...{ [key]: valueForState }}
     : { [key]: valueForState }
-  const updatedValueForUpdatedSettings = valueExists(updatedSettings, path)
+  let updatedValueForUpdatedSettings = valueExists(updatedSettings, path)
     ? { ...getCurrentValue(updatedSettings[group][parentKey], parents.map(el => el.key).slice(0, -1))[1],
       ...{ [key]: [type, valueForUpdatedSettings] }}
     : { [key]: [type, valueForUpdatedSettings] }
 
-    // if (group === ':mime' && key === ':types') {
-  //   updatedValueForState = { ...settings[group][key].value, ...updatedValueForState }
-  //   updatedValueForUpdatedSettings = {
-  //     ...Object.keys(settings[group][key].value)
-  //       .reduce((acc, el) => {
-  //         return { ...acc, [el]: [['list', 'string'], settings[group][key].value[el]] }
-  //       }, {}),
-  //     ...updatedValueForUpdatedSettings
-  //   }
-  // }
+  if (group === ':mime' && parents[0].key === ':types') {
+    updatedValueForState = { ...settings[group][parents[0].key].value, ...updatedValueForState }
+    updatedValueForUpdatedSettings = {
+      ...Object.keys(settings[group][parents[0].key].value)
+        .reduce((acc, el) => {
+          return { ...acc, [el]: [type, settings[group][parents[0].key].value[el]] }
+        }, {}),
+      ...updatedValueForUpdatedSettings
+    }
+  }
+
   return otherParents.length === 1
     ? { valueForState: updatedValueForState, valueForUpdatedSettings: updatedValueForUpdatedSettings, setting: otherParents[0] }
     : processNested(updatedValueForState, updatedValueForUpdatedSettings, group, parentKey, otherParents, settings, updatedSettings)
