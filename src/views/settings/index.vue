@@ -47,6 +47,9 @@
       <el-tab-pane :label="$t('settings.mailer')" lazy>
         <mailer/>
       </el-tab-pane>
+      <!-- <el-tab-pane :label="$t('settings.mediaProxy')" lazy>
+        <media-proxy/>
+      </el-tab-pane> -->
       <el-tab-pane :label="$t('settings.metadata')" lazy>
         <metadata/>
       </el-tab-pane>
@@ -59,18 +62,17 @@
       <el-tab-pane :label="$t('settings.relays')" lazy>
         <relays/>
       </el-tab-pane>
+      <el-tab-pane :label="$t('settings.webPush')" lazy>
+        <web-push/>
+      </el-tab-pane>
       <el-tab-pane :label="$t('settings.other')" lazy>
         <other/>
       </el-tab-pane>
-      <!-- <el-tab-pane :label="$t('settings.mediaProxy')" lazy>
-        <media-proxy/>
-      </el-tab-pane>
+      <!--
       <el-tab-pane :label="$t('settings.upload')" lazy>
         <upload/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.webPush')" lazy>
-        <web-push/>
-      </el-tab-pane> -->
+       -->
     </el-tabs>
   </div>
 </template>

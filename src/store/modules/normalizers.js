@@ -134,18 +134,18 @@ export const partialUpdate = (group, key) => {
 
 export const processNested = (valueForState, valueForUpdatedSettings, group, parentKey, parents, settings, updatedSettings) => {
   const [{ key, type }, ...otherParents] = parents
-  const path = [group, parentKey, ...parents.reverse().map(parent => parent.key)]
+  const path = [group, parentKey, ...parents.reverse().map(parent => parent.key).slice(0, -1)]
 
   const updatedValueForState = valueExists(settings, path)
     ? { ...getCurrentValue(settings[group][parentKey], parents.map(el => el.key).slice(0, -1)),
       ...{ [key]: valueForState }}
     : { [key]: valueForState }
   const updatedValueForUpdatedSettings = valueExists(updatedSettings, path)
-    ? { ...getCurrentValue(settings[group][parentKey], parents.map(el => el.key).slice(0, -1)),
+    ? { ...getCurrentValue(updatedSettings[group][parentKey], parents.map(el => el.key).slice(0, -1))[1],
       ...{ [key]: [type, valueForUpdatedSettings] }}
     : { [key]: [type, valueForUpdatedSettings] }
 
-  // if (group === ':mime' && key === ':types') {
+    // if (group === ':mime' && key === ':types') {
   //   updatedValueForState = { ...settings[group][key].value, ...updatedValueForState }
   //   updatedValueForUpdatedSettings = {
   //     ...Object.keys(settings[group][key].value)
@@ -197,8 +197,10 @@ const wrapValues = (settings, currentState) => {
       return { 'tuple': [setting, wrapValues(value, currentState)] }
     } else if (type === 'atom' && value.length > 0) {
       return { 'tuple': [setting, `:${value}`] }
-    } else if (type.includes('tuple') && (type.includes('string') || type.includes('list') || type.includes('atom'))) {
+    } else if (type.includes('tuple') && (type.includes('string') || type.includes('atom'))) {
       return { 'tuple': [setting, { 'tuple': value }] }
+    } else if (type.includes('tuple') && type.includes('list')) {
+      return { 'tuple': [setting, value] }
     } else if (type === 'map') {
       const mapValue = Object.keys(value).reduce((acc, key) => {
         acc[key] = setting === ':match_actor' ? value[key] : value[key][1]

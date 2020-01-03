@@ -59,7 +59,7 @@
       <div v-for="subSetting in setting.children" :key="subSetting.key">
         <inputs
           :setting-group="settingGroup"
-          :setting-parent="[...settingParent, setting, subSetting]"
+          :setting-parent="[...settingParent, subSetting]"
           :setting="subSetting"
           :data="data[setting.key]"
           :custom-label-width="'100px'"
@@ -164,7 +164,7 @@ export default {
         return this.data[this.setting.key] ? this.data[this.setting.key][0] : ''
       },
       set: function(value) {
-        this.processNestedData([value], this.settingGroup.group, this.settingGroup.key, this.settingParent[0].key, this.settingParent[0].type)
+        this.processNestedData([value], this.settingGroup.group, this.settingGroup.key, this.settingParent)
       }
     },
     inputValue() {

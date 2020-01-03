@@ -33,7 +33,7 @@
           <div v-for="subSetting in setting.children" :key="subSetting.key">
             <inputs
               :setting-group="settingGroup"
-              :setting-parent="[setting]"
+              :setting-parent="[setting, subSetting]"
               :setting="subSetting"
               :data="data[setting.key]"
               :nested="true"/>
