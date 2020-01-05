@@ -1,20 +1,22 @@
 <template>
   <div class="setting-input">
     <el-input
-      :value="data.host"
+      :value="proxyUrlData.host"
       placeholder="host (e.g. localhost or 127.0.0.1)"
       class="proxy-url-value-input"
       @input="updateProxyUrl($event, 'host')"/> :
     <el-input
-      :value="data.port"
+      :value="proxyUrlData.port"
       placeholder="port (e.g 9020 or 3090)"
       class="proxy-url-value-input"
       @input="updateProxyUrl($event, 'port')"/>
-    <el-checkbox :value="data.socks5" class="name-input" @change="updateProxyUrl($event, 'socks5')">Socks5</el-checkbox>
+    <el-checkbox :value="proxyUrlData.socks5" class="name-input" @change="updateProxyUrl($event, 'socks5')">Socks5</el-checkbox>
   </div>
 </template>
 
 <script>
+import { processNested } from '@/store/modules/normalizers'
+
 export default {
   name: 'ProxyUrlInput',
   props: {
@@ -35,17 +37,35 @@ export default {
       default: function() {
         return {}
       }
+    },
+    parents: {
+      type: Array,
+      default: function() {
+        return []
+      },
+      required: false
+    }
+  },
+  computed: {
+    settings() {
+      return this.$store.state.settings.settings
+    },
+    updatedSettings() {
+      return this.$store.state.settings.updatedSettings
+    },
+    proxyUrlData() {
+      return Object.keys(this.data).length === 0 ? { socks5: false, host: null, port: null } : this.data
     }
   },
   methods: {
     updateProxyUrl(value, inputType) {
       let data
       if (inputType === 'socks5') {
-        data = { ...this.data, socks5: value }
+        data = { ...this.proxyUrlData, socks5: value }
       } else if (inputType === 'host') {
-        data = { ...this.data, host: value }
+        data = { ...this.proxyUrlData, host: value }
       } else {
-        data = { ...this.data, port: value }
+        data = { ...this.proxyUrlData, port: value }
       }
       this.updateSetting(data, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
@@ -53,8 +73,19 @@ export default {
       const assembledData = value.socks5
         ? [':socks5', value.host, value.port]
         : `${value.host}:${value.port}`
-      this.$store.dispatch('UpdateSettings', { group, key, input, value: assembledData, type })
-      this.$store.dispatch('UpdateState', { group, key, input, value })
+      if (this.parents.length > 0) {
+        const { valueForState,
+          valueForUpdatedSettings,
+          setting } = processNested(value, assembledData, group, key, this.parents.reverse(), this.settings, this.updatedSettings)
+
+        this.$store.dispatch('UpdateSettings',
+          { group, key, input: setting.key, value: valueForUpdatedSettings, type: setting.type })
+        this.$store.dispatch('UpdateState',
+          { group, key, input: setting.key, value: valueForState })
+      } else {
+        this.$store.dispatch('UpdateSettings', { group, key, input, value: assembledData, type })
+        this.$store.dispatch('UpdateState', { group, key, input, value })
+      }
     }
   }
 }

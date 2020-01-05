@@ -132,8 +132,7 @@ const parseProxyUrl = value => {
 }
 
 export const partialUpdate = (group, key) => {
-  if ((group === ':pleroma' && key === 'Oban') ||
-    (group === ':auto_linker' && key === ':opts')) {
+  if (group === ':auto_linker' && key === ':opts') {
     return false
   }
   return true
@@ -206,7 +205,9 @@ const wrapValues = (settings, currentState) => {
     } else if (type === 'atom' && value.length > 0) {
       return { 'tuple': [setting, `:${value}`] }
     } else if (type.includes('tuple') && (type.includes('string') || type.includes('atom'))) {
-      return { 'tuple': [setting, { 'tuple': value }] }
+      return typeof value === 'string'
+        ? { 'tuple': [setting, value] }
+        : { 'tuple': [setting, { 'tuple': value }] }
     } else if (type.includes('tuple') && type.includes('list')) {
       return { 'tuple': [setting, value] }
     } else if (type === 'map') {
