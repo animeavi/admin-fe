@@ -1,8 +1,3 @@
-const nonAtomsTuples = ['replace', ':replace']
-const nonAtomsObjects = ['match_actor', ':match_actor']
-const objects = ['digest', 'pleroma_fe', 'masto_fe', 'poll_limits', 'styling']
-const objectParents = ['mascots']
-
 const getCurrentValue = (object, keys) => {
   if (keys.length === 0) {
     return object
@@ -78,35 +73,17 @@ export const parseTuples = (tuples, key) => {
       (typeof item.tuple[1][0] === 'object' && !Array.isArray(item.tuple[1][0])) && item.tuple[1][0]['tuple']) {
       accum[item.tuple[0]] = parseTuples(item.tuple[1], item.tuple[0])
     } else if (Array.isArray(item.tuple[1])) {
-      nonAtomsTuples.includes(item.tuple[0])
-        ? accum[item.tuple[0]] = parseNonAtomTuples(item.tuple[1])
-        : accum[item.tuple[0]] = item.tuple[1]
+      accum[item.tuple[0]] = item.tuple[1]
     } else if (item.tuple[0] === ':ip') {
       accum[item.tuple[0]] = item.tuple[1].tuple.join('.')
     } else if (item.tuple[1] && typeof item.tuple[1] === 'object' && 'tuple' in item.tuple[1]) {
       accum[item.tuple[0]] = { [item.tuple[1].tuple[0]]: item.tuple[1].tuple[1] }
     } else if (item.tuple[1] && typeof item.tuple[1] === 'object') {
-      nonAtomsObjects.includes(item.tuple[0])
-        ? accum[item.tuple[0]] = parseNonAtomObject(item.tuple[1])
-        : accum[item.tuple[0]] = parseObject(item.tuple[1])
+      accum[item.tuple[0]] = parseObject(item.tuple[1])
     } else {
       accum[item.tuple[0]] = item.tuple[1]
     }
     return accum
-  }, {})
-}
-
-const parseNonAtomTuples = (tuples) => {
-  return tuples.reduce((acc, item) => {
-    acc[item.tuple[0]] = item.tuple[1]
-    return acc
-  }, {})
-}
-
-const parseNonAtomObject = (object) => {
-  return Object.keys(object).reduce((acc, item) => {
-    acc[item] = object[item]
-    return acc
   }, {})
 }
 
@@ -237,52 +214,4 @@ const wrapValues = (settings, currentState) => {
       return { 'tuple': [setting, value] }
     }
   })
-}
-
-const wrapNestedTuples = setting => {
-  return Object.keys(setting).reduce((acc, settingName) => {
-    const data = setting[settingName]
-    if (data === null || data === '') {
-      return acc
-    } else if (settingName === 'ip') {
-      const ip = data.split('.').map(s => parseInt(s, 10))
-      return [...acc, { 'tuple': [`:${settingName}`, { 'tuple': ip }] }]
-    } else if (Array.isArray(data) || typeof data !== 'object') {
-      return [...acc, { 'tuple': [`:${settingName}`, data] }]
-    } else if (nonAtomsObjects.includes(settingName)) {
-      return [...acc, { 'tuple': [`:${settingName}`, wrapNonAtomsObjects(data)] }]
-    } else if (objectParents.includes(settingName)) {
-      return [...acc, { 'tuple': [`:${settingName}`, wrapNestedObjects(data)] }]
-    } else if (objects.includes(settingName)) {
-      return [...acc, { 'tuple': [`:${settingName}`, wrapObjects(data)] }]
-    } else if (nonAtomsTuples.includes(settingName)) {
-      return [...acc, { 'tuple': [`:${settingName}`, wrapNonAtomsTuples(data)] }]
-    } else {
-      return [...acc, { 'tuple': [`:${settingName}`, wrapNestedTuples(data)] }]
-    }
-  }, [])
-}
-
-const wrapNonAtomsTuples = setting => {
-  return Object.keys(setting).reduce((acc, settingName) => {
-    return [...acc, { 'tuple': [`${settingName}`, setting[settingName]] }]
-  }, [])
-}
-
-const wrapNestedObjects = setting => {
-  return Object.keys(setting).reduce((acc, settingName) => {
-    return [...acc, { 'tuple': [`:${settingName}`, wrapObjects(setting[settingName])] }]
-  }, [])
-}
-
-const wrapNonAtomsObjects = setting => {
-  return Object.keys(setting).reduce((acc, settingName) => {
-    return { ...acc, [`${settingName}`]: setting[settingName] }
-  }, {})
-}
-
-const wrapObjects = setting => {
-  return Object.keys(setting).reduce((acc, settingName) => {
-    return { ...acc, [`:${settingName}`]: setting[settingName] }
-  }, {})
 }
