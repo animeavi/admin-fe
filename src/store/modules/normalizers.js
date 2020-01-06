@@ -64,9 +64,6 @@ export const parseTuples = (tuples, key) => {
       accum[item.tuple[0]] = item.tuple[1] === ':disabled' ? [item.tuple[1]] : item.tuple[1].tuple
     } else if (item.tuple[0] === ':proxy_url') {
       accum[item.tuple[0]] = parseProxyUrl(item.tuple[1])
-    } else if ((item.tuple[0] === ':sslopts' && item.tuple[1].length === 0) ||
-      (item.tuple[0] === ':tlsopts' && item.tuple[1].length === 0)) {
-      accum[item.tuple[0]] = {}
     } else if (item.tuple[0] === ':args') {
       accum[item.tuple[0]] = parseNonTuples(item.tuple[0], item.tuple[1])
     } else if (Array.isArray(item.tuple[1]) &&
