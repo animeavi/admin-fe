@@ -153,4 +153,66 @@ describe('Parse tuples', () => {
     })}
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
+
+  it('parse assets settings', () => {
+    const tuples = [
+      { tuple: [':mascots', [
+        { tuple: [':pleroma_fox_tan', { ':mime_type': 'image/png', ':url': '/images/pleroma-fox-tan-smol.png'}]},
+        { tuple: [':pleroma_fox_tan_shy', { ':mime_type': 'image/png', ':url': '/images/pleroma-fox-tan-shy.png'}]}
+      ]]},
+      { tuple: [':default_mascot', ':pleroma_fox_tan']}
+    ]
+    const expectedResult = {
+      ':default_mascot': ':pleroma_fox_tan',
+      ':mascots': [
+        { ':pleroma_fox_tan': { ':mime_type': 'image/png', ':url':'/images/pleroma-fox-tan-smol.png' }},
+        { ':pleroma_fox_tan_shy': { ':mime_type': 'image/png', ':url':'/images/pleroma-fox-tan-shy.png' }}]
+    }
+
+    const parsed = parseTuples(tuples, ':assets')
+    expect(typeof parsed).toBe('object')
+    expect(':default_mascot' in parsed).toBeTruthy()
+    expect(':mascots' in parsed).toBeTruthy()
+
+    const result = { ...parsed, ':mascots': parsed[':mascots'].map(el => {
+      const key = Object.keys(el)[0]
+      const { id, ...rest } = el[key]
+      return { [key]: rest }
+    })}
+    expect(_.isEqual(expectedResult, result)).toBeTruthy()
+  })
+
+  it('parse groups setting in emoji group', () => {
+    const tuples = [{ tuple: [':groups', [{ tuple: [':Custom', ['/emoji/*.png', '/emoji/**/*.png']]}]]}]
+    const expectedResult = { ':groups': [{ ':Custom': { value: ['/emoji/*.png', '/emoji/**/*.png']}}] }
+
+    const parsed = parseTuples(tuples, ':emoji')
+
+    expect(typeof parsed).toBe('object')
+    expect(':groups' in parsed).toBeTruthy()
+    const result = { ...parsed, ':groups': parsed[':groups'].map(el => {
+      const key = Object.keys(el)[0]
+      const { id, ...rest } = el[key]
+      return { [key]: rest }
+    })}
+    expect(_.isEqual(expectedResult, result)).toBeTruthy()
+  })
+
+  it('parse match_actor setting in mrf_subchain group', () => {
+    const tuples = [{ tuple: [":match_actor",
+      { '~r/https:\/\/example.com/s': ["Elixir.Pleroma.Web.ActivityPub.MRF.DropPolicy"]}]}]
+    const expectedResult = { ":match_actor":
+      [{ '~r/https:\/\/example.com/s': { value: ["Elixir.Pleroma.Web.ActivityPub.MRF.DropPolicy"] }}]}
+
+    const parsed = parseTuples(tuples, ':mrf_subchain')
+
+    expect(typeof parsed).toBe('object')
+    expect(':match_actor' in parsed).toBeTruthy()
+    const result = { ...parsed, ':match_actor': parsed[':match_actor'].map(el => {
+      const key = Object.keys(el)[0]
+      const { id, ...rest } = el[key]
+      return { [key]: rest }
+    })}
+    expect(_.isEqual(expectedResult, result)).toBeTruthy()
+  })
 })
