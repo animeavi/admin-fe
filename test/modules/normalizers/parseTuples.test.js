@@ -2,7 +2,7 @@ import { parseTuples } from '@/store/modules/normalizers'
 import _ from 'lodash'
 
 describe('Parse tuples', () => {
-  it('parse tuples', () => {
+  it('parses tuples', () => {
     const tuples = [
       { tuple: [':enabled', false]},
       { tuple: [':host', 'localhost']},
@@ -22,7 +22,7 @@ describe('Parse tuples', () => {
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
 
-  it('parse rate limiters setting', () => {
+  it('parses rate limiters setting', () => {
     const tuples = [
       { tuple: [':authentication', { tuple: [60000, 15] }]},
       { tuple: [':app_account_creation', [{ tuple: [100, 55] }, { tuple: [150, 10] }]]}
@@ -36,7 +36,7 @@ describe('Parse tuples', () => {
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
 
-  it('parse icons setting', () => {
+  it('parses icons setting', () => {
     const tuples = [
       { tuple: [':icons', [
         { ':src': '/static/logo.png', ':type': 'image/png' },
@@ -63,7 +63,7 @@ describe('Parse tuples', () => {
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
 
-  it('parse retries setting', () => {
+  it('parses retries setting', () => {
     const tuples = [
       { tuple: [':retries', [
         { tuple: [':federator_incoming', 5] },
@@ -80,7 +80,7 @@ describe('Parse tuples', () => {
     expect(parsed[':retries'][0][':federator_incoming']['value']).toEqual(5)
   })
 
-  it('parse objects', () => {
+  it('parses objects', () => {
     const tuples = [
       { tuple: [':pleroma_fe', { ':alwaysShowSubjectInput': true, ':redirectRootNoLogin': '/main/all' }]},
       { tuple: [':masto_fe', { ':showInstanceSpecificPanel': true }]}
@@ -94,7 +94,7 @@ describe('Parse tuples', () => {
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
 
-  it('parse ip', () => {
+  it('parses ip', () => {
     const tuples = [
       { tuple: [':enabled', false]},
       { tuple: [':ip', { tuple: [0, 0, 0, 0] }]}
@@ -105,7 +105,7 @@ describe('Parse tuples', () => {
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
 
-  it('parse prune setting that is a tuple', () => {
+  it('parses prune setting that is a tuple', () => {
     const tuples = [
       { tuple: [':verbose', false]},
       { tuple: [':prune', { tuple: [':maxlen', 1500] }]},
@@ -123,7 +123,7 @@ describe('Parse tuples', () => {
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
 
-  it('parse prune setting that is an atom', () => {
+  it('parses prune setting that is an atom', () => {
     const tuples = [{ tuple: [':prune', ':disabled' ]}]
     const expectedResult = { ':prune': [':disabled'] }
 
@@ -131,7 +131,7 @@ describe('Parse tuples', () => {
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
 
-  it('parse mrf_keyword settings', () => {
+  it('parses mrf_keyword settings', () => {
     const tuples = [
       { tuple: [':reject', ['foo', '~r/foo/iu'] ]},
       { tuple: [':replace', [{ tuple: ['pattern', 'replacement']}, { tuple: ['foo', 'bar']}]]}
@@ -154,7 +154,7 @@ describe('Parse tuples', () => {
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
 
-  it('parse assets settings', () => {
+  it('parses assets settings', () => {
     const tuples = [
       { tuple: [':mascots', [
         { tuple: [':pleroma_fox_tan', { ':mime_type': 'image/png', ':url': '/images/pleroma-fox-tan-smol.png'}]},
@@ -182,7 +182,7 @@ describe('Parse tuples', () => {
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
 
-  it('parse groups setting in emoji group', () => {
+  it('parses groups setting in emoji group', () => {
     const tuples = [{ tuple: [':groups', [{ tuple: [':Custom', ['/emoji/*.png', '/emoji/**/*.png']]}]]}]
     const expectedResult = { ':groups': [{ ':Custom': { value: ['/emoji/*.png', '/emoji/**/*.png']}}] }
 
@@ -198,7 +198,7 @@ describe('Parse tuples', () => {
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
 
-  it('parse match_actor setting in mrf_subchain group', () => {
+  it('parses match_actor setting in mrf_subchain group', () => {
     const tuples = [{ tuple: [":match_actor",
       { '~r/https:\/\/example.com/s': ["Elixir.Pleroma.Web.ActivityPub.MRF.DropPolicy"]}]}]
     const expectedResult = { ":match_actor":
@@ -213,6 +213,57 @@ describe('Parse tuples', () => {
       const { id, ...rest } = el[key]
       return { [key]: rest }
     })}
+    expect(_.isEqual(expectedResult, result)).toBeTruthy()
+  })
+
+  it('parses proxy_url', () => {
+    const proxyUrlNull = [{ tuple: [":proxy_url", null] }]
+    const proxyUrlTuple = [{ tuple: [":proxy_url", { tuple: [":socks5", ":localhost", 3090] }]}]
+    const proxyUrlString = [{ tuple: [":proxy_url", 'localhost:9020'] }]
+
+    const expectedProxyUrlNull = { ":proxy_url": { socks5: false, host: null, port: null }}
+    const expectedProxyUrlTuple = { ":proxy_url": { socks5: true, host: ":localhost", port: 3090 }}
+    const expectedProxyUrlString = { ":proxy_url": { socks5: false, host: 'localhost', port: '9020' }}
+
+    expect(_.isEqual(expectedProxyUrlNull, parseTuples(proxyUrlNull, ':http'))).toBeTruthy()
+    expect(_.isEqual(expectedProxyUrlTuple, parseTuples(proxyUrlTuple, ':http'))).toBeTruthy()
+    expect(_.isEqual(expectedProxyUrlString, parseTuples(proxyUrlString, ':http'))).toBeTruthy()
+  })
+
+  it('parses args setting in Pleroma.Upload.Filter.Mogrify', () => {
+    const tuples = [{ tuple: [":args", ["strip", { tuple: ["implode", "1"] }]]}]
+    const expectedResult = { ":args": ["strip", "implode"] }
+
+    const result = parseTuples(tuples, 'Pleroma.Upload.Filter.Mogrify')
+    expect(_.isEqual(expectedResult, result)).toBeTruthy()
+  })
+
+  it('parses nested tuples', () => {
+    const tuples = [{ tuple: [':proxy_opts', [
+      { tuple: [":redirect_on_failure", false] },
+      { tuple: [":max_body_length", 26214400] },
+      { tuple: [":http", [
+        { tuple: [":follow_redirect", true] },
+        { tuple: [":pool", ":media"] }
+      ]]},
+    ]]}]
+    const expectedResult = { ':proxy_opts': {
+      ":redirect_on_failure": false,
+      ":max_body_length": 26214400,
+      ":http": {
+        ":follow_redirect": true,
+        ":pool": ":media"
+      }
+    }}
+    const result = parseTuples(tuples, ':media_proxy')
+    expect(_.isEqual(expectedResult, result)).toBeTruthy()
+  })
+
+  it('parses tuples with arrays', () => {
+    const tuples = [{ tuple: [":ignore_hosts", []]}, { tuple: [":ignore_tld", ["local", "localdomain", "lan"]]}]
+    const expectedResult = { ":ignore_hosts": [], ":ignore_tld": ["local", "localdomain", "lan"] }
+
+    const result = parseTuples(tuples, ':rich_media')
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
 })

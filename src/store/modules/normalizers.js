@@ -73,8 +73,6 @@ export const parseTuples = (tuples, key) => {
       accum[item.tuple[0]] = item.tuple[1]
     } else if (item.tuple[0] === ':ip') {
       accum[item.tuple[0]] = item.tuple[1].tuple.join('.')
-    } else if (item.tuple[1] && typeof item.tuple[1] === 'object' && 'tuple' in item.tuple[1]) {
-      accum[item.tuple[0]] = { [item.tuple[1].tuple[0]]: item.tuple[1].tuple[1] }
     } else if (item.tuple[1] && typeof item.tuple[1] === 'object') {
       accum[item.tuple[0]] = parseObject(item.tuple[1])
     } else {
