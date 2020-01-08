@@ -1,5 +1,5 @@
 import { fetchDescription, fetchSettings, removeSettings, updateSettings, uploadMedia } from '@/api/settings'
-import { parseNonTuples, parseTuples, partialUpdate, valueHasTuples, wrapUpdatedSettings } from './normalizers'
+import { checkPartialUpdate, parseNonTuples, parseTuples, valueHasTuples, wrapUpdatedSettings } from './normalizers'
 
 const settings = {
   state: {
@@ -70,27 +70,11 @@ const settings = {
       await removeSettings(configs, getters.authHost, getters.token)
     },
     async SubmitChanges({ getters, commit, state }) {
-      const updatedData = Object.keys(state.updatedSettings).reduce((acc, group) => {
-        acc[group] = Object.keys(state.updatedSettings[group]).reduce((acc, key) => {
-          if (!partialUpdate(group, key)) {
-            const updated = Object.keys(state.settings[group][key]).reduce((acc, settingName) => {
-              const settingType = state.description
-                .find(element => element.group === group && element.key === key).children
-                .find(child => child.key === settingName).type
-              acc[settingName] = [settingType, state.settings[group][key][settingName]]
-              return acc
-            }, {})
-            acc[key] = updated
-            return acc
-          }
-          acc[key] = state.updatedSettings[group][key]
-          return acc
-        }, {})
-        return acc
-      }, {})
+      const updatedData = checkPartialUpdate(state.settings, state.updatedSettings, state.description)
       const configs = Object.keys(updatedData).reduce((acc, group) => {
         return [...acc, ...wrapUpdatedSettings(group, updatedData[group], state.settings)]
       }, [])
+
       const response = await updateSettings(configs, getters.authHost, getters.token)
       commit('SET_SETTINGS', response.data.configs)
       commit('CLEAR_UPDATED_SETTINGS')

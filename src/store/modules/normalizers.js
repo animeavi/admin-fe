@@ -1,3 +1,26 @@
+export const checkPartialUpdate = (settings, updatedSettings, description) => {
+  return Object.keys(updatedSettings).reduce((acc, group) => {
+    acc[group] = Object.keys(updatedSettings[group]).reduce((acc, key) => {
+      debugger
+      if (!partialUpdate(group, key)) {
+        const updated = Object.keys(settings[group][key]).reduce((acc, settingName) => {
+          const setting = description
+            .find(element => element.group === group && element.key === key).children
+            .find(child => child.key === settingName)
+          const type = setting ? setting.type : ''
+          acc[settingName] = [type, settings[group][key][settingName]]
+          return acc
+        }, {})
+        acc[key] = updated
+        return acc
+      }
+      acc[key] = updatedSettings[group][key]
+      return acc
+    }, {})
+    return acc
+  }, {})
+}
+
 const getCurrentValue = (object, keys) => {
   if (keys.length === 0) {
     return object
@@ -103,7 +126,7 @@ const parseProxyUrl = value => {
   return { socks5: false, host: null, port: null }
 }
 
-export const partialUpdate = (group, key) => {
+const partialUpdate = (group, key) => {
   if (group === ':auto_linker' && key === ':opts') {
     return false
   }
