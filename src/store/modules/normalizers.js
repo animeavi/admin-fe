@@ -1,7 +1,6 @@
 export const checkPartialUpdate = (settings, updatedSettings, description) => {
   return Object.keys(updatedSettings).reduce((acc, group) => {
     acc[group] = Object.keys(updatedSettings[group]).reduce((acc, key) => {
-      debugger
       if (!partialUpdate(group, key)) {
         const updated = Object.keys(settings[group][key]).reduce((acc, settingName) => {
           const setting = description
