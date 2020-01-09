@@ -1,19 +1,6 @@
 <template>
-  <el-form ref="vapidDetails" :model="vapidDetails" :label-width="labelWidth">
-    <el-form-item label="Subject">
-      <el-input :value="vapidDetails.subject" @input="updateSetting($event, 'vapid_details', 'subject')"/>
-      <p class="expl">A mailto link for the administrative contact. It’s best if this email is not a personal email address,
-      but rather a group email so that if a person leaves an organization, is unavailable for an extended period,
-      or otherwise can’t respond, someone else on the list can.</p>
-    </el-form-item>
-    <el-form-item label="Public key">
-      <el-input :value="vapidDetails.public_key" @input="updateSetting($event, 'vapid_details', 'public_key')"/>
-      <p class="expl">VAPID public key</p>
-    </el-form-item>
-    <el-form-item label="Private key">
-      <el-input :value="vapidDetails.private_key" @input="updateSetting($event, 'vapid_details', 'private_key')"/>
-      <p class="expl">VAPID private key</p>
-    </el-form-item>
+  <el-form v-if="!loading" ref="vapidDetailsData" :model="vapidDetailsData" :label-width="labelWidth">
+    <setting :setting-group="vapidDetails" :data="vapidDetailsData"/>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">Submit</el-button>
     </el-form-item>
@@ -22,26 +9,43 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import i18n from '@/lang'
+import Setting from './Setting'
 
 export default {
   name: 'WebPush',
+  components: { Setting },
   computed: {
     ...mapGetters([
-      'vapidDetails'
+      'settings'
     ]),
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '210px'
+      return this.isMobile ? '100px' : '240px'
+    },
+    loading() {
+      return this.settings.loading
+    },
+    vapidDetails() {
+      return this.settings.description.find(setting => setting.key === ':vapid_details')
+    },
+    vapidDetailsData() {
+      return this.settings.settings[':web_push_encryption'][':vapid_details']
     }
   },
   methods: {
-    updateSetting(value, tab, input) {
-      this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})
-    },
-    onSubmit() {
-      this.$store.dispatch('SubmitChanges')
+    async onSubmit() {
+      try {
+        await this.$store.dispatch('SubmitChanges')
+      } catch (e) {
+        return
+      }
+      this.$message({
+        type: 'success',
+        message: i18n.t('settings.success')
+      })
     }
   }
 }

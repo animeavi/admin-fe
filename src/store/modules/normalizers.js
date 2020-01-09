@@ -1,248 +1,234 @@
-const nonAtomsTuples = ['replace', ':replace']
-const nonAtomsObjects = ['match_actor', ':match_actor']
-const objects = ['digest', 'pleroma_fe', 'masto_fe', 'poll_limits', 'styling']
-const objectParents = ['mascots']
-const groups = {
-  'cors_plug': [
-    'credentials',
-    'expose',
-    'headers',
-    'max_age',
-    'methods'
-  ],
-  'esshd': [
-    'enabled',
-    'handler',
-    'password_authenticator',
-    'port',
-    'priv_dir'
-  ],
-  'logger': ['backends', 'console', 'ex_syslogger'],
-  'mime': ['types'],
-  'phoenix': ['format_encoders'],
-  'pleroma': [
-    'Pleroma.Captcha',
-    'Pleroma.Captcha.Kocaptcha',
-    'Pleroma.Emails.Mailer',
-    'Pleroma.Emails.UserEmail',
-    'Pleroma.Repo',
-    'Pleroma.ScheduledActivity',
-    'Pleroma.Upload',
-    'Pleroma.Upload.Filter.AnonymizeFilename',
-    'Pleroma.Upload.Filter.Mogrify',
-    'Pleroma.Uploaders.Local',
-    'Pleroma.Uploaders.MDII',
-    'Pleroma.Uploaders.S3',
-    'Pleroma.User',
-    'Pleroma.Web.Auth.Authenticator',
-    'Pleroma.Web.Endpoint',
-    'Pleroma.Web.Federator.RetryQueue',
-    'Pleroma.Web.Metadata',
-    'activitypub',
-    'admin_token',
-    'assets',
-    'auth',
-    'auto_linker',
-    'chat',
-    'database',
-    'ecto_repos',
-    'email_notifications',
-    'emoji',
-    'env',
-    'fetch_initial_posts',
-    'frontend_configurations',
-    'gopher',
-    'hackney_pools',
-    'http',
-    'http_security',
-    'instance',
-    'ldap',
-    'markup',
-    'media_proxy',
-    'mrf_hellthread',
-    'mrf_keyword',
-    'mrf_mention',
-    'mrf_normalize_markup',
-    'mrf_rejectnonpublic',
-    'mrf_simple',
-    'mrf_subchain',
-    'mrf_user_allowlist',
-    'mrf_vocabulary',
-    'oauth2',
-    'rate_limit',
-    'rich_media',
-    'suggestions',
-    'uri_schemes',
-    'user'
-  ],
-  'pleroma_job_queue': ['queues'],
-  'quack': ['level', 'meta', 'webhook_url'],
-  'tesla': ['adapter'],
-  'ueberauth': [
-    'Ueberauth',
-    'Ueberauth.Strategy.Facebook.OAuth',
-    'Ueberauth.Strategy.Google.OAuth',
-    'Ueberauth.Strategy.Microsoft.OAuth',
-    'Ueberauth.Strategy.Twitter.OAuth'
-  ],
-  'web_push_encryption': ['vapid_details']
+export const checkPartialUpdate = (settings, updatedSettings, description) => {
+  return Object.keys(updatedSettings).reduce((acc, group) => {
+    acc[group] = Object.keys(updatedSettings[group]).reduce((acc, key) => {
+      if (!partialUpdate(group, key)) {
+        const updated = Object.keys(settings[group][key]).reduce((acc, settingName) => {
+          const setting = description
+            .find(element => element.group === group && element.key === key).children
+            .find(child => child.key === settingName)
+          const type = setting ? setting.type : ''
+          acc[settingName] = [type, settings[group][key][settingName]]
+          return acc
+        }, {})
+        acc[key] = updated
+        return acc
+      }
+      acc[key] = updatedSettings[group][key]
+      return acc
+    }, {})
+    return acc
+  }, {})
 }
 
-export const filterIgnored = (settings, ignored) => {
-  if (settings.enabled.value === true) {
-    return settings
+const getCurrentValue = (object, keys) => {
+  if (keys.length === 0) {
+    return object
   }
-
-  return ignored.reduce((acc, name) => {
-    const { [name]: ignored, ...newAcc } = acc
-
-    return newAcc
-  }, settings)
+  const [currentKey, ...restKeys] = keys
+  return getCurrentValue(object[currentKey], restKeys)
 }
 
+const getValueWithoutKey = (key, [type, value]) => {
+  if (type === 'atom' && value.length > 1) {
+    return `:${value}`
+  } else if (key === ':backends') {
+    const index = value.findIndex(el => el === ':ex_syslogger')
+    const updatedArray = value.slice()
+    if (index !== -1) {
+      updatedArray[index] = { 'tuple': ['ExSyslogger', ':ex_syslogger'] }
+    }
+    return updatedArray
+  } else if (key === ':types') {
+    return Object.keys(value).reduce((acc, key) => { return { ...acc, [key]: value[key][1] } }, {})
+  }
+  return value
+}
+
+export const parseNonTuples = (key, value) => {
+  if (key === ':backends') {
+    const index = value.findIndex(el => typeof el === 'object' && el.tuple.includes(':ex_syslogger'))
+    const updated = value.map((el, i) => i === index ? ':ex_syslogger' : el)
+    return updated
+  }
+  if (key === ':args') {
+    const index = value.findIndex(el => typeof el === 'object' && el.tuple.includes('implode'))
+    const updated = value.map((el, i) => i === index ? 'implode' : el)
+    return updated
+  }
+  return value
+}
 // REFACTOR
 export const parseTuples = (tuples, key) => {
   return tuples.reduce((accum, item) => {
-    if (key === 'rate_limit') {
-      accum[item.tuple[0].substr(1)] = item.tuple[1]
+    if (key === ':rate_limit') {
+      accum[item.tuple[0]] = Array.isArray(item.tuple[1])
+        ? item.tuple[1].map(el => el.tuple)
+        : item.tuple[1].tuple
+    } else if (item.tuple[0] === ':mascots') {
+      accum[item.tuple[0]] = item.tuple[1].reduce((acc, mascot) => {
+        return [...acc, { [mascot.tuple[0]]: { ...mascot.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
+      }, [])
+    } else if (item.tuple[0] === ':groups' || item.tuple[0] === ':replace' || item.tuple[0] === ':retries') {
+      accum[item.tuple[0]] = item.tuple[1].reduce((acc, group) => {
+        return [...acc, { [group.tuple[0]]: { value: group.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
+      }, [])
+    } else if (item.tuple[0] === ':match_actor') {
+      accum[item.tuple[0]] = Object.keys(item.tuple[1]).reduce((acc, regex) => {
+        return [...acc, { [regex]: { value: item.tuple[1][regex], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
+      }, [])
+    } else if (item.tuple[0] === ':icons') {
+      accum[item.tuple[0]] = item.tuple[1].map(icon => {
+        return Object.keys(icon).map(name => {
+          return { key: name, value: icon[name], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }
+        })
+      }, [])
+    } else if (item.tuple[0] === ':prune') {
+      accum[item.tuple[0]] = item.tuple[1] === ':disabled' ? [item.tuple[1]] : item.tuple[1].tuple
+    } else if (item.tuple[0] === ':proxy_url') {
+      accum[item.tuple[0]] = parseProxyUrl(item.tuple[1])
+    } else if (item.tuple[0] === ':args') {
+      accum[item.tuple[0]] = parseNonTuples(item.tuple[0], item.tuple[1])
     } else if (Array.isArray(item.tuple[1]) &&
-       (typeof item.tuple[1][0] === 'object' && !Array.isArray(item.tuple[1][0])) && item.tuple[1][0]['tuple']) {
-      nonAtomsTuples.includes(item.tuple[0])
-        ? accum[item.tuple[0].substr(1)] = parseNonAtomTuples(item.tuple[1])
-        : accum[item.tuple[0].substr(1)] = parseTuples(item.tuple[1])
+      (typeof item.tuple[1][0] === 'object' && !Array.isArray(item.tuple[1][0])) && item.tuple[1][0]['tuple']) {
+      accum[item.tuple[0]] = parseTuples(item.tuple[1], item.tuple[0])
     } else if (Array.isArray(item.tuple[1])) {
-      accum[item.tuple[0].substr(1)] = item.tuple[1]
-    } else if (item.tuple[1] && typeof item.tuple[1] === 'object' && 'tuple' in item.tuple[1]) {
-      accum[item.tuple[0].substr(1)] = item.tuple[1]['tuple'].join('.')
+      accum[item.tuple[0]] = item.tuple[1]
+    } else if (item.tuple[0] === ':ip') {
+      accum[item.tuple[0]] = item.tuple[1].tuple.join('.')
     } else if (item.tuple[1] && typeof item.tuple[1] === 'object') {
-      nonAtomsObjects.includes(item.tuple[0])
-        ? accum[item.tuple[0].substr(1)] = parseNonAtomObject(item.tuple[1])
-        : accum[item.tuple[0].substr(1)] = parseObject(item.tuple[1])
+      accum[item.tuple[0]] = parseObject(item.tuple[1])
     } else {
-      key === 'mrf_user_allowlist'
-        ? accum[item.tuple[0]] = item.tuple[1]
-        : accum[item.tuple[0].substr(1)] = item.tuple[1]
+      accum[item.tuple[0]] = item.tuple[1]
     }
     return accum
   }, {})
 }
 
-const parseNonAtomTuples = (tuples) => {
-  return tuples.reduce((acc, item) => {
-    acc[item.tuple[0]] = item.tuple[1]
-    return acc
-  }, {})
-}
-
-const parseNonAtomObject = (object) => {
+const parseObject = object => {
   return Object.keys(object).reduce((acc, item) => {
     acc[item] = object[item]
     return acc
   }, {})
 }
 
-const parseObject = (object) => {
-  return Object.keys(object).reduce((acc, item) => {
-    acc[item.substr(1)] = object[item]
-    return acc
-  }, {})
+const parseProxyUrl = value => {
+  if (value && !Array.isArray(value) &&
+    typeof value === 'object' &&
+    value.tuple.length === 3 &&
+    value.tuple[0] === ':socks5') {
+    const [, host, port] = value.tuple
+    return { socks5: true, host, port }
+  } else if (typeof value === 'string') {
+    const [host, port] = value.split(':')
+    return { socks5: false, host, port }
+  }
+  return { socks5: false, host: null, port: null }
+}
+
+const partialUpdate = (group, key) => {
+  if (group === ':auto_linker' && key === ':opts') {
+    return false
+  }
+  return true
+}
+
+export const processNested = (valueForState, valueForUpdatedSettings, group, parentKey, parents, settings, updatedSettings) => {
+  const [{ key, type }, ...otherParents] = parents
+  const path = [group, parentKey, ...parents.reverse().map(parent => parent.key).slice(0, -1)]
+
+  let updatedValueForState = valueExists(settings, path)
+    ? { ...getCurrentValue(settings[group][parentKey], parents.map(el => el.key).slice(0, -1)),
+      ...{ [key]: valueForState }}
+    : { [key]: valueForState }
+  let updatedValueForUpdatedSettings = valueExists(updatedSettings, path)
+    ? { ...getCurrentValue(updatedSettings[group][parentKey], parents.map(el => el.key).slice(0, -1))[1],
+      ...{ [key]: [type, valueForUpdatedSettings] }}
+    : { [key]: [type, valueForUpdatedSettings] }
+
+  if (group === ':mime' && parents[0].key === ':types') {
+    updatedValueForState = { ...settings[group][parents[0].key].value, ...updatedValueForState }
+    updatedValueForUpdatedSettings = {
+      ...Object.keys(settings[group][parents[0].key].value)
+        .reduce((acc, el) => {
+          return { ...acc, [el]: [type, settings[group][parents[0].key].value[el]] }
+        }, {}),
+      ...updatedValueForUpdatedSettings
+    }
+  }
+
+  return otherParents.length === 1
+    ? { valueForState: updatedValueForState, valueForUpdatedSettings: updatedValueForUpdatedSettings, setting: otherParents[0] }
+    : processNested(updatedValueForState, updatedValueForUpdatedSettings, group, parentKey, otherParents, settings, updatedSettings)
+}
+
+const valueExists = (value, path) => {
+  if (path.length === 0) {
+    return true
+  }
+  const [element, ...rest] = path
+  return value[element] ? valueExists(value[element], rest) : false
 }
 
 export const valueHasTuples = (key, value) => {
-  const valueIsArrayOfNonObjects = Array.isArray(value) && value.length > 0 && typeof value[0] !== 'object'
-  return key === 'meta' ||
-    key === 'types' ||
+  const valueIsArrayOfNonObjects = Array.isArray(value) && value.length > 0 && value.every(el => typeof el !== 'object')
+  return key === ':meta' ||
+    key === ':types' ||
+    key === ':backends' ||
+    key === ':compiled_template_engines' ||
+    key === ':compiled_format_encoders' ||
     typeof value === 'string' ||
     typeof value === 'number' ||
     typeof value === 'boolean' ||
+    value === null ||
     valueIsArrayOfNonObjects
 }
 
-// REFACTOR
-export const wrapConfig = settings => {
-  return Object.keys(settings).map(config => {
-    const group = getGroup(config)
-    const key = config.startsWith('Pleroma') || config.startsWith('Ueberauth') ? config : `:${config}`
-    const value = (settings[config]['value'] !== undefined)
-      ? settings[config]['value']
-      : Object.keys(settings[config]).reduce((acc, settingName) => {
-        const data = settings[config][settingName]
-        if (data === null || data === '') {
-          return acc
-        } else if (key === ':rate_limit') {
-          return [...acc, { 'tuple': [`:${settingName}`, data] }]
-        } else if (settingName === 'ip') {
-          const ip = data.split('.').map(s => parseInt(s, 10))
-          return [...acc, { 'tuple': [`:${settingName}`, { 'tuple': ip }] }]
-        } else if (Array.isArray(data) || typeof data !== 'object') {
-          return key === ':mrf_user_allowlist'
-            ? [...acc, { 'tuple': [`${settingName}`, data] }]
-            : [...acc, { 'tuple': [`:${settingName}`, data] }]
-        } else if (nonAtomsObjects.includes(settingName)) {
-          return [...acc, { 'tuple': [`:${settingName}`, wrapNonAtomsObjects(data)] }]
-        } else if (objectParents.includes(settingName)) {
-          return [...acc, { 'tuple': [`:${settingName}`, wrapNestedObjects(data)] }]
-        } else if (objects.includes(settingName)) {
-          return [...acc, { 'tuple': [`:${settingName}`, wrapObjects(data)] }]
-        } else if (nonAtomsTuples.includes(settingName)) {
-          return [...acc, { 'tuple': [`:${settingName}`, wrapNonAtomsTuples(data)] }]
-        } else {
-          return [...acc, { 'tuple': [`:${settingName}`, wrapNestedTuples(data)] }]
-        }
-      }, [])
-    return { group, key, value }
+export const wrapUpdatedSettings = (group, settings, currentState) => {
+  return Object.keys(settings).map((key) => {
+    return settings[key]._value
+      ? { group, key, value: getValueWithoutKey(key, settings[key]._value) }
+      : { group, key, value: wrapValues(settings[key], currentState[group][key]) }
   })
 }
 
-const wrapNestedTuples = setting => {
-  return Object.keys(setting).reduce((acc, settingName) => {
-    const data = setting[settingName]
-    if (data === null || data === '') {
-      return acc
-    } else if (settingName === 'ip') {
-      const ip = data.split('.').map(s => parseInt(s, 10))
-      return [...acc, { 'tuple': [`:${settingName}`, { 'tuple': ip }] }]
-    } else if (Array.isArray(data) || typeof data !== 'object') {
-      return [...acc, { 'tuple': [`:${settingName}`, data] }]
-    } else if (nonAtomsObjects.includes(settingName)) {
-      return [...acc, { 'tuple': [`:${settingName}`, wrapNonAtomsObjects(data)] }]
-    } else if (objectParents.includes(settingName)) {
-      return [...acc, { 'tuple': [`:${settingName}`, wrapNestedObjects(data)] }]
-    } else if (objects.includes(settingName)) {
-      return [...acc, { 'tuple': [`:${settingName}`, wrapObjects(data)] }]
-    } else if (nonAtomsTuples.includes(settingName)) {
-      return [...acc, { 'tuple': [`:${settingName}`, wrapNonAtomsTuples(data)] }]
+const wrapValues = (settings, currentState) => {
+  return Object.keys(settings).map(setting => {
+    const [type, value] = settings[setting]
+    if (type === 'keyword' || type.includes('keyword') || setting === ':replace') {
+      return { 'tuple': [setting, wrapValues(value, currentState)] }
+    } else if (type === 'atom' && value.length > 0) {
+      return { 'tuple': [setting, `:${value}`] }
+    } else if (type.includes('tuple') && (type.includes('string') || type.includes('atom'))) {
+      return typeof value === 'string'
+        ? { 'tuple': [setting, value] }
+        : { 'tuple': [setting, { 'tuple': value }] }
+    } else if (type.includes('tuple') && type.includes('list')) {
+      return { 'tuple': [setting, value] }
+    } else if (type === 'map') {
+      const mapValue = Object.keys(value).reduce((acc, key) => {
+        acc[key] = setting === ':match_actor' ? value[key] : value[key][1]
+        return acc
+      }, {})
+      const mapCurrentState = setting === ':match_actor'
+        ? currentState[setting].reduce((acc, element) => {
+          return { ...acc, ...{ [Object.keys(element)[0]]: Object.values(element)[0].value }}
+        }, {})
+        : currentState[setting]
+      return { 'tuple': [setting, { ...mapCurrentState, ...mapValue }] }
+    } else if (setting === ':ip') {
+      const ip = value.split('.').map(s => parseInt(s, 10))
+      return { 'tuple': [setting, { 'tuple': ip }] }
+    } else if (setting === ':ssl_options') {
+      return { 'tuple': [setting, wrapValues(value, currentState)] }
+    } else if (setting === ':args') {
+      const index = value.findIndex(el => el === 'implode')
+      const updatedArray = value.slice()
+      if (index !== -1) {
+        updatedArray[index] = { 'tuple': ['implode', '1'] }
+      }
+      return { 'tuple': [setting, updatedArray] }
     } else {
-      return [...acc, { 'tuple': [`:${settingName}`, wrapNestedTuples(data)] }]
+      return { 'tuple': [setting, value] }
     }
-  }, [])
+  })
 }
-
-const wrapNonAtomsTuples = setting => {
-  return Object.keys(setting).reduce((acc, settingName) => {
-    return [...acc, { 'tuple': [`${settingName}`, setting[settingName]] }]
-  }, [])
-}
-
-const wrapNestedObjects = setting => {
-  return Object.keys(setting).reduce((acc, settingName) => {
-    return [...acc, { 'tuple': [`:${settingName}`, wrapObjects(setting[settingName])] }]
-  }, [])
-}
-
-const wrapNonAtomsObjects = setting => {
-  return Object.keys(setting).reduce((acc, settingName) => {
-    return { ...acc, [`${settingName}`]: setting[settingName] }
-  }, {})
-}
-
-const wrapObjects = setting => {
-  return Object.keys(setting).reduce((acc, settingName) => {
-    return { ...acc, [`:${settingName}`]: setting[settingName] }
-  }, {})
-}
-
-const getGroup = key => {
-  return Object.keys(groups).find(i => groups[i].includes(key))
-}
-

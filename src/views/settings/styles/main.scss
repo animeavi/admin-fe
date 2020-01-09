@@ -8,8 +8,27 @@
     font-family: monospace;
     padding: 0 3px 0 3px;
   }
+  .description {
+    font-size: 14px;
+    color: #606266;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
+    font-weight: 700;
+    line-height: 20px;
+    margin: 0 0 14px 0;
+  }
+  .description-container {
+    overflow-wrap: break-word;
+    margin-bottom: 0;
+  }
   .el-form-item {
     margin-right: 30px;
+  }
+  .center-label label {
+    text-align: center;
+  }
+  .el-input-group__prepend {
+    padding-left: 10px;
+    padding-right: 10px;
   }
   .el-select {
     width: 100%;
@@ -26,6 +45,47 @@
   }
   .highlight {
   background-color: #e6e6e6;
+  }
+  .icons-button-container {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .icons-button-desc {
+    font-size: 14px;
+    color: #606266;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
+    margin-left: 5px;
+  }
+  .icon-container {
+    flex-direction: column;
+    width: 95%;
+  }
+  .icon-values-container {
+    display: flex;
+    margin: 0 10px 10px 0;
+  }
+  .icon-key-input {
+    width: 30%;
+    margin-right: 8px
+  }
+  .icon-minus-button {
+    width: 36px;
+    height: 36px;
+  }
+  .icon-value-input {
+    width: 70%;
+    margin-left: 8px;
+  }
+  .icons-container {
+    display: flex;
+  }
+  .keyword-inner-input {
+    margin-bottom: 22px;
+  }
+  label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .limit-button-container {
     display: flex;
@@ -61,21 +121,14 @@
     width: 30%;
     margin-right: 8px
   }
-  .options-paragraph {
-    font-size: 14px;
-    color: #606266;
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
-    font-weight: 700;
-    line-height: 20px;
-    margin: 0 0 14px 0;
-  }
-  .options-paragraph-container {
-    overflow-wrap: break-word;
-    margin-bottom: 0;
-  }
   .pattern-input {
     width: 20%;
     margin-right: 8px
+  }
+  .proxy-url-value-input {
+    width: 35%;
+    margin-left: 8px;
+    margin-right: 10px
   }
   .setting-input {
     display: flex;
@@ -96,6 +149,9 @@
   .text {
     line-height: 20px;
     margin-right: 15px
+  }
+  .ssl-tls-opts {
+    margin: 36px 0 0 0;
   }
   .upload-container {
     display: flex;

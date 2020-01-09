@@ -1,29 +1,11 @@
 <template>
-  <div>
-    <el-form ref="captcha" :model="captcha" :label-width="labelWidth">
-      <el-form-item label="Enabled">
-        <el-switch :value="captcha.enabled" @change="updateSetting($event, 'Pleroma.Captcha', 'enabled')"/>
-        <p class="expl">Whether the captcha should be shown on registration</p>
-      </el-form-item>
-      <el-form-item label="Valid for (s)">
-        <el-input-number :value="captcha.seconds_valid" :step="1" :min="0" size="large" @change="updateSetting($event, 'Pleroma.Captcha', 'seconds_valid')"/>
-        <p class="expl">The time in seconds for which the captcha is valid</p>
-      </el-form-item>
-      <el-form-item label="Method">
-        <el-select :value="captcha.method" clearable @change="updateSetting($event, 'Pleroma.Captcha', 'method')">
-          <el-option label="Pleroma.Captcha.Kocaptcha" value="Pleroma.Captcha.Kocaptcha"/>
-        </el-select>
-        <p class="expl">The method/service to use for captcha</p>
-      </el-form-item>
+  <div v-if="!loading">
+    <el-form ref="captchaData" :model="captchaData" :label-width="labelWidth">
+      <setting :setting-group="captcha" :data="captchaData"/>
     </el-form>
-    <el-form ref="kocaptcha" :model="kocaptcha" :label-width="labelWidth">
-      <el-form-item label="Kocaptcha Endpoint">
-        <el-input :value="kocaptcha.endpoint" @input="updateSetting($event, 'Pleroma.Captcha.Kocaptcha', 'endpoint')"/>
-        <p class="expl">Kocaptcha is a captcha service with a single API endpoint, the source code is
-          <a href="https://github.com/koto-bank/kocaptcha" rel="nofollow noreferrer noopener" target="_blank">here</a>.
-          The default endpoint <span class="code">'https://captcha.kotobank.ch'</span> is hosted by the developer.
-        </p>
-      </el-form-item>
+    <div class="line"/>
+    <el-form ref="kocaptchaData" :model="kocaptchaData" :label-width="labelWidth">
+      <setting :setting-group="kocaptcha" :data="kocaptchaData"/>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>
@@ -33,27 +15,49 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import i18n from '@/lang'
+import Setting from './Setting'
 
 export default {
   name: 'Captcha',
+  components: { Setting },
   computed: {
     ...mapGetters([
-      'captcha',
-      'kocaptcha'
+      'settings'
     ]),
+    captcha() {
+      return this.settings.description.find(setting => setting.key === 'Pleroma.Captcha')
+    },
+    captchaData() {
+      return this.settings.settings[':pleroma']['Pleroma.Captcha']
+    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
+    kocaptcha() {
+      return this.settings.description.find(setting => setting.key === 'Pleroma.Captcha.Kocaptcha')
+    },
+    kocaptchaData() {
+      return this.settings.settings[':pleroma']['Pleroma.Captcha.Kocaptcha']
+    },
     labelWidth() {
-      return this.isMobile ? '100px' : '210px'
+      return this.isMobile ? '100px' : '240px'
+    },
+    loading() {
+      return this.settings.loading
     }
   },
   methods: {
-    updateSetting(value, tab, input) {
-      this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})
-    },
-    onSubmit() {
-      this.$store.dispatch('SubmitChanges')
+    async onSubmit() {
+      try {
+        await this.$store.dispatch('SubmitChanges')
+      } catch (e) {
+        return
+      }
+      this.$message({
+        type: 'success',
+        message: i18n.t('settings.success')
+      })
     }
   }
 }
