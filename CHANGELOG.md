@@ -8,26 +8,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- moves emoji pack configuration from the main menu to settings tab, redesigns it and fixes bugs
+- **breaking** PleromaFE login feature relies on `admin` scope presence in PleromaFE token (older versions of PleromaFE don't support it)
+- Moves emoji pack configuration from the main menu to settings tab, redesigns it and fixes bugs
 - `mailerEnabled` must be set to `true` in order to require password reset (password reset currently only works via email)
-- remove fetching initial data for configuring server settings
+- Remove fetching initial data for configuring server settings
 - Actions in users module (ActivateUsers, AddRight, DeactivateUsers, DeleteRight, DeleteUsers) now accept an array of users instead of one user
 - Leave dropdown menu open after clicking an action
+- Move current try/catch error handling from view files to module, add it where necessary
 
 ### Added
 
 - Optimistic update for actions in users module and fetching users after api function finished its execution
 - Relay management
+- Ability to fetch all statuses from a given instance
+- Grouped reports: now you can view reports, which are grouped by status (pagination is not implemented yet, though)
+- Ability to confirm users' emails and resend confirmation emails
+- Report notes
+- Ability to moderate users on the statuses page
 
 ### Fixed
 
 - Show checkmarks when tag is applied
+- Reports update (also, now it's optimistic)
+- Remove duplicated success message
 
 ## [1.2.0] - 2019-09-27
 
 ### Added
 
 - Emoji pack configuration
+- Statuses page: fetch all statuses from a given instance
 - Ability to require user's password reset
 – Ability to track admin/moderator actions, a.k.a. "the moderation log"
 

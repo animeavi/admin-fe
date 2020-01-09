@@ -6,6 +6,13 @@
 
 Admin UI for pleroma instance owners.
 
+### Branches
+
+There are two main branches here:
+
+- `develop`: ongoing work and all merge requests go here, *unstable*
+- `master`: after `develop` is stabilized it is merged to `master`, `master` is *stable*, allegedly
+
 ### Features
 
 1. User administration: grant roles to users (admin/moderator), deactivate/delete as well as force their statuses to have NSFW tag, strip media and many more
@@ -18,13 +25,17 @@ You can have any combination of these features (i.e. you can disable anything, b
 
 ## Usage
 
+### Bundled
+
+AdminFE is bundled with Pleroma, i.e. you can just visit `https://your.instance/pleroma/admin/` to try it out.
+
 ### Development
 
 To run AdminFE locally execute `yarn dev`
 
 ### Build
 
-To compile everything for production run `yarn build:prod`.
+To compile everything for production run `yarn build:prod`, this will build admin-fe into `dist` folder, which you will need to upload to your server and/or point your webserver of choice to.
 
 #### Disabling features
 

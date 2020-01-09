@@ -4,6 +4,10 @@ export let users = [
   { active: false, deactivated: true, id: 'abc', nickname: 'john', local: true, external: false, roles: { admin: false, moderator: false }, tags: ['strip_media'] }
 ]
 
+const userProfile = { avatar: 'avatar.jpg', display_name: 'Allis', nickname: 'allis', id: '2', tags: [], roles: { admin: true, moderator: false }, local: true, external: false }
+
+const userStatuses = []
+
 const filterUsers = (str) => {
   const filters = str.split(',').filter(item => item.length > 0)
   if (filters.length === 0) {
@@ -20,6 +24,10 @@ const filterUsers = (str) => {
   return applyFilters([], filters, users)
 }
 
+export async function fetchUser(id, authHost, token) {
+  return Promise.resolve({ data: userProfile })
+}
+
 export async function fetchUsers(filters, authHost, token, page = 1) {
   const filteredUsers = filterUsers(filters)
   return Promise.resolve({ data: {
@@ -27,6 +35,10 @@ export async function fetchUsers(filters, authHost, token, page = 1) {
     count: filteredUsers.length,
     page_size: 50
   }})
+}
+
+export async function fetchUserStatuses(id, authHost, godmode, token) {
+  return Promise.resolve({ data: userStatuses })
 }
 
 export async function getPasswordResetToken(nickname, authHost, token) {

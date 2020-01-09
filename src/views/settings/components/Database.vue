@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import i18n from '@/lang'
 import { mapGetters } from 'vuex'
+import i18n from '@/lang'
 import Setting from './Setting'
 
 export default {

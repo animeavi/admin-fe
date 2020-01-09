@@ -1,10 +1,13 @@
-import { changeState, changeStatusScope, deleteStatus, fetchReports, filterReports } from '@/api/reports'
+import { changeState, fetchReports, fetchGroupedReports, createNote, deleteNote } from '@/api/reports'
 
 const reports = {
   state: {
     fetchedReports: [],
-    idOfLastReport: '',
-    page_limit: 5,
+    fetchedGroupedReports: [],
+    totalReportsCount: 0,
+    currentPage: 1,
+    pageSize: 50,
+    groupReports: false,
     stateFilter: '',
     loading: true
   },
@@ -15,63 +18,104 @@ const reports = {
     SET_LOADING: (state, status) => {
       state.loading = status
     },
+    SET_PAGE: (state, page) => {
+      state.currentPage = page
+    },
     SET_REPORTS: (state, reports) => {
       state.fetchedReports = reports
     },
+    SET_GROUPED_REPORTS: (state, reports) => {
+      state.fetchedGroupedReports = reports
+    },
+    SET_REPORTS_COUNT: (state, total) => {
+      state.totalReportsCount = total
+    },
     SET_REPORTS_FILTER: (state, filter) => {
       state.stateFilter = filter
+    },
+    SET_REPORTS_GROUPING: (state) => {
+      state.groupReports = !state.groupReports
     }
   },
   actions: {
-    async ChangeReportState({ commit, getters, state }, { reportState, reportId }) {
-      const { data } = await changeState(reportState, reportId, getters.authHost, getters.token)
-      const updatedReports = state.fetchedReports.map(report => report.id === reportId ? data : report)
-      commit('SET_REPORTS', updatedReports)
-    },
-    async ChangeStatusScope({ commit, getters, state }, { statusId, isSensitive, visibility, reportId }) {
-      const { data } = await changeStatusScope(statusId, isSensitive, visibility, getters.authHost, getters.token)
+    async ChangeReportState({ commit, getters, state }, reportsData) {
+      changeState(reportsData, getters.authHost, getters.token)
+
       const updatedReports = state.fetchedReports.map(report => {
-        if (report.id === reportId) {
-          const statuses = report.statuses.map(status => status.id === statusId ? data : status)
-          return { ...report, statuses }
-        } else {
-          return report
-        }
+        const updatedReportsIds = reportsData.map(({ id }) => id)
+        return updatedReportsIds.includes(report.id) ? { ...report, state: reportsData[0].state } : report
       })
+
+      const updatedGroupedReports = state.fetchedGroupedReports.map(group => {
+        const updatedReportsIds = reportsData.map(({ id }) => id)
+        const updatedReports = group.reports.map(report => updatedReportsIds.includes(report.id) ? { ...report, state: reportsData[0].state } : report)
+        return { ...group, reports: updatedReports }
+      })
+
       commit('SET_REPORTS', updatedReports)
+      commit('SET_GROUPED_REPORTS', updatedGroupedReports)
     },
     ClearFetchedReports({ commit }) {
       commit('SET_REPORTS', [])
-      commit('SET_LAST_REPORT_ID', '')
     },
-    async DeleteStatus({ commit, getters, state }, { statusId, reportId }) {
-      deleteStatus(statusId, getters.authHost, getters.token)
-      const updatedReports = state.fetchedReports.map(report => {
-        if (report.id === reportId) {
-          const statuses = report.statuses.filter(status => status.id !== statusId)
-          return { ...report, statuses }
-        } else {
-          return report
-        }
-      })
-      commit('SET_REPORTS', updatedReports)
-    },
-    async FetchReports({ commit, getters, state }) {
+    async FetchReports({ commit, getters, state }, page) {
       commit('SET_LOADING', true)
+      const { data } = await fetchReports(state.stateFilter, page, state.pageSize, getters.authHost, getters.token)
 
-      const response = state.stateFilter.length === 0
-        ? await fetchReports(state.page_limit, state.idOfLastReport, getters.authHost, getters.token)
-        : await filterReports(state.stateFilter, state.page_limit, state.idOfLastReport, getters.authHost, getters.token)
+      commit('SET_REPORTS', data.reports)
+      commit('SET_REPORTS_COUNT', data.total)
+      commit('SET_PAGE', page)
+      commit('SET_LOADING', false)
+    },
+    async FetchGroupedReports({ commit, getters }) {
+      commit('SET_LOADING', true)
+      const { data } = await fetchGroupedReports(getters.authHost, getters.token)
 
-      const reports = state.fetchedReports.concat(response.data.reports)
-      const id = reports.length > 0 ? reports[reports.length - 1].id : state.idOfLastReport
-
-      commit('SET_REPORTS', reports)
-      commit('SET_LAST_REPORT_ID', id)
+      commit('SET_GROUPED_REPORTS', data.reports)
       commit('SET_LOADING', false)
     },
     SetFilter({ commit }, filter) {
       commit('SET_REPORTS_FILTER', filter)
+    },
+    ToggleReportsGrouping({ commit }) {
+      commit('SET_REPORTS_GROUPING')
+    },
+    CreateReportNote({ commit, getters, state, rootState }, { content, reportID }) {
+      createNote(content, reportID, getters.authHost, getters.token)
+
+      const optimisticNote = {
+        user: {
+          avatar: rootState.user.avatar,
+          display_name: rootState.user.name,
+          url: `${rootState.user.authHost}/${rootState.user.name}`,
+          acct: rootState.user.name
+        },
+        content: content,
+        created_at: new Date().getTime()
+      }
+
+      const updatedReports = state.fetchedReports.map(report => {
+        if (report.id === reportID) {
+          report.notes = [...report.notes, optimisticNote]
+        }
+
+        return report
+      })
+
+      commit('SET_REPORTS', updatedReports)
+    },
+    DeleteReportNote({ commit, getters, state }, { noteID, reportID }) {
+      deleteNote(noteID, reportID, getters.authHost, getters.token)
+
+      const updatedReports = state.fetchedReports.map(report => {
+        if (report.id === reportID) {
+          report.notes = report.notes.filter(note => note.id !== noteID)
+        }
+
+        return report
+      })
+
+      commit('SET_REPORTS', updatedReports)
     }
   }
 }

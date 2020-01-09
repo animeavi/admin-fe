@@ -136,4 +136,24 @@ export async function fetchUserStatuses(id, authHost, godmode, token) {
   })
 }
 
+export async function confirmUserEmail(nicknames, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: '/api/pleroma/admin/users/confirm_email',
+    method: 'patch',
+    headers: authHeaders(token),
+    data: { nicknames }
+  })
+}
+
+export async function resendConfirmationEmail(nicknames, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: '/api/pleroma/admin/users/resend_confirmation_email',
+    method: 'patch',
+    headers: authHeaders(token),
+    data: { nicknames }
+  })
+}
+
 const authHeaders = (token) => token ? { 'Authorization': `Bearer ${getToken()}` } : {}

@@ -8,7 +8,7 @@ import {
   savePackMetadata,
   importFromFS,
   updatePackFile } from '@/api/emojiPacks'
-
+import i18n from '@/lang'
 import { Message } from 'element-ui'
 
 import Vue from 'vue'
@@ -44,34 +44,30 @@ const packs = {
     }
   },
   actions: {
-    async SetLocalEmojiPacks({ commit, getters, state }) {
-      const { data } = await listPacks(getters.authHost)
-      commit('SET_LOCAL_PACKS', data)
+    async CreatePack({ getters }, { name }) {
+      await createPack(getters.authHost, getters.token, name)
     },
-    async SetRemoteEmojiPacks({ commit, getters, state }, { remoteInstance }) {
-      const { data } = await listRemotePacks(getters.authHost, getters.token, remoteInstance)
-
-      commit('SET_REMOTE_PACKS', data)
+    async DeletePack({ getters }, { name }) {
+      await deletePack(getters.authHost, getters.token, name)
     },
-    async DownloadFrom({ commit, getters, state }, { instanceAddress, packName, as }) {
+    async DownloadFrom({ getters }, { instanceAddress, packName, as }) {
       const result = await downloadFrom(getters.authHost, instanceAddress, packName, as, getters.token)
 
       if (result.data === 'ok') {
         Message({
-          message: `Successfully downloaded ${packName}`,
+          message: `${i18n.t('settings.successfullyDownloaded')} ${packName}`,
           type: 'success',
           duration: 5 * 1000
         })
       }
     },
-    async ReloadEmoji({ commit, getters, state }) {
-      await reloadEmoji(getters.authHost, getters.token)
-    },
-    async ImportFromFS({ commit, getters, state }) {
+    async ImportFromFS({ getters }) {
       const result = await importFromFS(getters.authHost, getters.token)
 
       if (result.status === 200) {
-        const message = result.data.length > 0 ? `Successfully imported ${result.data}` : 'No new packs to import'
+        const message = result.data.length > 0
+          ? `${i18n.t('settings.successfullyImported')} ${result.data}`
+          : i18n.t('settings.nowNewPacksToImport')
 
         Message({
           message,
@@ -80,17 +76,9 @@ const packs = {
         })
       }
     },
-    async DeletePack({ commit, getters, state }, { name }) {
-      await deletePack(getters.authHost, getters.token, name)
+    async ReloadEmoji({ getters }) {
+      await reloadEmoji(getters.authHost, getters.token)
     },
-    async CreatePack({ commit, getters, state }, { name }) {
-      await createPack(getters.authHost, getters.token, name)
-    },
-
-    async UpdateLocalPackVal({ commit, getters, state }, args) {
-      commit('UPDATE_LOCAL_PACK_VAL', args)
-    },
-
     async SavePackMetadata({ commit, getters, state }, { packName }) {
       const result =
         await savePackMetadata(
@@ -102,7 +90,7 @@ const packs = {
 
       if (result.status === 200) {
         Message({
-          message: `Successfully updated ${packName} metadata`,
+          message: `${i18n.t('settings.successfullyUpdated')} ${packName} ${i18n.t('settings.metadatLowerCase')}`,
           type: 'success',
           duration: 5 * 1000
         })
@@ -110,21 +98,32 @@ const packs = {
         commit('UPDATE_LOCAL_PACK_PACK', { name: packName, pack: result.data })
       }
     },
+    async SetLocalEmojiPacks({ commit, getters }) {
+      const { data } = await listPacks(getters.authHost)
+      commit('SET_LOCAL_PACKS', data)
+    },
+    async SetRemoteEmojiPacks({ commit, getters }, { remoteInstance }) {
+      const { data } = await listRemotePacks(getters.authHost, getters.token, remoteInstance)
 
-    async UpdateAndSavePackFile({ commit, getters, state }, args) {
+      commit('SET_REMOTE_PACKS', data)
+    },
+    async UpdateAndSavePackFile({ commit, getters }, args) {
       const result = await updatePackFile(getters.authHost, getters.token, args)
 
       if (result.status === 200) {
         const { packName } = args
 
         Message({
-          message: `Successfully updated ${packName} files`,
+          message: `${i18n.t('settings.successfullyUpdated')} ${packName} ${i18n.t('settings.metadatLowerCase')}`,
           type: 'success',
           duration: 5 * 1000
         })
 
         commit('UPDATE_LOCAL_PACK_FILES', { name: packName, files: result.data })
       }
+    },
+    async UpdateLocalPackVal({ commit }, args) {
+      commit('UPDATE_LOCAL_PACK_VAL', args)
     }
   }
 }

@@ -4,10 +4,12 @@ import app from './modules/app'
 import errorLog from './modules/errorLog'
 import moderationLog from './modules/moderationLog'
 import invites from './modules/invites'
+import peers from './modules/peers'
 import permission from './modules/permission'
 import relays from './modules/relays'
 import reports from './modules/reports'
 import settings from './modules/settings'
+import status from './modules/status'
 import tagsView from './modules/tagsView'
 import user from './modules/user'
 import userProfile from './modules/userProfile'
@@ -23,10 +25,12 @@ const store = new Vuex.Store({
     errorLog,
     moderationLog,
     invites,
+    peers,
     permission,
     relays,
     reports,
     settings,
+    status,
     tagsView,
     user,
     userProfile,

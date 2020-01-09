@@ -28,6 +28,15 @@
       </el-dropdown-item>
       <el-dropdown-item
         divided
+        @click.native="confirmAccountsForMultipleUsers">
+        {{ $t('users.confirmAccounts') }}
+      </el-dropdown-item>
+      <el-dropdown-item
+        @click.native="resendConfirmationForMultipleUsers">
+        {{ $t('users.resendConfirmation') }}
+      </el-dropdown-item>
+      <el-dropdown-item
+        divided
         @click.native="activateMultipleUsers">
         {{ $t('users.activateAccounts') }}
       </el-dropdown-item>
@@ -151,16 +160,7 @@ export default {
   methods: {
     mappers() {
       const applyAction = async(users, dispatchAction) => {
-        try {
-          await dispatchAction(users)
-        } catch (err) {
-          console.log(err)
-          return
-        }
-        this.$message({
-          type: 'success',
-          message: this.$t('users.completed')
-        })
+        await dispatchAction(users)
         this.$emit('apply-action')
       }
       return {
@@ -215,7 +215,21 @@ export default {
           applyAction(filtered, removeTagFn)
         },
         requirePasswordReset: () => {
-          this.selectedUsers.map(user => this.$store.dispatch('RequirePasswordReset', user))
+          const filtered = this.selectedUsers.filter(user => user.local)
+          filtered.map(user => this.$store.dispatch('RequirePasswordReset', user))
+          this.$emit('apply-action')
+        },
+        confirmAccounts: () => {
+          const filtered = this.selectedUsers.filter(user => user.local && user.confirmation_pending)
+          const confirmAccountFn = async(users) => await this.$store.dispatch('ConfirmUsersEmail', users)
+
+          applyAction(filtered, confirmAccountFn)
+        },
+        resendConfirmation: () => {
+          const filtered = this.selectedUsers.filter(user => user.local && user.confirmation_pending)
+          const resendConfirmationFn = async(users) => await this.$store.dispatch('ResendConfirmationEmail', users)
+
+          applyAction(filtered, resendConfirmationFn)
         }
       }
     },
@@ -281,6 +295,20 @@ export default {
       this.confirmMessage(
         this.$t('users.removeTagFromMultipleUsersConfirmation'),
         removeTag(tag)
+      )
+    },
+    confirmAccountsForMultipleUsers() {
+      const { confirmAccounts } = this.mappers()
+      this.confirmMessage(
+        this.$t('users.confirmAccountsConfirmation'),
+        confirmAccounts
+      )
+    },
+    resendConfirmationForMultipleUsers() {
+      const { resendConfirmation } = this.mappers()
+      this.confirmMessage(
+        this.$t('users.resendEmailConfirmation'),
+        resendConfirmation
       )
     },
     confirmMessage(message, applyAction) {

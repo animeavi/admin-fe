@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import ScrollPane from '@/components/ScrollPane'
+import ScrollPane from '@/components/element-ui/ScrollPane'
 import { generateTitle } from '@/utils/i18n'
 import path from 'path'
 

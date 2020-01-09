@@ -8,7 +8,7 @@ export async function loginByUsername(username, password, authHost) {
   const verifyHost = user.authHost === authHost
   const data = {
     'token_type': 'Bearer',
-    'scope': 'read write follow',
+    'scope': 'read write follow push admin',
     'refresh_token': 'foo123',
     'me': 'bob',
     'expires_in': 600,

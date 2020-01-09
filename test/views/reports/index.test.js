@@ -31,22 +31,7 @@ describe('Reports', () => {
 
     await flushPromises()
     const initialReports = store.state.reports.fetchedReports.length
-    expect(initialReports).toEqual(5)
-    done()
-  })
-
-  it('loads more reports on scroll', async (done) => {
-    const wrapper = mount(Reports, {
-      store,
-      localVue
-    })
-
-    await flushPromises()
-    expect(store.state.reports.fetchedReports.length).toEqual(5)
-
-    window.dispatchEvent(new CustomEvent('scroll', { detail: 2000 }))
-    await flushPromises()
-    expect(store.state.reports.fetchedReports.length).toEqual(7)
+    expect(initialReports).toEqual(7)
     done()
   })
 })
