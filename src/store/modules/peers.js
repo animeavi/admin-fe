@@ -19,7 +19,7 @@ const peers = {
     async FetchPeers({ commit, getters }) {
       const peers = await fetchPeers(getters.authHost, getters.token)
 
-      commit('SET_PEERS', peers.data)
+      commit('SET_PEERS', [...peers.data].sort())
       commit('SET_LOADING', false)
     }
   }
