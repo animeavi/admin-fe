@@ -23,6 +23,9 @@
   .el-form-item {
     margin-right: 30px;
   }
+  .el-form-item .rate-limit {
+    margin-right: 0;
+  }
   .center-label label {
     text-align: center;
   }
@@ -95,8 +98,8 @@
     margin-left: 10px;
   }
   .limit-input {
-    width: 48%;
-    margin: 0 0 5px 8px
+    width: 47%;
+    margin: 0 0 5px 1%
   }
   .line {
     width: 100%;
@@ -130,6 +133,15 @@
     margin-left: 8px;
     margin-right: 10px
   }
+  .replacement-input {
+    width: 80%;
+    margin-left: 8px;
+    margin-right: 10px
+  }
+  .scale-input {
+    width: 47%;
+    margin: 0 1% 5px 0
+  }
   .setting-input {
     display: flex;
     margin-bottom: 10px;
@@ -137,21 +149,12 @@
   .single-input {
     margin-right: 10px
   }
-  .scale-input {
-    width: 48%;
-    margin: 0 8px 5px 0
-  }
-  .replacement-input {
-    width: 80%;
-    margin-left: 8px;
-    margin-right: 10px
+  .ssl-tls-opts {
+    margin: 36px 0 0 0;
   }
   .text {
     line-height: 20px;
     margin-right: 15px
-  }
-  .ssl-tls-opts {
-    margin: 36px 0 0 0;
   }
   .upload-container {
     display: flex;

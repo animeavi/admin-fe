@@ -1,31 +1,24 @@
-import { fetchDescription, fetchSettings, removeSettings, updateSettings, uploadMedia } from '@/api/settings'
+import { fetchDescription, fetchSettings, removeSettings, updateSettings } from '@/api/settings'
 import { checkPartialUpdate, parseNonTuples, parseTuples, valueHasTuples, wrapUpdatedSettings } from './normalizers'
+import _ from 'lodash'
 
 const settings = {
   state: {
     description: [],
-    settings: {
-      ':auto_linker': {},
-      ':cors_plug': {},
-      ':esshd': {},
-      ':http_signatures': {},
-      ':logger': {},
-      ':mime': {},
-      ':phoenix': {},
-      ':pleroma': {},
-      ':prometheus': {},
-      ':quack': {},
-      ':tesla': {},
-      ':ueberauth': {},
-      ':web_push_encryption': {}
-    },
+    settings: {},
     updatedSettings: {},
-    ignoredIfNotEnabled: ['enabled', 'handler', 'password_authenticator', 'port', 'priv_dir'],
+    db: {},
     loading: true
   },
   mutations: {
     CLEAR_UPDATED_SETTINGS: (state) => {
       state.updatedSettings = {}
+    },
+    REMOVE_SETTING_FROM_UPDATED: (state, { group, key, subkeys }) => {
+      if (_.get(state.updatedSettings, [group, key, subkeys[0]])) {
+        const { [subkeys[0]]: value, ...updatedSettings } = state.updatedSettings[group][key]
+        state.updatedSettings = updatedSettings
+      }
     },
     SET_DESCRIPTION: (state, data) => {
       state.description = data
@@ -38,10 +31,19 @@ const settings = {
         const parsedValue = valueHasTuples(key, value)
           ? { value: parseNonTuples(key, value) }
           : parseTuples(value, key)
-        acc[group][key] = { ...acc[group][key], ...parsedValue }
+        acc[group] = acc[group] ? { ...acc[group], [key]: parsedValue } : { [key]: parsedValue }
         return acc
-      }, state.settings)
+      }, {})
+
+      const newDbSettings = data.reduce((acc, { group, key, db }) => {
+        if (db) {
+          acc[group] = acc[group] ? { ...acc[group], [key]: db } : { [key]: db }
+        }
+        return acc
+      }, {})
+
       state.settings = newSettings
+      state.db = newDbSettings
     },
     UPDATE_SETTINGS: (state, { group, key, input, value, type }) => {
       const updatedSetting = !state.updatedSettings[group] || (key === 'Pleroma.Emails.Mailer' && input === ':adapter')
@@ -66,8 +68,12 @@ const settings = {
       commit('SET_SETTINGS', response.data.configs)
       commit('SET_LOADING', false)
     },
-    async RemoveSetting({ getters }, configs) {
+    async RemoveSetting({ commit, getters }, configs) {
       await removeSettings(configs, getters.authHost, getters.token)
+      const response = await fetchSettings(getters.authHost, getters.token)
+      const { group, key, subkeys } = configs[0]
+      commit('SET_SETTINGS', response.data.configs)
+      commit('REMOVE_SETTING_FROM_UPDATED', { group, key, subkeys: subkeys || [] })
     },
     async SubmitChanges({ getters, commit, state }) {
       const updatedData = checkPartialUpdate(state.settings, state.updatedSettings, state.description)
@@ -75,7 +81,8 @@ const settings = {
         return [...acc, ...wrapUpdatedSettings(group, updatedData[group], state.settings)]
       }, [])
 
-      const response = await updateSettings(configs, getters.authHost, getters.token)
+      await updateSettings(configs, getters.authHost, getters.token)
+      const response = await fetchSettings(getters.authHost, getters.token)
       commit('SET_SETTINGS', response.data.configs)
       commit('CLEAR_UPDATED_SETTINGS')
     },
@@ -84,24 +91,14 @@ const settings = {
         ? commit('UPDATE_SETTINGS', { group, key, input, value, type })
         : commit('UPDATE_SETTINGS', { group, key: input, input: '_value', value, type })
     },
-    UpdateState({ commit, dispatch, state }, { group, key, input, value }) {
+    async UpdateState({ commit, getters, state }, { group, key, input, value }) {
       if (key === 'Pleroma.Emails.Mailer' && input === ':adapter') {
         const subkeys = Object.keys(state.settings[group][key]).filter(el => el !== ':adapter')
-        const emailsValue = subkeys.map(el => {
-          return { 'tuple': [el, state.settings[group][key][el]] }
-        })
-        dispatch('RemoveSetting', [{ group, key, value: emailsValue, delete: true, subkeys }])
+        await removeSettings([{ group, key, delete: true, subkeys }], getters.authHost, getters.token)
       }
       key
         ? commit('UPDATE_STATE', { group, key, input, value })
         : commit('UPDATE_STATE', { group, key: input, input: 'value', value })
-    },
-    async UploadMedia({ dispatch, getters, state }, { file, tab, inputName, childName }) {
-      const response = await uploadMedia(file, getters.authHost, getters.token)
-      const updatedValue = childName
-        ? { ...state.settings[tab][inputName], ...{ [childName]: response.data.url }}
-        : response.data.url
-      dispatch('UpdateSettings', { tab, data: { [inputName]: updatedValue }})
     }
   }
 }

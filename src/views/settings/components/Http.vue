@@ -29,6 +29,7 @@
 import { mapGetters } from 'vuex'
 import i18n from '@/lang'
 import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
   name: 'HTTP',
@@ -41,31 +42,31 @@ export default {
       return this.settings.description.find(setting => setting.group === ':cors_plug')
     },
     corsPlugData() {
-      return this.settings.settings[':cors_plug']
+      return _.get(this.settings.settings, [':cors_plug']) || {}
     },
     http() {
       return this.settings.description.find(setting => setting.key === ':http')
     },
     httpData() {
-      return this.settings.settings[':pleroma'][':http']
+      return _.get(this.settings.settings, [':pleroma', ':http']) || {}
     },
     httpSecurity() {
       return this.settings.description.find(setting => setting.key === ':http_security')
     },
     httpSecurityData() {
-      return this.settings.settings[':pleroma'][':http_security']
+      return _.get(this.settings.settings, [':pleroma', ':http_security']) || {}
     },
     httpSignatures() {
       return this.settings.description.find(setting => setting.group === ':http_signatures')
     },
     httpSignaturesData() {
-      return this.settings.settings[':http_signatures']
+      return _.get(this.settings.settings, [':http_signatures']) || {}
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
     },
     loading() {
       return this.settings.loading
@@ -74,7 +75,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':web_cache_ttl')
     },
     webCacheTtlData() {
-      return this.settings.settings[':pleroma'][':web_cache_ttl']
+      return _.get(this.settings.settings, [':pleroma', ':web_cache_ttl']) || {}
     }
   },
   methods: {

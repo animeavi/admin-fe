@@ -1,7 +1,13 @@
 <template>
-  <el-form-item :label="setting.label" :label-width="customLabelWidth" :class="labelClass">
+  <el-form-item :label-width="customLabelWidth" :class="labelClass">
+    <span slot="label">
+      {{ setting.label }}
+      <el-tooltip v-if="canBeDeleted" :content="$t('settings.removeFromDB')" placement="bottom-end">
+        <el-button icon="el-icon-delete" circle size="mini" style="margin-left:5px" @click="removeSetting"/>
+      </el-tooltip>
+    </span>
     <el-input
-      v-if="setting.type === 'string'"
+      v-if="setting.type === 'string' || (setting.type.includes('string') && setting.type.includes('atom'))"
       :value="inputValue"
       :placeholder="setting.suggestions ? setting.suggestions[0] : null"
       @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
@@ -36,13 +42,6 @@
       @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
       <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
     </el-select>
-    <editor
-      v-if="setting.key === ':dispatch'"
-      v-model="editorContent"
-      height="150"
-      width="100%"
-      lang="elixir"
-      theme="chrome"/>
     <el-input
       v-if="setting.key === ':ip'"
       :value="inputValue"
@@ -62,7 +61,7 @@
           :setting-parent="[...settingParent, subSetting]"
           :setting="subSetting"
           :data="data[setting.key]"
-          :custom-label-width="'100px'"
+          :custom-label-width="'140px'"
           :label-class="'center-label'"
           :input-class="'keyword-inner-input'"
           :nested="true"/>
@@ -70,11 +69,10 @@
     </div>
     <!-- special inputs -->
     <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :data="data" :setting-group="settingGroup" :setting="setting"/>
-    <mascots-input v-if="setting.key === ':mascots'" :data="data" :setting-group="settingGroup" :setting="setting"/>
-    <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="data" :setting-group="settingGroup" :setting="setting"/>
-    <icons-input v-if="setting.key === ':icons'" :data="data[':icons']" :setting-group="settingGroup" :setting="setting"/>
+    <mascots-input v-if="setting.key === ':mascots'" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
+    <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
+    <icons-input v-if="setting.key === ':icons'" :data="iconsData" :setting-group="settingGroup" :setting="setting"/>
     <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
-    <!-- <ssl-options-input v-if="setting.key === ':ssl_options'" :setting-group="settingGroup" :setting-parent="settingParent" :setting="setting" :data="data" :nested="true" :custom-label-width="'100px'"/> -->
     <multiple-select v-if="setting.key === ':backends' || setting.key === ':args'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
     <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
@@ -84,16 +82,14 @@
 </template>
 
 <script>
-import AceEditor from 'vue2-ace-editor'
-import 'brace/mode/elixir'
-import 'default-passive-events'
-import { AutoLinkerInput, EditableKeywordInput, IconsInput, MascotsInput, MultipleSelect, ProxyUrlInput, PruneInput, RateLimitInput, SslOptionsInput } from './inputComponents'
+import i18n from '@/lang'
+import { AutoLinkerInput, EditableKeywordInput, IconsInput, MascotsInput, MultipleSelect, ProxyUrlInput, PruneInput, RateLimitInput } from './inputComponents'
 import { processNested } from '@/store/modules/normalizers'
+import _ from 'lodash'
 
 export default {
   name: 'Inputs',
   components: {
-    editor: AceEditor,
     AutoLinkerInput,
     EditableKeywordInput,
     IconsInput,
@@ -101,8 +97,7 @@ export default {
     MultipleSelect,
     ProxyUrlInput,
     PruneInput,
-    RateLimitInput,
-    SslOptionsInput
+    RateLimitInput
   },
   props: {
     customLabelWidth: {
@@ -159,13 +154,13 @@ export default {
     }
   },
   computed: {
-    editorContent: {
-      get: function() {
-        return this.data[this.setting.key] ? this.data[this.setting.key][0] : ''
-      },
-      set: function(value) {
-        this.processNestedData([value], this.settingGroup.group, this.settingGroup.key, this.settingParent)
-      }
+    canBeDeleted() {
+      const { group, key } = this.settingGroup
+      return _.get(this.$store.state.settings.db, [group, key]) &&
+        this.$store.state.settings.db[group][key].includes(this.setting.key)
+    },
+    iconsData() {
+      return Array.isArray(this.data[':icons']) ? this.data[':icons'] : []
     },
     inputValue() {
       if ([':esshd', ':cors_plug', ':quack', ':http_signatures', ':tesla'].includes(this.settingGroup.group) &&
@@ -178,7 +173,7 @@ export default {
         this.setting.key === ':admin_token') {
         return this.data.value
       } else if (this.settingGroup.group === ':mime' && this.settingParent[0].key === ':types') {
-        return this.data.value[this.setting.key]
+        return this.data.value ? this.data.value[this.setting.key] : []
       } else if (this.setting.type === 'atom') {
         return this.data[this.setting.key] && this.data[this.setting.key][0] === ':' ? this.data[this.setting.key].substr(1) : this.data[this.setting.key]
       } else {
@@ -186,7 +181,10 @@ export default {
       }
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
+    },
+    keywordData() {
+      return Array.isArray(this.data) ? this.data : []
     },
     rewritePolicyValue() {
       return typeof this.data[this.setting.key] === 'string' ? [this.data[this.setting.key]] : this.data[this.setting.key]
@@ -214,6 +212,20 @@ export default {
         { group, key: parentKey, input: setting.key, value: valueForUpdatedSettings, type: setting.type })
       this.$store.dispatch('UpdateState',
         { group, key: parentKey, input: setting.key, value: valueForState })
+    },
+    async removeSetting() {
+      const config = this.settingGroup.key
+        ? [{ group: this.settingGroup.group, key: this.settingGroup.key, delete: true, subkeys: [this.setting.key] }]
+        : [{ group: this.settingGroup.group, key: this.setting.key, delete: true }]
+      try {
+        await this.$store.dispatch('RemoveSetting', config)
+      } catch (e) {
+        return
+      }
+      this.$message({
+        type: 'success',
+        message: i18n.t('settings.successfullyRemoved')
+      })
     },
     renderMultipleSelect(type) {
       return Array.isArray(type) && this.setting.key !== ':backends' && this.setting.key !== ':args' && (

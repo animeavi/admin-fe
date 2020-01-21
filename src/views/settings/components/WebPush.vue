@@ -11,6 +11,7 @@
 import { mapGetters } from 'vuex'
 import i18n from '@/lang'
 import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
   name: 'WebPush',
@@ -23,7 +24,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
     },
     loading() {
       return this.settings.loading
@@ -32,7 +33,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':vapid_details')
     },
     vapidDetailsData() {
-      return this.settings.settings[':web_push_encryption'][':vapid_details']
+      return _.get(this.settings.settings, [':web_push_encryption', ':vapid_details']) || {}
     }
   },
   methods: {

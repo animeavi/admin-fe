@@ -19,6 +19,7 @@
 import { mapGetters } from 'vuex'
 import i18n from '@/lang'
 import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
   name: 'JobQueue',
@@ -31,13 +32,13 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Pleroma.ActivityExpiration')
     },
     activityExpirationData() {
-      return this.settings.settings[':pleroma']['Pleroma.ActivityExpiration']
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.ActivityExpiration']) || {}
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
     },
     loading() {
       return this.settings.loading
@@ -46,13 +47,13 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Oban')
     },
     obanQueuesData() {
-      return this.settings.settings[':pleroma']['Oban']
+      return _.get(this.settings.settings, [':pleroma', 'Oban']) || {}
     },
     workers() {
       return this.settings.description.find(setting => setting.key === ':workers')
     },
     workersData() {
-      return this.settings.settings[':pleroma'][':workers']
+      return _.get(this.settings.settings, [':pleroma', ':workers']) || {}
     }
   },
   methods: {

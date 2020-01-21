@@ -17,14 +17,8 @@
       <el-tab-pane :label="$t('settings.captcha')" lazy>
         <captcha/>
       </el-tab-pane>
-      <el-tab-pane :label="$t('settings.database')" lazy>
-        <database/>
-      </el-tab-pane>
       <el-tab-pane :label="$t('settings.emojiPacks')" lazy>
         <emoji-packs/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.endpoint')" lazy>
-        <endpoint/>
       </el-tab-pane>
       <el-tab-pane :label="$t('settings.frontend')" lazy>
         <frontend/>
@@ -76,11 +70,11 @@
 </template>
 
 <script>
-import { ActivityPub, Authentication, AutoLinker, Captcha, Database, Endpoint, Esshd, Frontend, Gopher, Http, Instance, JobQueue, Logger, Mailer, MediaProxy, Metadata, Mrf, Other, RateLimiters, Relays, Upload, WebPush } from './components'
+import { ActivityPub, Authentication, AutoLinker, Captcha, Esshd, Frontend, Gopher, Http, Instance, JobQueue, Logger, Mailer, MediaProxy, Metadata, Mrf, Other, RateLimiters, Relays, Upload, WebPush } from './components'
 import EmojiPacks from '../emojiPacks/index'
 
 export default {
-  components: { ActivityPub, Authentication, AutoLinker, Captcha, Database, Endpoint, EmojiPacks, Esshd, Frontend, Gopher, Http, Instance, JobQueue, Logger, Mailer, MediaProxy, Metadata, Mrf, Other, RateLimiters, Relays, Upload, WebPush },
+  components: { ActivityPub, Authentication, AutoLinker, Captcha, EmojiPacks, Esshd, Frontend, Gopher, Http, Instance, JobQueue, Logger, Mailer, MediaProxy, Metadata, Mrf, Other, RateLimiters, Relays, Upload, WebPush },
   data() {
     return {
       activeTab: 'instance'

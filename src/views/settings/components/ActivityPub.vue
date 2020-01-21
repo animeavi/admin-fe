@@ -17,6 +17,7 @@
 import { mapGetters } from 'vuex'
 import i18n from '@/lang'
 import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
   name: 'ActivityPub',
@@ -29,13 +30,13 @@ export default {
       return this.settings.description.find(setting => setting.key === ':activitypub')
     },
     activitypubData() {
-      return this.settings.settings[':pleroma'][':activitypub']
+      return _.get(this.settings.settings, [':pleroma', ':activitypub']) || {}
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
     },
     loading() {
       return this.$store.state.settings.loading
@@ -44,7 +45,7 @@ export default {
       return this.settings.description.find(setting => setting.key === ':user')
     },
     userData() {
-      return this.settings.settings[':pleroma'][':user']
+      return _.get(this.settings.settings, [':pleroma', ':user']) || {}
     }
   },
   methods: {

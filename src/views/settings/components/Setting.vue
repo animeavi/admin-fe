@@ -29,17 +29,30 @@
             :nested="false"/>
         </div>
         <div v-if="compound(setting)">
-          <el-form-item :label="`${setting.label}:`"/>
-          <div v-for="subSetting in setting.children" :key="subSetting.key">
+          <div v-if="!setting.children">
             <inputs
               :setting-group="settingGroup"
-              :setting-parent="[setting, subSetting]"
-              :setting="subSetting"
+              :setting="setting"
               :data="data[setting.key]"
               :nested="true"/>
           </div>
-          <div v-if="!setting.children">
-            <inputs :setting-group="settingGroup" :setting="setting" :data="data[setting.key]" :nested="true"/>
+          <div v-else>
+            <el-form-item>
+              <span slot="label">
+                {{ setting.label }}:
+                <el-tooltip v-if="canBeDeleted(setting.key)" :content="$t('settings.removeFromDB')" placement="bottom-end">
+                  <el-button icon="el-icon-delete" circle size="mini" style="margin-left:5px" @click="removeSetting(setting.key)"/>
+                </el-tooltip>
+              </span>
+            </el-form-item>
+            <div v-for="subSetting in setting.children" :key="subSetting.key">
+              <inputs
+                :setting-group="settingGroup"
+                :setting-parent="[setting, subSetting]"
+                :setting="subSetting"
+                :data="data[setting.key]"
+                :nested="true"/>
+            </div>
           </div>
           <div class="line"/>
         </div>
@@ -49,15 +62,13 @@
 </template>
 
 <script>
-import AceEditor from 'vue2-ace-editor'
 import Inputs from './Inputs'
-import 'brace/mode/elixir'
-import 'default-passive-events'
+import i18n from '@/lang'
+import _ from 'lodash'
 
 export default {
   name: 'Setting',
   components: {
-    editor: AceEditor,
     Inputs
   },
   props: {
@@ -84,11 +95,31 @@ export default {
     }
   },
   methods: {
+    canBeDeleted(settingKey) {
+      const { group, key } = this.settingGroup
+      const existingKey = key || settingKey
+      return _.get(this.$store.state.settings.db, [group, existingKey]) &&
+        this.$store.state.settings.db[group][existingKey].includes(settingKey)
+    },
     compound({ type, key, children }) {
       return type === 'keyword' ||
         type === 'map' ||
         type.includes('keyword') ||
         key === ':replace'
+    },
+    async removeSetting(key) {
+      const config = this.settingGroup.key
+        ? [{ group: this.settingGroup.group, key: this.settingGroup.key, delete: true, subkeys: [key] }]
+        : [{ group: this.settingGroup.group, key, delete: true }]
+      try {
+        await this.$store.dispatch('RemoveSetting', config)
+      } catch (e) {
+        return
+      }
+      this.$message({
+        type: 'success',
+        message: i18n.t('settings.successfullyRemoved')
+      })
     },
     updateSetting(value, tab, input) {
       this.$store.dispatch('UpdateSettings', { tab, data: { [input]: value }})

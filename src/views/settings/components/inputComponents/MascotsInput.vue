@@ -23,7 +23,7 @@ export default {
   name: 'MascotsInput',
   props: {
     data: {
-      type: [Object, Array],
+      type: Array,
       default: function() {
         return {}
       }
@@ -88,7 +88,7 @@ export default {
     updateSetting(value, group, key, input, type) {
       const mascotsWithoutIDs = value.reduce((acc, mascot) => {
         const { id, ...mascotValue } = Object.values(mascot)[0]
-        return { ...acc, [Object.keys(mascot)[0]]: mascotValue }
+        return { ...acc, [Object.keys(mascot)[0]]: ['', mascotValue] }
       }, {})
       this.$store.dispatch('UpdateSettings', { group, key, input, value: mascotsWithoutIDs, type })
       this.$store.dispatch('UpdateState', { group, key, input, value })

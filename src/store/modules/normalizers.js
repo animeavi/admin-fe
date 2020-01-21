@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export const checkPartialUpdate = (settings, updatedSettings, description) => {
   return Object.keys(updatedSettings).reduce((acc, group) => {
     acc[group] = Object.keys(updatedSettings[group]).reduce((acc, key) => {
@@ -20,12 +22,22 @@ export const checkPartialUpdate = (settings, updatedSettings, description) => {
   }, {})
 }
 
-const getCurrentValue = (object, keys) => {
-  if (keys.length === 0) {
-    return object
+const getCurrentValue = (type, value, path) => {
+  if (type === 'state') {
+    return _.get(value, path)
+  } else {
+    const [firstSettingName, ...restKeys] = path
+    const firstSegment = value[firstSettingName]
+    if (restKeys.length === 0 || !firstSegment) {
+      return firstSegment || false
+    } else {
+      const secondSegment = (value, keys) => {
+        const [element, ...rest] = keys
+        return keys.length === 0 ? value : secondSegment(value[1][element], rest)
+      }
+      return secondSegment(firstSegment, restKeys)
+    }
   }
-  const [currentKey, ...restKeys] = keys
-  return getCurrentValue(object[currentKey], restKeys)
 }
 
 const getValueWithoutKey = (key, [type, value]) => {
@@ -136,24 +148,26 @@ export const processNested = (valueForState, valueForUpdatedSettings, group, par
   const [{ key, type }, ...otherParents] = parents
   const path = [group, parentKey, ...parents.reverse().map(parent => parent.key).slice(0, -1)]
 
-  let updatedValueForState = valueExists(settings, path)
-    ? { ...getCurrentValue(settings[group][parentKey], parents.map(el => el.key).slice(0, -1)),
+  let updatedValueForState = valueExists('state', settings, path)
+    ? { ...getCurrentValue('state', settings[group][parentKey], parents.map(el => el.key).slice(0, -1)),
       ...{ [key]: valueForState }}
     : { [key]: valueForState }
-  let updatedValueForUpdatedSettings = valueExists(updatedSettings, path)
-    ? { ...getCurrentValue(updatedSettings[group][parentKey], parents.map(el => el.key).slice(0, -1))[1],
+  let updatedValueForUpdatedSettings = valueExists('updatedSettings', updatedSettings, path)
+    ? { ...getCurrentValue('updatedSettings', updatedSettings[group][parentKey], parents.map(el => el.key).slice(0, -1))[1],
       ...{ [key]: [type, valueForUpdatedSettings] }}
     : { [key]: [type, valueForUpdatedSettings] }
 
   if (group === ':mime' && parents[0].key === ':types') {
-    updatedValueForState = { ...settings[group][parents[0].key].value, ...updatedValueForState }
-    updatedValueForUpdatedSettings = {
-      ...Object.keys(settings[group][parents[0].key].value)
+    updatedValueForState = settings[group][parents[0].key]
+      ? { ...settings[group][parents[0].key].value, ...updatedValueForState }
+      : updatedValueForState
+    updatedValueForUpdatedSettings = settings[group][parents[0].key]
+      ? { ...Object.keys(settings[group][parents[0].key].value)
         .reduce((acc, el) => {
           return { ...acc, [el]: [type, settings[group][parents[0].key].value[el]] }
         }, {}),
-      ...updatedValueForUpdatedSettings
-    }
+      ...updatedValueForUpdatedSettings }
+      : updatedValueForUpdatedSettings
   }
 
   return otherParents.length === 1
@@ -161,12 +175,25 @@ export const processNested = (valueForState, valueForUpdatedSettings, group, par
     : processNested(updatedValueForState, updatedValueForUpdatedSettings, group, parentKey, otherParents, settings, updatedSettings)
 }
 
-const valueExists = (value, path) => {
-  if (path.length === 0) {
-    return true
+const valueExists = (type, value, path) => {
+  if (type === 'state') {
+    return _.get(value, path)
+  } else {
+    const [group, key, firstSettingName, ...restKeys] = path
+    const firstSegment = _.get(value, [group, key, firstSettingName])
+    if (restKeys.length === 0 || !firstSegment) {
+      return firstSegment || false
+    } else {
+      const secondSegment = (value, keys) => {
+        if (keys.length === 0) {
+          return true
+        }
+        const [element, ...rest] = keys
+        return value[1][element] ? secondSegment(value[1][element], rest) : false
+      }
+      return secondSegment(firstSegment, restKeys)
+    }
   }
-  const [element, ...rest] = path
-  return value[element] ? valueExists(value[element], rest) : false
 }
 
 export const valueHasTuples = (key, value) => {
@@ -218,8 +245,6 @@ const wrapValues = (settings, currentState) => {
     } else if (setting === ':ip') {
       const ip = value.split('.').map(s => parseInt(s, 10))
       return { 'tuple': [setting, { 'tuple': ip }] }
-    } else if (setting === ':ssl_options') {
-      return { 'tuple': [setting, wrapValues(value, currentState)] }
     } else if (setting === ':args') {
       const index = value.findIndex(el => el === 'implode')
       const updatedArray = value.slice()

@@ -20,6 +20,7 @@
 import { mapGetters } from 'vuex'
 import i18n from '@/lang'
 import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
   name: 'Mailer',
@@ -34,13 +35,13 @@ export default {
       return this.settings.description.find(setting => setting.key === ':email_notifications')
     },
     emailNotificationsData() {
-      return this.settings.settings[':pleroma'][':email_notifications']
+      return _.get(this.settings.settings, [':pleroma', ':email_notifications']) || {}
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
     },
     loading() {
       return this.$store.state.settings.loading
@@ -49,13 +50,13 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Emails.Mailer')
     },
     mailerData() {
-      return this.settings.settings[':pleroma']['Pleroma.Emails.Mailer']
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Emails.Mailer']) || {}
     },
     userEmail() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Emails.UserEmail')
     },
     userEmailData() {
-      return this.settings.settings[':pleroma']['Pleroma.Emails.UserEmail']
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Emails.UserEmail']) || {}
     }
   },
   methods: {

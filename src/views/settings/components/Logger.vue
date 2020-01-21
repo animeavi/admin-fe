@@ -26,6 +26,7 @@
 import { mapGetters } from 'vuex'
 import i18n from '@/lang'
 import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
   name: 'Logger',
@@ -38,19 +39,19 @@ export default {
       return this.settings.description.find(setting => setting.key === ':console')
     },
     consoleData() {
-      return this.settings.settings[':logger'][':console']
+      return _.get(this.settings.settings, [':logger', ':console']) || {}
     },
     exsyslogger() {
       return this.settings.description.find(setting => setting.key === ':ex_syslogger')
     },
     exsysloggerData() {
-      return this.settings.settings[':logger'][':ex_syslogger']
+      return _.get(this.settings.settings, [':logger', ':ex_syslogger']) || {}
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
     },
     loading() {
       return this.settings.loading
@@ -59,13 +60,13 @@ export default {
       return this.settings.description.find(setting => setting.group === ':logger')
     },
     loggerData() {
-      return this.settings.settings[':logger'][':backends']
+      return _.get(this.settings.settings, [':logger', ':backends']) || {}
     },
     quack() {
       return this.settings.description.find(setting => setting.group === ':quack')
     },
     quackData() {
-      return this.settings.settings[':quack']
+      return _.get(this.settings.settings, [':quack']) || {}
     }
   },
   methods: {
