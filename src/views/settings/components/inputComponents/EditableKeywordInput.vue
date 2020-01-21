@@ -32,7 +32,7 @@ export default {
   name: 'EditableKeywordInput',
   props: {
     data: {
-      type: [Object, Array],
+      type: Array,
       default: function() {
         return {}
       }
@@ -95,7 +95,7 @@ export default {
     updateSetting(value, group, key, input, type) {
       const updatedSettings = type !== 'map'
         ? value.reduce((acc, element) => {
-          return { ...acc, [Object.keys(element)[0]]: [['list'], Object.values(element)[0].value] }
+          return { ...acc, [Object.keys(element)[0]]: ['list', Object.values(element)[0].value] }
         }, {})
         : value.reduce((acc, element) => {
           return { ...acc, [Object.keys(element)[0]]: Object.values(element)[0].value }

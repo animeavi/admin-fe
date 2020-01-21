@@ -6,6 +6,9 @@
     <div class="line"/>
     <el-form ref="mimeTypes" :model="mimeTypesData" :label-width="labelWidth">
       <setting :setting-group="mimeTypes" :data="mimeTypesData"/>
+    </el-form>
+    <el-form ref="remoteIp" :model="remoteIpData" :label-width="labelWidth">
+      <setting :setting-group="remoteIp" :data="remoteIpData"/>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>
@@ -17,6 +20,7 @@
 import { mapGetters } from 'vuex'
 import i18n from '@/lang'
 import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
   name: 'Other',
@@ -29,7 +33,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
     },
     loading() {
       return this.settings.loading
@@ -38,13 +42,19 @@ export default {
       return this.settings.description.find(setting => setting.group === ':mime')
     },
     mimeTypesData() {
-      return this.settings.settings[':mime']
+      return _.get(this.settings.settings, [':mime']) || {}
+    },
+    remoteIp() {
+      return this.settings.description.find(setting => setting.key === 'Pleroma.Plugs.RemoteIp')
+    },
+    remoteIpData() {
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Plugs.RemoteIp']) || {}
     },
     teslaAdapter() {
       return this.settings.description.find(setting => setting.group === ':tesla')
     },
     teslaAdapterData() {
-      return this.settings.settings[':tesla']
+      return _.get(this.settings.settings, [':tesla']) || {}
     }
   },
   methods: {

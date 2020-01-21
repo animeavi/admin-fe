@@ -40,16 +40,4 @@ export async function removeSettings(configs, authHost, token) {
   })
 }
 
-export async function uploadMedia(file, authHost, token) {
-  const formData = new FormData()
-  formData.append('file', file)
-  return await request({
-    baseURL: baseName(authHost),
-    url: `/api/v1/media`,
-    method: 'post',
-    headers: authHeaders(token),
-    data: formData
-  })
-}
-
 const authHeaders = (token) => token ? { 'Authorization': `Bearer ${getToken()}` } : {}

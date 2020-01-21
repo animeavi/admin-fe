@@ -339,12 +339,10 @@ export default {
     mediaProxy: 'Media Proxy',
     metadata: 'Metadata',
     gopher: 'Gopher',
-    endpoint: 'Endpoint',
     jobQueue: 'Job queue',
     webPush: 'Web push encryption',
     esshd: 'BBS / SSH access',
     rateLimiters: 'Rate limiters',
-    database: 'Database',
     other: 'Other',
     relays: 'Relays',
     follow: 'Follow',
@@ -383,6 +381,7 @@ export default {
     file: 'File',
     update: 'Update',
     remove: 'Remove',
+    removeFromDB: 'Remove setting from the DB',
     selectLocalPack: 'Select the local pack to copy to',
     localPack: 'Local pack',
     specifyShortcode: 'Specify a custom shortcode',
@@ -405,7 +404,8 @@ export default {
     nowNewPacksToImport: 'No new packs to import',
     successfullyUpdated: 'Successfully updated',
     metadatLowerCase: 'metadata',
-    files: 'files'
+    files: 'files',
+    successfullyRemoved: 'Setting removed successfully!'
   },
   invites: {
     inviteTokens: 'Invite tokens',

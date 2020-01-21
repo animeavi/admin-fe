@@ -11,10 +11,6 @@
       <setting :setting-group="uploadersS3" :data="uploadersS3Data"/>
     </el-form>
     <div class="line"/>
-    <el-form ref="uploadersMDII" :model="uploadersMDIIData" :label-width="labelWidth">
-      <setting :setting-group="uploadersMDII" :data="uploadersMDIIData"/>
-    </el-form>
-    <div class="line"/>
     <el-form ref="uploadFilterMogrify" :model="uploadFilterMogrifyData" :label-width="labelWidth">
       <setting :setting-group="uploadFilterMogrify" :data="uploadFilterMogrifyData"/>
     </el-form>
@@ -32,6 +28,7 @@
 import { mapGetters } from 'vuex'
 import i18n from '@/lang'
 import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
   name: 'Upload',
@@ -44,7 +41,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
     },
     loading() {
       return this.settings.loading
@@ -53,37 +50,31 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Upload')
     },
     uploadData() {
-      return this.settings.settings[':pleroma']['Pleroma.Upload']
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Upload']) || {}
     },
     uploadersLocal() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Uploaders.Local')
     },
     uploadersLocalData() {
-      return this.settings.settings[':pleroma']['Pleroma.Uploaders.Local']
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Uploaders.Local']) || {}
     },
     uploadersS3() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Uploaders.S3')
     },
     uploadersS3Data() {
-      return this.settings.settings[':pleroma']['Pleroma.Uploaders.S3']
-    },
-    uploadersMDII() {
-      return this.settings.description.find(setting => setting.key === 'Pleroma.Uploaders.MDII')
-    },
-    uploadersMDIIData() {
-      return this.settings.settings[':pleroma']['Pleroma.Uploaders.MDII']
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Uploaders.S3']) || {}
     },
     uploadFilterMogrify() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Upload.Filter.Mogrify')
     },
     uploadFilterMogrifyData() {
-      return this.settings.settings[':pleroma']['Pleroma.Upload.Filter.Mogrify']
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Upload.Filter.Mogrify']) || {}
     },
     uploadAnonymizeFilename() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Upload.Filter.AnonymizeFilename')
     },
     uploadAnonymizeFilenameData() {
-      return this.settings.settings[':pleroma']['Pleroma.Upload.Filter.AnonymizeFilename']
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Upload.Filter.AnonymizeFilename']) || {}
     }
   },
   methods: {

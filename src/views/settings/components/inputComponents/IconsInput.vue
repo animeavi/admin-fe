@@ -28,7 +28,7 @@ export default {
   name: 'EditableKeywordInput',
   props: {
     data: {
-      type: [Object, Array],
+      type: Array,
       default: function() {
         return {}
       }
@@ -46,13 +46,10 @@ export default {
       }
     }
   },
-  computed: {
-
-  },
   methods: {
     addIconToIcons() {
       const updatedValue = [...this.data, [{ key: '', value: '', id: this.generateID() }]]
-      this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key)
+      this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
     addValueToIcons(index) {
       const updatedValue = this.data.map((icon, i) => {
@@ -61,11 +58,11 @@ export default {
         }
         return icon
       })
-      this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key)
+      this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
     deleteIcondRow(index) {
       const filteredValues = this.data.filter((icon, i) => i !== index)
-      this.updateSetting(filteredValues, this.settingGroup.group, this.settingGroup.key, this.setting.key)
+      this.updateSetting(filteredValues, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
     generateID() {
       return `f${(~~(Math.random() * 1e8)).toString(16)}`

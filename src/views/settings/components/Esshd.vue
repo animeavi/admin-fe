@@ -20,6 +20,7 @@
 import i18n from '@/lang'
 import { mapGetters } from 'vuex'
 import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
   name: 'Esshd',
@@ -32,13 +33,13 @@ export default {
       return this.settings.description.find(setting => setting.group === ':esshd')
     },
     esshdData() {
-      return this.settings.settings[':esshd']
+      return _.get(this.settings.settings, [':esshd']) || {}
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
     },
     loading() {
       return this.settings.loading

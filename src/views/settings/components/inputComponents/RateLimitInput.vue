@@ -5,7 +5,8 @@
         :value="rateLimitAllUsers[0]"
         placeholder="scale"
         class="scale-input"
-        @input="parseRateLimiter($event, setting.key, 'scale', 'oneLimit', rateLimitAllUsers)"/> :
+        @input="parseRateLimiter($event, setting.key, 'scale', 'oneLimit', rateLimitAllUsers)"/>
+      <span>:</span>
       <el-input
         :value="rateLimitAllUsers[1]"
         placeholder="limit"
@@ -17,24 +18,26 @@
       </div>
     </div>
     <div v-if="rateLimitAuthUsers">
-      <el-form-item label="Unauthenticated users:">
+      <el-form-item label="Unauthenticated users:" label-width="180px" class="rate-limit">
         <el-input
           :value="rateLimitUnauthUsers[0]"
           placeholder="scale"
           class="scale-input"
-          @input="parseRateLimiter($event, setting.key, 'scale', 'unauthUsersLimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/> :
+          @input="parseRateLimiter($event, setting.key, 'scale', 'unauthUsersLimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
+        <span>:</span>
         <el-input
           :value="rateLimitUnauthUsers[1]"
           placeholder="limit"
           class="limit-input"
           @input="parseRateLimiter($event, setting.key, 'limit', 'unauthUsersLimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
       </el-form-item>
-      <el-form-item label="Authenticated users:">
+      <el-form-item label="Authenticated users:" label-width="180px" class="rate-limit">
         <el-input
           :value="rateLimitAuthUsers[0]"
           placeholder="scale"
           class="scale-input"
-          @input="parseRateLimiter($event, setting.key, 'scale', 'authUserslimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/> :
+          @input="parseRateLimiter($event, setting.key, 'scale', 'authUserslimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
+        <span>:</span>
         <el-input
           :value="rateLimitAuthUsers[1]"
           placeholder="limit"

@@ -42,6 +42,7 @@
 import { mapGetters } from 'vuex'
 import i18n from '@/lang'
 import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
   name: 'Instance',
@@ -56,25 +57,25 @@ export default {
       return this.settings.description.find(setting => setting.description === `Allows to set a token that can be used to authenticate with the admin api without using an actual user by giving it as the 'admin_token' parameter`)
     },
     adminTokenData() {
-      return this.settings.settings[':pleroma'][':admin_token']
+      return _.get(this.settings.settings, [':pleroma', ':admin_token']) || {}
     },
     fetchInitialPosts() {
       return this.settings.description.find(setting => setting.key === ':fetch_initial_posts')
     },
     fetchInitialPostsData() {
-      return this.settings.settings[':pleroma'][':fetch_initial_posts']
+      return _.get(this.settings.settings, [':pleroma', ':fetch_initial_posts']) || {}
     },
     instance() {
       return this.settings.description.find(setting => setting.key === ':instance')
     },
     instanceData() {
-      return this.settings.settings[':pleroma'][':instance']
+      return _.get(this.settings.settings, [':pleroma', ':instance']) || {}
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
     },
     loading() {
       return this.settings.loading
@@ -83,31 +84,31 @@ export default {
       return this.settings.description.find(setting => setting.key === ':manifest')
     },
     manifestData() {
-      return this.settings.settings[':pleroma'][':manifest']
+      return _.get(this.settings.settings, [':pleroma', ':manifest']) || {}
     },
     pleromaUser() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.User')
     },
     pleromaUserData() {
-      return this.settings.settings[':pleroma']['Pleroma.User']
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.User']) || {}
     },
     scheduledActivity() {
       return this.$store.state.settings.description.find(setting => setting.key === 'Pleroma.ScheduledActivity')
     },
     scheduledActivityData() {
-      return this.settings.settings[':pleroma']['Pleroma.ScheduledActivity']
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.ScheduledActivity']) || {}
     },
     suggestions() {
       return this.$store.state.settings.description.find(setting => setting.key === ':suggestions')
     },
     suggestionsData() {
-      return this.settings.settings[':pleroma'][':suggestions']
+      return _.get(this.settings.settings, [':pleroma', ':suggestions']) || {}
     },
     uriSchemes() {
       return this.$store.state.settings.description.find(setting => setting.key === ':uri_schemes')
     },
     uriSchemesData() {
-      return this.settings.settings[':pleroma'][':uri_schemes']
+      return _.get(this.settings.settings, [':pleroma', ':uri_schemes']) || {}
     }
   },
   methods: {

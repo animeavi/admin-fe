@@ -11,6 +11,7 @@
 import { mapGetters } from 'vuex'
 import i18n from '@/lang'
 import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
   name: 'RateLimiters',
@@ -23,13 +24,13 @@ export default {
       return this.settings.description.find(setting => setting.key === ':rate_limit')
     },
     rateLimitersData() {
-      return this.settings.settings[':pleroma'][':rate_limit']
+      return _.get(this.settings.settings, [':pleroma', ':rate_limit']) || {}
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
     },
     loading() {
       return this.$store.state.settings.loading

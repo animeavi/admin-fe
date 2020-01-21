@@ -25,6 +25,7 @@
 import { mapGetters } from 'vuex'
 import i18n from '@/lang'
 import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
   name: 'Authentication',
@@ -37,19 +38,19 @@ export default {
       return this.settings.description.find(setting => setting.key === ':auth')
     },
     authData() {
-      return this.settings.settings[':pleroma'][':auth']
+      return _.get(this.settings.settings, [':pleroma', ':auth']) || {}
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
     },
     ldap() {
       return this.settings.description.find(setting => setting.key === ':ldap')
     },
     ldapData() {
-      return this.settings.settings[':pleroma'][':ldap']
+      return _.get(this.settings.settings, [':pleroma', ':ldap']) || {}
     },
     loading() {
       return this.settings.loading
@@ -58,13 +59,13 @@ export default {
       return this.settings.description.find(setting => setting.key === ':oauth2')
     },
     oauth2Data() {
-      return this.settings.settings[':pleroma'][':oauth2']
+      return _.get(this.settings.settings, [':pleroma', ':oauth2']) || {}
     },
     pleromaAuthenticator() {
       return this.settings.description.find(setting => setting.description === 'Authenticator')
     },
     pleromaAuthenticatorData() {
-      return this.settings.settings[':pleroma']['Pleroma.Web.Auth.Authenticator']
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Web.Auth.Authenticator']) || {}
     }
   },
   methods: {

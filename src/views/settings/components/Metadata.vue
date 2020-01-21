@@ -17,6 +17,7 @@
 import { mapGetters } from 'vuex'
 import i18n from '@/lang'
 import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
   name: 'Metadata',
@@ -29,7 +30,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '240px'
+      return this.isMobile ? '100px' : '280px'
     },
     loading() {
       return this.settings.loading
@@ -38,13 +39,13 @@ export default {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Web.Metadata')
     },
     metadataData() {
-      return this.settings.settings[':pleroma']['Pleroma.Web.Metadata']
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Web.Metadata']) || {}
     },
     richMedia() {
       return this.settings.description.find(setting => setting.key === ':rich_media')
     },
     richMediaData() {
-      return this.settings.settings[':pleroma'][':rich_media']
+      return _.get(this.settings.settings, [':pleroma', ':rich_media']) || {}
     }
   },
   methods: {
