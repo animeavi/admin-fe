@@ -51,8 +51,8 @@
                 <tr class="el-table__row">
                   <td>{{ $t('userProfile.activeUppercase') }}</td>
                   <td>
-                    <el-tag v-if="user.deactivated" type="success">{{ $t('userProfile.active') }}</el-tag>
-                    <el-tag v-if="!user.deactivated" type="danger">{{ $t('userProfile.deactivated') }}</el-tag>
+                    <el-tag v-if="!user.deactivated" type="success">{{ $t('userProfile.active') }}</el-tag>
+                    <el-tag v-if="user.deactivated" type="danger">{{ $t('userProfile.deactivated') }}</el-tag>
                   </td>
                 </tr>
               </tbody>
