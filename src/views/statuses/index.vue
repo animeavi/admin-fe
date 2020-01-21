@@ -8,6 +8,7 @@
         v-model="selectedInstance"
         :placeholder="$t('statuses.instanceFilter')"
         :no-data-text="$t('statuses.noInstances')"
+        filterable
         @change="handleFilterChange">
         <el-option
           v-for="(instance,index) in instances"
