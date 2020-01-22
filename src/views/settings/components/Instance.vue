@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading" class="form-container">
     <el-form ref="instanceData" :model="instanceData" :label-width="labelWidth">
       <setting :setting-group="instance" :data="instanceData"/>
     </el-form>
@@ -31,10 +31,10 @@
     <div class="line"/>
     <el-form ref="pleromaUser" :model="pleromaUserData" :label-width="labelWidth">
       <setting :setting-group="pleromaUser" :data="pleromaUserData"/>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Submit</el-button>
-      </el-form-item>
     </el-form>
+    <div class="submit-button-container">
+      <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
+    </div>
   </div>
 </template>
 

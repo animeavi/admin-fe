@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading" class="form-container">
     <el-form ref="loggerData" :model="loggerData" :label-width="labelWidth">
       <setting :setting-group="logger" :data="loggerData"/>
     </el-form>
@@ -15,10 +15,10 @@
     <el-form ref="quackData" :model="quackData" :label-width="labelWidth">
       <el-form-item label="Quack logger:"/>
       <setting :setting-group="quack" :data="quackData"/>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Submit</el-button>
-      </el-form-item>
     </el-form>
+    <div class="submit-button-container">
+      <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
+    </div>
   </div>
 </template>
 

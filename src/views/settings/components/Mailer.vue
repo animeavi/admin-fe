@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading" class="form-container">
     <el-form ref="mailer" :model="mailerData" :label-width="labelWidth">
       <setting :setting-group="mailer" :data="mailerData"/>
     </el-form>
@@ -9,10 +9,10 @@
     </el-form>
     <el-form ref="userEmail" :model="userEmail" :label-width="labelWidth">
       <setting :setting-group="userEmail" :data="userEmailData"/>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Submit</el-button>
-      </el-form-item>
     </el-form>
+    <div class="submit-button-container">
+      <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
+    </div>
   </div>
 </template>
 

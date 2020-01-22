@@ -1,10 +1,12 @@
 <template>
-  <el-form v-if="!loading" ref="rateLimiters" :model="rateLimitersData" :label-width="labelWidth">
-    <setting :setting-group="rateLimiters" :data="rateLimitersData"/>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">Submit</el-button>
-    </el-form-item>
-  </el-form>
+  <div v-if="!loading" class="form-container">
+    <el-form v-if="!loading" ref="rateLimiters" :model="rateLimitersData" :label-width="labelWidth">
+      <setting :setting-group="rateLimiters" :data="rateLimitersData"/>
+    </el-form>
+    <div class="submit-button-container">
+      <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
+    </div>
+  </div>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading" class="form-container">
     <el-form ref="teslaAdapter" :model="teslaAdapterData" :label-width="labelWidth">
       <setting :setting-group="teslaAdapter" :data="teslaAdapterData"/>
     </el-form>
@@ -9,10 +9,10 @@
     </el-form>
     <el-form ref="remoteIp" :model="remoteIpData" :label-width="labelWidth">
       <setting :setting-group="remoteIp" :data="remoteIpData"/>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Submit</el-button>
-      </el-form-item>
     </el-form>
+    <div class="submit-button-container">
+      <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
+    </div>
   </div>
 </template>
 
