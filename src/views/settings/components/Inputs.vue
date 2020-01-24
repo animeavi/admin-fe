@@ -77,7 +77,11 @@
     <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
     <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
     <!-------------------->
-    <p v-if="setting.type !== 'keyword'" :class="inputClass" class="expl">{{ setting.description }}</p>
+    <span
+      v-if="setting.description && setting.type !== 'keyword'"
+      :class="inputClass"
+      class="expl"
+      v-html="getFormattedDescription(setting.description)"/>
   </el-form-item>
 </template>
 
@@ -86,6 +90,7 @@ import i18n from '@/lang'
 import { AutoLinkerInput, EditableKeywordInput, IconsInput, MascotsInput, MultipleSelect, ProxyUrlInput, PruneInput, RateLimitInput } from './inputComponents'
 import { processNested } from '@/store/modules/normalizers'
 import _ from 'lodash'
+import marked from 'marked'
 
 export default {
   name: 'Inputs',
@@ -202,6 +207,9 @@ export default {
         (Array.isArray(type) && type.includes('keyword') && type.includes('integer')) ||
         type === 'map' ||
         (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
+    },
+    getFormattedDescription(desc) {
+      return marked(desc)
     },
     processNestedData(value, group, parentKey, parents) {
       const { valueForState,
