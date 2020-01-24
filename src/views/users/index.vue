@@ -9,8 +9,8 @@
       <el-input :placeholder="$t('users.search')" v-model="search" class="search" @input="handleDebounceSearchInput"/>
     </div>
     <div class="actions-container">
-      <el-button class="actions-button create-account" @click="createAccountDialogOpen = true">
-        <span>
+      <el-button class="actions-button" @click="createAccountDialogOpen = true">
+        <span class="create-account">
           <i class="el-icon-plus"/>
           {{ $t('users.createAccount') }}
         </span>
@@ -354,7 +354,7 @@ export default {
     cursor: pointer;
     color: #409EFF;
   }
-.el-icon-plus {
+.create-account > .el-icon-plus {
   margin-right: 5px;
 }
 .password-reset-token {
@@ -402,13 +402,13 @@ only screen and (max-width: 760px),
     h1 {
       margin: 7px 10px 15px 10px;
     }
+    .actions-button {
+      width: 100%;
+    }
     .actions-container {
       display: flex;
       flex-direction: column;
       margin: 0 10px 7px 10px
-    }
-    .create-account {
-      width: 100%;
     }
     .el-icon-arrow-down {
       font-size: 12px;
