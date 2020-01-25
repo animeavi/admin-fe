@@ -44,7 +44,7 @@
   .esshd-list {
     margin: 0;
   }
-  .expl > p {
+  .expl, .expl > p {
     color: #666666;
     font-size: 13px;
     line-height: 22px;
@@ -52,6 +52,7 @@
     overflow-wrap: break-word;
     code {
       display: inline;
+      line-height: 22px;
       font-size: 13px;
       padding: 2px 3px;
     }
