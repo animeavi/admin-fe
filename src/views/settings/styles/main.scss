@@ -11,13 +11,18 @@
     font-family: monospace;
     padding: 0 3px 0 3px;
   }
-  .description {
+  .description > p {
     font-size: 14px;
     color: #606266;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
     font-weight: 700;
     line-height: 20px;
     margin: 0 0 14px 0;
+    code {
+      display: inline;
+      padding: 2px 3px;
+      font-size: 14px;
+    }
   }
   .description-container {
     overflow-wrap: break-word;
@@ -39,12 +44,17 @@
   .esshd-list {
     margin: 0;
   }
-  .expl {
+  .expl > p {
     color: #666666;
     font-size: 13px;
     line-height: 22px;
     margin: 5px 0 0 0;
     overflow-wrap: break-word;
+    code {
+      display: inline;
+      font-size: 13px;
+      padding: 2px 3px;
+    }
   }
   .form-container {
     margin-bottom: 80px;
