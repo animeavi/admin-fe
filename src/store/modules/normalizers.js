@@ -138,7 +138,7 @@ const parseProxyUrl = value => {
 }
 
 const partialUpdate = (group, key) => {
-  return group === ':auto_linker' && key === ':opts'
+  return !(group === ':auto_linker' && key === ':opts')
 }
 
 export const processNested = (valueForState, valueForUpdatedSettings, group, parentKey, parents, settings, updatedSettings) => {
