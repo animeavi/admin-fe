@@ -4,10 +4,6 @@
       <setting :setting-group="instance" :data="instanceData"/>
     </el-form>
     <div class="line"/>
-    <el-form ref="uriSchemes" :model="uriSchemesData" :label-width="labelWidth">
-      <setting :setting-group="uriSchemes" :data="uriSchemesData"/>
-    </el-form>
-    <div class="line"/>
     <el-form ref="adminToken" :model="adminTokenData" :label-width="labelWidth">
       <setting :setting-group="adminToken" :data="adminTokenData"/>
     </el-form>
@@ -103,12 +99,6 @@ export default {
     },
     suggestionsData() {
       return _.get(this.settings.settings, [':pleroma', ':suggestions']) || {}
-    },
-    uriSchemes() {
-      return this.$store.state.settings.description.find(setting => setting.key === ':uri_schemes')
-    },
-    uriSchemesData() {
-      return _.get(this.settings.settings, [':pleroma', ':uri_schemes']) || {}
     }
   },
   methods: {
