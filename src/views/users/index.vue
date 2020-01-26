@@ -277,7 +277,7 @@ export default {
         return
       }
 
-      this.$store.dispatch('RequirePasswordReset', { nickname })
+      this.$store.dispatch('RequirePasswordReset', { nicknames: [nickname] })
     },
     toggleActivation(user) {
       user.deactivated
