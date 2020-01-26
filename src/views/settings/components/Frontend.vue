@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading" class="form-container">
     <el-form ref="frontendData" :model="frontendData" :label-width="labelWidth">
       <setting :setting-group="frontend" :data="frontendData"/>
     </el-form>
@@ -20,10 +20,10 @@
     <el-form ref="markupData" :model="markupData" :label-width="labelWidth">
       <el-form-item label="Markup settings:"/>
       <setting :setting-group="markup" :data="markupData"/>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Submit</el-button>
-      </el-form-item>
     </el-form>
+    <div class="submit-button-container">
+      <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
+    </div>
   </div>
 </template>
 

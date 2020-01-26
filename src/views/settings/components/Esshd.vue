@@ -1,18 +1,11 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading" class="form-container">
     <el-form ref="esshdData" :model="esshdData" :label-width="labelWidth">
       <setting :setting-group="esshd" :data="esshdData"/>
-      <el-form-item>
-        <p class="expl">Feel free to adjust the priv_dir and port number.
-        Then you will have to create the key for the keys (in the example <span class="code">priv/ssh_keys</span>) and create the host keys with
-          <span class="code">ssh-keygen -m PEM -N "" -b 2048 -t rsa -f ssh_host_rsa_key</span>.
-          After restarting, you should be able to connect to your Pleroma instance with <span class="code">ssh username@server -p $PORT</span>
-        </p>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Submit</el-button>
-      </el-form-item>
     </el-form>
+    <div class="submit-button-container">
+      <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
+    </div>
   </div>
 </template>
 

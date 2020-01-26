@@ -1,26 +1,29 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading" class="form-container">
     <el-form ref="uploadData" :model="uploadData" :label-width="labelWidth">
       <setting :setting-group="upload" :data="uploadData"/>
     </el-form>
-    <el-form ref="uploadersLocal" :model="uploadersLocalData" :label-width="labelWidth">
+    <el-form v-if="showUploadersLocal" ref="uploadersLocal" :model="uploadersLocalData" :label-width="labelWidth">
+      <el-form-item class="description-container description">
+        <span class="description"><p>Pleroma.Uploaders.Local</p></span>
+      </el-form-item>
       <setting :setting-group="uploadersLocal" :data="uploadersLocalData"/>
+      <div class="line"/>
     </el-form>
-    <div class="line"/>
-    <el-form ref="uploadersS3" :model="uploadersS3Data" :label-width="labelWidth">
+    <el-form v-if="showUploadersS3" ref="uploadersS3" :model="uploadersS3Data" :label-width="labelWidth">
       <setting :setting-group="uploadersS3" :data="uploadersS3Data"/>
+      <div class="line"/>
     </el-form>
-    <div class="line"/>
     <el-form ref="uploadFilterMogrify" :model="uploadFilterMogrifyData" :label-width="labelWidth">
       <setting :setting-group="uploadFilterMogrify" :data="uploadFilterMogrifyData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="uploadAnonymizeFilename" :model="uploadAnonymizeFilenameData" :label-width="labelWidth">
       <setting :setting-group="uploadAnonymizeFilename" :data="uploadAnonymizeFilenameData"/>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Submit</el-button>
-      </el-form-item>
     </el-form>
+    <div class="submit-button-container">
+      <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
+    </div>
   </div>
 </template>
 
@@ -45,6 +48,14 @@ export default {
     },
     loading() {
       return this.settings.loading
+    },
+    showUploadersS3() {
+      const uploader = _.get(this.settings.settings, [':pleroma', 'Pleroma.Upload', ':uploader'])
+      return uploader === 'Pleroma.Uploaders.S3'
+    },
+    showUploadersLocal() {
+      const uploader = _.get(this.settings.settings, [':pleroma', 'Pleroma.Upload', ':uploader'])
+      return uploader === 'Pleroma.Uploaders.Local'
     },
     upload() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Upload')

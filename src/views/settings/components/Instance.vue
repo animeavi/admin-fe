@@ -1,11 +1,7 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading" class="form-container">
     <el-form ref="instanceData" :model="instanceData" :label-width="labelWidth">
       <setting :setting-group="instance" :data="instanceData"/>
-    </el-form>
-    <div class="line"/>
-    <el-form ref="uriSchemes" :model="uriSchemesData" :label-width="labelWidth">
-      <setting :setting-group="uriSchemes" :data="uriSchemesData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="adminToken" :model="adminTokenData" :label-width="labelWidth">
@@ -31,10 +27,10 @@
     <div class="line"/>
     <el-form ref="pleromaUser" :model="pleromaUserData" :label-width="labelWidth">
       <setting :setting-group="pleromaUser" :data="pleromaUserData"/>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Submit</el-button>
-      </el-form-item>
     </el-form>
+    <div class="submit-button-container">
+      <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
+    </div>
   </div>
 </template>
 
@@ -54,7 +50,7 @@ export default {
       'settings'
     ]),
     adminToken() {
-      return this.settings.description.find(setting => setting.description === `Allows to set a token that can be used to authenticate with the admin api without using an actual user by giving it as the 'admin_token' parameter`)
+      return this.settings.description.find(setting => setting.children && setting.children[0].key === ':admin_token')
     },
     adminTokenData() {
       return _.get(this.settings.settings, [':pleroma', ':admin_token']) || {}
@@ -103,12 +99,6 @@ export default {
     },
     suggestionsData() {
       return _.get(this.settings.settings, [':pleroma', ':suggestions']) || {}
-    },
-    uriSchemes() {
-      return this.$store.state.settings.description.find(setting => setting.key === ':uri_schemes')
-    },
-    uriSchemesData() {
-      return _.get(this.settings.settings, [':pleroma', ':uri_schemes']) || {}
     }
   },
   methods: {

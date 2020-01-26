@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading" class="form-container">
     <el-form ref="pleromaAuthenticatorData" :model="pleromaAuthenticatorData" :label-width="labelWidth">
       <setting :setting-group="pleromaAuthenticator" :data="pleromaAuthenticatorData"/>
     </el-form>
@@ -14,10 +14,10 @@
     <div class="line"/>
     <el-form ref="oauth2" :model="oauth2Data" :label-width="labelWidth">
       <setting :setting-group="oauth2" :data="oauth2Data"/>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Submit</el-button>
-      </el-form-item>
     </el-form>
+    <div class="submit-button-container">
+      <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
+    </div>
   </div>
 </template>
 
@@ -62,7 +62,7 @@ export default {
       return _.get(this.settings.settings, [':pleroma', ':oauth2']) || {}
     },
     pleromaAuthenticator() {
-      return this.settings.description.find(setting => setting.description === 'Authenticator')
+      return this.settings.description.find(setting => setting.children && setting.children[0].key === 'Pleroma.Web.Auth.Authenticator')
     },
     pleromaAuthenticatorData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Web.Auth.Authenticator']) || {}

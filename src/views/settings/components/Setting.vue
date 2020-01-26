@@ -1,7 +1,7 @@
 <template>
   <div v-if="!loading">
     <el-form-item v-if="settingGroup.description" class="description-container">
-      <p class="description">{{ settingGroup.description }}</p>
+      <span class="description" v-html="getFormattedDescription(settingGroup.description)"/>
     </el-form-item>
     <div v-if="settingGroup.key === 'Pleroma.Emails.Mailer'">
       <div v-for="setting in settingGroup.children.filter(setting => !setting.group)" :key="setting.key">
@@ -65,6 +65,7 @@
 import Inputs from './Inputs'
 import i18n from '@/lang'
 import _ from 'lodash'
+import marked from 'marked'
 
 export default {
   name: 'Setting',
@@ -106,6 +107,9 @@ export default {
         type === 'map' ||
         type.includes('keyword') ||
         key === ':replace'
+    },
+    getFormattedDescription(desc) {
+      return marked(desc)
     },
     async removeSetting(key) {
       const config = this.settingGroup.key

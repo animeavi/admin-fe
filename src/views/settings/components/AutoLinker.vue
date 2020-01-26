@@ -1,10 +1,12 @@
 <template>
-  <el-form v-if="!loading" ref="autoLinker" :model="autoLinkerData" :label-width="labelWidth">
-    <setting :setting-group="autoLinker" :data="autoLinkerData"/>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">Submit</el-button>
-    </el-form-item>
-  </el-form>
+  <div v-if="!loading" class="form-container">
+    <el-form ref="autoLinker" :model="autoLinkerData" :label-width="labelWidth">
+      <setting :setting-group="autoLinker" :data="autoLinkerData"/>
+    </el-form>
+    <div class="submit-button-container">
+      <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
+    </div>
+  </div>
 </template>
 
 <script>
