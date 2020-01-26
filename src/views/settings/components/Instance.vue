@@ -50,7 +50,7 @@ export default {
       'settings'
     ]),
     adminToken() {
-      return this.settings.description.find(setting => setting.description === `Allows to set a token that can be used to authenticate with the admin api without using an actual user by giving it as the 'admin_token' parameter`)
+      return this.settings.description.find(setting => setting.children && setting.children[0].key === ':admin_token')
     },
     adminTokenData() {
       return _.get(this.settings.settings, [':pleroma', ':admin_token']) || {}
