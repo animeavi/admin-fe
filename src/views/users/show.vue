@@ -1,8 +1,11 @@
 <template>
   <main v-if="!userProfileLoading">
-    <header>
-      <el-avatar :src="user.avatar" size="large" />
-      <h1>{{ user.display_name }}</h1>
+    <header class="user-page-header">
+      <div class="avatar-name-container">
+        <el-avatar :src="user.avatar" size="large" />
+        <h1>{{ user.display_name }}</h1>
+      </div>
+      <moderation-dropdown :user="user" :page="'userPage'"/>
     </header>
     <el-row>
       <el-col :span="8">
@@ -84,10 +87,11 @@
 
 <script>
 import Status from '@/components/Status'
+import ModerationDropdown from './components/ModerationDropdown'
 
 export default {
   name: 'UsersShow',
-  components: { Status },
+  components: { ModerationDropdown, Status },
   data() {
     return {
       showPrivate: false
@@ -119,6 +123,10 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss' scoped>
+.avatar-name-container {
+  display: flex;
+  align-items: center;
+}
 header {
   align-items: center;
   display: flex;
@@ -151,7 +159,6 @@ table {
 .no-statuses {
   margin-left: 28px;
   color: #606266;
-
 }
 .recent-statuses-header {
   margin-top: 10px;
@@ -160,16 +167,24 @@ table {
   padding: 0 20px 0 0;
 }
 .show-private {
-  text-align: right;
+  width: 173px;
+  text-align: left;
   line-height: 67px;
-  padding-right: 20px;
+  margin-right: 20px;
 }
 .recent-statuses {
   margin-left: 28px;
 }
+.user-page-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  h1 {
+    display: inline
+  }
+}
 .user-profile-card {
-  margin-left: 15px;
-  margin-right: 20px;
+  margin: 0 20px;
 }
 .user-profile-table {
   margin: 0;

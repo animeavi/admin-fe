@@ -93,6 +93,8 @@ const users = {
       } finally {
         dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
       }
+
+      dispatch('FetchUserProfile', { userId: users[0].id, godmode: false })
       dispatch('SuccessMessage')
     },
     async AddRight({ commit, dispatch, getters, state }, { users, right }) {
@@ -109,6 +111,8 @@ const users = {
       } finally {
         dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
       }
+
+      dispatch('FetchUserProfile', { userId: users[0].id, godmode: false })
       dispatch('SuccessMessage')
     },
     async AddTag({ commit, dispatch, getters, state }, { users, tag }) {
@@ -125,6 +129,8 @@ const users = {
       } finally {
         dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
       }
+
+      dispatch('FetchUserProfile', { userId: users[0].id, godmode: false })
       dispatch('SuccessMessage')
     },
     async ClearFilters({ commit, dispatch, state }) {
@@ -155,6 +161,8 @@ const users = {
       } finally {
         dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
       }
+
+      dispatch('FetchUserProfile', { userId: users[0].id, godmode: false })
       dispatch('SuccessMessage')
     },
     async ConfirmUsersEmail({ commit, dispatch, getters, state }, users) {
@@ -196,6 +204,8 @@ const users = {
       } finally {
         dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
       }
+
+      dispatch('FetchUserProfile', { userId: users[0].id, godmode: false })
       dispatch('SuccessMessage')
     },
     async DeleteUsers({ commit, dispatch, getters, state }, users) {
@@ -208,6 +218,8 @@ const users = {
       const deletedUsersIds = users.map(deletedUser => deletedUser.id)
       const updatedUsers = state.fetchedUsers.filter(user => !deletedUsersIds.includes(user.id))
       commit('SET_USERS', updatedUsers)
+
+      dispatch('FetchUserProfile', { userId: users[0].id, godmode: false })
       dispatch('SuccessMessage')
     },
     async FetchUsers({ commit, dispatch, getters, state }, { page }) {
@@ -238,6 +250,8 @@ const users = {
       } finally {
         dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
       }
+
+      dispatch('FetchUserProfile', { userId: users[0].id, godmode: false })
       dispatch('SuccessMessage')
     },
     async RequirePasswordReset({ dispatch, getters }, user) {

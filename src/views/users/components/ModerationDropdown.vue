@@ -1,9 +1,20 @@
 <template>
   <el-dropdown :hide-on-click="false" size="small" trigger="click">
-    <span class="el-dropdown-link">
-      {{ $t('users.moderation') }}
-      <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
-    </span>
+    <div>
+      <span v-if="page === 'users'" class="el-dropdown-link">
+        {{ $t('users.moderation') }}
+        <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
+      </span>
+      <el-button v-if="page === 'userPage'" class="actions-button">
+        <span class="actions-button-container">
+          <span>
+            <i class="el-icon-edit" />
+            {{ $t('users.moderateUser') }}
+          </span>
+          <i class="el-icon-arrow-down el-icon--right"/>
+        </span>
+      </el-button>
+    </div>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item
         v-if="showAdminAction(user)"
@@ -100,6 +111,10 @@ export default {
       default: function() {
         return {}
       }
+    },
+    page: {
+      type: String,
+      default: 'users'
     }
   },
   computed: {

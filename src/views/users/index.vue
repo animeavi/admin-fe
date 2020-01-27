@@ -66,7 +66,7 @@
       </el-table-column>
       <el-table-column :label="$t('users.actions')" fixed="right">
         <template slot-scope="scope">
-          <moderation-dropdown :user="scope.row"/>
+          <moderation-dropdown :user="scope.row" :page="'users'"/>
         </template>
       </el-table-column>
     </el-table>
