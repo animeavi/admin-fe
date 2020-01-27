@@ -167,7 +167,7 @@ table {
   padding: 0 20px 0 0;
 }
 .show-private {
-  width: 173px;
+  width: 200px;
   text-align: left;
   line-height: 67px;
   margin-right: 20px;

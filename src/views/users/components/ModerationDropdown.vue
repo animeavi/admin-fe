@@ -5,8 +5,8 @@
         {{ $t('users.moderation') }}
         <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
       </span>
-      <el-button v-if="page === 'userPage'" class="actions-button">
-        <span class="actions-button-container">
+      <el-button v-if="page === 'userPage'" class="moderate-user-button">
+        <span class="moderate-user-button-container">
           <span>
             <i class="el-icon-edit" />
             {{ $t('users.moderateUser') }}
@@ -168,3 +168,15 @@ export default {
   }
 }
 </script>
+
+<style rel='stylesheet/scss' lang='scss'>
+  .moderate-user-button {
+    text-align: left;
+    width: 200px;
+    padding: 10px;
+  }
+  .moderate-user-button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
