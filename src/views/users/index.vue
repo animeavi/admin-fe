@@ -66,96 +66,7 @@
       </el-table-column>
       <el-table-column :label="$t('users.actions')" fixed="right">
         <template slot-scope="scope">
-          <el-dropdown :hide-on-click="false" size="small" trigger="click">
-            <span class="el-dropdown-link">
-              {{ $t('users.moderation') }}
-              <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                v-if="showAdminAction(scope.row)"
-                @click.native="toggleUserRight(scope.row, 'admin')">
-                {{ scope.row.roles.admin ? $t('users.revokeAdmin') : $t('users.grantAdmin') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                v-if="showAdminAction(scope.row)"
-                @click.native="toggleUserRight(scope.row, 'moderator')">
-                {{ scope.row.roles.moderator ? $t('users.revokeModerator') : $t('users.grantModerator') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                v-if="showDeactivatedButton(scope.row.id)"
-                :divided="showAdminAction(scope.row)"
-                @click.native="toggleActivation(scope.row)">
-                {{ scope.row.deactivated ? $t('users.activateAccount') : $t('users.deactivateAccount') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                v-if="showDeactivatedButton(scope.row.id)"
-                @click.native="handleDeletion(scope.row)">
-                {{ $t('users.deleteAccount') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                v-if="scope.row.local && scope.row.confirmation_pending"
-                divided
-                @click.native="handleEmailConfirmation(scope.row)">
-                {{ $t('users.confirmAccount') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                v-if="scope.row.local && scope.row.confirmation_pending"
-                @click.native="handleConfirmationResend(scope.row)">
-                {{ $t('users.resendConfirmation') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                :divided="showAdminAction(scope.row)"
-                :class="{ 'active-tag': scope.row.tags.includes('force_nsfw') }"
-                @click.native="toggleTag(scope.row, 'force_nsfw')">
-                {{ $t('users.forceNsfw') }}
-                <i v-if="scope.row.tags.includes('force_nsfw')" class="el-icon-check"/>
-              </el-dropdown-item>
-              <el-dropdown-item
-                :class="{ 'active-tag': scope.row.tags.includes('strip_media') }"
-                @click.native="toggleTag(scope.row, 'strip_media')">
-                {{ $t('users.stripMedia') }}
-                <i v-if="scope.row.tags.includes('strip_media')" class="el-icon-check"/>
-              </el-dropdown-item>
-              <el-dropdown-item
-                :class="{ 'active-tag': scope.row.tags.includes('force_unlisted') }"
-                @click.native="toggleTag(scope.row, 'force_unlisted')">
-                {{ $t('users.forceUnlisted') }}
-                <i v-if="scope.row.tags.includes('force_unlisted')" class="el-icon-check"/>
-              </el-dropdown-item>
-              <el-dropdown-item
-                :class="{ 'active-tag': scope.row.tags.includes('sandbox') }"
-                @click.native="toggleTag(scope.row, 'sandbox')">
-                {{ $t('users.sandbox') }}
-                <i v-if="scope.row.tags.includes('sandbox')" class="el-icon-check"/>
-              </el-dropdown-item>
-              <el-dropdown-item
-                v-if="scope.row.local"
-                :class="{ 'active-tag': scope.row.tags.includes('disable_remote_subscription') }"
-                @click.native="toggleTag(scope.row, 'disable_remote_subscription')">
-                {{ $t('users.disableRemoteSubscription') }}
-                <i v-if="scope.row.tags.includes('disable_remote_subscription')" class="el-icon-check"/>
-              </el-dropdown-item>
-              <el-dropdown-item
-                v-if="scope.row.local"
-                :class="{ 'active-tag': scope.row.tags.includes('disable_any_subscription') }"
-                @click.native="toggleTag(scope.row, 'disable_any_subscription')">
-                {{ $t('users.disableAnySubscription') }}
-                <i v-if="scope.row.tags.includes('disable_any_subscription')" class="el-icon-check"/>
-              </el-dropdown-item>
-              <el-dropdown-item
-                v-if="scope.row.local"
-                divided
-                @click.native="getPasswordResetToken(scope.row.nickname)">
-                {{ $t('users.getPasswordResetToken') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                v-if="scope.row.local"
-                @click.native="requirePasswordReset(scope.row.nickname)">
-                {{ $t('users.requirePasswordReset') }}
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <moderation-dropdown :user="scope.row"/>
         </template>
       </el-table-column>
     </el-table>
@@ -191,13 +102,15 @@ import numeral from 'numeral'
 import UsersFilter from './components/UsersFilter'
 import MultipleUsersMenu from './components/MultipleUsersMenu'
 import NewAccountDialog from './components/NewAccountDialog'
+import ModerationDropdown from './components/ModerationDropdown'
 
 export default {
   name: 'Users',
   components: {
-    UsersFilter,
+    NewAccountDialog,
+    ModerationDropdown,
     MultipleUsersMenu,
-    NewAccountDialog
+    UsersFilter
   },
   data() {
     return {
@@ -264,29 +177,6 @@ export default {
     getFirstLetter(str) {
       return str.charAt(0).toUpperCase()
     },
-    getPasswordResetToken(nickname) {
-      this.resetPasswordDialogOpen = true
-      this.$store.dispatch('GetPasswordResetToken', nickname)
-    },
-    requirePasswordReset(nickname) {
-      const mailerEnabled = this.$store.state.user.nodeInfo.metadata.mailerEnabled
-
-      if (!mailerEnabled) {
-        this.$alert(this.$t('users.mailerMustBeEnabled'), 'Error', { type: 'error' })
-
-        return
-      }
-
-      this.$store.dispatch('RequirePasswordReset', { nickname })
-    },
-    toggleActivation(user) {
-      user.deactivated
-        ? this.$store.dispatch('ActivateUsers', [user])
-        : this.$store.dispatch('DeactivateUsers', [user])
-    },
-    handleDeletion(user) {
-      this.$store.dispatch('DeleteUsers', [user])
-    },
     handlePageChange(page) {
       const searchQuery = this.$store.state.users.searchQuery
       if (searchQuery === '') {
@@ -302,27 +192,8 @@ export default {
       this.resetPasswordDialogOpen = false
       this.$store.dispatch('RemovePasswordToken')
     },
-    showAdminAction({ local, id }) {
-      return local && this.showDeactivatedButton(id)
-    },
     showDeactivatedButton(id) {
       return this.$store.state.user.id !== id
-    },
-    toggleTag(user, tag) {
-      user.tags.includes(tag)
-        ? this.$store.dispatch('RemoveTag', { users: [user], tag })
-        : this.$store.dispatch('AddTag', { users: [user], tag })
-    },
-    toggleUserRight(user, right) {
-      user.roles[right]
-        ? this.$store.dispatch('DeleteRight', { users: [user], right })
-        : this.$store.dispatch('AddRight', { users: [user], right })
-    },
-    handleEmailConfirmation(user) {
-      this.$store.dispatch('ConfirmUsersEmail', [user])
-    },
-    handleConfirmationResend(user) {
-      this.$store.dispatch('ResendConfirmationEmail', [user])
     }
   }
 }
