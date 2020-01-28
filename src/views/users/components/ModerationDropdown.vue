@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     getPasswordResetToken(nickname) {
-      this.resetPasswordDialogOpen = true
+      this.$emit('open-reset-token-dialog')
       this.$store.dispatch('GetPasswordResetToken', nickname)
     },
     handleConfirmationResend(user) {

@@ -5,8 +5,24 @@
         <el-avatar :src="user.avatar" size="large" />
         <h1>{{ user.display_name }}</h1>
       </div>
-      <moderation-dropdown :user="user" :page="'userPage'"/>
+      <moderation-dropdown
+        :user="user"
+        :page="'userPage'"
+        @open-reset-token-dialog="openResetPasswordDialog"/>
     </header>
+    <el-dialog
+      v-loading="loading"
+      :visible.sync="resetPasswordDialogOpen"
+      :title="$t('users.passwordResetTokenCreated')"
+      custom-class="password-reset-token-dialog"
+      @close="closeResetPasswordDialog">
+      <div>
+        <p class="password-reset-token">Password reset token was generated: {{ passwordResetToken }}</p>
+        <p>You can also use this link to reset password:
+          <a :href="passwordResetLink" target="_blank" class="reset-password-link">{{ passwordResetLink }}</a>
+        </p>
+      </div>
+    </el-dialog>
     <el-row>
       <el-col :span="8">
         <el-card class="user-profile-card">
@@ -94,10 +110,20 @@ export default {
   components: { ModerationDropdown, Status },
   data() {
     return {
-      showPrivate: false
+      showPrivate: false,
+      resetPasswordDialogOpen: false
     }
   },
   computed: {
+    loading() {
+      return this.$store.state.users.loading
+    },
+    passwordResetLink() {
+      return this.$store.state.users.passwordResetToken.link
+    },
+    passwordResetToken() {
+      return this.$store.state.users.passwordResetToken.token
+    },
     statuses() {
       return this.$store.state.userProfile.statuses
     },
@@ -115,8 +141,15 @@ export default {
     this.$store.dispatch('FetchUserProfile', { userId: this.$route.params.id, godmode: false })
   },
   methods: {
+    closeResetPasswordDialog() {
+      this.resetPasswordDialogOpen = false
+      this.$store.dispatch('RemovePasswordToken')
+    },
     onTogglePrivate() {
       this.$store.dispatch('FetchUserProfile', { userId: this.$route.params.id, godmode: this.showPrivate })
+    },
+    openResetPasswordDialog() {
+      this.resetPasswordDialogOpen = true
     }
   }
 }

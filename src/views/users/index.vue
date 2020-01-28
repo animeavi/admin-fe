@@ -66,7 +66,10 @@
       </el-table-column>
       <el-table-column :label="$t('users.actions')" fixed="right">
         <template slot-scope="scope">
-          <moderation-dropdown :user="scope.row" :page="'users'"/>
+          <moderation-dropdown
+            :user="scope.row"
+            :page="'users'"
+            @open-reset-token-dialog="openResetPasswordDialog"/>
         </template>
       </el-table-column>
     </el-table>
@@ -170,6 +173,10 @@ export default {
     clearSelection() {
       this.$refs.usersTable.clearSelection()
     },
+    closeResetPasswordDialog() {
+      this.resetPasswordDialogOpen = false
+      this.$store.dispatch('RemovePasswordToken')
+    },
     async createNewAccount(accountData) {
       await this.$store.dispatch('CreateNewAccount', accountData)
       this.createAccountDialogOpen = false
@@ -188,9 +195,8 @@ export default {
     handleSelectionChange(value) {
       this.$data.selectedUsers = value
     },
-    closeResetPasswordDialog() {
-      this.resetPasswordDialogOpen = false
-      this.$store.dispatch('RemovePasswordToken')
+    openResetPasswordDialog() {
+      this.resetPasswordDialogOpen = true
     },
     showDeactivatedButton(id) {
       return this.$store.state.user.id !== id
