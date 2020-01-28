@@ -95,7 +95,7 @@
       </el-dropdown-item>
       <el-dropdown-item
         v-if="user.local"
-        @click.native="requirePasswordReset(user.nickname)">
+        @click.native="requirePasswordReset(user)">
         {{ $t('users.requirePasswordReset') }}
       </el-dropdown-item>
     </el-dropdown-menu>
@@ -136,13 +136,13 @@ export default {
     handleEmailConfirmation(user) {
       this.$store.dispatch('ConfirmUsersEmail', [user])
     },
-    requirePasswordReset(nickname) {
+    requirePasswordReset(user) {
       const mailerEnabled = this.$store.state.user.nodeInfo.metadata.mailerEnabled
       if (!mailerEnabled) {
         this.$alert(this.$t('users.mailerMustBeEnabled'), 'Error', { type: 'error' })
         return
       }
-      this.$store.dispatch('RequirePasswordReset', { nickname })
+      this.$store.dispatch('RequirePasswordReset', [user])
     },
     showAdminAction({ local, id }) {
       return local && this.showDeactivatedButton(id)

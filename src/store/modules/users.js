@@ -12,7 +12,7 @@ import {
   searchUsers,
   tagUser,
   untagUser,
-  requirePasswordReset,
+  forcePasswordReset,
   confirmUserEmail,
   resendConfirmationEmail
 } from '@/api/users'
@@ -207,9 +207,10 @@ const users = {
 
       dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: users[0].id })
     },
-    async RequirePasswordReset({ dispatch, getters }, user) {
+    async RequirePasswordReset({ dispatch, getters }, users) {
+      const nicknames = users.map(user => user.nickname)
       try {
-        await requirePasswordReset(user.nickname, getters.authHost, getters.token)
+        await forcePasswordReset(nicknames, getters.authHost, getters.token)
       } catch (_e) {
         return
       }
