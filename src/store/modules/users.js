@@ -240,9 +240,9 @@ const users = {
       }
       dispatch('SuccessMessage')
     },
-    async RequirePasswordReset({ dispatch, getters }, user) {
+    async RequirePasswordReset({ dispatch, getters }, { nicknames }) {
       try {
-        await requirePasswordReset(user.nickname, getters.authHost, getters.token)
+        await requirePasswordReset(nicknames, getters.authHost, getters.token)
       } catch (_e) {
         return
       }
