@@ -202,6 +202,7 @@ export default {
     disableAnySubscriptionForMultiple: 'Disallow following users at all',
     requirePasswordReset: 'Require password reset on next login',
     selectUsers: 'Select users to apply actions to multiple users',
+    moderateUser: 'Moderate user',
     moderateUsers: 'Moderate multiple users',
     createAccount: 'Create new account',
     apply: 'apply',

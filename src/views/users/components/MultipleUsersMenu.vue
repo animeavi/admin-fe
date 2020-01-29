@@ -216,9 +216,9 @@ export default {
         },
         requirePasswordReset: () => {
           const filtered = this.selectedUsers.filter(user => user.local)
-          const nicknames = filtered.map(u => u.nickname)
-          this.$store.dispatch('RequirePasswordReset', { nicknames })
-          this.$emit('apply-action')
+          const requirePasswordResetFn = async(users) => await this.$store.dispatch('RequirePasswordReset', users)
+
+          applyAction(filtered, requirePasswordResetFn)
         },
         confirmAccounts: () => {
           const filtered = this.selectedUsers.filter(user => user.local && user.confirmation_pending)
