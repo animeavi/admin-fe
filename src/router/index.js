@@ -63,6 +63,20 @@ const invites = {
   ]
 }
 
+const emojiPacksDisabled = disabledFeatures.includes('emoji-packs')
+const emojiPacks = {
+  path: '/emoji_packs',
+  component: Layout,
+  children: [
+    {
+      path: 'index',
+      component: () => import('@/views/emojiPacks/index'),
+      name: 'Emoji Packs',
+      meta: { title: 'Emoji Packs', icon: 'eye-open', noCache: true }
+    }
+  ]
+}
+
 const moderationLogDisabled = disabledFeatures.includes('moderation-log')
 const moderationLog = {
   path: '/moderation_log',
@@ -143,6 +157,7 @@ export const asyncRouterMap = [
   ...(statusesDisabled ? [] : [statuses]),
   ...(reportsDisabled ? [] : [reports]),
   ...(invitesDisabled ? [] : [invites]),
+  ...(emojiPacksDisabled ? [] : [emojiPacks]),
   ...(moderationLogDisabled ? [] : [moderationLog]),
   ...(settingsDisabled ? [] : [settings]),
   {
