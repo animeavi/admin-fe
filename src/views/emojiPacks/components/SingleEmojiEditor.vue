@@ -7,8 +7,8 @@
       <el-input v-model="emojiName" :placeholder="$t('settings.shortcode')" class="emoji-info"/>
       <el-input v-model="emojiFile" :placeholder="$t('settings.file')" class="emoji-info"/>
       <div class="emoji-buttons">
-        <el-button type="primary" class="emoji-button" @click="update">{{ $t('settings.update') }}</el-button>
-        <el-button class="emoji-button" @click="remove">{{ $t('settings.remove') }}</el-button>
+        <el-button type="primary" @click="update">{{ $t('settings.update') }}</el-button>
+        <el-button @click="remove">{{ $t('settings.remove') }}</el-button>
       </div>
     </div>
 
@@ -155,23 +155,23 @@ export default {
 .copy-popover {
   width: 330px
 }
-.emoji-button {
-  margin-left: 10px
-}
 .emoji-buttons {
-  min-width: 210px
+  place-self: center;
+  min-width: 200px
 }
 .emoji-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 7% 35% 35% 20%;
   justify-content: space-between;
-  align-items: center;
+  grid-column-gap: 1%;
   margin-bottom: 10px;
 }
 .emoji-preview-img {
-  max-width: 5em;
+  max-width: 100%;
+  place-self: center;
 }
 .emoji-info {
-  margin-left: 10px
+  place-self: center;
 }
 .copy-to-local-button {
   margin-top: 12px;

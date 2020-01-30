@@ -10,7 +10,7 @@
       </el-tooltip>
     </div>
     <div class="line"/>
-    <el-form label-width="230px" class="emoji-packs-form">
+    <el-form label-width="200px" class="emoji-packs-form">
       <el-form-item :label="$t('settings.localPacks')">
         <el-button type="primary" @click="refreshLocalPacks">{{ $t('settings.refreshLocalPacks') }}</el-button>
       </el-form-item>
