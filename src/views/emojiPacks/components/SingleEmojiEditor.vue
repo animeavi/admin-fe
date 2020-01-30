@@ -161,9 +161,8 @@ export default {
 }
 .emoji-container {
   display: grid;
-  grid-template-columns: 7% 35% 35% 20%;
-  justify-content: space-between;
-  grid-column-gap: 1%;
+  grid-template-columns: 75px auto auto 195px;
+  grid-column-gap: 15px;
   margin-bottom: 10px;
 }
 .emoji-preview-img {

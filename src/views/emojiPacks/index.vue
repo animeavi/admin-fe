@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="emoji-packs">
     <h1 class="emoji-packs-header">{{ $t('settings.emojiPacks') }}</h1>
     <div class="button-container">
       <el-button type="primary" @click="reloadEmoji">{{ $t('settings.reloadEmoji') }}</el-button>
@@ -10,7 +10,7 @@
       </el-tooltip>
     </div>
     <div class="line"/>
-    <el-form label-width="200px" class="emoji-packs-form">
+    <el-form label-width="180px" class="emoji-packs-form">
       <el-form-item :label="$t('settings.localPacks')">
         <el-button type="primary" @click="refreshLocalPacks">{{ $t('settings.refreshLocalPacks') }}</el-button>
       </el-form-item>
@@ -136,4 +136,11 @@ export default {
     border: 1px solid #eee;
     margin-bottom: 22px;
   }
+
+@media only screen and (min-width: 1824px) {
+  .emoji-packs {
+    max-width: 1824px;
+    margin: auto;
+  }
+}
 </style>
