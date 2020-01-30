@@ -4,11 +4,11 @@
       <img
         :src="addressOfEmojiInPack(host, packName, file)"
         class="emoji-preview-img">
-      <el-input v-model="emojiName" :placeholder="$t('settings.shortcode')" class="emoji-info"/>
-      <el-input v-model="emojiFile" :placeholder="$t('settings.file')" class="emoji-info"/>
+      <el-input v-model="emojiName" :placeholder="$t('emoji.shortcode')" class="emoji-info"/>
+      <el-input v-model="emojiFile" :placeholder="$t('emoji.file')" class="emoji-info"/>
       <div class="emoji-buttons">
-        <el-button type="primary" @click="update">{{ $t('settings.update') }}</el-button>
-        <el-button @click="remove">{{ $t('settings.remove') }}</el-button>
+        <el-button type="primary" @click="update">{{ $t('emoji.update') }}</el-button>
+        <el-button @click="remove">{{ $t('emoji.remove') }}</el-button>
       </div>
     </div>
 
@@ -16,27 +16,27 @@
       <img
         :src="addressOfEmojiInPack(host, packName, file)"
         class="emoji-preview-img">
-      <el-input :value="emojiName" :placeholder="$t('settings.shortcode')" class="emoji-info"/>
-      <el-input :value="emojiFile" :placeholder="$t('settings.file')" class="emoji-info"/>
+      <el-input :value="emojiName" :placeholder="$t('emoji.shortcode')" class="emoji-info"/>
+      <el-input :value="emojiFile" :placeholder="$t('emoji.file')" class="emoji-info"/>
       <el-popover v-model="copyPopoverVisible" placement="left-start" popper-class="copy-popover">
-        <p>{{ $t('settings.selectLocalPack') }}</p>
-        <el-select v-model="copyToLocalPackName" :placeholder="$t('settings.localPack')">
+        <p>{{ $t('emoji.selectLocalPack') }}</p>
+        <el-select v-model="copyToLocalPackName" :placeholder="$t('emoji.localPack')">
           <el-option
             v-for="(_pack, name) in localPacks"
             :key="name"
             :label="name"
             :value="name" />
         </el-select>
-        <p>{{ $t('settings.specifyShortcode') }}</p>
-        <el-input v-model="copyToShortcode" :placeholder="$t('settings.leaveEmptyShortcode')"/>
-        <p>{{ $t('settings.specifyFilename') }}</p>
-        <el-input v-model="copyToFilename" :placeholder="$t('settings.leaveEmptyFilename')"/>
+        <p>{{ $t('emoji.specifyShortcode') }}</p>
+        <el-input v-model="copyToShortcode" :placeholder="$t('emoji.leaveEmptyShortcode')"/>
+        <p>{{ $t('emoji.specifyFilename') }}</p>
+        <el-input v-model="copyToFilename" :placeholder="$t('emoji.leaveEmptyFilename')"/>
         <el-button
           :disabled="!copyToLocalPackName"
           type="primary"
           class="copy-to-local-button"
-          @click="copyToLocal">{{ $t('settings.copy') }}</el-button>
-        <el-button slot="reference" type="primary" class="emoji-button">{{ $t('settings.copyToLocalPack') }}</el-button>
+          @click="copyToLocal">{{ $t('emoji.copy') }}</el-button>
+        <el-button slot="reference" type="primary" class="emoji-button">{{ $t('emoji.copyToLocalPack') }}</el-button>
       </el-popover>
     </div>
   </div>

@@ -1,29 +1,29 @@
 <template>
   <el-collapse-item :title="name" :name="name" class="has-background">
     <el-form v-if="isLocal" label-width="120px" label-position="left" size="small" class="emoji-pack-metadata">
-      <el-form-item :label="$t('settings.sharePack')">
+      <el-form-item :label=" $t('emoji.sharePack')">
         <el-switch v-model="share" />
       </el-form-item>
-      <el-form-item :label="$t('settings.homepage')">
+      <el-form-item :label=" $t('emoji.homepage')">
         <el-input v-model="homepage" />
       </el-form-item>
-      <el-form-item :label="$t('settings.description')">
+      <el-form-item :label=" $t('emoji.description')">
         <el-input v-model="description" type="textarea" />
       </el-form-item>
-      <el-form-item :label="$t('settings.license')">
+      <el-form-item :label=" $t('emoji.license')">
         <el-input v-model="license" />
       </el-form-item>
-      <el-form-item :label="$t('settings.fallbackSrc')">
+      <el-form-item :label=" $t('emoji.fallbackSrc')">
         <el-input v-model="fallbackSrc" />
       </el-form-item>
       <el-form-item
         v-if="fallbackSrc && fallbackSrc.trim() !== ''"
-        :label="$t('settings.fallbackSrcSha')">
+        :label=" $t('emoji.fallbackSrcSha')">
         {{ pack.pack["fallback-src-sha256"] }}
       </el-form-item>
       <el-form-item class="save-pack-button">
-        <el-button type="primary" @click="savePackMetadata">{{ $t('settings.savePackMetadata') }}</el-button>
-        <el-button @click="deletePack">{{ $t('settings.deletePack') }}</el-button>
+        <el-button type="primary" @click="savePackMetadata">{{ $t('emoji.savePackMetadata') }}</el-button>
+        <el-button @click="deletePack">{{ $t('emoji.deletePack') }}</el-button>
       </el-form-item>
       <el-form-item>
         <el-link
@@ -32,29 +32,29 @@
           :underline="false"
           type="primary"
           target="_blank">
-          <el-button class="download-archive">{{ $t('settings.downloadPackArchive') }}</el-button>
+          <el-button class="download-archive">{{ $t('emoji.downloadPackArchive') }}</el-button>
         </el-link>
       </el-form-item>
     </el-form>
     <el-form v-if="!isLocal" label-width="120px" label-position="left" size="small" class="emoji-pack-metadata">
-      <el-form-item :label="$t('settings.sharePack')">
+      <el-form-item :label=" $t('emoji.sharePack')">
         <el-switch v-model="share" disabled />
       </el-form-item>
-      <el-form-item v-if="homepage" :label="$t('settings.homepage')">
+      <el-form-item v-if="homepage" :label=" $t('emoji.homepage')">
         <span>{{ homepage }}</span>
       </el-form-item>
-      <el-form-item v-if="description" :label="$t('settings.description')">
+      <el-form-item v-if="description" :label=" $t('emoji.description')">
         <span>{{ description }}</span>
       </el-form-item>
-      <el-form-item v-if="license" :label="$t('settings.license')">
+      <el-form-item v-if="license" :label=" $t('emoji.license')">
         <span>{{ license }}</span>
       </el-form-item>
-      <el-form-item v-if="fallbackSrc" :label="$t('settings.fallbackSrc')">
+      <el-form-item v-if="fallbackSrc" :label=" $t('emoji.fallbackSrc')">
         <span>{{ fallbackSrc }}</span>
       </el-form-item>
       <el-form-item
         v-if="fallbackSrc && fallbackSrc.trim() !== ''"
-        :label="$t('settings.fallbackSrcSha')">
+        :label=" $t('emoji.fallbackSrcSha')">
         {{ pack.pack["fallback-src-sha256"] }}
       </el-form-item>
       <el-form-item>
@@ -64,15 +64,15 @@
           :underline="false"
           type="primary"
           target="_blank">
-          <el-button class="download-archive">{{ $t('settings.downloadPackArchive') }}</el-button>
+          <el-button class="download-archive">{{ $t('emoji.downloadPackArchive') }}</el-button>
         </el-link>
       </el-form-item>
     </el-form>
     <el-collapse v-model="showPackContent" class="contents-collapse">
-      <el-collapse-item v-if="isLocal" :title="$t('settings.addNewEmoji')" name="addEmoji" class="no-background">
+      <el-collapse-item v-if="isLocal" :title=" $t('emoji.addNewEmoji')" name="addEmoji" class="no-background">
         <new-emoji-uploader :pack-name="name"/>
       </el-collapse-item>
-      <el-collapse-item v-if="Object.keys(pack.files).length > 0" :title="$t('settings.manageEmoji')" name="manageEmoji" class="no-background">
+      <el-collapse-item v-if="Object.keys(pack.files).length > 0" :title=" $t('emoji.manageEmoji')" name="manageEmoji" class="no-background">
         <single-emoji-editor
           v-for="(file, ename) in pack.files"
           :key="ename"
@@ -82,16 +82,16 @@
           :file="file"
           :is-local="isLocal" />
       </el-collapse-item>
-      <el-collapse-item v-if="!isLocal" :title="$t('settings.downloadPack')" name="downloadPack" class="no-background">
+      <el-collapse-item v-if="!isLocal" :title=" $t('emoji.downloadPack')" name="downloadPack" class="no-background">
         <p>
-          {{ $t('settings.thisWillDownload') }} "{{ name }}" {{ $t('settings.downloadToCurrentInstance') }}
-          "{{ downloadSharedAs.trim() === '' ? name : downloadSharedAs }}" ({{ $t('settings.canBeChanged') }}).
-          {{ $t('settings.willBeUsable') }}.
+          {{ $t('emoji.thisWillDownload') }} "{{ name }}" {{ $t('emoji.downloadToCurrentInstance') }}
+          "{{ downloadSharedAs.trim() === '' ? name : downloadSharedAs }}" ({{ $t('emoji.canBeChanged') }}).
+          {{ $t('emoji.willBeUsable') }}.
         </p>
         <div class="download-shared-pack">
-          <el-input v-model="downloadSharedAs" :placeholder="$t('settings.downloadAsOptional')"/>
+          <el-input v-model="downloadSharedAs" :placeholder=" $t('emoji.downloadAsOptional')"/>
           <el-button type="primary" class="download-shared-pack-button" @click="downloadFromInstance">
-            {{ $t('settings.downloadSharedPack') }}
+            {{ $t('emoji.downloadSharedPack') }}
           </el-button>
         </div>
       </el-collapse-item>

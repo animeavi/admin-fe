@@ -1,15 +1,15 @@
 <template>
   <el-form label-width="130px" label-position="left" size="small">
-    <el-form-item :label="$t('settings.shortcode')">
-      <el-input v-model="shortcode" :placeholder="$t('settings.required')"/>
+    <el-form-item :label="$t('emoji.shortcode')">
+      <el-input v-model="shortcode" :placeholder="$t('emoji.required')"/>
     </el-form-item>
-    <el-form-item :label="$t('settings.customFilename')">
-      <el-input v-model="customFileName" :placeholder="$t('settings.optional')"/>
+    <el-form-item :label="$t('emoji.customFilename')">
+      <el-input v-model="customFileName" :placeholder="$t('emoji.optional')"/>
     </el-form-item>
-    <el-form-item :label="$t('settings.uploadFile')">
+    <el-form-item :label="$t('emoji.uploadFile')">
       <div class="upload-file-url">
-        <el-input v-model="imageUploadURL" :placeholder="$t('settings.url')"/>
-        <el-button :disabled="shortcodePresent" type="primary" class="upload-button" @click="uploadEmoji">{{ $t('settings.upload') }}</el-button>
+        <el-input v-model="imageUploadURL" :placeholder="$t('emoji.url')"/>
+        <el-button :disabled="shortcodePresent" type="primary" class="upload-button" @click="uploadEmoji">{{ $t('emoji.upload') }}</el-button>
       </div>
       <div class="upload-container">
         <p class="text">or</p>
@@ -18,7 +18,7 @@
           :multiple="false"
           :show-file-list="false"
           action="add">
-          <el-button :disabled="shortcodePresent" type="primary">{{ $t('settings.clickToUpload') }}</el-button>
+          <el-button :disabled="shortcodePresent" type="primary">{{ $t('emoji.clickToUpload') }}</el-button>
         </el-upload>
       </div>
     </el-form-item>
