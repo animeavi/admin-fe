@@ -4,6 +4,8 @@ import _ from 'lodash'
 
 const settings = {
   state: {
+    activeTab: 'instance',
+    configDisabled: true,
     description: [],
     settings: {},
     updatedSettings: {},
@@ -19,6 +21,9 @@ const settings = {
         const { [subkeys[0]]: value, ...updatedSettings } = state.updatedSettings[group][key]
         state.updatedSettings = updatedSettings
       }
+    },
+    SET_ACTIVE_TAB: (state, tab) => {
+      state.activeTab = tab
     },
     SET_DESCRIPTION: (state, data) => {
       state.description = data
@@ -45,6 +50,9 @@ const settings = {
       state.settings = newSettings
       state.db = newDbSettings
     },
+    TOGGLE_TABS: (state, status) => {
+      state.configDisabled = status
+    },
     UPDATE_SETTINGS: (state, { group, key, input, value, type }) => {
       const updatedSetting = !state.updatedSettings[group] || (key === 'Pleroma.Emails.Mailer' && input === ':adapter')
         ? { [key]: { [input]: [type, value] }}
@@ -61,11 +69,18 @@ const settings = {
   actions: {
     async FetchSettings({ commit, getters }) {
       commit('SET_LOADING', true)
-      const response = await fetchSettings(getters.authHost, getters.token)
-      const description = await fetchDescription(getters.authHost, getters.token)
-
-      commit('SET_DESCRIPTION', description.data)
-      commit('SET_SETTINGS', response.data.configs)
+      try {
+        const response = await fetchSettings(getters.authHost, getters.token)
+        const description = await fetchDescription(getters.authHost, getters.token)
+        commit('SET_DESCRIPTION', description.data)
+        commit('SET_SETTINGS', response.data.configs)
+      } catch (_e) {
+        commit('TOGGLE_TABS', true)
+        commit('SET_ACTIVE_TAB', 'relays')
+        commit('SET_LOADING', false)
+        return
+      }
+      commit('TOGGLE_TABS', false)
       commit('SET_LOADING', false)
     },
     async RemoveSetting({ commit, getters }, configs) {
@@ -74,6 +89,9 @@ const settings = {
       const { group, key, subkeys } = configs[0]
       commit('SET_SETTINGS', response.data.configs)
       commit('REMOVE_SETTING_FROM_UPDATED', { group, key, subkeys: subkeys || [] })
+    },
+    SetActiveTab({ commit }, tab) {
+      commit('SET_ACTIVE_TAB', tab)
     },
     async SubmitChanges({ getters, commit, state }) {
       const updatedData = checkPartialUpdate(state.settings, state.updatedSettings, state.description)
