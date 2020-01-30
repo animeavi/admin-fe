@@ -141,4 +141,10 @@ export default {
       margin: 22px 0 0 15px;
     }
   }
+  @media only screen and (min-width: 1824px) {
+    .settings-container {
+      max-width: 1600px;
+      margin: auto;
+    }
+  }
 </style>
