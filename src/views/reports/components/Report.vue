@@ -58,7 +58,7 @@
             <el-collapse>
               <el-collapse-item :title="getStatusesTitle(report.statuses)">
                 <div v-for="status in report.statuses" :key="status.id">
-                  <status :status="status" :page="currentPage"/>
+                  <status :status="status" :show-checkbox="false" :page="currentPage"/>
                 </div>
               </el-collapse-item>
             </el-collapse>

@@ -22,7 +22,7 @@
         @apply-action="clearSelection"/>
     </div>
     <div v-for="status in statuses" :key="status.id" class="status-container">
-      <status :status="status" @status-selection="handleStatusSelection" />
+      <status :status="status" :show-checkbox="isDesktop" @status-selection="handleStatusSelection" />
     </div>
     <div v-if="statuses.length > 0" class="statuses-pagination">
       <el-button @click="handleLoadMore">{{ $t('statuses.loadMore') }}</el-button>
@@ -54,6 +54,9 @@ export default {
       'instances',
       'statuses'
     ]),
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
     loadingPeers() {
       return this.$store.state.peers.loading
     }

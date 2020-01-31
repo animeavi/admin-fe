@@ -5,10 +5,9 @@
         <div class="status-header">
           <div class="status-account-container">
             <div class="status-account">
-              <el-checkbox @change="handleStatusSelection(status.account)">
-                <img :src="status.account.avatar" class="status-avatar-img">
-                <h3 class="status-account-name">{{ status.account.display_name }}</h3>
-              </el-checkbox>
+              <el-checkbox v-if="showCheckbox" class="status-checkbox" @change="handleStatusSelection(status.account)"/>
+              <img :src="status.account.avatar" class="status-avatar-img">
+              <h3 class="status-account-name">{{ status.account.display_name }}</h3>
             </div>
             <a :href="status.account.url" target="_blank" class="account">
               @{{ status.account.acct }}
@@ -122,6 +121,11 @@ import moment from 'moment'
 export default {
   name: 'Status',
   props: {
+    showCheckbox: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
     status: {
       type: Object,
       required: true
@@ -223,6 +227,9 @@ export default {
   .status-body {
     display: flex;
     flex-direction: column;
+  }
+  .status-checkbox {
+    margin-right: 7px;
   }
   .status-content {
     font-size: 15px;
