@@ -9,6 +9,7 @@
         :placeholder="$t('statuses.instanceFilter')"
         :no-data-text="$t('statuses.noInstances')"
         filterable
+        class="select-instance"
         @change="handleFilterChange">
         <el-option
           v-for="(instance,index) in instances"
@@ -49,13 +50,13 @@ export default {
     }
   },
   computed: {
-    loadingPeers() {
-      return this.$store.state.peers.loading
-    },
     ...mapGetters([
       'instances',
       'statuses'
-    ])
+    ]),
+    loadingPeers() {
+      return this.$store.state.peers.loading
+    }
   },
   created() {
   },
@@ -99,7 +100,14 @@ export default {
   }
 }
 .filter-container {
-  margin: 22px 15px 15px 0;
+    display: flex;
+    height: 36px;
+    justify-content: space-between;
+    align-items: center;
+    margin: 22px 0 15px 0;
+}
+.select-instance {
+  width: 350px;
 }
 .statuses-pagination {
   padding: 15px 0;
@@ -107,5 +115,21 @@ export default {
 }
 h1 {
   margin: 22px 0 0 0;
+}
+
+@media
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+  .filter-container {
+    display: flex;
+    height: 36px;
+    flex-direction: column;
+    margin: 10px 10px
+  }
+
+  .select-field {
+    width: 100%;
+    margin-bottom: 5px;
+  }
 }
 </style>
