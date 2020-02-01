@@ -3,9 +3,20 @@ import { changeStatusScope, deleteStatus, fetchStatusesByInstance } from '@/api/
 const status = {
   state: {
     fetchedStatuses: [],
-    loading: false
+    loading: false,
+    statusesByInstance: {
+      selectedInstance: '',
+      page: 1,
+      pageSize: 30
+    }
   },
   mutations: {
+    CHANGE_PAGE: (state, page) => {
+      state.statusesByInstance.page = page
+    },
+    CHANGE_SELECTED_INSTANCE: (state, instance) => {
+      state.statusesByInstance.selectedInstance = instance
+    },
     SET_STATUSES: (state, statuses) => {
       state.fetchedStatuses = statuses
     },
@@ -37,19 +48,39 @@ const status = {
         dispatch('FetchGroupedReports')
       }
     },
-    async FetchStatusesByInstance({ commit, getters }, { instance, page, pageSize }) {
+    async FetchStatusesByInstance({ commit, getters, state }) {
       commit('SET_LOADING', true)
-      const statuses = await fetchStatusesByInstance(instance, getters.authHost, getters.token, pageSize, page)
+      const statuses = await fetchStatusesByInstance(
+        {
+          instance: state.statusesByInstance.selectedInstance,
+          authHost: getters.authHost,
+          token: getters.token,
+          pageSize: state.statusesByInstance.pageSize,
+          page: state.statusesByInstance.page
+        })
 
       commit('SET_STATUSES', statuses.data)
       commit('SET_LOADING', false)
     },
-    async FetchStatusesPageByInstance({ commit, getters }, { instance, page, pageSize }) {
+    async FetchStatusesPageByInstance({ commit, getters, state }) {
       commit('SET_LOADING', true)
-      const statuses = await fetchStatusesByInstance(instance, getters.authHost, getters.token, pageSize, page)
+      const statuses = await fetchStatusesByInstance(
+        {
+          instance: state.statusesByInstance.selectedInstance,
+          authHost: getters.authHost,
+          token: getters.token,
+          pageSize: state.statusesByInstance.pageSize,
+          page: state.statusesByInstance.page
+        })
 
       commit('PUSH_STATUSES', statuses.data)
       commit('SET_LOADING', false)
+    },
+    HandleFilterChange({ commit }, instance) {
+      commit('CHANGE_SELECTED_INSTANCE', instance)
+    },
+    HandlePageChange({ commit }, page) {
+      commit('CHANGE_PAGE', page)
     }
   }
 }

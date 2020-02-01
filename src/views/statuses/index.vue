@@ -22,7 +22,11 @@
         @apply-action="clearSelection"/>
     </div>
     <div v-for="status in statuses" :key="status.id" class="status-container">
-      <status :status="status" :show-checkbox="isDesktop" @status-selection="handleStatusSelection" />
+      <status
+        :status="status"
+        :show-checkbox="isDesktop"
+        :statuses-args="{ instance: selectedInstance, page, pageSize }"
+        @status-selection="handleStatusSelection" />
     </div>
     <div v-if="statuses.length > 0" class="statuses-pagination">
       <el-button @click="handleLoadMore">{{ $t('statuses.loadMore') }}</el-button>
@@ -43,10 +47,7 @@ export default {
   },
   data() {
     return {
-      selectedInstance: '',
-      selectedUsers: [],
-      page: 1,
-      pageSize: 30
+      selectedUsers: []
     }
   },
   computed: {
@@ -59,27 +60,34 @@ export default {
     },
     loadingPeers() {
       return this.$store.state.peers.loading
+    },
+    page() {
+      return this.$store.state.status.statusesByInstance.page
+    },
+    pageSize() {
+      return this.$store.state.status.statusesByInstance.pageSize
+    },
+    selectedInstance: {
+      get() {
+        return this.$store.state.status.statusesByInstance.selectedInstance
+      },
+      set(instance) {
+        this.$store.dispatch('HandleFilterChange', instance)
+      }
     }
-  },
-  created() {
   },
   mounted() {
     this.$store.dispatch('FetchPeers')
   },
   methods: {
-    handleFilterChange(instance) {
-      this.page = 1
-
-      this.$store.dispatch('FetchStatusesByInstance', { instance, page: this.page, pageSize: this.pageSize })
+    handleFilterChange() {
+      this.$store.dispatch('HandlePageChange', 1)
+      this.$store.dispatch('FetchStatusesByInstance')
     },
     handleLoadMore() {
-      this.page = this.page + 1
+      this.$store.dispatch('HandlePageChange', this.page + 1)
 
-      this.$store.dispatch('FetchStatusesPageByInstance', {
-        instance: this.selectedInstance,
-        page: this.page,
-        pageSize: this.pageSize
-      })
+      this.$store.dispatch('FetchStatusesPageByInstance')
     },
     clearSelection() {
       // TODO
