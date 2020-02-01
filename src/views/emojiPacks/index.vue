@@ -1,19 +1,20 @@
 <template>
-  <div>
+  <div class="emoji-packs">
+    <h1 class="emoji-packs-header">{{ $t('emoji.emojiPacks') }}</h1>
     <div class="button-container">
-      <el-button type="primary" @click="reloadEmoji">{{ $t('settings.reloadEmoji') }}</el-button>
-      <el-tooltip :content="$t('settings.importEmojiTooltip')" effects="dark" placement="bottom">
+      <el-button type="primary" @click="reloadEmoji">{{ $t('emoji.reloadEmoji') }}</el-button>
+      <el-tooltip :content="$t('emoji.importEmojiTooltip')" effects="dark" placement="bottom">
         <el-button type="primary" @click="importFromFS">
-          {{ $t('settings.importPacks') }}
+          {{ $t('emoji.importPacks') }}
         </el-button>
       </el-tooltip>
     </div>
     <div class="line"/>
-    <el-form :label-width="labelWidth">
-      <el-form-item :label="$t('settings.localPacks')">
-        <el-button type="primary" @click="refreshLocalPacks">{{ $t('settings.refreshLocalPacks') }}</el-button>
+    <el-form label-width="180px" class="emoji-packs-form">
+      <el-form-item :label="$t('emoji.localPacks')">
+        <el-button type="primary" @click="refreshLocalPacks">{{ $t('emoji.refreshLocalPacks') }}</el-button>
       </el-form-item>
-      <el-form-item :label="$t('settings.createLocalPack')">
+      <el-form-item :label="$t('emoji.createLocalPack')">
         <div class="create-pack">
           <el-input v-model="newPackName" :placeholder="$t('users.name')" />
           <el-button
@@ -24,26 +25,26 @@
           </el-button>
         </div>
       </el-form-item>
-      <el-form-item v-if="Object.keys(localPacks).length > 0" :label="$t('settings.packs')">
+      <el-form-item v-if="Object.keys(localPacks).length > 0" :label="$t('emoji.packs')">
         <el-collapse v-for="(pack, name) in localPacks" :key="name" v-model="activeLocalPack">
           <emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="true" />
         </el-collapse>
       </el-form-item>
       <div class="line"/>
-      <el-form-item :label="$t('settings.remotePacks')">
+      <el-form-item :label="$t('emoji.remotePacks')">
         <div class="create-pack">
           <el-input
             v-model="remoteInstanceAddress"
-            :placeholder="$t('settings.remoteInstanceAddress')" />
+            :placeholder="$t('emoji.remoteInstanceAddress')" />
           <el-button
             :disabled="remoteInstanceAddress.trim() === ''"
             class="create-pack-button"
             @click="refreshRemotePacks">
-            {{ $t('settings.refreshRemote') }}
+            {{ $t('emoji.refreshRemote') }}
           </el-button>
         </div>
       </el-form-item>
-      <el-form-item v-if="Object.keys(remotePacks).length > 0" :label="$t('settings.packs')">
+      <el-form-item v-if="Object.keys(remotePacks).length > 0" :label="$t('emoji.packs')">
         <el-collapse v-for="(pack, name) in remotePacks" :key="name" v-model="activeRemotePack">
           <emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="false" />
         </el-collapse>
@@ -54,6 +55,7 @@
 
 <script>
 import EmojiPack from './components/EmojiPack'
+import i18n from '@/lang'
 
 export default {
   components: { EmojiPack },
@@ -93,13 +95,29 @@ export default {
         })
     },
     refreshLocalPacks() {
-      this.$store.dispatch('SetLocalEmojiPacks')
+      try {
+        this.$store.dispatch('SetLocalEmojiPacks')
+      } catch (e) {
+        return
+      }
+      this.$message({
+        type: 'success',
+        message: i18n.t('emoji.refreshed')
+      })
     },
     refreshRemotePacks() {
       this.$store.dispatch('SetRemoteEmojiPacks', { remoteInstance: this.remoteInstanceAddress })
     },
-    reloadEmoji() {
-      this.$store.dispatch('ReloadEmoji')
+    async reloadEmoji() {
+      try {
+        this.$store.dispatch('ReloadEmoji')
+      } catch (e) {
+        return
+      }
+      this.$message({
+        type: 'success',
+        message: i18n.t('emoji.reloaded')
+      })
     },
     importFromFS() {
       this.$store.dispatch('ImportFromFS')
@@ -114,7 +132,7 @@ export default {
 
 <style rel='stylesheet/scss' lang='scss'>
 .button-container {
-  margin: 0 0 22px 20px;
+  margin: 0 0 22px 15px;
 }
 .create-pack {
   display: flex;
@@ -123,10 +141,23 @@ export default {
 .create-pack-button {
   margin-left: 10px;
 }
+.emoji-packs-form {
+  margin: 0 30px;
+}
+.emoji-packs-header {
+  margin: 22px 0 20px 15px;
+}
 .line {
     width: 100%;
     height: 0;
     border: 1px solid #eee;
     margin-bottom: 22px;
   }
+
+@media only screen and (min-width: 1824px) {
+  .emoji-packs {
+    max-width: 1824px;
+    margin: auto;
+  }
+}
 </style>
