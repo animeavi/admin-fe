@@ -25,7 +25,7 @@
       <status
         :status="status"
         :show-checkbox="isDesktop"
-        :statuses-args="{ instance: selectedInstance, page, pageSize }"
+        :fetch-statuses-by-instance="true"
         @status-selection="handleStatusSelection" />
     </div>
     <div v-if="statuses.length > 0" class="statuses-pagination">

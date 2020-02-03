@@ -121,6 +121,11 @@ import moment from 'moment'
 export default {
   name: 'Status',
   props: {
+    fetchStatusesByInstance: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     showCheckbox: {
       type: Boolean,
       required: true,
@@ -156,7 +161,15 @@ export default {
       return str.charAt(0).toUpperCase() + str.slice(1)
     },
     changeStatus(statusId, isSensitive, visibility) {
-      this.$store.dispatch('ChangeStatusScope', { statusId, isSensitive, visibility, reportCurrentPage: this.page, userId: this.userId, godmode: this.godmode })
+      this.$store.dispatch('ChangeStatusScope', {
+        statusId,
+        isSensitive,
+        visibility,
+        reportCurrentPage: this.page,
+        userId: this.userId,
+        godmode: this.godmode,
+        fetchStatusesByInstance: this.fetchStatusesByInstance
+      })
     },
     deleteStatus(statusId) {
       this.$confirm('Are you sure you want to delete this status?', 'Warning', {
@@ -164,7 +177,13 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('DeleteStatus', { statusId, reportCurrentPage: this.page, userId: this.userId, godmode: this.godmode })
+        this.$store.dispatch('DeleteStatus', {
+          statusId,
+          reportCurrentPage: this.page,
+          userId: this.userId,
+          godmode: this.godmode,
+          fetchStatusesByInstance: this.fetchStatusesByInstance
+        })
         this.$message({
           type: 'success',
           message: 'Delete completed'
