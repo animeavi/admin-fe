@@ -9,6 +9,7 @@
         :placeholder="$t('statuses.instanceFilter')"
         :no-data-text="$t('statuses.noInstances')"
         filterable
+        clearable
         class="select-instance"
         @change="handleFilterChange">
         <el-option

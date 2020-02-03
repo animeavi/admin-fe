@@ -54,14 +54,16 @@ const status = {
     },
     async FetchStatusesByInstance({ commit, getters, state }) {
       commit('SET_LOADING', true)
-      const statuses = await fetchStatusesByInstance(
-        {
-          instance: state.statusesByInstance.selectedInstance,
-          authHost: getters.authHost,
-          token: getters.token,
-          pageSize: state.statusesByInstance.pageSize,
-          page: state.statusesByInstance.page
-        })
+      const statuses = state.statusesByInstance.selectedInstance === ''
+        ? { data: [] }
+        : await fetchStatusesByInstance(
+          {
+            instance: state.statusesByInstance.selectedInstance,
+            authHost: getters.authHost,
+            token: getters.token,
+            pageSize: state.statusesByInstance.pageSize,
+            page: state.statusesByInstance.page
+          })
 
       commit('SET_STATUSES', statuses.data)
       commit('SET_LOADING', false)
