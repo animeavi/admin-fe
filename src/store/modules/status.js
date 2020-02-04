@@ -17,7 +17,7 @@ const status = {
     CHANGE_SELECTED_INSTANCE: (state, instance) => {
       state.statusesByInstance.selectedInstance = instance
     },
-    SET_STATUSES: (state, statuses) => {
+    SET_STATUSES_BY_INSTANCE: (state, statuses) => {
       state.fetchedStatuses = statuses
     },
     PUSH_STATUSES: (state, statuses) => {
@@ -65,7 +65,7 @@ const status = {
             page: state.statusesByInstance.page
           })
 
-      commit('SET_STATUSES', statuses.data)
+      commit('SET_STATUSES_BY_INSTANCE', statuses.data)
       commit('SET_LOADING', false)
     },
     async FetchStatusesPageByInstance({ commit, getters, state }) {
