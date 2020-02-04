@@ -91,7 +91,7 @@ export default {
       this.$store.dispatch('FetchStatusesPageByInstance')
     },
     clearSelection() {
-      // TODO
+      this.selectedUsers = []
     },
     handleStatusSelection(user) {
       if (this.selectedUsers.find(selectedUser => user.id === selectedUser.id) !== undefined) {

@@ -180,19 +180,19 @@ export default {
         },
         activate: () => {
           const filtered = this.selectedUsers.filter(user => user.deactivated && this.$store.state.user.id !== user.id)
-          const activateUsersFn = async(users) => await this.$store.dispatch('ActivateUsers', users)
+          const activateUsersFn = async(users) => await this.$store.dispatch('ActivateUsers', { users })
 
           applyAction(filtered, activateUsersFn)
         },
         deactivate: () => {
           const filtered = this.selectedUsers.filter(user => !user.deactivated && this.$store.state.user.id !== user.id)
-          const deactivateUsersFn = async(users) => await this.$store.dispatch('DeactivateUsers', users)
+          const deactivateUsersFn = async(users) => await this.$store.dispatch('DeactivateUsers', { users })
 
           applyAction(filtered, deactivateUsersFn)
         },
         remove: () => {
           const filtered = this.selectedUsers.filter(user => this.$store.state.user.id !== user.id)
-          const deleteAccountFn = async(users) => await this.$store.dispatch('DeleteUsers', users)
+          const deleteAccountFn = async(users) => await this.$store.dispatch('DeleteUsers', { users })
 
           applyAction(filtered, deleteAccountFn)
         },
@@ -202,7 +202,6 @@ export default {
               ? user.local && !user.tags.includes(tag)
               : !user.tags.includes(tag))
           const addTagFn = async(users) => await this.$store.dispatch('AddTag', { users, tag })
-
           applyAction(filtered, addTagFn)
         },
         removeTag: (tag) => async() => {
@@ -222,7 +221,7 @@ export default {
         },
         confirmAccounts: () => {
           const filtered = this.selectedUsers.filter(user => user.local && user.confirmation_pending)
-          const confirmAccountFn = async(users) => await this.$store.dispatch('ConfirmUsersEmail', users)
+          const confirmAccountFn = async(users) => await this.$store.dispatch('ConfirmUsersEmail', { users })
 
           applyAction(filtered, confirmAccountFn)
         },
