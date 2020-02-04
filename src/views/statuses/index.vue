@@ -9,6 +9,8 @@
         :placeholder="$t('statuses.instanceFilter')"
         :no-data-text="$t('statuses.noInstances')"
         filterable
+        clearable
+        class="select-instance"
         @change="handleFilterChange">
         <el-option
           v-for="(instance,index) in instances"
@@ -21,7 +23,11 @@
         @apply-action="clearSelection"/>
     </div>
     <div v-for="status in statuses" :key="status.id" class="status-container">
-      <status :status="status" @status-selection="handleStatusSelection" />
+      <status
+        :status="status"
+        :show-checkbox="isDesktop"
+        :fetch-statuses-by-instance="true"
+        @status-selection="handleStatusSelection" />
     </div>
     <div v-if="statuses.length > 0" class="statuses-pagination">
       <el-button @click="handleLoadMore">{{ $t('statuses.loadMore') }}</el-button>
@@ -42,43 +48,50 @@ export default {
   },
   data() {
     return {
-      selectedInstance: '',
-      selectedUsers: [],
-      page: 1,
-      pageSize: 30
+      selectedUsers: []
     }
   },
   computed: {
-    loadingPeers() {
-      return this.$store.state.peers.loading
-    },
     ...mapGetters([
       'instances',
       'statuses'
-    ])
-  },
-  created() {
+    ]),
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
+    loadingPeers() {
+      return this.$store.state.peers.loading
+    },
+    page() {
+      return this.$store.state.status.statusesByInstance.page
+    },
+    pageSize() {
+      return this.$store.state.status.statusesByInstance.pageSize
+    },
+    selectedInstance: {
+      get() {
+        return this.$store.state.status.statusesByInstance.selectedInstance
+      },
+      set(instance) {
+        this.$store.dispatch('HandleFilterChange', instance)
+      }
+    }
   },
   mounted() {
     this.$store.dispatch('FetchPeers')
   },
   methods: {
-    handleFilterChange(instance) {
-      this.page = 1
-
-      this.$store.dispatch('FetchStatusesByInstance', { instance, page: this.page, pageSize: this.pageSize })
+    handleFilterChange() {
+      this.$store.dispatch('HandlePageChange', 1)
+      this.$store.dispatch('FetchStatusesByInstance')
     },
     handleLoadMore() {
-      this.page = this.page + 1
+      this.$store.dispatch('HandlePageChange', this.page + 1)
 
-      this.$store.dispatch('FetchStatusesPageByInstance', {
-        instance: this.selectedInstance,
-        page: this.page,
-        pageSize: this.pageSize
-      })
+      this.$store.dispatch('FetchStatusesPageByInstance')
     },
     clearSelection() {
-      // TODO
+      this.selectedUsers = []
     },
     handleStatusSelection(user) {
       if (this.selectedUsers.find(selectedUser => user.id === selectedUser.id) !== undefined) {
@@ -99,7 +112,14 @@ export default {
   }
 }
 .filter-container {
-  margin: 22px 15px 15px 0;
+    display: flex;
+    height: 36px;
+    justify-content: space-between;
+    align-items: center;
+    margin: 22px 0 15px 0;
+}
+.select-instance {
+  width: 350px;
 }
 .statuses-pagination {
   padding: 15px 0;
@@ -107,5 +127,21 @@ export default {
 }
 h1 {
   margin: 22px 0 0 0;
+}
+
+@media
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+  .filter-container {
+    display: flex;
+    height: 36px;
+    flex-direction: column;
+    margin: 10px 10px
+  }
+
+  .select-field {
+    width: 100%;
+    margin-bottom: 5px;
+  }
 }
 </style>

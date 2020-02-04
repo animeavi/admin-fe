@@ -79,14 +79,14 @@ const users = {
     }
   },
   actions: {
-    async ActivateUsers({ dispatch, getters }, users) {
+    async ActivateUsers({ dispatch, getters }, { users, _userId }) {
       const updatedUsers = users.map(user => {
         return { ...user, deactivated: false }
       })
       const nicknames = users.map(user => user.nickname)
       const callApiFn = async() => await activateUsers(nicknames, getters.authHost, getters.token)
 
-      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: users[0].id })
+      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId })
     },
     async ApplyChanges({ commit, dispatch, state }, { updatedUsers, callApiFn, userId }) {
       commit('SWAP_USERS', updatedUsers)
@@ -99,26 +99,28 @@ const users = {
         dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
       }
 
-      dispatch('FetchUserProfile', { userId, godmode: false })
+      if (userId) {
+        dispatch('FetchUserProfile', { userId, godmode: false })
+      }
       dispatch('SuccessMessage')
     },
-    async AddRight({ dispatch, getters }, { users, right }) {
+    async AddRight({ dispatch, getters }, { users, right, _userId }) {
       const updatedUsers = users.map(user => {
         return user.local ? { ...user, roles: { ...user.roles, [right]: true }} : user
       })
       const nicknames = users.map(user => user.nickname)
       const callApiFn = async() => await addRight(nicknames, right, getters.authHost, getters.token)
 
-      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: users[0].id })
+      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId })
     },
-    async AddTag({ dispatch, getters }, { users, tag }) {
+    async AddTag({ dispatch, getters }, { users, tag, _userId }) {
       const updatedUsers = users.map(user => {
         return { ...user, tags: [...user.tags, tag] }
       })
       const nicknames = users.map(user => user.nickname)
       const callApiFn = async() => await tagUser(nicknames, [tag], getters.authHost, getters.token)
 
-      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: users[0].id })
+      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId })
     },
     async ClearFilters({ commit, dispatch, state }) {
       commit('CLEAR_USERS_FILTERS')
@@ -134,23 +136,23 @@ const users = {
       }
       dispatch('SuccessMessage')
     },
-    async DeactivateUsers({ dispatch, getters }, users) {
+    async DeactivateUsers({ dispatch, getters }, { users, _userId }) {
       const updatedUsers = users.map(user => {
         return { ...user, deactivated: true }
       })
       const nicknames = users.map(user => user.nickname)
       const callApiFn = async() => await deactivateUsers(nicknames, getters.authHost, getters.token)
 
-      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: users[0].id })
+      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId })
     },
-    async ConfirmUsersEmail({ dispatch, getters }, users) {
+    async ConfirmUsersEmail({ dispatch, getters }, { users, _userId }) {
       const updatedUsers = users.map(user => {
         return { ...user, confirmation_pending: false }
       })
       const nicknames = users.map(user => user.nickname)
       const callApiFn = async() => await confirmUserEmail(nicknames, getters.authHost, getters.token)
 
-      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: users[0].id })
+      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId })
     },
     async ResendConfirmationEmail({ dispatch, getters }, users) {
       const usersNicknames = users.map(user => user.nickname)
@@ -161,16 +163,16 @@ const users = {
       }
       dispatch('SuccessMessage')
     },
-    async DeleteRight({ dispatch, getters }, { users, right }) {
+    async DeleteRight({ dispatch, getters }, { users, right, _userId }) {
       const updatedUsers = users.map(user => {
         return user.local ? { ...user, roles: { ...user.roles, [right]: false }} : user
       })
       const nicknames = users.map(user => user.nickname)
       const callApiFn = async() => await deleteRight(nicknames, right, getters.authHost, getters.token)
 
-      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: users[0].id })
+      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId })
     },
-    async DeleteUsers({ commit, dispatch, getters, state }, users) {
+    async DeleteUsers({ commit, dispatch, getters, state }, { users, _userId }) {
       const usersNicknames = users.map(user => user.nickname)
       try {
         await deleteUsers(usersNicknames, getters.authHost, getters.token)
@@ -181,7 +183,7 @@ const users = {
       const updatedUsers = state.fetchedUsers.filter(user => !deletedUsersIds.includes(user.id))
       commit('SET_USERS', updatedUsers)
 
-      dispatch('FetchUserProfile', { userId: users[0].id, godmode: false })
+      dispatch('FetchUserProfile', { userId: _userId, godmode: false })
       dispatch('SuccessMessage')
     },
     async FetchUsers({ commit, dispatch, getters, state }, { page }) {
@@ -198,14 +200,14 @@ const users = {
     RemovePasswordToken({ commit }) {
       commit('SET_PASSWORD_RESET_TOKEN', { link: '', token: '' })
     },
-    async RemoveTag({ dispatch, getters }, { users, tag }) {
+    async RemoveTag({ dispatch, getters }, { users, tag, _userId }) {
       const updatedUsers = users.map(user => {
         return { ...user, tags: user.tags.filter(userTag => userTag !== tag) }
       })
       const nicknames = users.map(user => user.nickname)
       const callApiFn = async() => await untagUser(nicknames, [tag], getters.authHost, getters.token)
 
-      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: users[0].id })
+      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId })
     },
     async RequirePasswordReset({ dispatch, getters }, users) {
       const nicknames = users.map(user => user.nickname)

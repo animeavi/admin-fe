@@ -5,10 +5,9 @@
         <div class="status-header">
           <div class="status-account-container">
             <div class="status-account">
-              <el-checkbox @change="handleStatusSelection(status.account)">
-                <img :src="status.account.avatar" class="status-avatar-img">
-                <h3 class="status-account-name">{{ status.account.display_name }}</h3>
-              </el-checkbox>
+              <el-checkbox v-if="showCheckbox" class="status-checkbox" @change="handleStatusSelection(status.account)"/>
+              <img :src="status.account.avatar" class="status-avatar-img">
+              <h3 class="status-account-name">{{ status.account.display_name }}</h3>
             </div>
             <a :href="status.account.url" target="_blank" class="account">
               @{{ status.account.acct }}
@@ -122,6 +121,16 @@ import moment from 'moment'
 export default {
   name: 'Status',
   props: {
+    fetchStatusesByInstance: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    showCheckbox: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
     status: {
       type: Object,
       required: true
@@ -152,7 +161,15 @@ export default {
       return str.charAt(0).toUpperCase() + str.slice(1)
     },
     changeStatus(statusId, isSensitive, visibility) {
-      this.$store.dispatch('ChangeStatusScope', { statusId, isSensitive, visibility, reportCurrentPage: this.page, userId: this.userId, godmode: this.godmode })
+      this.$store.dispatch('ChangeStatusScope', {
+        statusId,
+        isSensitive,
+        visibility,
+        reportCurrentPage: this.page,
+        userId: this.userId,
+        godmode: this.godmode,
+        fetchStatusesByInstance: this.fetchStatusesByInstance
+      })
     },
     deleteStatus(statusId) {
       this.$confirm('Are you sure you want to delete this status?', 'Warning', {
@@ -160,7 +177,13 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('DeleteStatus', { statusId, reportCurrentPage: this.page, userId: this.userId, godmode: this.godmode })
+        this.$store.dispatch('DeleteStatus', {
+          statusId,
+          reportCurrentPage: this.page,
+          userId: this.userId,
+          godmode: this.godmode,
+          fetchStatusesByInstance: this.fetchStatusesByInstance
+        })
         this.$message({
           type: 'success',
           message: 'Delete completed'
@@ -223,6 +246,9 @@ export default {
   .status-body {
     display: flex;
     flex-direction: column;
+  }
+  .status-checkbox {
+    margin-right: 7px;
   }
   .status-content {
     font-size: 15px;

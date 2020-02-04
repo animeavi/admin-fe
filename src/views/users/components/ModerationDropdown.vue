@@ -131,10 +131,10 @@ export default {
       this.$store.dispatch('ResendConfirmationEmail', [user])
     },
     handleDeletion(user) {
-      this.$store.dispatch('DeleteUsers', [user])
+      this.$store.dispatch('DeleteUsers', { users: [user], _userId: user.id })
     },
     handleEmailConfirmation(user) {
-      this.$store.dispatch('ConfirmUsersEmail', [user])
+      this.$store.dispatch('ConfirmUsersEmail', { users: [user], _userId: user.id })
     },
     requirePasswordReset(user) {
       const mailerEnabled = this.$store.state.user.nodeInfo.metadata.mailerEnabled
@@ -152,18 +152,18 @@ export default {
     },
     toggleActivation(user) {
       user.deactivated
-        ? this.$store.dispatch('ActivateUsers', [user])
-        : this.$store.dispatch('DeactivateUsers', [user])
+        ? this.$store.dispatch('ActivateUsers', { users: [user], _userId: user.id })
+        : this.$store.dispatch('DeactivateUsers', { users: [user], _userId: user.id })
     },
     toggleTag(user, tag) {
       user.tags.includes(tag)
-        ? this.$store.dispatch('RemoveTag', { users: [user], tag })
-        : this.$store.dispatch('AddTag', { users: [user], tag })
+        ? this.$store.dispatch('RemoveTag', { users: [user], tag, _userId: user.id })
+        : this.$store.dispatch('AddTag', { users: [user], tag, _userId: user.id })
     },
     toggleUserRight(user, right) {
       user.roles[right]
-        ? this.$store.dispatch('DeleteRight', { users: [user], right })
-        : this.$store.dispatch('AddRight', { users: [user], right })
+        ? this.$store.dispatch('DeleteRight', { users: [user], right, _userId: user.id })
+        : this.$store.dispatch('AddRight', { users: [user], right, _userId: user.id })
     }
   }
 }
