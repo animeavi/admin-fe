@@ -15,6 +15,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Actions in users module (ActivateUsers, AddRight, DeactivateUsers, DeleteRight, DeleteUsers) now accept an array of users instead of one user
 - Leave dropdown menu open after clicking an action
 - Move current try/catch error handling from view files to module, add it where necessary
+- Display checkboxes in status card and fetch statuses only when status card was rendered from Statuses by instance page
+- Move statuses by instance state from local state to store state
+- Pass user's ID to actions that moderate users when action is called from user's profile page
 
 ### Added
 
@@ -32,6 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Show checkmarks when tag is applied
 - Reports update (also, now it's optimistic)
 - Remove duplicated success message
+- Fix styles for Statuses by instance page
 
 ## [1.2.0] - 2019-09-27
 
