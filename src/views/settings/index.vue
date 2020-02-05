@@ -15,7 +15,7 @@
       </el-link>
 
     </div>
-    <el-tabs v-model="activeTab" :tab-position="tabPosition">
+    <el-tabs v-model="activeTab" tab-position="left">
       <el-tab-pane :label="$t('settings.activityPub')" :disabled="configDisabled" lazy>
         <activity-pub/>
       </el-tab-pane>
@@ -141,9 +141,6 @@ export default {
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
-    },
-    tabPosition() {
-      return this.isMobile ? 'top' : 'left'
     }
   },
   mounted: function() {
