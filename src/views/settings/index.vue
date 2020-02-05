@@ -1,6 +1,20 @@
 <template>
   <div class="settings-container">
-    <h1>{{ $t('settings.settings') }}</h1>
+    <div class="settings-header-container">
+      <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
+      <el-link
+        :underline="false"
+        href="https://docs-develop.pleroma.social/backend/admin/config/"
+        target="_blank">
+        <el-button class="settings-docs-button">
+          <span>
+            <i class="el-icon-document"/>
+            {{ $t('settings.seeDocs') }}
+          </span>
+        </el-button>
+      </el-link>
+
+    </div>
     <el-tabs v-model="activeTab" :tab-position="tabPosition">
       <el-tab-pane :label="$t('settings.activityPub')" :disabled="configDisabled" lazy>
         <activity-pub/>
@@ -143,9 +157,21 @@ export default {
     .el-tabs {
       margin-top: 20px
     }
-    h1 {
-      margin: 22px 0 0 15px;
-    }
+  }
+  .settings-docs-button {
+    width: 163px;
+    text-align: left;
+    padding: 10px;
+  }
+  .settings-header {
+    margin: 0;
+  }
+  .settings-header-container {
+    display: flex;
+    height: 36px;
+    justify-content: space-between;
+    align-items: center;
+    margin: 22px 15px 15px 15px;
   }
   @media only screen and (min-width: 1824px) {
     .settings-container {
