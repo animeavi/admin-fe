@@ -18,7 +18,7 @@
       </div>
     </div>
     <div v-if="rateLimitAuthUsers">
-      <el-form-item label="Unauthenticated users:" label-width="180px" class="rate-limit">
+      <el-form-item label="Unauthenticated users:" label-width="180px" class="rate-limit settings-input">
         <el-input
           :value="rateLimitUnauthUsers[0]"
           placeholder="scale"
@@ -31,7 +31,7 @@
           class="limit-input"
           @input="parseRateLimiter($event, setting.key, 'limit', 'unauthUsersLimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
       </el-form-item>
-      <el-form-item label="Authenticated users:" label-width="180px" class="rate-limit">
+      <el-form-item label="Authenticated users:" label-width="180px" class="rate-limit settings-input">
         <el-input
           :value="rateLimitAuthUsers[0]"
           placeholder="scale"
@@ -45,7 +45,7 @@
           @input="parseRateLimiter($event, setting.key, 'limit', 'authUserslimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
       </el-form-item>
       <div class="limit-button-container">
-        <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-minus" circle @click="toggleLimits(['', ''], setting.key)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" class="icon-minus-button" icon="el-icon-minus" circle @click="toggleLimits(['', ''], setting.key)"/>
         <p class="expl limit-expl">Set limit for all users</p>
       </div>
     </div>

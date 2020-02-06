@@ -4,7 +4,7 @@
       <setting :setting-group="http" :data="httpData"/>
     </el-form>
     <el-form ref="corsPlugData" :model="corsPlugData" :label-width="labelWidth">
-      <el-form-item label="Cors plug config:"/>
+      <el-form-item label="Cors plug config:" class="settings-input"/>
       <setting :setting-group="corsPlug" :data="corsPlugData"/>
     </el-form>
     <div class="line"/>

@@ -13,7 +13,7 @@
     </el-form>
     <div class="line"/>
     <el-form ref="quackData" :model="quackData" :label-width="labelWidth">
-      <el-form-item label="Quack logger:"/>
+      <el-form-item label="Quack logger:" class="settings-input"/>
       <setting :setting-group="quack" :data="quackData"/>
     </el-form>
     <div class="submit-button-container">

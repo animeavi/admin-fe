@@ -104,6 +104,10 @@
   .keyword-inner-input {
     margin-bottom: 22px;
   }
+  label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   .limit-button-container {
     display: flex;
     align-items: baseline;
@@ -205,11 +209,22 @@
 
   @media only screen and (max-width: 760px),
     (min-device-width: 768px) and (max-device-width: 1024px) {
+    .description > p {
+      line-height: 18px;
+      margin: 0 0 7px 0;
+    }
+    .description-container.settings-input {
+      margin-bottom: 0;
+    }
     .input-container {
       width: 100%;
       .settings-delete-button {
         margin: 4px 7px 0 7px;
       }
+    }
+    .setting-label {
+      display: flex;
+      justify-content: space-between;
     }
     .settings-input {
       display: inline-block;
@@ -253,8 +268,17 @@
     .icons-button-container {
       line-height: 24px;
     }
+    .keyword-inner-input {
+      margin-bottom: 10px;
+    }
     .line {
       margin-bottom: 10px;
+    }
+    .mascot-container {
+      margin-bottom: 5px;
+      .settings-input {
+        width: 100%;
+      }
     }
     .name-input {
       width: 40%;

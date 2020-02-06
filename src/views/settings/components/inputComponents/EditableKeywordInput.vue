@@ -4,7 +4,7 @@
       <div v-for="element in data" :key="getId(element)" class="setting-input">
         <el-input :value="getKey(element)" placeholder="pattern" class="name-input" @input="parseEditableKeyword($event, 'key', element)"/> :
         <el-input :value="getValue(element)" placeholder="replacement" class="value-input" @input="parseEditableKeyword($event, 'value', element)"/>
-        <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" class="icon-minus-button" icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
       </div>
       <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
     </div>
@@ -12,7 +12,7 @@
       <div v-for="element in data" :key="getId(element)" class="setting-input">
         <el-input :value="getKey(element)" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', element)"/> :
         <el-input-number :value="getValue(element)" :min="0" size="large" class="value-input" @change="parseEditableKeyword($event, 'value', element)"/>
-        <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" class="icon-minus-button" icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
       </div>
       <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
     </div>
@@ -20,7 +20,7 @@
       <div v-for="element in data" :key="getId(element)" class="setting-input">
         <el-input :value="getKey(element)" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', element)"/> :
         <el-select :value="getValue(element)" multiple filterable allow-create class="value-input" @change="parseEditableKeyword($event, 'value', element)"/>
-        <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" class="icon-minus-button" icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
       </div>
       <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
     </div>

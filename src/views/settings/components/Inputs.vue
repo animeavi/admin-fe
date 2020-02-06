@@ -83,7 +83,7 @@
         class="expl"
         v-html="getFormattedDescription(setting.description)"/>
     </el-form-item>
-    <el-tooltip v-if="isMobile" :content="$t('settings.removeFromDB')" placement="bottom-end">
+    <el-tooltip v-if="canBeDeleted && isMobile" :content="$t('settings.removeFromDB')" placement="bottom-end">
       <el-button icon="el-icon-delete" circle size="mini" class="settings-delete-button" @click="removeSetting"/>
     </el-tooltip>
   </div>

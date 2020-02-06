@@ -4,7 +4,7 @@
       <setting :setting-group="upload" :data="uploadData"/>
     </el-form>
     <el-form v-if="showUploadersLocal" ref="uploadersLocal" :model="uploadersLocalData" :label-width="labelWidth">
-      <el-form-item class="description-container description">
+      <el-form-item class="description-container description settings-input">
         <span class="description"><p>Pleroma.Uploaders.Local</p></span>
       </el-form-item>
       <setting :setting-group="uploadersLocal" :data="uploadersLocalData"/>

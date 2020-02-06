@@ -1,6 +1,6 @@
 <template>
   <div v-if="!loading">
-    <el-form-item v-if="settingGroup.description" class="description-container">
+    <el-form-item v-if="settingGroup.description" class="description-container settings-input">
       <span class="description" v-html="getFormattedDescription(settingGroup.description)"/>
     </el-form-item>
     <div v-if="settingGroup.key === 'Pleroma.Emails.Mailer'">
@@ -37,14 +37,19 @@
               :nested="true"/>
           </div>
           <div v-else>
-            <el-form-item>
-              <span slot="label">
-                {{ setting.label }}:
-                <el-tooltip v-if="canBeDeleted(setting.key)" :content="$t('settings.removeFromDB')" placement="bottom-end">
-                  <el-button icon="el-icon-delete" circle size="mini" style="margin-left:5px" @click="removeSetting(setting.key)"/>
-                </el-tooltip>
-              </span>
-            </el-form-item>
+            <div class="input-container">
+              <el-form-item class="settings-input">
+                <span slot="label">
+                  {{ setting.label }}:
+                  <el-tooltip v-if="isDesktop && canBeDeleted(setting.key)" :content="$t('settings.removeFromDB')" placement="bottom-end">
+                    <el-button icon="el-icon-delete" circle size="mini" style="margin-left:5px" @click="removeSetting(setting.key)"/>
+                  </el-tooltip>
+                </span>
+              </el-form-item>
+              <el-tooltip v-if="isMobile && canBeDeleted(setting.key)" :content="$t('settings.removeFromDB')" placement="bottom-end">
+                <el-button icon="el-icon-delete" circle size="mini" class="settings-delete-button" @click="removeSetting(setting.key)"/>
+              </el-tooltip>
+            </div>
             <div v-for="subSetting in setting.children" :key="subSetting.key">
               <inputs
                 :setting-group="settingGroup"
@@ -90,6 +95,12 @@ export default {
     emailAdapterChildren() {
       const adapter = this.$store.state.settings.settings[':pleroma']['Pleroma.Emails.Mailer'][':adapter']
       return this.settingGroup.children.filter(child => child.group && child.group.includes(adapter))
+    },
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
+    isMobile() {
+      return this.$store.state.app.device === 'mobile'
     },
     loading() {
       return this.$store.state.settings.loading

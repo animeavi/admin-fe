@@ -4,12 +4,12 @@
       <setting :setting-group="frontend" :data="frontendData"/>
     </el-form>
     <el-form ref="assetsData" :model="assetsData" :label-width="labelWidth">
-      <el-form-item label="Assets:"/>
+      <el-form-item label="Assets:" class="settings-input"/>
       <setting :setting-group="assets" :data="assetsData"/>
     </el-form>
     <div class="line"/>
     <el-form ref="emojiData" :model="emojiData" :label-width="labelWidth">
-      <el-form-item label="Emoji:"/>
+      <el-form-item label="Emoji:" class="settings-input"/>
       <setting :setting-group="emoji" :data="emojiData"/>
     </el-form>
     <div class="line"/>
@@ -18,7 +18,7 @@
     </el-form>
     <div class="line"/>
     <el-form ref="markupData" :model="markupData" :label-width="labelWidth">
-      <el-form-item label="Markup settings:"/>
+      <el-form-item label="Markup settings:" class="settings-input"/>
       <setting :setting-group="markup" :data="markupData"/>
     </el-form>
     <div class="submit-button-container">
