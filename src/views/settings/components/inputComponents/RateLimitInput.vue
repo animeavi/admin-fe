@@ -13,7 +13,7 @@
         class="limit-input"
         @input="parseRateLimiter($event, setting.key, 'limit', 'oneLimit', rateLimitAllUsers)"/>
       <div class="limit-button-container">
-        <el-button icon="el-icon-plus" circle @click="toggleLimits([['', ''], ['', '']], setting.key)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="toggleLimits([['', ''], ['', '']], setting.key)"/>
         <p class="expl limit-expl">Set different limits for unauthenticated and authenticated users</p>
       </div>
     </div>
@@ -45,7 +45,7 @@
           @input="parseRateLimiter($event, setting.key, 'limit', 'authUserslimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
       </el-form-item>
       <div class="limit-button-container">
-        <el-button icon="el-icon-minus" circle @click="toggleLimits(['', ''], setting.key)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-minus" circle @click="toggleLimits(['', ''], setting.key)"/>
         <p class="expl limit-expl">Set limit for all users</p>
       </div>
     </div>
@@ -76,6 +76,9 @@ export default {
     }
   },
   computed: {
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
     rateLimitAllUsers() {
       return this.data[this.setting.key] ? this.data[this.setting.key] : ['', '']
     },

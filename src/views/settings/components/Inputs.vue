@@ -1,6 +1,6 @@
 <template>
   <div class="input-container">
-    <el-form-item :label-width="customLabelWidth" :class="labelClass">
+    <el-form-item :label-width="customLabelWidth" :class="labelClass" class="settings-input">
       <span slot="label">
         {{ setting.label }}
         <el-tooltip v-if="canBeDeleted && isDesktop" :content="$t('settings.removeFromDB')" placement="bottom-end">
@@ -21,7 +21,7 @@
         :value="inputValue === null ? 0 : inputValue"
         :placeholder="setting.suggestions ? setting.suggestions[0].toString() : null"
         :min="0"
-        size="large"
+        :size="isDesktop ? 'large' : 'small'"
         @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
       <el-select
         v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes(false))"

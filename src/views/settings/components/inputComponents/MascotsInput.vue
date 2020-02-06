@@ -4,7 +4,7 @@
       <el-form-item label="Name" label-width="100px">
         <div class="mascot-name-container">
           <el-input :value="getName(mascot)" placeholder="Name" class="mascot-name-input" @input="parseMascots($event, 'name', mascot)"/>
-          <el-button icon="el-icon-minus" circle @click="deleteMascotsRow(mascot)"/>
+          <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-minus" circle @click="deleteMascotsRow(mascot)"/>
         </div>
       </el-form-item>
       <el-form-item label="URL" label-width="100px">
@@ -14,7 +14,7 @@
         <el-input :value="getMimeType(mascot)" placeholder="Mime type" class="mascot-input" @input="parseMascots($event, 'mimeType', mascot)"/>
       </el-form-item>
     </div>
-    <el-button icon="el-icon-plus" circle @click="addRowToMascots"/>
+    <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addRowToMascots"/>
   </div>
 </template>
 
@@ -39,6 +39,11 @@ export default {
       default: function() {
         return {}
       }
+    }
+  },
+  computed: {
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
     }
   },
   methods: {

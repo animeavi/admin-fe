@@ -4,25 +4,25 @@
       <div v-for="element in data" :key="getId(element)" class="setting-input">
         <el-input :value="getKey(element)" placeholder="pattern" class="name-input" @input="parseEditableKeyword($event, 'key', element)"/> :
         <el-input :value="getValue(element)" placeholder="replacement" class="value-input" @input="parseEditableKeyword($event, 'value', element)"/>
-        <el-button icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
       </div>
-      <el-button icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
+      <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
     </div>
     <div v-else-if="editableKeywordWithInteger">
       <div v-for="element in data" :key="getId(element)" class="setting-input">
         <el-input :value="getKey(element)" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', element)"/> :
         <el-input-number :value="getValue(element)" :min="0" size="large" class="value-input" @change="parseEditableKeyword($event, 'value', element)"/>
-        <el-button icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
       </div>
-      <el-button icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
+      <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
     </div>
     <div v-else>
       <div v-for="element in data" :key="getId(element)" class="setting-input">
         <el-input :value="getKey(element)" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', element)"/> :
         <el-select :value="getValue(element)" multiple filterable allow-create class="value-input" @change="parseEditableKeyword($event, 'value', element)"/>
-        <el-button icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
       </div>
-      <el-button icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
+      <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
     </div>
   </div>
 </template>
@@ -53,6 +53,9 @@ export default {
   computed: {
     editableKeywordWithInteger() {
       return Array.isArray(this.setting.type) && this.setting.type.includes('keyword') && this.setting.type.includes('integer')
+    },
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
     }
   },
   methods: {
