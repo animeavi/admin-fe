@@ -96,13 +96,13 @@
   .icons-container {
     display: flex;
   }
+  .input-container {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+  }
   .keyword-inner-input {
     margin-bottom: 22px;
-  }
-  label {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   .limit-button-container {
     display: flex;
@@ -156,6 +156,9 @@
     width: 47%;
     margin: 0 1% 5px 0
   }
+  .settings-delete-button {
+    margin-left: 5px;
+  }
   .setting-input {
     display: flex;
     margin-bottom: 10px;
@@ -202,9 +205,15 @@
 
   @media only screen and (max-width: 760px),
     (min-device-width: 768px) and (max-device-width: 1024px) {
-    .el-form-item {
-      margin-right: 15px;
+    .input-container {
+      .el-form-item {
+        margin: 0 0 15px 0;
+      }
+      .settings-delete-button {
+        margin: 4px 7px 0 7px;
+      }
     }
+
     .el-input__inner {
     padding: 0 5px 0 5px
     }
@@ -235,10 +244,6 @@
       width: 60%;
       margin-left: 4px;
       margin-right: 5px
-    }
-    .top-margin {
-      position: absolute;
-      top: 25%;
     }
     .value-input {
       width: 60%;

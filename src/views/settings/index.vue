@@ -63,34 +63,36 @@
         <other/>
       </el-tab-pane>
     </el-tabs>
-    <el-select v-if="isMobile" v-model="activeTab" class="settings-menu" placeholder="Select">
-      <el-option
-        v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-        :disabled="configDisabled"/>
-    </el-select>
-    <activity-pub v-if="activeTab === 'activityPub'"/>
-    <authentication v-if="activeTab === 'auth'"/>
-    <auto-linker v-if="activeTab === 'autoLinker'"/>
-    <esshd v-if="activeTab === 'esshd'"/>
-    <captcha v-if="activeTab === 'captcha'"/>
-    <frontend v-if="activeTab === 'frontend'"/>
-    <gopher v-if="activeTab === 'gopher'"/>
-    <http v-if="activeTab === 'http'"/>
-    <instance v-if="activeTab === 'instance'"/>
-    <job-queue v-if="activeTab === 'jobQueue'"/>
-    <logger v-if="activeTab === 'logger'"/>
-    <mailer v-if="activeTab === 'mailer'"/>
-    <media-proxy v-if="activeTab === 'mediaProxy'"/>
-    <metadata v-if="activeTab === 'metadata'"/>
-    <mrf v-if="activeTab === 'mrf'"/>
-    <rate-limiters v-if="activeTab === 'rateLimiters'"/>
-    <relays v-if="activeTab === 'relays'"/>
-    <web-push v-if="activeTab === 'webPush'"/>
-    <upload v-if="activeTab === 'upload'"/>
-    <other v-if="activeTab === 'other'"/>
+    <div v-if="isMobile">
+      <el-select v-model="activeTab" class="settings-menu" placeholder="Select">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+          :disabled="configDisabled"/>
+      </el-select>
+      <activity-pub v-if="activeTab === 'activityPub'"/>
+      <authentication v-if="activeTab === 'auth'"/>
+      <auto-linker v-if="activeTab === 'autoLinker'"/>
+      <esshd v-if="activeTab === 'esshd'"/>
+      <captcha v-if="activeTab === 'captcha'"/>
+      <frontend v-if="activeTab === 'frontend'"/>
+      <gopher v-if="activeTab === 'gopher'"/>
+      <http v-if="activeTab === 'http'"/>
+      <instance v-if="activeTab === 'instance'"/>
+      <job-queue v-if="activeTab === 'jobQueue'"/>
+      <logger v-if="activeTab === 'logger'"/>
+      <mailer v-if="activeTab === 'mailer'"/>
+      <media-proxy v-if="activeTab === 'mediaProxy'"/>
+      <metadata v-if="activeTab === 'metadata'"/>
+      <mrf v-if="activeTab === 'mrf'"/>
+      <rate-limiters v-if="activeTab === 'rateLimiters'"/>
+      <relays v-if="activeTab === 'relays'"/>
+      <web-push v-if="activeTab === 'webPush'"/>
+      <upload v-if="activeTab === 'upload'"/>
+      <other v-if="activeTab === 'other'"/>
+    </div>
   </div>
 </template>
 

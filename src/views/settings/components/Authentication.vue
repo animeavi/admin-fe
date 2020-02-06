@@ -44,7 +44,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '280px'
+      return this.isMobile ? '120px' : '280px'
     },
     ldap() {
       return this.settings.description.find(setting => setting.key === ':ldap')

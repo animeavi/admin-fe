@@ -42,7 +42,7 @@ export default {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Captcha.Kocaptcha']) || {}
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '280px'
+      return this.isMobile ? '120px' : '280px'
     },
     loading() {
       return this.settings.loading
