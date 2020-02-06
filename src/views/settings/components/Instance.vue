@@ -20,11 +20,6 @@
       <setting :setting-group="manifest" :data="manifestData"/>
     </el-form>
     <div class="line"/>
-    <el-form ref="suggestions" :model="suggestionsData" :label-width="labelWidth">
-      <el-form-item label="Suggestions:"/>
-      <setting :setting-group="suggestions" :data="suggestionsData"/>
-    </el-form>
-    <div class="line"/>
     <el-form ref="pleromaUser" :model="pleromaUserData" :label-width="labelWidth">
       <setting :setting-group="pleromaUser" :data="pleromaUserData"/>
     </el-form>
@@ -93,12 +88,6 @@ export default {
     },
     scheduledActivityData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.ScheduledActivity']) || {}
-    },
-    suggestions() {
-      return this.$store.state.settings.description.find(setting => setting.key === ':suggestions')
-    },
-    suggestionsData() {
-      return _.get(this.settings.settings, [':pleroma', ':suggestions']) || {}
     }
   },
   methods: {
