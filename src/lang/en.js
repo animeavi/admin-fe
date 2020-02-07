@@ -358,7 +358,8 @@ export default {
     successfullyUpdated: 'Successfully updated',
     metadatLowerCase: 'metadata',
     files: 'files',
-    successfullyRemoved: 'Setting removed successfully!'
+    successfullyRemoved: 'Setting removed successfully!',
+    seeDocs: 'See Documentation'
   },
   invites: {
     inviteTokens: 'Invite tokens',
