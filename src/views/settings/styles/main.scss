@@ -28,18 +28,12 @@
     overflow-wrap: break-word;
     margin-bottom: 0;
   }
-  .el-form-item {
-    margin-right: 30px;
-  }
   .el-form-item .rate-limit {
     margin-right: 0;
   }
   .el-input-group__prepend {
     padding-left: 10px;
     padding-right: 10px;
-  }
-  .el-select {
-    width: 100%;
   }
   .esshd-list {
     margin: 0;
@@ -100,6 +94,13 @@
     display: flex;
     align-items: start;
     justify-content: space-between;
+    .el-form-item {
+      margin-right: 30px;
+      width: 100%
+    }
+    .el-select {
+      width: 100%;
+    }
   }
   .keyword-inner-input {
     margin-bottom: 22px;
@@ -218,8 +219,11 @@
     }
     .input-container {
       width: 100%;
+      .el-form-item {
+        margin-right: 15px;
+      }
       .settings-delete-button {
-        margin: 4px 7px 0 7px;
+        margin: 4px 7px 0 -5px;
       }
     }
     .setting-label {
