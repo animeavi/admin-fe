@@ -61,7 +61,7 @@
             :setting-parent="[...settingParent, subSetting]"
             :setting="subSetting"
             :data="data[setting.key]"
-            :custom-label-width="'140px'"
+            :custom-label-width="isDesktop ? '140px' : '100px'"
             :label-class="'center-label'"
             :input-class="'keyword-inner-input'"
             :nested="true"/>

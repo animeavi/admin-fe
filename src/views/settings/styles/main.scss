@@ -51,6 +51,10 @@
       padding: 2px 3px;
     }
   }
+  .follow-relay {
+    width: 350px;
+    margin-right: 7px;
+  }
   .form-container {
     margin-bottom: 80px;
   }
@@ -152,6 +156,9 @@
     margin-left: 8px;
     margin-right: 10px
   }
+  .relays-container {
+    margin: 0 15px;
+  }
   .replacement-input {
     width: 80%;
     margin-left: 8px;
@@ -213,9 +220,26 @@
     .description > p {
       line-height: 18px;
       margin: 0 0 7px 0;
+      code {
+        display: inline;
+        line-height: 18px;
+        padding: 2px 3px;
+        font-size: 14px;
+      }
     }
     .description-container.settings-input {
       margin-bottom: 0;
+    }
+    .follow-relay {
+      width: 70%;
+      margin-right: 5px;
+      input {
+        width: 100%;
+      }
+    }
+    .follow-relay-container {
+      display: flex;
+      justify-content: space-between;
     }
     .input-container {
       width: 100%;
@@ -294,6 +318,9 @@
     .pattern-input {
       width: 40%;
       margin-right: 4px
+    }
+    .relays-container {
+      margin: 0 10px;
     }
     .replacement-input {
       width: 60%;
