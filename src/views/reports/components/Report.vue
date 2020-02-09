@@ -1,22 +1,22 @@
 <template>
   <div>
-    <el-timeline class="timeline">
+    <el-timeline class="reports-timeline">
       <el-timeline-item
         v-for="report in reports"
         :timestamp="parseTimestamp(report.created_at)"
         :key="report.id"
         placement="top"
         class="timeline-item-container">
-        <el-card>
+        <el-card class="report">
           <div class="header-container">
-            <div>
+            <div class="title-container">
               <h3 class="report-title">{{ $t('reports.reportOn') }} {{ report.account.display_name }}</h3>
               <h5 class="id">{{ $t('reports.id') }}: {{ report.id }}</h5>
             </div>
             <div>
-              <el-tag :type="getStateType(report.state)" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
+              <el-tag :type="getStateType(report.state)" size="large" class="report-tag">{{ capitalizeFirstLetter(report.state) }}</el-tag>
               <el-dropdown trigger="click">
-                <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeState') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
+                <el-button plain size="small" icon="el-icon-edit" class="report-actions-button">{{ $t('reports.changeState') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-if="report.state !== 'resolved'" @click.native="changeReportState('resolved', report.id)">{{ $t('reports.resolve') }}</el-dropdown-item>
                   <el-dropdown-item v-if="report.state !== 'open'" @click.native="changeReportState('open', report.id)">{{ $t('reports.reopen') }}</el-dropdown-item>
@@ -43,7 +43,7 @@
               <span>{{ report.content }}</span>
             </span>
           </div>
-          <div>
+          <div :style="showStatuses(report.statuses) ? '' : 'margin-bottom:15px'">
             <div class="line"/>
             <span class="report-row-key">{{ $t('reports.actor') }}:</span>
             <img
@@ -54,7 +54,7 @@
               <span>{{ report.actor.acct }}</span>
             </a>
           </div>
-          <div v-if="report.statuses.length > 0" class="statuses">
+          <div v-if="showStatuses(report.statuses)" class="statuses">
             <el-collapse>
               <el-collapse-item :title="getStatusesTitle(report.statuses)">
                 <div v-for="status in report.statuses" :key="status.id">
@@ -153,15 +153,18 @@ export default {
     getNotesTitle(notes = []) {
       return `Notes: ${notes.length} item(s)`
     },
+    handleNewNote(reportID) {
+      this.$store.dispatch('CreateReportNote', { content: this.notes[reportID], reportID })
+      this.notes[reportID] = ''
+    },
     handlePageChange(page) {
       this.$store.dispatch('FetchReports', page)
     },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('L HH:mm')
     },
-    handleNewNote(reportID) {
-      this.$store.dispatch('CreateReportNote', { content: this.notes[reportID], reportID })
-      this.notes[reportID] = ''
+    showStatuses(statuses) {
+      return statuses.length > 0
     }
   }
 }
@@ -205,11 +208,13 @@ export default {
     margin: 0;
     height: 17px;
   }
-  .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    height: 40px;
+  .report {
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      height: 40px;
+    }
   }
   .id {
     color: gray;
@@ -258,6 +263,10 @@ export default {
     margin: 25px 0;
     text-align: center;
   }
+  .reports-timeline {
+    margin: 30px 45px 45px 19px;
+    padding: 0px;
+  }
   .statuses {
     margin-top: 15px;
   }
@@ -273,14 +282,25 @@ export default {
   @media
   only screen and (max-width: 760px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
-    .timeline-item-container {
+    .report {
       .header-container {
         display: flex;
         flex-direction: column;
-        height: 80px;
+        justify-content: flex-start;
+        align-items: flex-start;
+        height: auto;
       }
       .id {
         margin: 6px 0 0 0;
+      }
+      .report-actions-button {
+        margin: 3px 0 6px;
+      }
+      .report-tag {
+        margin: 3px 0 6px;
+      }
+      .title-container {
+        margin-bottom: 7px;
       }
     }
   }

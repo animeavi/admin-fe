@@ -1,5 +1,5 @@
 <template>
-  <el-timeline class="timeline">
+  <el-timeline class="reports-timeline">
     <el-timeline-item
       v-for="groupedReport in groupedReports"
       :key="groupedReport.id"
@@ -13,7 +13,7 @@
           </div>
           <div>
             <el-dropdown trigger="click">
-              <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeAllReports') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
+              <el-button plain size="small" icon="el-icon-edit" class="report-actions-button">{{ $t('reports.changeAllReports') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item @click.native="changeAllReports('resolved', groupedReport.reports)">{{ $t('reports.resolveAll') }}</el-dropdown-item>
                 <el-dropdown-item @click.native="changeAllReports('open', groupedReport.reports)">{{ $t('reports.reopenAll') }}</el-dropdown-item>
@@ -46,7 +46,7 @@
         <div v-if="groupedReport.status">
           <div class="line"/>
           <span class="report-row-key">{{ $t('reports.reportedStatus') }}:</span>
-          <status :status="groupedReport.status" class="reported-status"/>
+          <status :status="groupedReport.status" :show-checkbox="false" class="reported-status"/>
         </div>
         <div v-if="groupedReport.reports">
           <el-collapse>
@@ -109,11 +109,13 @@ export default {
   .el-icon-arrow-right {
     margin-right: 6px;
   }
-  .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    height: 40px;
+  .grouped-report {
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      height: 36px;
+    }
   }
   .line {
     width: 100%;
@@ -128,16 +130,30 @@ export default {
     font-size: 14px;
     font-weight: 500;
   }
+  .reports-timeline {
+    margin: 30px 45px 45px 19px;
+    padding: 0px;
+  }
   .reported-status {
     margin-top: 15px;
   }
   @media
   only screen and (max-width: 760px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
-    .header-container {
-      display: flex;
-      flex-direction: column;
-      height: 80px;
+    .grouped-report {
+      .header-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        height: auto;
+      }
+      .report-actions-button {
+        margin: 3px 0 6px;
+      }
+      .report-title {
+        margin-bottom: 7px;
+      }
     }
   }
 </style>

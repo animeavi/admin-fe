@@ -13,7 +13,7 @@
             </a>
           </div>
           <div>
-            <el-tag :type="getStateType(report.state)" size="large">{{ capitalizeFirstLetter(report.state) }}</el-tag>
+            <el-tag :type="getStateType(report.state)" size="large" class="report-tag">{{ capitalizeFirstLetter(report.state) }}</el-tag>
             <el-dropdown trigger="click">
               <el-button plain size="small" icon="el-icon-edit">{{ $t('reports.changeState') }}<i class="el-icon-arrow-down el-icon--right"/></el-button>
               <el-dropdown-menu slot="dropdown">
@@ -117,14 +117,12 @@ export default {
     .report-header {
       display: flex;
       flex-direction: column;
-      height: 80px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      height: auto;
     }
-    .report-actor-container {
-      margin-bottom: 5px;
-    }
-    .report-header {
-      display: flex;
-      flex-direction: column;
+    .report-tag {
+      margin: 3px 0 6px;
     }
   }
 </style>
