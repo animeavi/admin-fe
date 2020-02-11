@@ -1,26 +1,97 @@
-image: node:10
+image: node:10-alpine
+
+variables: &global_variables
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: unix:///var/run/docker.sock
+
+cache: &global_cache_policy
+  key: '$CI_COMMIT_SHORT_SHA'
+  policy: pull-push
+  paths:
+    - node_modules/
+    - build
 
 stages:
-  - lint
   - build
   - test
+  - release
+
+build:
+  stage: build
+  before_script: &before-build
+    - apk --no-cache add git
+  script:
+    - npm install
+    - npm run build:prod
+  artifacts: &release-artifacts
+    name: "admin-fe-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA"
+    paths:
+      - dist/
 
 lint:
-  stage: lint
-  script:
+  stage: test
+  before_script: &before-yarn
+    - apk --no-cache add git
+    - yarn cache clean
     - yarn
+  cache:
+    key: '$CI_COMMIT_SHORT_SHA'
+    policy: pull
+  script:
     - yarn lint
 
 test:
   stage: test
-  variables:
-    APT_CACHE_DIR: apt-cache
+  before_script: *before-yarn
+  cache:
+    key: '$CI_COMMIT_SHORT_SHA'
+    policy: pull
   script:
-    - yarn
     - yarn test
 
-build:
-  stage: build
+docker:
+  stage: release
+  image: docker:latest
+  cache: {}
+  dependencies: []
+  variables: &docker-variables
+    IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+    IMAGE_TAG_SLUG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    IMAGE_TAG_LATEST: $CI_REGISTRY_IMAGE:latest
+    IMAGE_TAG_LATEST_STABLE: $CI_REGISTRY_IMAGE:stable
+  before_script: &before-docker
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $IMAGE_TAG_SLUG || true
+    - export CI_JOB_TIMESTAMP=$(date --utc -Iseconds)
+    - export CI_VCS_REF=$CI_COMMIT_SHORT_SHA
+  allow_failure: true
   script:
-    - yarn
-    - npm run build:prod
+    - docker build --cache-from $IMAGE_TAG_SLUG --build-arg VCS_REF=$CI_VCS_REF --build-arg BUILD_DATE=$CI_JOB_TIMESTAMP -t $IMAGE_TAG -t $IMAGE_TAG_SLUG -t $IMAGE_TAG_LATEST .
+    - docker push $IMAGE_TAG
+    - docker push $IMAGE_TAG_SLUG
+    - docker push $IMAGE_TAG_LATEST
+  tags:
+    - dind
+  only:
+    - develop@pleroma/admin-fe
+    - /^(features|ci)\/.*/@jp/admin-fe
+
+docker-stable:
+  stage: release
+  image: docker:latest
+  cache: {}
+  dependencies: []
+  variables: *docker-variables
+  before_script: *before-docker
+  allow_failure: true
+  script:
+    - docker build --cache-from $IMAGE_TAG_SLUG --build-arg VCS_REF=$CI_VCS_REF --build-arg BUILD_DATE=$CI_JOB_TIMESTAMP -t $IMAGE_TAG -t $IMAGE_TAG_SLUG -t $IMAGE_TAG_LATEST_STABLE .
+    - docker push $IMAGE_TAG
+    - docker push $IMAGE_TAG_SLUG
+    - docker push $IMAGE_TAG_LATEST_STABLE
+  tags:
+    - dind
+  only:
+    - master@pleroma/admin-fe
+
+
