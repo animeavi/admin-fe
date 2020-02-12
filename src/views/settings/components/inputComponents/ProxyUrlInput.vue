@@ -3,7 +3,7 @@
     <el-input
       :value="proxyUrlData.host"
       placeholder="host (e.g. localhost or 127.0.0.1)"
-      class="proxy-url-value-input"
+      class="proxy-url-host-input"
       @input="updateProxyUrl($event, 'host')"/> :
     <el-input
       :value="proxyUrlData.port"

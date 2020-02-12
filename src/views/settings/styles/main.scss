@@ -4,6 +4,9 @@
   }
   .center-label label {
     text-align: center;
+    span {
+      float: left;
+    }
   }
   .code {
     background-color: #adbed67a;
@@ -150,6 +153,10 @@
   .pattern-input {
     width: 20%;
     margin-right: 8px
+  }
+  .proxy-url-host-input {
+    width: 35%;
+    margin-right: 10px
   }
   .proxy-url-value-input {
     width: 35%;

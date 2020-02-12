@@ -1,7 +1,29 @@
 <template>
   <div class="input-container">
-    <el-form-item :label-width="customLabelWidth" :class="labelClass" class="settings-input">
-      <span slot="label">
+    <div v-if="setting.type === 'keyword'" style="width:100%">
+      <el-form-item :label-width="customLabelWidth" :class="labelClass" :style="`margin-left:${margin}px;margin-bottom:0`" class="settings-input">
+        <span slot="label">
+          {{ setting.label }}
+          <el-tooltip v-if="canBeDeleted && isDesktop" :content="$t('settings.removeFromDB')" placement="bottom-end">
+            <el-button icon="el-icon-delete" circle size="mini" style="margin-left:5px" @click="removeSetting"/>
+          </el-tooltip>
+        </span>
+      </el-form-item>
+      <el-form-item v-for="subSetting in setting.children" :key="subSetting.key" class="settings-input has-nested">
+        <inputs
+          :setting-group="settingGroup"
+          :setting-parent="[...settingParent, subSetting]"
+          :setting="subSetting"
+          :data="data[setting.key]"
+          :custom-label-width="isDesktop ? 'auto' : '100px'"
+          :label-class="'center-label'"
+          :input-class="'keyword-inner-input'"
+          :margin="margin + 20"
+          :nested="true"/>
+      </el-form-item>
+    </div>
+    <el-form-item v-if="setting.type !== 'keyword'" :label-width="customLabelWidth" :class="labelClass" class="settings-input">
+      <span slot="label" :style="`margin-left:${margin}px`">
         {{ setting.label }}
         <el-tooltip v-if="canBeDeleted && isDesktop" :content="$t('settings.removeFromDB')" placement="bottom-end">
           <el-button icon="el-icon-delete" circle size="mini" style="margin-left:5px" @click="removeSetting"/>
@@ -56,6 +78,7 @@
       </el-input>
       <div v-if="setting.type === 'keyword'">
         <div v-for="subSetting in setting.children" :key="subSetting.key">
+          <!-- {{ [...settingParent, subSetting].map(s => s.label) }} -->
           <inputs
             :setting-group="settingGroup"
             :setting-parent="[...settingParent, subSetting]"
@@ -80,6 +103,7 @@
       <div
         v-if="setting.description && setting.type !== 'keyword'"
         :class="inputClass"
+        :style="`margin-left:${margin}px`"
         class="expl"
         v-html="getFormattedDescription(setting.description)"/>
     </el-form-item>
@@ -136,6 +160,13 @@ export default {
       },
       required: false
     },
+    margin: {
+      type: Number,
+      default: function() {
+        return 0
+      },
+      required: false
+    },
     nested: {
       type: Boolean,
       default: function() {
@@ -160,6 +191,11 @@ export default {
         return []
       },
       required: false
+    }
+  },
+  data() {
+    return {
+      currentMargin: 0
     }
   },
   computed: {
