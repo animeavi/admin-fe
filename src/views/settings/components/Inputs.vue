@@ -15,10 +15,10 @@
           :setting-parent="[...settingParent, subSetting]"
           :setting="subSetting"
           :data="data[setting.key]"
-          :custom-label-width="isDesktop ? 'auto' : '100px'"
+          :custom-label-width="isDesktop ? '120px' : '100px'"
           :label-class="'center-label'"
           :input-class="'keyword-inner-input'"
-          :margin="margin + 20"
+          :margin="isDesktop ? margin + 15 : margin + 8"
           :nested="true"/>
       </el-form-item>
     </div>
@@ -103,7 +103,6 @@
       <div
         v-if="setting.description && setting.type !== 'keyword'"
         :class="inputClass"
-        :style="`margin-left:${margin}px`"
         class="expl"
         v-html="getFormattedDescription(setting.description)"/>
     </el-form-item>
@@ -191,11 +190,6 @@ export default {
         return []
       },
       required: false
-    }
-  },
-  data() {
-    return {
-      currentMargin: 0
     }
   },
   computed: {

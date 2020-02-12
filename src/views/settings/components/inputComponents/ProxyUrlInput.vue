@@ -1,16 +1,20 @@
 <template>
-  <div class="setting-input">
+  <div class="proxy-url-input">
     <el-input
       :value="proxyUrlData.host"
       placeholder="host (e.g. localhost or 127.0.0.1)"
       class="proxy-url-host-input"
-      @input="updateProxyUrl($event, 'host')"/> :
+      @input="updateProxyUrl($event, 'host')"/>
+    <span v-if="isDesktop">:</span>
     <el-input
       :value="proxyUrlData.port"
       placeholder="port (e.g 9020 or 3090)"
       class="proxy-url-value-input"
       @input="updateProxyUrl($event, 'port')"/>
-    <el-checkbox :value="proxyUrlData.socks5" class="name-input" @change="updateProxyUrl($event, 'socks5')">Socks5</el-checkbox>
+    <div class="socks5-checkbox-container">
+      <el-checkbox :value="proxyUrlData.socks5" @change="updateProxyUrl($event, 'socks5')"/>
+      <span class="socks5-checkbox">Socks5</span>
+    </div>
   </div>
 </template>
 
@@ -47,6 +51,9 @@ export default {
     }
   },
   computed: {
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
     settings() {
       return this.$store.state.settings.settings
     },

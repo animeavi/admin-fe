@@ -154,9 +154,14 @@
     width: 20%;
     margin-right: 8px
   }
+  .proxy-url-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
   .proxy-url-host-input {
     width: 35%;
-    margin-right: 10px
+    margin-right: 8px
   }
   .proxy-url-value-input {
     width: 35%;
@@ -184,6 +189,20 @@
   }
   .single-input {
     margin-right: 10px
+  }
+  .socks5-checkbox {
+    font-size: 14px;
+    color: #606266;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
+    font-weight: 700;
+    margin-left: 10px;
+  }
+  .socks5-checkbox-container {
+    width: 40%;
+    height: 36px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
   }
   .ssl-tls-opts {
     margin: 36px 0 0 0;
@@ -257,6 +276,19 @@
         margin: 4px 7px 0 -5px;
       }
     }
+    .proxy-url-input {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 0;
+    }
+    .proxy-url-host-input {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    .proxy-url-value-input {
+      width: 100%;
+      margin-left: 0;
+    }
     .setting-label {
       display: flex;
       justify-content: space-between;
@@ -265,6 +297,9 @@
       display: inline-block;
       width: 90%;
       margin: 0 0 10px 0;
+    }
+    .socks5-checkbox-container {
+      width: 100%;
     }
     .el-input__inner {
     padding: 0 5px 0 5px
