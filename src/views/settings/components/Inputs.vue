@@ -9,7 +9,7 @@
           </el-tooltip>
         </span>
       </el-form-item>
-      <el-form-item v-for="subSetting in setting.children" :key="subSetting.key" class="settings-input has-nested">
+      <el-form-item v-for="subSetting in setting.children" :key="subSetting.key" class="settings-input">
         <inputs
           :setting-group="settingGroup"
           :setting-parent="[...settingParent, subSetting]"

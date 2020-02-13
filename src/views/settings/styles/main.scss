@@ -47,6 +47,8 @@
     line-height: 22px;
     margin: 5px 0 0 0;
     overflow-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
     code {
       display: inline;
       line-height: 22px;
@@ -168,6 +170,27 @@
     margin-left: 8px;
     margin-right: 10px
   }
+  .rate-limit {
+    .el-form-item__content {
+      width: 100%;
+      display: flex;
+    }
+  }
+  .rate-limit-content {
+    width: 100%;
+  }
+  .rate-limit-label {
+    float: right;
+  }
+  .rate-limit-label-container {
+    font-size: 14px;
+    color: #606266;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
+    font-weight: 700;
+    height: 36px;
+    width: 240px;
+    margin-right: 10px;
+  }
   .relays-container {
     margin: 0 15px;
   }
@@ -270,11 +293,15 @@
     .input-container {
       width: 100%;
       .el-form-item {
-        margin-right: 15px;
+        margin: 0;
+        padding: 0 15px 10px 0;
       }
       .settings-delete-button {
         margin: 4px 7px 0 -5px;
       }
+    }
+    .limit-input {
+      width: 46%;
     }
     .proxy-url-input {
       flex-direction: column;
@@ -289,6 +316,17 @@
       width: 100%;
       margin-left: 0;
     }
+    .rate-limit {
+      .el-form-item__content {
+        flex-direction: column;
+      }
+    }
+    .rate-limit-label {
+      float: left;
+    }
+    .scale-input {
+      width: 46%;
+    }
     .setting-label {
       display: flex;
       justify-content: space-between;
@@ -296,7 +334,8 @@
     .settings-input {
       display: inline-block;
       width: 90%;
-      margin: 0 0 10px 0;
+      padding: 0 15px 10px 0;
+      margin: 0;
     }
     .socks5-checkbox-container {
       width: 100%;
