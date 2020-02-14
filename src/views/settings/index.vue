@@ -1,90 +1,106 @@
 <template>
   <div class="settings-container">
-    <div class="settings-header-container">
-      <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
-      <el-link
-        :underline="false"
-        href="https://docs-develop.pleroma.social/backend/admin/config/"
-        target="_blank">
-        <el-button class="settings-docs-button">
-          <span>
-            <i class="el-icon-document"/>
-            {{ $t('settings.seeDocs') }}
-          </span>
-        </el-button>
-      </el-link>
+    <div v-if="isDesktop">
+      <div class="settings-header-container">
+        <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
+        <el-link
+          :underline="false"
+          href="https://docs-develop.pleroma.social/backend/administration/CLI_tasks/config/"
+          target="_blank">
+          <el-button class="settings-docs-button">
+            <span>
+              <i class="el-icon-document"/>
+              {{ $t('settings.seeDocs') }}
+            </span>
+          </el-button>
+        </el-link>
+      </div>
+      <el-tabs v-model="activeTab" tab-position="left">
+        <el-tab-pane :label="$t('settings.activityPub')" :disabled="configDisabled" name="activityPub" lazy>
+          <activity-pub/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.auth')" :disabled="configDisabled" name="auth" lazy>
+          <authentication/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.autoLinker')" :disabled="configDisabled" name="autoLinker" lazy>
+          <auto-linker/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.esshd')" :disabled="configDisabled" name="esshd" lazy>
+          <esshd/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.captcha')" :disabled="configDisabled" name="captcha" lazy>
+          <captcha/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.frontend')" :disabled="configDisabled" name="frontend" lazy>
+          <frontend/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.gopher')" :disabled="configDisabled" name="gopher" lazy>
+          <gopher/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.http')" :disabled="configDisabled" name="http" lazy>
+          <http/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.instance')" :disabled="configDisabled" name="instance">
+          <instance/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.jobQueue')" :disabled="configDisabled" name="jobQueue" lazy>
+          <job-queue/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.logger')" :disabled="configDisabled" name="logger" lazy>
+          <logger/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.mailer')" :disabled="configDisabled" name="mailer" lazy>
+          <mailer/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.mediaProxy')" :disabled="configDisabled" name="mediaProxy" lazy>
+          <media-proxy/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.metadata')" :disabled="configDisabled" name="metadata" lazy>
+          <metadata/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.mrf')" :disabled="configDisabled" name="mrf" lazy>
+          <mrf/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.rateLimiters')" :disabled="configDisabled" name="rateLimiters" lazy>
+          <rate-limiters/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.relays')" lazy name="relays">
+          <relays/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.webPush')" :disabled="configDisabled" name="webPush" lazy>
+          <web-push/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.upload')" :disabled="configDisabled" name="upload" lazy>
+          <upload/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('settings.other')" :disabled="configDisabled" name="other" lazy>
+          <other/>
+        </el-tab-pane>
+      </el-tabs>
     </div>
-    <el-tabs v-if="isDesktop" v-model="activeTab" tab-position="left">
-      <el-tab-pane :label="$t('settings.activityPub')" :disabled="configDisabled" name="activityPub" lazy>
-        <activity-pub/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.auth')" :disabled="configDisabled" name="auth" lazy>
-        <authentication/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.autoLinker')" :disabled="configDisabled" name="autoLinker" lazy>
-        <auto-linker/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.esshd')" :disabled="configDisabled" name="esshd" lazy>
-        <esshd/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.captcha')" :disabled="configDisabled" name="captcha" lazy>
-        <captcha/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.frontend')" :disabled="configDisabled" name="frontend" lazy>
-        <frontend/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.gopher')" :disabled="configDisabled" name="gopher" lazy>
-        <gopher/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.http')" :disabled="configDisabled" name="http" lazy>
-        <http/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.instance')" :disabled="configDisabled" name="instance">
-        <instance/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.jobQueue')" :disabled="configDisabled" name="jobQueue" lazy>
-        <job-queue/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.logger')" :disabled="configDisabled" name="logger" lazy>
-        <logger/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.mailer')" :disabled="configDisabled" name="mailer" lazy>
-        <mailer/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.mediaProxy')" :disabled="configDisabled" name="mediaProxy" lazy>
-        <media-proxy/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.metadata')" :disabled="configDisabled" name="metadata" lazy>
-        <metadata/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.mrf')" :disabled="configDisabled" name="mrf" lazy>
-        <mrf/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.rateLimiters')" :disabled="configDisabled" name="rateLimiters" lazy>
-        <rate-limiters/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.relays')" lazy name="relays">
-        <relays/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.webPush')" :disabled="configDisabled" name="webPush" lazy>
-        <web-push/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.upload')" :disabled="configDisabled" name="upload" lazy>
-        <upload/>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('settings.other')" :disabled="configDisabled" name="other" lazy>
-        <other/>
-      </el-tab-pane>
-    </el-tabs>
     <div v-if="isMobile">
-      <el-select v-model="activeTab" class="settings-menu" placeholder="Select">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          :disabled="configDisabled"/>
-      </el-select>
+      <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
+      <div class="settings-header-container">
+        <el-select v-model="activeTab" class="settings-menu" placeholder="Select">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="configDisabled"/>
+        </el-select>
+        <el-link
+          :underline="false"
+          href="https://docs-develop.pleroma.social/backend/administration/CLI_tasks/config/"
+          target="_blank">
+          <el-button class="settings-docs-button">
+            <span>
+              <i class="el-icon-document"/>
+              {{ $t('settings.seeDocs') }}
+            </span>
+          </el-button>
+        </el-link>
+      </div>
       <activity-pub v-if="activeTab === 'activityPub'"/>
       <authentication v-if="activeTab === 'auth'"/>
       <auto-linker v-if="activeTab === 'autoLinker'"/>
@@ -241,8 +257,10 @@ export default {
   .settings-header {
     margin: 7px 10px 15px 10px;
   }
+  .settings-header-container {
+    margin: 15px;
+  }
   .settings-menu {
-    margin: 0 0 15px 10px;
     width: 45%;
   }
 }
