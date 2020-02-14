@@ -38,13 +38,13 @@
           </div>
           <div v-else>
             <div class="input-container">
-              <el-form-item class="settings-input">
+              <el-form-item class="grouped-settings-header">
                 <span slot="label">
-                  {{ setting.label }}:
                   <el-tooltip v-if="isDesktop && canBeDeleted(setting.key)" :content="$t('settings.removeFromDB')" placement="bottom-end">
                     <el-button icon="el-icon-delete" circle size="mini" style="margin-left:5px" @click="removeSetting(setting.key)"/>
                   </el-tooltip>
                 </span>
+                <span class="label-font">{{ setting.label }}</span>
               </el-form-item>
               <el-tooltip v-if="isMobile && canBeDeleted(setting.key)" :content="$t('settings.removeFromDB')" placement="bottom-end">
                 <el-button icon="el-icon-delete" circle size="mini" class="settings-delete-button" @click="removeSetting(setting.key)"/>

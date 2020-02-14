@@ -63,6 +63,9 @@
   .form-container {
     margin-bottom: 80px;
   }
+  .grouped-settings-header {
+    margin: 0 0 14px 0;
+  }
   .highlight {
   background-color: #e6e6e6;
   }
@@ -111,12 +114,15 @@
       width: 100%;
     }
   }
-  .keyword-inner-input {
-    margin-bottom: 22px;
-  }
   label {
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .label-font {
+    font-size: 14px;
+    color: #606266;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
+    font-weight: 700;
   }
   .limit-button-container {
     display: flex;
@@ -376,9 +382,6 @@
     }
     .icons-button-container {
       line-height: 24px;
-    }
-    .keyword-inner-input {
-      margin-bottom: 10px;
     }
     .line {
       margin-bottom: 10px;

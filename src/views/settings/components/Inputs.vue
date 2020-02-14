@@ -16,8 +16,7 @@
           :setting="subSetting"
           :data="data[setting.key]"
           :custom-label-width="isDesktop ? '120px' : '100px'"
-          :label-class="'center-label'"
-          :input-class="'keyword-inner-input'"
+          :label-class="subSetting.type === 'keyword' ? 'center-label' : ''"
           :margin="isDesktop ? margin + 15 : margin + 8"
           :nested="true"/>
       </el-form-item>
@@ -76,20 +75,6 @@
         @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
         <template slot="prepend">:</template>
       </el-input>
-      <div v-if="setting.type === 'keyword'">
-        <div v-for="subSetting in setting.children" :key="subSetting.key">
-          <!-- {{ [...settingParent, subSetting].map(s => s.label) }} -->
-          <inputs
-            :setting-group="settingGroup"
-            :setting-parent="[...settingParent, subSetting]"
-            :setting="subSetting"
-            :data="data[setting.key]"
-            :custom-label-width="isDesktop ? '140px' : '100px'"
-            :label-class="'center-label'"
-            :input-class="'keyword-inner-input'"
-            :nested="true"/>
-        </div>
-      </div>
       <!-- special inputs -->
       <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :data="data" :setting-group="settingGroup" :setting="setting"/>
       <mascots-input v-if="setting.key === ':mascots'" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
@@ -144,13 +129,6 @@ export default {
       default: function() {
         return {}
       }
-    },
-    inputClass: {
-      type: String,
-      default: function() {
-        return 'input-class'
-      },
-      required: false
     },
     labelClass: {
       type: String,
