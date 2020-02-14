@@ -1,11 +1,11 @@
 <template>
   <div class="input-container">
-    <div v-if="setting.type === 'keyword'" style="width:100%">
+    <div v-if="setting.type === 'keyword'" class="keyword-container">
       <el-form-item :label-width="customLabelWidth" :class="labelClass" :style="`margin-left:${margin}px;margin-bottom:0`" class="settings-input">
         <span slot="label">
           {{ setting.label }}
           <el-tooltip v-if="canBeDeleted && isDesktop" :content="$t('settings.removeFromDB')" placement="bottom-end">
-            <el-button icon="el-icon-delete" circle size="mini" style="margin-left:5px" @click="removeSetting"/>
+            <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
           </el-tooltip>
         </span>
       </el-form-item>
@@ -22,10 +22,10 @@
       </el-form-item>
     </div>
     <el-form-item v-if="setting.type !== 'keyword'" :label-width="customLabelWidth" :class="labelClass" class="settings-input">
-      <span slot="label" :style="`margin-left:${margin}px`">
+      <span slot="label">
         {{ setting.label }}
         <el-tooltip v-if="canBeDeleted && isDesktop" :content="$t('settings.removeFromDB')" placement="bottom-end">
-          <el-button icon="el-icon-delete" circle size="mini" style="margin-left:5px" @click="removeSetting"/>
+          <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
         </el-tooltip>
       </span>
       <el-input
