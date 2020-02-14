@@ -112,11 +112,11 @@ export default {
   }
 }
 .filter-container {
-    display: flex;
-    height: 36px;
-    justify-content: space-between;
-    align-items: center;
-    margin: 22px 0 15px 0;
+  display: flex;
+  height: 36px;
+  justify-content: space-between;
+  align-items: center;
+  margin: 22px 0 15px 0;
 }
 .select-instance {
   width: 350px;

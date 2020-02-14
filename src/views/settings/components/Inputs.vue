@@ -46,7 +46,7 @@
         :size="isDesktop ? 'large' : 'small'"
         @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
       <el-select
-        v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes(false))"
+        v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown'))"
         :value="inputValue"
         clearable
         @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">

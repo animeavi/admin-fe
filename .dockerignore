@@ -1,0 +1,30 @@
+# block everything
+**
+
+# allowed files
+!AGPL-3
+!CHANGELOG.md
+!README.md
+!README.png
+!.babelrc
+!.eslintignore
+!.eslintrc.js
+!.postcssrc.js
+!favicon.ico
+!index.html
+!package.json
+!yarn.lock
+
+# allowed subdirectories
+!/build/**
+!/config/**
+!/docker/**
+!/public/**
+!/static/**
+!/src/**
+
+# blocked subdirectory files
+**/*.log
+**/*~
+**/.DS_Store
+**/Thumbs.db
