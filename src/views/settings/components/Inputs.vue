@@ -1,7 +1,7 @@
 <template>
   <div class="input-container">
     <div v-if="setting.type === 'keyword'" class="keyword-container">
-      <el-form-item :label-width="customLabelWidth" :class="labelClass" :style="`margin-left:${margin}px;margin-bottom:0`" class="settings-input">
+      <el-form-item :label-width="customLabelWidth" :class="labelClass" :style="`margin-left:${margin}px;margin-bottom:0`" >
         <span slot="label">
           {{ setting.label }}
           <el-tooltip v-if="canBeDeleted && isDesktop" :content="$t('settings.removeFromDB')" placement="bottom-end">
@@ -9,7 +9,7 @@
           </el-tooltip>
         </span>
       </el-form-item>
-      <el-form-item v-for="subSetting in setting.children" :key="subSetting.key" class="settings-input">
+      <el-form-item v-for="subSetting in setting.children" :key="subSetting.key">
         <inputs
           :setting-group="settingGroup"
           :setting-parent="[...settingParent, subSetting]"
@@ -21,7 +21,7 @@
           :nested="true"/>
       </el-form-item>
     </div>
-    <el-form-item v-if="setting.type !== 'keyword'" :label-width="customLabelWidth" :class="labelClass" class="settings-input">
+    <el-form-item v-if="setting.type !== 'keyword'" :label-width="customLabelWidth" :class="labelClass">
       <span slot="label">
         {{ setting.label }}
         <el-tooltip v-if="canBeDeleted && isDesktop" :content="$t('settings.removeFromDB')" placement="bottom-end">

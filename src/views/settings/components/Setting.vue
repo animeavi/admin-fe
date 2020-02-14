@@ -1,6 +1,6 @@
 <template>
   <div v-if="!loading">
-    <el-form-item v-if="settingGroup.description" class="description-container settings-input">
+    <el-form-item v-if="settingGroup.description" class="description-container">
       <span class="description" v-html="getFormattedDescription(settingGroup.description)"/>
     </el-form-item>
     <div v-if="settingGroup.key === 'Pleroma.Emails.Mailer'">

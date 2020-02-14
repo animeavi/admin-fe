@@ -18,7 +18,7 @@
       </div>
     </div>
     <div v-if="rateLimitAuthUsers">
-      <el-form-item class="rate-limit settings-input">
+      <el-form-item class="rate-limit">
         <div class="rate-limit-label-container">
           <span class="rate-limit-label">
             Unauthenticated users:
@@ -42,7 +42,7 @@
           )"/>
         </div>
       </el-form-item>
-      <el-form-item class="rate-limit settings-input">
+      <el-form-item class="rate-limit">
         <div class="rate-limit-label-container">
           <span class="rate-limit-label">
             Authenticated users:

@@ -182,6 +182,9 @@
     margin-left: 8px;
     margin-right: 10px
   }
+  .prune-options {
+    display: flex;
+  }
   .rate-limit {
     .el-form-item__content {
       width: 100%;
@@ -288,9 +291,6 @@
         font-size: 14px;
       }
     }
-    .description-container.settings-input {
-      margin-bottom: 0;
-    }
     .follow-relay {
       width: 70%;
       margin-right: 5px;
@@ -328,6 +328,9 @@
       width: 100%;
       margin-left: 0;
     }
+    .prune-options {
+      flex-direction: column;
+    }
     .rate-limit {
       .el-form-item__content {
         flex-direction: column;
@@ -342,12 +345,6 @@
     .setting-label {
       display: flex;
       justify-content: space-between;
-    }
-    .settings-input {
-      display: inline-block;
-      width: 90%;
-      padding: 0 15px 10px 0;
-      margin: 0;
     }
     .socks5-checkbox-container {
       width: 100%;
@@ -394,9 +391,6 @@
     }
     .mascot-container {
       margin-bottom: 5px;
-      .settings-input {
-        width: 100%;
-      }
     }
     .name-input {
       width: 40%;

@@ -261,7 +261,7 @@ export default {
     margin: 15px;
   }
   .settings-menu {
-    width: 45%;
+    width: 163px;
   }
 }
 </style>
