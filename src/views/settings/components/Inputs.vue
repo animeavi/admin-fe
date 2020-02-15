@@ -39,7 +39,7 @@
         @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
       <el-input-number
         v-if="setting.type === 'integer'"
-        :value="inputValue === null ? 0 : inputValue"
+        :value="inputValue === null ? undefined : inputValue"
         :placeholder="setting.suggestions ? setting.suggestions[0].toString() : null"
         :min="0"
         :size="isDesktop ? 'large' : 'small'"
