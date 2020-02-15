@@ -3,23 +3,23 @@
     <el-form ref="instanceData" :model="instanceData" :label-width="labelWidth">
       <setting :setting-group="instance" :data="instanceData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="adminToken" :model="adminTokenData" :label-width="labelWidth">
       <setting :setting-group="adminToken" :data="adminTokenData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="scheduledActivity" :model="scheduledActivityData" :label-width="labelWidth">
       <setting :setting-group="scheduledActivity" :data="scheduledActivityData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="fetchInitialPosts" :model="fetchInitialPostsData" :label-width="labelWidth">
       <setting :setting-group="fetchInitialPosts" :data="fetchInitialPostsData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="manifest" :model="manifestData" :label-width="labelWidth">
       <setting :setting-group="manifest" :data="manifestData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="pleromaUser" :model="pleromaUserData" :label-width="labelWidth">
       <setting :setting-group="pleromaUser" :data="pleromaUserData"/>
     </el-form>

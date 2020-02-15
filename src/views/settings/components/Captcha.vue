@@ -3,7 +3,7 @@
     <el-form ref="captchaData" :model="captchaData" :label-width="labelWidth">
       <setting :setting-group="captcha" :data="captchaData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="kocaptchaData" :model="kocaptchaData" :label-width="labelWidth">
       <setting :setting-group="kocaptcha" :data="kocaptchaData"/>
     </el-form>

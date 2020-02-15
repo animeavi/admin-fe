@@ -14,7 +14,7 @@
         <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addValueToIcons(index)"/>
         <span class="icons-button-desc">Add another `key - value` pair to this icon</span>
       </div>
-      <div class="line"/>
+      <el-divider class="divider"/>
     </div>
     <div class="icons-button-container">
       <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addIconToIcons"/>

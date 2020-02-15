@@ -9,18 +9,18 @@
       </el-form-item>
       <setting :setting-group="assets" :data="assetsData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="emojiData" :model="emojiData" :label-width="labelWidth">
       <el-form-item class="grouped-settings-header">
         <span class="label-font">{{ $t('settings.emoji') }}</span>
       </el-form-item>
       <setting :setting-group="emoji" :data="emojiData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="chatData" :model="chatData" :label-width="labelWidth">
       <setting :setting-group="chat" :data="chatData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="markupData" :model="markupData" :label-width="labelWidth">
       <el-form-item class="grouped-settings-header">
         <span class="label-font">{{ $t('settings.markup') }}</span>

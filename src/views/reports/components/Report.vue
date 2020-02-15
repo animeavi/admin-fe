@@ -27,7 +27,7 @@
             </div>
           </div>
           <div>
-            <div class="line"/>
+            <el-divider class="divider"/>
             <span class="report-row-key">{{ $t('reports.account') }}:</span>
             <img
               :src="report.account.avatar"
@@ -38,13 +38,13 @@
             </a>
           </div>
           <div v-if="report.content.length > 0">
-            <div class="line"/>
+            <el-divider class="divider"/>
             <span class="report-row-key">{{ $t('reports.content') }}:
               <span>{{ report.content }}</span>
             </span>
           </div>
           <div :style="showStatuses(report.statuses) ? '' : 'margin-bottom:15px'">
-            <div class="line"/>
+            <el-divider class="divider"/>
             <span class="report-row-key">{{ $t('reports.actor') }}:</span>
             <img
               :src="report.actor.avatar"

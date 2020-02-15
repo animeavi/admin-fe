@@ -3,15 +3,15 @@
     <el-form ref="mrfSimple" :model="mrfSimpleData" :label-width="labelWidth">
       <setting :setting-group="mrfSimple" :data="mrfSimpleData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="mrfRejectnonpublic" :model="mrfRejectnonpublicData" :label-width="labelWidth">
       <setting :setting-group="mrfRejectnonpublic" :data="mrfRejectnonpublicData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="mrfHellthread" :model="mrfHellthreadData" :label-width="labelWidth">
       <setting :setting-group="mrfHellthread" :data="mrfHellthreadData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="mrfKeyword" :model="mrfKeywordData" :label-width="labelWidth">
       <setting :setting-group="mrfKeyword" :data="mrfKeywordData"/>
     </el-form>
@@ -21,11 +21,11 @@
     <el-form ref="mrfMention" :model="mrfMentionData" :label-width="labelWidth">
       <setting :setting-group="mrfMention" :data="mrfMentionData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="mrfNormalizeMarkup" :model="mrfNormalizeMarkupData" :label-width="labelWidth">
       <setting :setting-group="mrfNormalizeMarkup" :data="mrfNormalizeMarkupData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form ref="mrfVocabulary" :model="mrfVocabularyData" :label-width="labelWidth">
       <setting :setting-group="mrfVocabulary" :data="mrfVocabularyData"/>
     </el-form>

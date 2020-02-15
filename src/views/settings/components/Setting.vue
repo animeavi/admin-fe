@@ -29,6 +29,7 @@
             :nested="false"/>
         </div>
         <div v-if="compound(setting)">
+          <el-divider v-if="divideSetting(setting.key)" class="divider"/>
           <div v-if="!setting.children">
             <inputs
               :setting-group="settingGroup"
@@ -59,7 +60,7 @@
                 :nested="true"/>
             </div>
           </div>
-          <div class="line"/>
+          <el-divider class="divider"/>
         </div>
       </div>
     </div>
@@ -118,6 +119,9 @@ export default {
         type === 'map' ||
         type.includes('keyword') ||
         key === ':replace'
+    },
+    divideSetting(key) {
+      return [':sslopts', ':tlsopts', ':adapter', ':poll_limits', ':queues', ':styling', ':proxy_opts'].includes(key)
     },
     getFormattedDescription(desc) {
       return marked(desc)

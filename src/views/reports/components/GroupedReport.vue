@@ -24,7 +24,7 @@
           </div>
         </div>
         <div>
-          <div class="line"/>
+          <el-divider class="divider"/>
           <span class="report-row-key">{{ $t('reports.account') }}:</span>
           <img
             :src="groupedReport.account.avatar"
@@ -35,7 +35,7 @@
           </a>
         </div>
         <div>
-          <div class="line"/>
+          <el-divider class="divider"/>
           <span class="report-row-key">{{ $t('reports.actors') }}:</span>
           <span v-for="(actor, index) in groupedReport.actors" :key="actor.id">
             <a :href="actor.url" target="_blank">
@@ -44,7 +44,7 @@
           </span>
         </div>
         <div v-if="groupedReport.status">
-          <div class="line"/>
+          <el-divider class="divider"/>
           <span class="report-row-key">{{ $t('reports.reportedStatus') }}:</span>
           <status :status="groupedReport.status" :show-checkbox="false" class="reported-status"/>
         </div>

@@ -9,7 +9,7 @@
         </el-button>
       </el-tooltip>
     </div>
-    <div class="line"/>
+    <el-divider class="divider"/>
     <el-form label-width="180px" class="emoji-packs-form">
       <el-form-item :label="$t('emoji.localPacks')">
         <el-button type="primary" @click="refreshLocalPacks">{{ $t('emoji.refreshLocalPacks') }}</el-button>
@@ -30,7 +30,7 @@
           <emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="true" />
         </el-collapse>
       </el-form-item>
-      <div class="line"/>
+      <el-divider class="divider"/>
       <el-form-item :label="$t('emoji.remotePacks')">
         <div class="create-pack">
           <el-input

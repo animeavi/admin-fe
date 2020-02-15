@@ -87,7 +87,6 @@
       <!-------------------->
       <div
         v-if="setting.description && setting.type !== 'keyword'"
-        :class="inputClass"
         class="expl"
         v-html="getFormattedDescription(setting.description)"/>
     </el-form-item>
