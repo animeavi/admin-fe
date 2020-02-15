@@ -3,7 +3,7 @@
     <el-form ref="mailer" :model="mailerData" :label-width="labelWidth">
       <setting :setting-group="mailer" :data="mailerData"/>
     </el-form>
-    <el-divider class="divider"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="emailNotifications" :model="emailNotificationsData" :label-width="labelWidth">
       <setting :setting-group="emailNotifications" :data="emailNotificationsData"/>
     </el-form>

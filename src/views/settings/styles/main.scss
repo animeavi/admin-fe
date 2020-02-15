@@ -37,6 +37,9 @@
   .divider {
     margin: 0 0 18px 0;
   }
+  .divider.thick-line {
+    height: 2px;
+  }
   .el-form-item .rate-limit {
     margin-right: 0;
   }
@@ -296,6 +299,9 @@
     }
     .divider {
       margin: 0 0 10px 0;
+    }
+    .divider .thick-line {
+      height: 2px;
     }
     .follow-relay {
       width: 70%;

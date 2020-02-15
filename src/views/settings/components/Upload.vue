@@ -8,16 +8,16 @@
         <span class="label-font">Pleroma.Uploaders.Local</span>
       </el-form-item>
       <setting :setting-group="uploadersLocal" :data="uploadersLocalData"/>
-      <el-divider class="divider"/>
+      <el-divider class="divider thick-line"/>
     </el-form>
     <el-form v-if="showUploadersS3" ref="uploadersS3" :model="uploadersS3Data" :label-width="labelWidth">
       <setting :setting-group="uploadersS3" :data="uploadersS3Data"/>
-      <el-divider class="divider"/>
+      <el-divider class="divider thick-line"/>
     </el-form>
     <el-form ref="uploadFilterMogrify" :model="uploadFilterMogrifyData" :label-width="labelWidth">
       <setting :setting-group="uploadFilterMogrify" :data="uploadFilterMogrifyData"/>
     </el-form>
-    <el-divider class="divider"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="uploadAnonymizeFilename" :model="uploadAnonymizeFilenameData" :label-width="labelWidth">
       <setting :setting-group="uploadAnonymizeFilename" :data="uploadAnonymizeFilenameData"/>
     </el-form>

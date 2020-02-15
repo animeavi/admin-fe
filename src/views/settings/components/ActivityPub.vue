@@ -3,8 +3,7 @@
     <el-form ref="activitypubData" :model="activitypubData" :label-width="labelWidth">
       <setting :setting-group="activitypub" :data="activitypubData"/>
     </el-form>
-    <el-divider class="divider"/>
-    <el-divider class="divider"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="userData" :model="userData" :label-width="labelWidth">
       <setting :setting-group="user" :data="userData"/>
     </el-form>

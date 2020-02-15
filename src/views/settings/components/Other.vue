@@ -3,7 +3,7 @@
     <el-form ref="teslaAdapter" :model="teslaAdapterData" :label-width="labelWidth">
       <setting :setting-group="teslaAdapter" :data="teslaAdapterData"/>
     </el-form>
-    <el-divider class="divider"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="mimeTypes" :model="mimeTypesData" :label-width="labelWidth">
       <setting :setting-group="mimeTypes" :data="mimeTypesData"/>
     </el-form>

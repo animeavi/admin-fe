@@ -9,15 +9,15 @@
       </el-form-item>
       <setting :setting-group="corsPlug" :data="corsPlugData"/>
     </el-form>
-    <el-divider class="divider"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="httpSignatures" :model="httpSignaturesData" :label-width="labelWidth">
       <setting :setting-group="httpSignatures" :data="httpSignaturesData"/>
     </el-form>
-    <el-divider class="divider"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="httpSecurityData" :model="httpSecurityData" :label-width="labelWidth">
       <setting :setting-group="httpSecurity" :data="httpSecurityData"/>
     </el-form>
-    <el-divider class="divider"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="webCacheTtl" :model="webCacheTtlData" :label-width="labelWidth">
       <setting :setting-group="webCacheTtl" :data="webCacheTtlData"/>
     </el-form>
