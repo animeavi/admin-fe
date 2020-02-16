@@ -296,7 +296,7 @@
   @media only screen and (max-width: 760px),
     (min-device-width: 768px) and (max-device-width: 1024px) {
     .delete-setting-button {
-      margin-left: 5px;
+      margin: 4px 0 0 5px;
       height: 28px;
     }
     .delete-setting-button-container {
@@ -338,17 +338,22 @@
         margin: 0;
         padding: 0 15px 10px 0;
       }
+      .el-form-item:first-child .mascot-form-item {
+        padding: 0;
+      }
+      .el-form-item:first-child .rate-limit {
+        padding: 0;
+      }
       .settings-delete-button {
-        margin: 4px 7px 0 -5px;
+        margin: 4px 15px 0 -5px;
       }
     }
     .input-row {
       display: flex;
-      align-items: center;
       justify-content: space-between;
     }
     .limit-input {
-      width: 46%;
+      width: 40%;
     }
     .proxy-url-input {
       flex-direction: column;
@@ -376,7 +381,7 @@
       float: left;
     }
     .scale-input {
-      width: 46%;
+      width: 40%;
     }
     .setting-label {
       display: flex;

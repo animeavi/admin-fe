@@ -45,7 +45,7 @@
           :value="inputValue === null ? undefined : inputValue"
           :placeholder="setting.suggestions ? setting.suggestions[0].toString() : null"
           :min="0"
-          :size="isDesktop ? 'large' : 'small'"
+          :size="isDesktop ? 'large' : 'medium'"
           @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
         <el-select
           v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown'))"
