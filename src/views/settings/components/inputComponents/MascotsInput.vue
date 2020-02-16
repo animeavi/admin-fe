@@ -1,20 +1,20 @@
 <template>
   <div>
     <div v-for="mascot in data" :key="getId(mascot)" class="mascot-container">
-      <el-form-item label="Name" label-width="100px">
+      <el-form-item label="Name" label-width="85px" class="mascot-form-item">
         <div class="mascot-name-container">
           <el-input :value="getName(mascot)" placeholder="Name" class="mascot-name-input" @input="parseMascots($event, 'name', mascot)"/>
-          <el-button icon="el-icon-minus" circle @click="deleteMascotsRow(mascot)"/>
+          <el-button :size="isDesktop ? 'medium' : 'mini'" class="icon-minus-button" icon="el-icon-minus" circle @click="deleteMascotsRow(mascot)"/>
         </div>
       </el-form-item>
-      <el-form-item label="URL" label-width="100px">
+      <el-form-item label="URL" label-width="85px" class="mascot-form-item">
         <el-input :value="getUrl(mascot)" placeholder="URL" class="mascot-input" @input="parseMascots($event, 'url', mascot)"/>
       </el-form-item>
-      <el-form-item label="Mime type" label-width="100px">
+      <el-form-item label="Mime type" label-width="85px" class="mascot-form-item">
         <el-input :value="getMimeType(mascot)" placeholder="Mime type" class="mascot-input" @input="parseMascots($event, 'mimeType', mascot)"/>
       </el-form-item>
     </div>
-    <el-button icon="el-icon-plus" circle @click="addRowToMascots"/>
+    <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addRowToMascots"/>
   </div>
 </template>
 
@@ -39,6 +39,11 @@ export default {
       default: function() {
         return {}
       }
+    }
+  },
+  computed: {
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
     }
   },
   methods: {

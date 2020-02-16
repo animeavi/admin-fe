@@ -3,7 +3,7 @@
     <el-form ref="activitypubData" :model="activitypubData" :label-width="labelWidth">
       <setting :setting-group="activitypub" :data="activitypubData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="userData" :model="userData" :label-width="labelWidth">
       <setting :setting-group="user" :data="userData"/>
     </el-form>
@@ -36,7 +36,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '280px'
+      return this.isMobile ? '120px' : '280px'
     },
     loading() {
       return this.$store.state.settings.loading

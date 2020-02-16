@@ -3,7 +3,7 @@
     <el-form ref="metadata" :model="metadataData" :label-width="labelWidth">
       <setting :setting-group="metadata" :data="metadataData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="richMedia" :model="richMediaData" :label-width="labelWidth">
       <setting :setting-group="richMedia" :data="richMediaData"/>
     </el-form>
@@ -30,7 +30,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '280px'
+      return this.isMobile ? '120px' : '280px'
     },
     loading() {
       return this.settings.loading

@@ -359,7 +359,11 @@ export default {
     metadatLowerCase: 'metadata',
     files: 'files',
     successfullyRemoved: 'Setting removed successfully!',
-    seeDocs: 'See Documentation'
+    seeDocs: 'See Documentation',
+    assets: 'Assets',
+    emoji: 'Emoji',
+    markup: 'Markup settings',
+    corsPlug: 'CORS plug config'
   },
   invites: {
     inviteTokens: 'Invite tokens',

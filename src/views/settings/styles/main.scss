@@ -4,12 +4,18 @@
   }
   .center-label label {
     text-align: center;
+    span {
+      float: left;
+    }
   }
   .code {
     background-color: #adbed67a;
     border-radius: 3px;
     font-family: monospace;
     padding: 0 3px 0 3px;
+  }
+  .delete-setting-button {
+    margin-left: 5px;
   }
   .description > p {
     font-size: 14px;
@@ -28,8 +34,11 @@
     overflow-wrap: break-word;
     margin-bottom: 0;
   }
-  .el-form-item {
-    margin-right: 30px;
+  .divider {
+    margin: 0 0 18px 0;
+  }
+  .divider.thick-line {
+    height: 2px;
   }
   .el-form-item .rate-limit {
     margin-right: 0;
@@ -37,9 +46,6 @@
   .el-input-group__prepend {
     padding-left: 10px;
     padding-right: 10px;
-  }
-  .el-select {
-    width: 100%;
   }
   .esshd-list {
     margin: 0;
@@ -50,6 +56,8 @@
     line-height: 22px;
     margin: 5px 0 0 0;
     overflow-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
     code {
       display: inline;
       line-height: 22px;
@@ -57,8 +65,15 @@
       padding: 2px 3px;
     }
   }
+  .follow-relay {
+    width: 350px;
+    margin-right: 7px;
+  }
   .form-container {
     margin-bottom: 80px;
+  }
+  .grouped-settings-header {
+    margin: 0 0 14px 0;
   }
   .highlight {
   background-color: #e6e6e6;
@@ -96,13 +111,30 @@
   .icons-container {
     display: flex;
   }
-  .keyword-inner-input {
-    margin-bottom: 22px;
+  .input-container {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    .el-form-item {
+      margin-right: 30px;
+      width: 100%
+    }
+    .el-select {
+      width: 100%;
+    }
+  }
+  .keyword-container {
+    width: 100%
   }
   label {
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .label-font {
+    font-size: 14px;
+    color: #606266;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
+    font-weight: 700;
   }
   .limit-button-container {
     display: flex;
@@ -119,7 +151,7 @@
     width: 100%;
     height: 0;
     border: 1px solid #eee;
-    margin-bottom: 22px;
+    margin-bottom: 18px;
   }
   .mascot-container {
     margin-bottom: 15px;
@@ -142,10 +174,51 @@
     width: 20%;
     margin-right: 8px
   }
+  .proxy-url-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .proxy-url-host-input {
+    width: 35%;
+    margin-right: 8px
+  }
   .proxy-url-value-input {
     width: 35%;
     margin-left: 8px;
     margin-right: 10px
+  }
+  .prune-options {
+    display: flex;
+    height: 36px;
+    align-items: baseline;
+    .el-radio {
+      margin-top: 11px;
+    }
+  }
+  .rate-limit {
+    .el-form-item__content {
+      width: 100%;
+      display: flex;
+    }
+  }
+  .rate-limit-content {
+    width: 100%;
+  }
+  .rate-limit-label {
+    float: right;
+  }
+  .rate-limit-label-container {
+    font-size: 14px;
+    color: #606266;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
+    font-weight: 700;
+    height: 36px;
+    width: 240px;
+    margin-right: 10px;
+  }
+  .relays-container {
+    margin: 0 15px;
   }
   .replacement-input {
     width: 80%;
@@ -156,12 +229,29 @@
     width: 47%;
     margin: 0 1% 5px 0
   }
+  .settings-delete-button {
+    margin-left: 5px;
+  }
   .setting-input {
     display: flex;
     margin-bottom: 10px;
   }
   .single-input {
     margin-right: 10px
+  }
+  .socks5-checkbox {
+    font-size: 14px;
+    color: #606266;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
+    font-weight: 700;
+    margin-left: 10px;
+  }
+  .socks5-checkbox-container {
+    width: 40%;
+    height: 36px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
   }
   .ssl-tls-opts {
     margin: 36px 0 0 0;
@@ -176,6 +266,9 @@
     bottom: 0px;
     right: 0;
     z-index: 10000;
+  }
+  .switch-input {
+    height: 36px;
   }
   .text {
     line-height: 20px;
@@ -202,8 +295,103 @@
 
   @media only screen and (max-width: 760px),
     (min-device-width: 768px) and (max-device-width: 1024px) {
-    .el-form-item {
-      margin-right: 15px;
+    .delete-setting-button {
+      margin: 4px 0 0 5px;
+      height: 28px;
+    }
+    .delete-setting-button-container {
+      flex: 0 0 auto;
+    }
+    .description > p {
+      line-height: 18px;
+      margin: 0 5px 7px 0;
+      code {
+        display: inline;
+        line-height: 18px;
+        padding: 2px 3px;
+        font-size: 14px;
+      }
+    }
+    .divider {
+      margin: 0 0 10px 0;
+    }
+    .divider .thick-line {
+      height: 2px;
+    }
+    .follow-relay {
+      width: 70%;
+      margin-right: 5px;
+      input {
+        width: 100%;
+      }
+    }
+    .follow-relay-container {
+      display: flex;
+      justify-content: space-between;
+    }
+    .input {
+      flex: 1 1 auto;
+    }
+    .input-container {
+      width: 100%;
+      .el-form-item:first-child {
+        margin: 0;
+        padding: 0 15px 10px 0;
+      }
+      .el-form-item:first-child .mascot-form-item {
+        padding: 0;
+      }
+      .el-form-item:first-child .rate-limit {
+        padding: 0;
+      }
+      .settings-delete-button {
+        margin: 4px 15px 0 -5px;
+      }
+    }
+    .input-row {
+      display: flex;
+      justify-content: space-between;
+    }
+    .limit-input {
+      width: 40%;
+    }
+    .proxy-url-input {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 0;
+    }
+    .proxy-url-host-input {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    .proxy-url-value-input {
+      width: 100%;
+      margin-left: 0;
+    }
+    .prune-options {
+      flex-direction: column;
+      height: 80px;
+    }
+    .rate-limit {
+      .el-form-item__content {
+        flex-direction: column;
+      }
+    }
+    .rate-limit-label {
+      float: left;
+    }
+    .scale-input {
+      width: 40%;
+    }
+    .setting-label {
+      display: flex;
+      justify-content: space-between;
+    }
+    .socks5-checkbox-container {
+      width: 100%;
+    }
+    .submit-button {
+      margin: 0 15px 22px 0;
     }
     .el-input__inner {
     padding: 0 5px 0 5px
@@ -220,6 +408,34 @@
     .el-select__tags {
       overflow: hidden;
     }
+    .expl, .expl > p {
+      line-height: 16px;
+    }
+    .icon-key-input {
+      width: 40%;
+      margin-right: 4px
+    }
+    .icon-minus-button {
+      width: 28px;
+      height: 28px;
+      margin-top: 4px;
+    }
+    .icon-values-container {
+      margin: 0 7px 7px 0;
+    }
+    .icon-value-input {
+      width: 60%;
+      margin-left: 4px;
+    }
+    .icons-button-container {
+      line-height: 24px;
+    }
+    .line {
+      margin-bottom: 10px;
+    }
+    .mascot-container {
+      margin-bottom: 5px;
+    }
     .name-input {
       width: 40%;
       margin-right: 5px
@@ -231,14 +447,13 @@
       width: 40%;
       margin-right: 4px
     }
+    .relays-container {
+      margin: 0 10px;
+    }
     .replacement-input {
       width: 60%;
       margin-left: 4px;
       margin-right: 5px
-    }
-    .top-margin {
-      position: absolute;
-      top: 25%;
     }
     .value-input {
       width: 60%;

@@ -3,15 +3,15 @@
     <el-form ref="pleromaAuthenticatorData" :model="pleromaAuthenticatorData" :label-width="labelWidth">
       <setting :setting-group="pleromaAuthenticator" :data="pleromaAuthenticatorData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="authData" :model="authData" :label-width="labelWidth">
       <setting :setting-group="auth" :data="authData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="ldapData" :model="ldapData" :label-width="labelWidth">
       <setting :setting-group="ldap" :data="ldapData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="oauth2" :model="oauth2Data" :label-width="labelWidth">
       <setting :setting-group="oauth2" :data="oauth2Data"/>
     </el-form>
@@ -44,7 +44,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '280px'
+      return this.isMobile ? '120px' : '280px'
     },
     ldap() {
       return this.settings.description.find(setting => setting.key === ':ldap')

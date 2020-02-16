@@ -8,7 +8,7 @@
       {{ $t('reports.reports') }}
       <span class="report-count">({{ normalizedReportsCount }})</span>
     </h1>
-    <div class="filter-container">
+    <div class="reports-filter-container">
       <reports-filter v-if="!groupReports"/>
       <el-checkbox v-model="groupReports" class="group-reports-checkbox">
         Group reports by statuses
@@ -70,13 +70,10 @@ export default {
 
 <style rel='stylesheet/scss' lang='scss' scoped>
 .reports-container {
-  .el-timeline {
-    margin: 45px 45px 45px 19px;
-    padding: 0px;
-  }
-  .filter-container {
+  .reports-filter-container {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     margin: 22px 15px 22px 15px;
     padding-bottom: 0
   }
@@ -102,8 +99,8 @@ only screen and (max-width: 760px),
     h1 {
       margin: 7px 10px 15px 10px;
     }
-    .filter-container {
-      margin: 0 10px
+    .reports-filter-container {
+      margin: 0 10px;
     }
   }
   #app > div > div.main-container > section > div > div.block > ul {

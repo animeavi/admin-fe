@@ -8,16 +8,16 @@
             <el-input :value="value" placeholder="value" class="icon-value-input" @input="parseIcons($event, 'value', index, id)"/>
           </div>
         </div>
-        <el-button icon="el-icon-minus" circle class="icon-minus-button" @click="deleteIcondRow(index)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-minus" circle class="icon-minus-button" @click="deleteIcondRow(index)"/>
       </div>
       <div class="icons-button-container">
-        <el-button icon="el-icon-plus" circle @click="addValueToIcons(index)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addValueToIcons(index)"/>
         <span class="icons-button-desc">Add another `key - value` pair to this icon</span>
       </div>
-      <div class="line"/>
+      <el-divider class="divider"/>
     </div>
     <div class="icons-button-container">
-      <el-button icon="el-icon-plus" circle @click="addIconToIcons"/>
+      <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addIconToIcons"/>
       <span class="icons-button-desc">Add another icon configuration</span>
     </div>
   </div>
@@ -44,6 +44,11 @@ export default {
       default: function() {
         return {}
       }
+    }
+  },
+  computed: {
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
     }
   },
   methods: {

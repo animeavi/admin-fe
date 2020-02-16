@@ -1,13 +1,9 @@
 <template>
-  <div v-if="!loading">
-    <el-row :gutter="5">
-      <el-col :span="8">
-        <el-input v-model="newRelay" :placeholder="$t('settings.followRelay')" @keyup.enter.native="followRelay"/>
-      </el-col>
-      <el-col :span="8">
-        <el-button type="primary" @click.native="followRelay">{{ $t('settings.follow') }}</el-button>
-      </el-col>
-    </el-row>
+  <div v-if="!loading" class="relays-container">
+    <div class="follow-relay-container">
+      <el-input v-model="newRelay" :placeholder="$t('settings.followRelay')" class="follow-relay" @keyup.enter.native="followRelay"/>
+      <el-button type="primary" @click.native="followRelay">{{ $t('settings.follow') }}</el-button>
+    </div>
     <el-table :data="relaysTable">
       <el-table-column
         :label="$t('settings.instanceUrl')"

@@ -1,88 +1,107 @@
 <template>
-  <el-form-item :label-width="customLabelWidth" :class="labelClass">
-    <span slot="label">
-      {{ setting.label }}
-      <el-tooltip v-if="canBeDeleted" :content="$t('settings.removeFromDB')" placement="bottom-end">
-        <el-button icon="el-icon-delete" circle size="mini" style="margin-left:5px" @click="removeSetting"/>
-      </el-tooltip>
-    </span>
-    <el-input
-      v-if="setting.type === 'string' || (setting.type.includes('string') && setting.type.includes('atom'))"
-      :value="inputValue"
-      :placeholder="setting.suggestions ? setting.suggestions[0] : null"
-      @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
-    <el-switch
-      v-if="setting.type === 'boolean'"
-      :value="inputValue"
-      @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
-    <el-input-number
-      v-if="setting.type === 'integer'"
-      :value="inputValue === null ? 0 : inputValue"
-      :placeholder="setting.suggestions ? setting.suggestions[0].toString() : null"
-      :min="0"
-      size="large"
-      class="top-margin"
-      @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
-    <el-select
-      v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown'))"
-      :value="inputValue"
-      clearable
-      @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
-      <el-option
-        v-for="(option, index) in setting.suggestions"
-        :value="option"
-        :key="index"/>
-    </el-select>
-    <el-select
-      v-if="renderMultipleSelect(setting.type)"
-      :value="setting.key === ':rewrite_policy' ? rewritePolicyValue : inputValue"
-      multiple
-      filterable
-      allow-create
-      @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
-      <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
-    </el-select>
-    <el-input
-      v-if="setting.key === ':ip'"
-      :value="inputValue"
-      placeholder="xxx.xxx.xxx.xx"
-      @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
-    <el-input
-      v-if="setting.type === 'atom'"
-      :value="inputValue"
-      :placeholder="setting.suggestions[0] ? setting.suggestions[0].substr(1) : ''"
-      @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
-      <template slot="prepend">:</template>
-    </el-input>
-    <div v-if="setting.type === 'keyword'">
-      <div v-for="subSetting in setting.children" :key="subSetting.key">
+  <div class="input-container">
+    <div v-if="setting.type === 'keyword'" class="keyword-container">
+      <el-form-item :label-width="customLabelWidth" :class="labelClass" :style="`margin-left:${margin}px;margin-bottom:0`" >
+        <span slot="label">
+          {{ setting.label }}
+          <el-tooltip v-if="canBeDeleted && isDesktop" :content="$t('settings.removeFromDB')" placement="bottom-end">
+            <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
+          </el-tooltip>
+        </span>
+      </el-form-item>
+      <el-form-item v-for="subSetting in setting.children" :key="subSetting.key">
         <inputs
           :setting-group="settingGroup"
           :setting-parent="[...settingParent, subSetting]"
           :setting="subSetting"
           :data="data[setting.key]"
-          :custom-label-width="'140px'"
-          :label-class="'center-label'"
-          :input-class="'keyword-inner-input'"
+          :custom-label-width="isDesktop ? '120px' : '100px'"
+          :label-class="subSetting.type === 'keyword' ? 'center-label' : ''"
+          :margin="isDesktop ? margin + 15 : margin + 8"
           :nested="true"/>
-      </div>
+      </el-form-item>
     </div>
-    <!-- special inputs -->
-    <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :data="data" :setting-group="settingGroup" :setting="setting"/>
-    <mascots-input v-if="setting.key === ':mascots'" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
-    <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
-    <icons-input v-if="setting.key === ':icons'" :data="iconsData" :setting-group="settingGroup" :setting="setting"/>
-    <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
-    <multiple-select v-if="setting.key === ':backends' || setting.key === ':args'" :data="data" :setting-group="settingGroup" :setting="setting"/>
-    <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
-    <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
-    <!-------------------->
-    <span
-      v-if="setting.description && setting.type !== 'keyword'"
-      :class="inputClass"
-      class="expl"
-      v-html="getFormattedDescription(setting.description)"/>
-  </el-form-item>
+    <el-form-item v-if="setting.type !== 'keyword'" :label-width="customLabelWidth" :class="labelClass">
+      <span slot="label">
+        {{ setting.label }}
+        <el-tooltip v-if="canBeDeleted && isDesktop" :content="$t('settings.removeFromDB')" placement="bottom-end">
+          <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
+        </el-tooltip>
+      </span>
+      <div class="input-row">
+        <el-input
+          v-if="setting.type === 'string' || (setting.type.includes('string') && setting.type.includes('atom'))"
+          :value="inputValue"
+          :placeholder="setting.suggestions ? setting.suggestions[0] : null"
+          class="input"
+          @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
+        <el-switch
+          v-if="setting.type === 'boolean'"
+          :value="inputValue"
+          class="switch-input"
+          @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
+        <el-input-number
+          v-if="setting.type === 'integer'"
+          :value="inputValue === null ? undefined : inputValue"
+          :placeholder="setting.suggestions ? setting.suggestions[0].toString() : null"
+          :min="0"
+          :size="isDesktop ? 'large' : 'medium'"
+          @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
+        <el-select
+          v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown'))"
+          :value="inputValue === false ? 'false' : inputValue"
+          clearable
+          class="input"
+          @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
+          <el-option
+            v-for="(option, index) in setting.suggestions"
+            :value="option"
+            :key="index"/>
+        </el-select>
+        <el-select
+          v-if="renderMultipleSelect(setting.type)"
+          :value="setting.key === ':rewrite_policy' ? rewritePolicyValue : inputValue"
+          multiple
+          filterable
+          allow-create
+          class="input"
+          @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
+          <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
+        </el-select>
+        <el-input
+          v-if="setting.key === ':ip'"
+          :value="inputValue"
+          placeholder="xxx.xxx.xxx.xx"
+          class="input"
+          @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
+        <el-input
+          v-if="setting.type === 'atom'"
+          :value="inputValue"
+          :placeholder="setting.suggestions[0] ? setting.suggestions[0].substr(1) : ''"
+          class="input"
+          @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
+          <template slot="prepend">:</template>
+        </el-input>
+        <!-- special inputs -->
+        <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :data="data" :setting-group="settingGroup" :setting="setting"/>
+        <mascots-input v-if="setting.key === ':mascots'" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
+        <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
+        <icons-input v-if="setting.key === ':icons'" :data="iconsData" :setting-group="settingGroup" :setting="setting"/>
+        <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
+        <multiple-select v-if="setting.key === ':backends' || setting.key === ':args'" :data="data" :setting-group="settingGroup" :setting="setting"/>
+        <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
+        <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
+        <!-------------------->
+        <el-tooltip v-if="canBeDeleted && isMobile" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
+          <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
+        </el-tooltip>
+      </div>
+      <div
+        v-if="setting.description && setting.type !== 'keyword'"
+        class="expl"
+        v-html="getFormattedDescription(setting.description)"/>
+    </el-form-item>
+  </div>
 </template>
 
 <script>
@@ -118,17 +137,17 @@ export default {
         return {}
       }
     },
-    inputClass: {
-      type: String,
-      default: function() {
-        return 'input-class'
-      },
-      required: false
-    },
     labelClass: {
       type: String,
       default: function() {
         return 'label'
+      },
+      required: false
+    },
+    margin: {
+      type: Number,
+      default: function() {
+        return 0
       },
       required: false
     },
@@ -185,8 +204,14 @@ export default {
         return this.data[this.setting.key]
       }
     },
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
+    isMobile() {
+      return this.$store.state.app.device === 'mobile'
+    },
     labelWidth() {
-      return this.isMobile ? '100px' : '280px'
+      return this.isMobile ? '120px' : '280px'
     },
     keywordData() {
       return Array.isArray(this.data) ? this.data : []

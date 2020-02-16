@@ -13,39 +13,57 @@
         class="limit-input"
         @input="parseRateLimiter($event, setting.key, 'limit', 'oneLimit', rateLimitAllUsers)"/>
       <div class="limit-button-container">
-        <el-button icon="el-icon-plus" circle @click="toggleLimits([['', ''], ['', '']], setting.key)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="toggleLimits([['', ''], ['', '']], setting.key)"/>
         <p class="expl limit-expl">Set different limits for unauthenticated and authenticated users</p>
       </div>
     </div>
     <div v-if="rateLimitAuthUsers">
-      <el-form-item label="Unauthenticated users:" label-width="180px" class="rate-limit">
-        <el-input
-          :value="rateLimitUnauthUsers[0]"
-          placeholder="scale"
-          class="scale-input"
-          @input="parseRateLimiter($event, setting.key, 'scale', 'unauthUsersLimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
-        <span>:</span>
-        <el-input
-          :value="rateLimitUnauthUsers[1]"
-          placeholder="limit"
-          class="limit-input"
-          @input="parseRateLimiter($event, setting.key, 'limit', 'unauthUsersLimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
+      <el-form-item class="rate-limit">
+        <div class="rate-limit-label-container">
+          <span class="rate-limit-label">
+            Unauthenticated users:
+          </span>
+        </div>
+        <div class="rate-limit-content">
+          <el-input
+            :value="rateLimitUnauthUsers[0]"
+            placeholder="scale"
+            class="scale-input"
+            @input="parseRateLimiter(
+              $event, setting.key, 'scale', 'unauthUsersLimit', [rateLimitUnauthUsers, rateLimitAuthUsers]
+          )"/>
+          <span>:</span>
+          <el-input
+            :value="rateLimitUnauthUsers[1]"
+            placeholder="limit"
+            class="limit-input"
+            @input="parseRateLimiter(
+              $event, setting.key, 'limit', 'unauthUsersLimit', [rateLimitUnauthUsers, rateLimitAuthUsers]
+          )"/>
+        </div>
       </el-form-item>
-      <el-form-item label="Authenticated users:" label-width="180px" class="rate-limit">
-        <el-input
-          :value="rateLimitAuthUsers[0]"
-          placeholder="scale"
-          class="scale-input"
-          @input="parseRateLimiter($event, setting.key, 'scale', 'authUserslimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
-        <span>:</span>
-        <el-input
-          :value="rateLimitAuthUsers[1]"
-          placeholder="limit"
-          class="limit-input"
-          @input="parseRateLimiter($event, setting.key, 'limit', 'authUserslimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
+      <el-form-item class="rate-limit">
+        <div class="rate-limit-label-container">
+          <span class="rate-limit-label">
+            Authenticated users:
+          </span>
+        </div>
+        <div class="rate-limit-content">
+          <el-input
+            :value="rateLimitAuthUsers[0]"
+            placeholder="scale"
+            class="scale-input"
+            @input="parseRateLimiter($event, setting.key, 'scale', 'authUserslimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
+          <span>:</span>
+          <el-input
+            :value="rateLimitAuthUsers[1]"
+            placeholder="limit"
+            class="limit-input"
+            @input="parseRateLimiter($event, setting.key, 'limit', 'authUserslimit', [rateLimitUnauthUsers, rateLimitAuthUsers])"/>
+        </div>
       </el-form-item>
       <div class="limit-button-container">
-        <el-button icon="el-icon-minus" circle @click="toggleLimits(['', ''], setting.key)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" class="icon-minus-button" icon="el-icon-minus" circle @click="toggleLimits(['', ''], setting.key)"/>
         <p class="expl limit-expl">Set limit for all users</p>
       </div>
     </div>
@@ -76,6 +94,9 @@ export default {
     }
   },
   computed: {
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
     rateLimitAllUsers() {
       return this.data[this.setting.key] ? this.data[this.setting.key] : ['', '']
     },

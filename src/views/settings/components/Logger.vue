@@ -3,15 +3,15 @@
     <el-form ref="loggerData" :model="loggerData" :label-width="labelWidth">
       <setting :setting-group="logger" :data="loggerData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="consoleData" :model="consoleData" :label-width="labelWidth">
       <setting :setting-group="console" :data="consoleData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="exsysloggerData" :model="exsysloggerData" :label-width="labelWidth">
       <setting :setting-group="exsyslogger" :data="exsysloggerData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="quackData" :model="quackData" :label-width="labelWidth">
       <setting :setting-group="quack" :data="quackData"/>
     </el-form>
@@ -50,7 +50,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '280px'
+      return this.isMobile ? '120px' : '280px'
     },
     loading() {
       return this.settings.loading

@@ -29,6 +29,7 @@
             :nested="false"/>
         </div>
         <div v-if="compound(setting)">
+          <el-divider v-if="divideSetting(setting.key)" class="divider"/>
           <div v-if="!setting.children">
             <inputs
               :setting-group="settingGroup"
@@ -37,14 +38,19 @@
               :nested="true"/>
           </div>
           <div v-else>
-            <el-form-item>
-              <span slot="label">
-                {{ setting.label }}:
-                <el-tooltip v-if="canBeDeleted(setting.key)" :content="$t('settings.removeFromDB')" placement="bottom-end">
-                  <el-button icon="el-icon-delete" circle size="mini" style="margin-left:5px" @click="removeSetting(setting.key)"/>
-                </el-tooltip>
-              </span>
-            </el-form-item>
+            <div class="input-container">
+              <el-form-item class="grouped-settings-header">
+                <span slot="label">
+                  <el-tooltip v-if="isDesktop && canBeDeleted(setting.key)" :content="$t('settings.removeFromDB')" placement="bottom-end">
+                    <el-button icon="el-icon-delete" circle size="mini" style="margin-left:5px" @click="removeSetting(setting.key)"/>
+                  </el-tooltip>
+                </span>
+                <span class="label-font">{{ setting.label }}</span>
+              </el-form-item>
+              <el-tooltip v-if="isMobile && canBeDeleted(setting.key)" :content="$t('settings.removeFromDB')" placement="bottom-end">
+                <el-button icon="el-icon-delete" circle size="mini" class="settings-delete-button" @click="removeSetting(setting.key)"/>
+              </el-tooltip>
+            </div>
             <div v-for="subSetting in setting.children" :key="subSetting.key">
               <inputs
                 :setting-group="settingGroup"
@@ -54,7 +60,7 @@
                 :nested="true"/>
             </div>
           </div>
-          <div class="line"/>
+          <el-divider class="divider"/>
         </div>
       </div>
     </div>
@@ -91,6 +97,12 @@ export default {
       const adapter = this.$store.state.settings.settings[':pleroma']['Pleroma.Emails.Mailer'][':adapter']
       return this.settingGroup.children.filter(child => child.group && child.group.includes(adapter))
     },
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
+    isMobile() {
+      return this.$store.state.app.device === 'mobile'
+    },
     loading() {
       return this.$store.state.settings.loading
     }
@@ -107,6 +119,9 @@ export default {
         type === 'map' ||
         type.includes('keyword') ||
         key === ':replace'
+    },
+    divideSetting(key) {
+      return [':sslopts', ':tlsopts', ':adapter', ':poll_limits', ':queues', ':styling', ':proxy_opts'].includes(key)
     },
     getFormattedDescription(desc) {
       return marked(desc)

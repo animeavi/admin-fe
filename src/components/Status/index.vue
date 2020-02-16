@@ -214,6 +214,7 @@ export default {
 
 <style rel='stylesheet/scss' lang='scss'>
 .status-card {
+  margin-bottom: 10px;
   .account {
     text-decoration: underline;
     line-height: 26px;
@@ -253,9 +254,6 @@ export default {
   .status-content {
     font-size: 15px;
     line-height: 26px;
-  }
-  .status-card {
-    margin-bottom: 15px;
   }
   .status-deleted {
     font-style: italic;

@@ -3,7 +3,7 @@
     <el-form ref="captchaData" :model="captchaData" :label-width="labelWidth">
       <setting :setting-group="captcha" :data="captchaData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="kocaptchaData" :model="kocaptchaData" :label-width="labelWidth">
       <setting :setting-group="kocaptcha" :data="kocaptchaData"/>
     </el-form>
@@ -42,7 +42,7 @@ export default {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Captcha.Kocaptcha']) || {}
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '280px'
+      return this.isMobile ? '120px' : '280px'
     },
     loading() {
       return this.settings.loading

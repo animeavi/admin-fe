@@ -4,18 +4,20 @@
       <setting :setting-group="http" :data="httpData"/>
     </el-form>
     <el-form ref="corsPlugData" :model="corsPlugData" :label-width="labelWidth">
-      <el-form-item label="Cors plug config:"/>
+      <el-form-item class="grouped-settings-header">
+        <span class="label-font">{{ $t('settings.corsPlug') }}</span>
+      </el-form-item>
       <setting :setting-group="corsPlug" :data="corsPlugData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="httpSignatures" :model="httpSignaturesData" :label-width="labelWidth">
       <setting :setting-group="httpSignatures" :data="httpSignaturesData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="httpSecurityData" :model="httpSecurityData" :label-width="labelWidth">
       <setting :setting-group="httpSecurity" :data="httpSecurityData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="webCacheTtl" :model="webCacheTtlData" :label-width="labelWidth">
       <setting :setting-group="webCacheTtl" :data="webCacheTtlData"/>
     </el-form>
@@ -66,7 +68,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '280px'
+      return this.isMobile ? '120px' : '280px'
     },
     loading() {
       return this.settings.loading

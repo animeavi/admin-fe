@@ -3,28 +3,23 @@
     <el-form ref="instanceData" :model="instanceData" :label-width="labelWidth">
       <setting :setting-group="instance" :data="instanceData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="adminToken" :model="adminTokenData" :label-width="labelWidth">
       <setting :setting-group="adminToken" :data="adminTokenData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="scheduledActivity" :model="scheduledActivityData" :label-width="labelWidth">
       <setting :setting-group="scheduledActivity" :data="scheduledActivityData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="fetchInitialPosts" :model="fetchInitialPostsData" :label-width="labelWidth">
       <setting :setting-group="fetchInitialPosts" :data="fetchInitialPostsData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="manifest" :model="manifestData" :label-width="labelWidth">
       <setting :setting-group="manifest" :data="manifestData"/>
     </el-form>
-    <div class="line"/>
-    <el-form ref="suggestions" :model="suggestionsData" :label-width="labelWidth">
-      <el-form-item label="Suggestions:"/>
-      <setting :setting-group="suggestions" :data="suggestionsData"/>
-    </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="pleromaUser" :model="pleromaUserData" :label-width="labelWidth">
       <setting :setting-group="pleromaUser" :data="pleromaUserData"/>
     </el-form>
@@ -71,7 +66,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '280px'
+      return this.isMobile ? '120px' : '280px'
     },
     loading() {
       return this.settings.loading
@@ -93,12 +88,6 @@ export default {
     },
     scheduledActivityData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.ScheduledActivity']) || {}
-    },
-    suggestions() {
-      return this.$store.state.settings.description.find(setting => setting.key === ':suggestions')
-    },
-    suggestionsData() {
-      return _.get(this.settings.settings, [':pleroma', ':suggestions']) || {}
     }
   },
   methods: {

@@ -4,20 +4,20 @@
       <setting :setting-group="upload" :data="uploadData"/>
     </el-form>
     <el-form v-if="showUploadersLocal" ref="uploadersLocal" :model="uploadersLocalData" :label-width="labelWidth">
-      <el-form-item class="description-container description">
-        <span class="description"><p>Pleroma.Uploaders.Local</p></span>
+      <el-form-item class="grouped-settings-header">
+        <span class="label-font">Pleroma.Uploaders.Local</span>
       </el-form-item>
       <setting :setting-group="uploadersLocal" :data="uploadersLocalData"/>
-      <div class="line"/>
+      <el-divider class="divider thick-line"/>
     </el-form>
     <el-form v-if="showUploadersS3" ref="uploadersS3" :model="uploadersS3Data" :label-width="labelWidth">
       <setting :setting-group="uploadersS3" :data="uploadersS3Data"/>
-      <div class="line"/>
+      <el-divider class="divider thick-line"/>
     </el-form>
     <el-form ref="uploadFilterMogrify" :model="uploadFilterMogrifyData" :label-width="labelWidth">
       <setting :setting-group="uploadFilterMogrify" :data="uploadFilterMogrifyData"/>
     </el-form>
-    <div class="line"/>
+    <el-divider class="divider thick-line"/>
     <el-form ref="uploadAnonymizeFilename" :model="uploadAnonymizeFilenameData" :label-width="labelWidth">
       <setting :setting-group="uploadAnonymizeFilename" :data="uploadAnonymizeFilenameData"/>
     </el-form>
@@ -44,7 +44,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelWidth() {
-      return this.isMobile ? '100px' : '280px'
+      return this.isMobile ? '120px' : '280px'
     },
     loading() {
       return this.settings.loading

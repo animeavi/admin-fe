@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-radio-group v-model="prune">
+    <el-radio-group v-model="prune" class="prune-options">
       <el-radio label=":disabled">Disabled</el-radio>
       <el-radio label=":maxlen">Limit-based</el-radio>
       <el-radio label=":maxage">Time-based</el-radio>
