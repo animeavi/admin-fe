@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Report notes
 - Ability to moderate users on the statuses page
 - Ability to moderate user on the user's page
+- Mobile UI for Settings tab
 
 ### Fixed
 
@@ -36,6 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Reports update (also, now it's optimistic)
 - Remove duplicated success message
 - Fix styles for Statuses by instance page
+- Fix styles for Reports section
 
 ## [1.2.0] - 2019-09-27
 
