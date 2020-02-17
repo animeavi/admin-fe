@@ -227,7 +227,7 @@
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
     font-weight: 700;
     height: 36px;
-    width: 240px;
+    width: 100%;
     margin-right: 10px;
   }
   .relays-container {
@@ -390,7 +390,7 @@
       justify-content: space-between;
     }
     .limit-input {
-      width: 40%;
+      width: 45%;
     }
     .proxy-url-input {
       flex-direction: column;
@@ -418,7 +418,7 @@
       float: left;
     }
     .scale-input {
-      width: 40%;
+      width: 45%;
     }
     .setting-label {
       display: flex;
