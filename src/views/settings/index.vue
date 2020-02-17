@@ -78,7 +78,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div v-if="isMobile">
+    <div v-if="isMobile || isTablet">
       <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
       <div class="settings-header-container">
         <el-select v-model="activeTab" class="settings-menu" placeholder="Select">
@@ -216,6 +216,9 @@ export default {
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
+    },
+    isTablet() {
+      return this.$store.state.app.device === 'tablet'
     }
   },
   mounted: function() {
@@ -224,44 +227,7 @@ export default {
 }
 </script>
 
-<style rel='stylesheet/scss' lang='scss' scoped>
-.settings-container {
-  .el-tabs {
-    margin-top: 20px
-  }
-}
-.settings-docs-button {
-  width: 163px;
-  text-align: left;
-  padding: 10px;
-}
-.settings-header {
-  margin: 0;
-}
-.settings-header-container {
-  display: flex;
-  height: 36px;
-  justify-content: space-between;
-  align-items: center;
-  margin: 22px 30px 15px 15px;
-}
-
-@media only screen and (min-width: 1824px) {
-  .settings-container {
-    max-width: 1824px;
-    margin: auto;
-  }
-}
-@media only screen and (max-width: 760px),
-  (min-device-width: 768px) and (max-device-width: 1024px) {
-  .settings-header {
-    margin: 7px 10px 15px 10px;
-  }
-  .settings-header-container {
-    margin: 15px;
-  }
-  .settings-menu {
-    width: 163px;
-  }
-}
+<style rel='stylesheet/scss' lang='scss'>
+@import './styles/main';
+@include settings
 </style>

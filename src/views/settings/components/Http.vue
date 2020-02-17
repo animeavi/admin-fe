@@ -67,8 +67,17 @@ export default {
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
+    isTablet() {
+      return this.$store.state.app.device === 'tablet'
+    },
     labelWidth() {
-      return this.isMobile ? '120px' : '280px'
+      if (this.isMobile) {
+        return '120px'
+      } else if (this.isTablet) {
+        return '200px'
+      } else {
+        return '280px'
+      }
     },
     loading() {
       return this.settings.loading

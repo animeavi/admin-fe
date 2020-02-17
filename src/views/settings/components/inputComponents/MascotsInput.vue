@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-for="mascot in data" :key="getId(mascot)" class="mascot-container">
+  <div class="mascot-container">
+    <div v-for="mascot in data" :key="getId(mascot)" class="mascot">
       <el-form-item label="Name" label-width="85px" class="mascot-form-item">
         <div class="mascot-name-container">
           <el-input :value="getName(mascot)" placeholder="Name" class="mascot-name-input" @input="parseMascots($event, 'name', mascot)"/>

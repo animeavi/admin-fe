@@ -40,6 +40,9 @@
   .divider.thick-line {
     height: 2px;
   }
+  .editable-keyword-container {
+    width: 100%;
+  }
   .el-form-item .rate-limit {
     margin-right: 0;
   }
@@ -153,8 +156,11 @@
     border: 1px solid #eee;
     margin-bottom: 18px;
   }
-  .mascot-container {
+  .mascot {
     margin-bottom: 15px;
+  }
+  .mascot-container {
+    width: 100%;
   }
   .mascot-input {
     margin-bottom: 7px;
@@ -165,6 +171,9 @@
   }
   .mascot-name-input {
     margin-right: 10px
+  }
+  .multiple-select-container {
+    width: 100%;
   }
   .name-input {
     width: 30%;
@@ -178,6 +187,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    width: 100%;
   }
   .proxy-url-host-input {
     width: 35%;
@@ -202,6 +212,9 @@
       display: flex;
     }
   }
+  .rate-limit-container {
+    width: 100%;
+  }
   .rate-limit-content {
     width: 100%;
   }
@@ -214,7 +227,7 @@
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
     font-weight: 700;
     height: 36px;
-    width: 240px;
+    width: 100%;
     margin-right: 10px;
   }
   .relays-container {
@@ -229,12 +242,32 @@
     width: 47%;
     margin: 0 1% 5px 0
   }
-  .settings-delete-button {
-    margin-left: 5px;
-  }
   .setting-input {
     display: flex;
     margin-bottom: 10px;
+  }
+  .settings-container {
+    .el-tabs {
+      margin-top: 20px
+    }
+  }
+  .settings-delete-button {
+    margin-left: 5px;
+  }
+  .settings-docs-button {
+    width: 163px;
+    text-align: left;
+    padding: 10px;
+  }
+  .settings-header {
+    margin: 0;
+  }
+  .settings-header-container {
+    display: flex;
+    height: 36px;
+    justify-content: space-between;
+    align-items: center;
+    margin: 22px 30px 15px 15px;
   }
   .single-input {
     margin-right: 10px
@@ -285,6 +318,10 @@
   }
 
   @media only screen and (min-width: 1824px) {
+    .settings-container {
+      max-width: 1824px;
+      margin: auto;
+    }
     .submit-button-container {
       max-width: 1637px;
       margin-left: auto;
@@ -293,8 +330,7 @@
     }
   }
 
-  @media only screen and (max-width: 760px),
-    (min-device-width: 768px) and (max-device-width: 1024px) {
+  @media only screen and (max-width:480px) {
     .delete-setting-button {
       margin: 4px 0 0 5px;
       height: 28px;
@@ -345,7 +381,8 @@
         padding: 0;
       }
       .settings-delete-button {
-        margin: 4px 15px 0 -5px;
+        margin-top: 4px;
+        float: right;
       }
     }
     .input-row {
@@ -353,7 +390,7 @@
       justify-content: space-between;
     }
     .limit-input {
-      width: 40%;
+      width: 45%;
     }
     .proxy-url-input {
       flex-direction: column;
@@ -381,11 +418,20 @@
       float: left;
     }
     .scale-input {
-      width: 40%;
+      width: 45%;
     }
     .setting-label {
       display: flex;
       justify-content: space-between;
+    }
+    .settings-header {
+      margin: 7px 10px 15px 15px;
+    }
+    .settings-header-container {
+      margin: 15px;
+    }
+    .settings-menu {
+      width: 163px;
     }
     .socks5-checkbox-container {
       width: 100%;
@@ -459,6 +505,47 @@
       width: 60%;
       margin-left: 5px;
       margin-right: 8px
+    }
+  }
+  @media only screen and (max-width:801px) and (min-width: 481px) {
+    .delete-setting-button {
+      margin: 4px 0 0 10px;
+      height: 28px;
+    }
+    .delete-setting-button-container {
+      flex: 0 0 auto;
+    }
+    .description > p {
+      line-height: 18px;
+      margin: 0 15px 10px 0;
+    }
+    .icon-minus-button {
+      width: 28px;
+      height: 28px;
+      margin-top: 4px;
+    }
+    .input {
+      flex: 1 1 auto;
+    }
+    .input-container {
+      .el-form-item__label {
+        span {
+          margin-left: 10px;
+        }
+      }
+    }
+    .input-row {
+      display: flex;
+      justify-content: space-between;
+    }
+    .rate-limit-label-container {
+      width: 250px;
+    }
+    .settings-delete-button {
+      float: right;
+    }
+    .settings-header {
+      margin: 5px 0 0 15px;
     }
   }
 }
