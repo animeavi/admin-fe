@@ -47,7 +47,7 @@
                 </span>
                 <span class="label-font">{{ setting.label }}</span>
               </el-form-item>
-              <el-tooltip v-if="isMobile && canBeDeleted(setting.key)" :content="$t('settings.removeFromDB')" placement="bottom-end">
+              <el-tooltip v-if="canBeDeleted(setting.key) && (isMobile || isTablet)" :content="$t('settings.removeFromDB')" placement="bottom-end">
                 <el-button icon="el-icon-delete" circle size="mini" class="settings-delete-button" @click="removeSetting(setting.key)"/>
               </el-tooltip>
             </div>
@@ -102,6 +102,9 @@ export default {
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
+    },
+    isTablet() {
+      return this.$store.state.app.device === 'tablet'
     },
     loading() {
       return this.$store.state.settings.loading

@@ -92,7 +92,7 @@
         <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
         <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <!-------------------->
-        <el-tooltip v-if="canBeDeleted && isMobile" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
+        <el-tooltip v-if="canBeDeleted && (isMobile || isTablet)" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
           <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
         </el-tooltip>
       </div>
@@ -210,8 +210,17 @@ export default {
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
+    isTablet() {
+      return this.$store.state.app.device === 'tablet'
+    },
     labelWidth() {
-      return this.isMobile ? '120px' : '280px'
+      if (this.isMobile) {
+        return '120px'
+      } else if (this.isTablet) {
+        return '200px'
+      } else {
+        return '280px'
+      }
     },
     keywordData() {
       return Array.isArray(this.data) ? this.data : []

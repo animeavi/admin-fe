@@ -10,7 +10,7 @@
       </el-tooltip>
     </div>
     <el-divider class="divider"/>
-    <el-form label-width="180px" class="emoji-packs-form">
+    <el-form :label-width="labelWidth" class="emoji-packs-form">
       <el-form-item :label="$t('emoji.localPacks')">
         <el-button type="primary" @click="refreshLocalPacks">{{ $t('emoji.refreshLocalPacks') }}</el-button>
       </el-form-item>
@@ -71,8 +71,17 @@ export default {
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
+    isTablet() {
+      return this.$store.state.app.device === 'tablet'
+    },
     labelWidth() {
-      return this.isMobile ? '120px' : '240px'
+      if (this.isMobile) {
+        return '120px'
+      } else if (this.isTablet) {
+        return '200px'
+      } else {
+        return '240px'
+      }
     },
     localPacks() {
       return this.$store.state.emojiPacks.localPacks

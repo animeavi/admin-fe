@@ -78,7 +78,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div v-if="isMobile">
+    <div v-if="isMobile || isTablet">
       <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
       <div class="settings-header-container">
         <el-select v-model="activeTab" class="settings-menu" placeholder="Select">
@@ -216,6 +216,9 @@ export default {
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
+    },
+    isTablet() {
+      return this.$store.state.app.device === 'tablet'
     }
   },
   mounted: function() {
