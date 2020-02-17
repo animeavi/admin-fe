@@ -1,8 +1,9 @@
 import store from '@/store'
 
 const { body } = document
-const WIDTH = 1024
-const RATIO = 3
+const mobileWidth = 480
+const tabletWidth = 801
+const ratio = 3
 
 export default {
   watch: {
@@ -17,23 +18,31 @@ export default {
   },
   mounted() {
     const isMobile = this.isMobile()
-    if (isMobile) {
-      store.dispatch('toggleDevice', 'mobile')
+    const isTablet = this.isTablet()
+    if (isMobile || isTablet) {
+      store.dispatch('toggleDevice', isMobile ? 'mobile' : 'tablet')
       store.dispatch('closeSideBar', { withoutAnimation: true })
     }
   },
   methods: {
     isMobile() {
       const rect = body.getBoundingClientRect()
-      return rect.width - RATIO < WIDTH
+      return rect.width - ratio < mobileWidth
+    },
+    isTablet() {
+      const rect = body.getBoundingClientRect()
+      return rect.width - ratio < tabletWidth && rect.width - ratio > mobileWidth
     },
     resizeHandler() {
       if (!document.hidden) {
         const isMobile = this.isMobile()
-        store.dispatch('toggleDevice', isMobile ? 'mobile' : 'desktop')
+        const isTablet = this.isTablet()
 
-        if (isMobile) {
+        if (isMobile || isTablet) {
+          store.dispatch('toggleDevice', isMobile ? 'mobile' : 'tablet')
           store.dispatch('closeSideBar', { withoutAnimation: true })
+        } else {
+          store.dispatch('toggleDevice', 'desktop')
         }
       }
     }
