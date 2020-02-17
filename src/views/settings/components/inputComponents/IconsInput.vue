@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-for="(icon, index) in data" :key="index" class="mascot-container">
+  <div class="mascot-container">
+    <div v-for="(icon, index) in data" :key="index" class="mascot">
       <div class="icons-container">
         <div class="icon-container">
           <div v-for="{ key, value, id } in icon" :key="id" class="icon-values-container">

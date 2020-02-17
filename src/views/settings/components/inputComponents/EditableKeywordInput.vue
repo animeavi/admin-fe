@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="editable-keyword-container">
     <div v-if="setting.key === ':replace'">
       <div v-for="element in data" :key="getId(element)" class="setting-input">
         <el-input :value="getKey(element)" placeholder="pattern" class="name-input" @input="parseEditableKeyword($event, 'key', element)"/> :

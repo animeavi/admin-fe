@@ -15,7 +15,7 @@
           :setting-parent="[...settingParent, subSetting]"
           :setting="subSetting"
           :data="data[setting.key]"
-          :custom-label-width="isDesktop ? '120px' : '100px'"
+          :custom-label-width="isMobile ? '100px' : '120px'"
           :label-class="subSetting.type === 'keyword' ? 'center-label' : ''"
           :margin="isDesktop ? margin + 15 : margin + 8"
           :nested="true"/>
