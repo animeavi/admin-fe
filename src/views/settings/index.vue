@@ -4,7 +4,7 @@
       <div class="settings-header-container">
         <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
         <div>
-          <el-button v-if="needReboot" class="settings-reboot-button">
+          <el-button v-if="needReboot" class="settings-reboot-button" @click="restartApp">
             <span>
               <i class="el-icon-refresh"/>
               {{ $t('settings.instanceReboot') }}
@@ -89,7 +89,7 @@
     <div v-if="isMobile || isTablet">
       <div class="settings-header-container">
         <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
-        <el-button v-if="needReboot" class="settings-reboot-button">
+        <el-button v-if="needReboot" class="settings-reboot-button" @click="restartApp">
           <span>
             <i class="el-icon-refresh"/>
             {{ $t('settings.instanceReboot') }}
@@ -242,6 +242,11 @@ export default {
   },
   mounted: function() {
     this.$store.dispatch('FetchSettings')
+  },
+  methods: {
+    restartApp() {
+      this.$store.dispatch('RestartApplication')
+    }
   }
 }
 </script>

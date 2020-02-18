@@ -1,4 +1,4 @@
-import { fetchDescription, fetchSettings, removeSettings, updateSettings } from '@/api/settings'
+import { fetchDescription, fetchSettings, removeSettings, restartApp, updateSettings } from '@/api/settings'
 import { checkPartialUpdate, parseNonTuples, parseTuples, valueHasTuples, wrapUpdatedSettings } from './normalizers'
 import _ from 'lodash'
 
@@ -9,10 +9,9 @@ const settings = {
     db: {},
     description: [],
     loading: true,
-    needReboot: true,
+    needReboot: false,
     settings: {},
     updatedSettings: {}
-
   },
   mutations: {
     CLEAR_UPDATED_SETTINGS: (state) => {
@@ -52,6 +51,9 @@ const settings = {
       state.settings = newSettings
       state.db = newDbSettings
     },
+    TOGGLE_REBOOT: (state, needReboot) => {
+      state.needReboot = needReboot || false
+    },
     TOGGLE_TABS: (state, status) => {
       state.configDisabled = status
     },
@@ -76,6 +78,7 @@ const settings = {
         const description = await fetchDescription(getters.authHost, getters.token)
         commit('SET_DESCRIPTION', description.data)
         commit('SET_SETTINGS', response.data.configs)
+        commit('TOGGLE_REBOOT', response.data.need_reboot)
       } catch (_e) {
         commit('TOGGLE_TABS', true)
         commit('SET_ACTIVE_TAB', 'relays')
@@ -90,7 +93,12 @@ const settings = {
       const response = await fetchSettings(getters.authHost, getters.token)
       const { group, key, subkeys } = configs[0]
       commit('SET_SETTINGS', response.data.configs)
+      commit('TOGGLE_REBOOT', response.data.need_reboot)
       commit('REMOVE_SETTING_FROM_UPDATED', { group, key, subkeys: subkeys || [] })
+    },
+    async RestartApplication({ commit, getters }) {
+      await restartApp(getters.authHost, getters.token)
+      commit('TOGGLE_REBOOT', false)
     },
     SetActiveTab({ commit }, tab) {
       commit('SET_ACTIVE_TAB', tab)
@@ -104,6 +112,7 @@ const settings = {
       await updateSettings(configs, getters.authHost, getters.token)
       const response = await fetchSettings(getters.authHost, getters.token)
       commit('SET_SETTINGS', response.data.configs)
+      commit('TOGGLE_REBOOT', response.data.need_reboot)
       commit('CLEAR_UPDATED_SETTINGS')
     },
     UpdateSettings({ commit }, { group, key, input, value, type }) {
