@@ -364,7 +364,9 @@ export default {
     emoji: 'Emoji',
     markup: 'Markup settings',
     corsPlug: 'CORS plug config',
-    instanceReboot: 'Instance Reboot'
+    instanceReboot: 'Instance Reboot',
+    restartApp: 'You must restart the instance to apply settings',
+    restartSuccess: 'Instance rebooted successfully!'
   },
   invites: {
     inviteTokens: 'Invite tokens',

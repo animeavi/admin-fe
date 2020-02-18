@@ -4,12 +4,14 @@
       <div class="settings-header-container">
         <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
         <div>
-          <el-button v-if="needReboot" class="settings-reboot-button" @click="restartApp">
-            <span>
-              <i class="el-icon-refresh"/>
-              {{ $t('settings.instanceReboot') }}
-            </span>
-          </el-button>
+          <el-tooltip v-if="needReboot" :content="$t('settings.restartApp')" placement="bottom-end">
+            <el-button type="warning" class="settings-reboot-button" @click="restartApp">
+              <span>
+                <i class="el-icon-refresh"/>
+                {{ $t('settings.instanceReboot') }}
+              </span>
+            </el-button>
+          </el-tooltip>
           <el-link
             :underline="false"
             href="https://docs-develop.pleroma.social/backend/administration/CLI_tasks/config/"
@@ -244,8 +246,16 @@ export default {
     this.$store.dispatch('FetchSettings')
   },
   methods: {
-    restartApp() {
-      this.$store.dispatch('RestartApplication')
+    async restartApp() {
+      try {
+        await this.$store.dispatch('RestartApplication')
+      } catch (e) {
+        return
+      }
+      this.$message({
+        type: 'success',
+        message: i18n.t('settings.restartSuccess')
+      })
     }
   }
 }
