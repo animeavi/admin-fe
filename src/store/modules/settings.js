@@ -6,11 +6,13 @@ const settings = {
   state: {
     activeTab: 'instance',
     configDisabled: true,
-    description: [],
-    settings: {},
-    updatedSettings: {},
     db: {},
-    loading: true
+    description: [],
+    loading: true,
+    needReboot: true,
+    settings: {},
+    updatedSettings: {}
+
   },
   mutations: {
     CLEAR_UPDATED_SETTINGS: (state) => {
