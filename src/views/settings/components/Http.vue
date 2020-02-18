@@ -3,6 +3,10 @@
     <el-form ref="httpData" :model="httpData" :label-width="labelWidth">
       <setting :setting-group="http" :data="httpData"/>
     </el-form>
+    <el-form ref="teslaAdapter" :model="teslaAdapterData" :label-width="labelWidth">
+      <setting :setting-group="teslaAdapter" :data="teslaAdapterData"/>
+    </el-form>
+    <el-divider class="divider thick-line"/>
     <el-form ref="corsPlugData" :model="corsPlugData" :label-width="labelWidth">
       <el-form-item class="grouped-settings-header">
         <span class="label-font">{{ $t('settings.corsPlug') }}</span>
@@ -81,6 +85,12 @@ export default {
     },
     loading() {
       return this.settings.loading
+    },
+    teslaAdapter() {
+      return this.settings.description.find(setting => setting.group === ':tesla')
+    },
+    teslaAdapterData() {
+      return _.get(this.settings.settings, [':tesla']) || {}
     },
     webCacheTtl() {
       return this.settings.description.find(setting => setting.key === ':web_cache_ttl')
