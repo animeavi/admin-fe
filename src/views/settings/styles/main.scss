@@ -247,6 +247,8 @@
     margin-bottom: 10px;
   }
   .settings-container {
+    max-width: 1824px;
+    margin: auto;
     .el-tabs {
       margin-top: 20px
     }
@@ -268,6 +270,12 @@
     justify-content: space-between;
     align-items: center;
     margin: 22px 30px 15px 15px;
+  }
+  .settings-reboot-button {
+    width: 145px;
+    text-align: left;
+    padding: 10px;
+    margin-right: 5px;
   }
   .single-input {
     margin-right: 10px
@@ -318,10 +326,6 @@
   }
 
   @media only screen and (min-width: 1824px) {
-    .settings-container {
-      max-width: 1824px;
-      margin: auto;
-    }
     .submit-button-container {
       max-width: 1637px;
       margin-left: auto;
@@ -425,9 +429,18 @@
       justify-content: space-between;
     }
     .settings-header {
-      margin: 7px 10px 15px 15px;
+      width: fit-content;
+      display: inline-block;
+      margin: 0;
     }
     .settings-header-container {
+      margin: 15px;
+    }
+    .nav-container {
+      display: flex;
+      height: 36px;
+      justify-content: space-between;
+      align-items: center;
       margin: 15px;
     }
     .settings-menu {
@@ -508,6 +521,7 @@
     }
   }
   @media only screen and (max-width:801px) and (min-width: 481px) {
+
     .delete-setting-button {
       margin: 4px 0 0 10px;
       height: 28px;
@@ -538,14 +552,18 @@
       display: flex;
       justify-content: space-between;
     }
+    .nav-container {
+      display: flex;
+      height: 36px;
+      justify-content: space-between;
+      align-items: center;
+      margin: 15px 30px 15px 15px;
+    }
     .rate-limit-label-container {
       width: 250px;
     }
     .settings-delete-button {
       float: right;
-    }
-    .settings-header {
-      margin: 5px 0 0 15px;
     }
   }
 }

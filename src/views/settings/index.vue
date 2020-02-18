@@ -3,17 +3,27 @@
     <div v-if="isDesktop">
       <div class="settings-header-container">
         <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
-        <el-link
-          :underline="false"
-          href="https://docs-develop.pleroma.social/backend/administration/CLI_tasks/config/"
-          target="_blank">
-          <el-button class="settings-docs-button">
-            <span>
-              <i class="el-icon-document"/>
-              {{ $t('settings.seeDocs') }}
-            </span>
-          </el-button>
-        </el-link>
+        <div>
+          <el-tooltip v-if="needReboot" :content="$t('settings.restartApp')" placement="bottom-end">
+            <el-button type="warning" class="settings-reboot-button" @click="restartApp">
+              <span>
+                <i class="el-icon-refresh"/>
+                {{ $t('settings.instanceReboot') }}
+              </span>
+            </el-button>
+          </el-tooltip>
+          <el-link
+            :underline="false"
+            href="https://docs-develop.pleroma.social/backend/administration/CLI_tasks/config/"
+            target="_blank">
+            <el-button class="settings-docs-button">
+              <span>
+                <i class="el-icon-document"/>
+                {{ $t('settings.seeDocs') }}
+              </span>
+            </el-button>
+          </el-link>
+        </div>
       </div>
       <el-tabs v-model="activeTab" tab-position="left">
         <el-tab-pane :label="$t('settings.activityPub')" :disabled="configDisabled" name="activityPub" lazy>
@@ -79,8 +89,16 @@
       </el-tabs>
     </div>
     <div v-if="isMobile || isTablet">
-      <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
       <div class="settings-header-container">
+        <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
+        <el-button v-if="needReboot" class="settings-reboot-button" @click="restartApp">
+          <span>
+            <i class="el-icon-refresh"/>
+            {{ $t('settings.instanceReboot') }}
+          </span>
+        </el-button>
+      </div>
+      <div class="nav-container">
         <el-select v-model="activeTab" class="settings-menu" placeholder="Select">
           <el-option
             v-for="item in options"
@@ -219,10 +237,26 @@ export default {
     },
     isTablet() {
       return this.$store.state.app.device === 'tablet'
+    },
+    needReboot() {
+      return this.$store.state.settings.needReboot
     }
   },
   mounted: function() {
     this.$store.dispatch('FetchSettings')
+  },
+  methods: {
+    async restartApp() {
+      try {
+        await this.$store.dispatch('RestartApplication')
+      } catch (e) {
+        return
+      }
+      this.$message({
+        type: 'success',
+        message: i18n.t('settings.restartSuccess')
+      })
+    }
   }
 }
 </script>

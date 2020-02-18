@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Report notes
 - Ability to moderate users on the statuses page
 - Ability to moderate user on the user's page
+- Ability to restart an application when settings that require instance reboot were changed
 - Mobile UI for Settings tab
 
 ### Fixed

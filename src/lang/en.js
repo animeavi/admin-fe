@@ -363,7 +363,10 @@ export default {
     assets: 'Assets',
     emoji: 'Emoji',
     markup: 'Markup settings',
-    corsPlug: 'CORS plug config'
+    corsPlug: 'CORS plug config',
+    instanceReboot: 'Instance Reboot',
+    restartApp: 'You must restart the instance to apply settings',
+    restartSuccess: 'Instance rebooted successfully!'
   },
   invites: {
     inviteTokens: 'Invite tokens',

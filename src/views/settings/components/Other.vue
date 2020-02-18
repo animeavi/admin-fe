@@ -1,9 +1,5 @@
 <template>
   <div v-if="!loading" class="form-container">
-    <el-form ref="teslaAdapter" :model="teslaAdapterData" :label-width="labelWidth">
-      <setting :setting-group="teslaAdapter" :data="teslaAdapterData"/>
-    </el-form>
-    <el-divider class="divider thick-line"/>
     <el-form ref="mimeTypes" :model="mimeTypesData" :label-width="labelWidth">
       <setting :setting-group="mimeTypes" :data="mimeTypesData"/>
     </el-form>
@@ -58,12 +54,6 @@ export default {
     },
     remoteIpData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Plugs.RemoteIp']) || {}
-    },
-    teslaAdapter() {
-      return this.settings.description.find(setting => setting.group === ':tesla')
-    },
-    teslaAdapterData() {
-      return _.get(this.settings.settings, [':tesla']) || {}
     }
   },
   methods: {

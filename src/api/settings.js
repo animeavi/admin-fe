@@ -40,4 +40,13 @@ export async function removeSettings(configs, authHost, token) {
   })
 }
 
+export async function restartApp(authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/restart`,
+    method: 'get',
+    headers: authHeaders(token)
+  })
+}
+
 const authHeaders = (token) => token ? { 'Authorization': `Bearer ${getToken()}` } : {}
