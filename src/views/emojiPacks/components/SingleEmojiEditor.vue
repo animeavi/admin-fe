@@ -18,9 +18,9 @@
         class="emoji-preview-img">
       <el-input :value="emojiName" :placeholder="$t('emoji.shortcode')" class="emoji-info"/>
       <el-input :value="emojiFile" :placeholder="$t('emoji.file')" class="emoji-info"/>
-      <el-popover v-model="copyPopoverVisible" placement="left-start" popper-class="copy-popover">
+      <el-popover v-model="copyPopoverVisible" placement="left-start" popper-class="copy-popover" class="copy-pack-container">
         <p>{{ $t('emoji.selectLocalPack') }}</p>
-        <el-select v-model="copyToLocalPackName" :placeholder="$t('emoji.localPack')">
+        <el-select v-model="copyToLocalPackName" :placeholder="$t('emoji.localPack')" class="copy-pack-select">
           <el-option
             v-for="(_pack, name) in localPacks"
             :key="name"
@@ -34,7 +34,6 @@
         <el-button
           :disabled="!copyToLocalPackName"
           type="primary"
-          class="copy-to-local-button"
           @click="copyToLocal">{{ $t('emoji.copy') }}</el-button>
         <el-button slot="reference" type="primary" class="emoji-button">{{ $t('emoji.copyToLocalPack') }}</el-button>
       </el-popover>
@@ -175,8 +174,10 @@ export default {
 .emoji-info {
   place-self: center;
 }
-.copy-to-local-button {
-  margin-top: 12px;
-  float: right;
+.copy-pack-container {
+  place-self: center stretch;
+}
+.copy-pack-select {
+  width: 100%;
 }
 </style>
