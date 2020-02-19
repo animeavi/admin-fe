@@ -14,7 +14,7 @@
 
     <div v-if="!isLocal" class="emoji-container">
       <img
-        :src="addressOfEmojiInPack(host, packName, file)"
+        :src="addressOfEmojiInPack(remoteInstance, packName, file)"
         class="emoji-preview-img">
       <el-input :value="emojiName" :placeholder="$t('emoji.shortcode')" class="emoji-info"/>
       <el-input :value="emojiFile" :placeholder="$t('emoji.file')" class="emoji-info"/>
@@ -95,6 +95,9 @@ export default {
     },
     localPacks() {
       return this.$store.state.emojiPacks.localPacks
+    },
+    remoteInstance() {
+      return this.$store.state.emojiPacks.remoteInstance
     }
   },
   methods: {

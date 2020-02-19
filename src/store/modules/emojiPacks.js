@@ -16,24 +16,25 @@ import Vue from 'vue'
 const packs = {
   state: {
     localPacks: {},
+    remoteInstance: '',
     remotePacks: {}
   },
   mutations: {
     SET_LOCAL_PACKS: (state, packs) => {
       state.localPacks = packs
     },
+    SET_REMOTE_INSTANCE: (state, name) => {
+      state.remoteInstance = name
+    },
     SET_REMOTE_PACKS: (state, packs) => {
       state.remotePacks = packs
     },
-
     UPDATE_LOCAL_PACK_VAL: (state, { name, key, value }) => {
       Vue.set(state.localPacks[name]['pack'], key, value)
     },
-
     UPDATE_LOCAL_PACK_PACK: (state, { name, pack }) => {
       state.localPacks[name]['pack'] = pack
     },
-
     UPDATE_LOCAL_PACK_FILES: (state, { name, files }) => {
       // Use vue.set in case "files" was null
       Vue.set(
@@ -105,6 +106,7 @@ const packs = {
     async SetRemoteEmojiPacks({ commit, getters }, { remoteInstance }) {
       const { data } = await listRemotePacks(getters.authHost, getters.token, remoteInstance)
 
+      commit('SET_REMOTE_INSTANCE', remoteInstance)
       commit('SET_REMOTE_PACKS', data)
     },
     async UpdateAndSavePackFile({ commit, getters }, args) {
