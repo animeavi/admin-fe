@@ -175,15 +175,6 @@ export default {
 }
 
 @media only screen and (max-width:480px) {
-  .emoji-packs-header-button-container {
-    height: 82px;
-    flex-direction: column;
-    .el-button+.el-button {
-      margin: 10px 0 0 0;
-      width: fit-content;
-
-    }
-  }
   .create-pack {
     height: 82px;
     flex-direction: column;
@@ -195,13 +186,24 @@ export default {
     margin: 15px 0;
   }
   .emoji-packs-form {
-    margin: 0 10px;
+    margin: 0 7px;
     label {
       padding-right: 8px;
+    }
+    .el-form-item {
+      margin-bottom: 15px;
     }
   }
   .emoji-packs-header {
     margin: 15px;
+  }
+  .emoji-packs-header-button-container {
+    height: 82px;
+    flex-direction: column;
+    .el-button+.el-button {
+      margin: 7px 0 0 0;
+      width: fit-content;
+    }
   }
   .reload-emoji-button {
     width: fit-content;

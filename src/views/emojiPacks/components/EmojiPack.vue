@@ -223,9 +223,6 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
-.pack-button-container {
-  margin: 0 0 18px 120px;
-}
 .download-archive {
   width: 250px
 }
@@ -271,7 +268,9 @@ export default {
 .no-background .el-collapse-item__header {
   background: white;
 }
-
+.pack-button-container {
+  margin: 0 0 18px 120px;
+}
 .save-pack-button-container {
   margin-bottom: 8px;
   width: 265px;
