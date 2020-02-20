@@ -428,6 +428,7 @@ export default {
     willBeUsable: 'It will then be usable and shareable from the current instance',
     downloadAsOptional: 'Download as (optional)',
     downloadSharedPack: 'Download shared pack to current instance',
+    downloadSharedPackMobile: 'Download pack to instance',
     optional: 'optional',
     uploadFile: 'Upload a file',
     url: 'URL',

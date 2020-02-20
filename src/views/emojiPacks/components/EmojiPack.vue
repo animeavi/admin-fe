@@ -22,7 +22,7 @@
         {{ pack.pack["fallback-src-sha256"] }}
       </el-form-item>
     </el-form>
-    <div class="pack-button-container">
+    <div v-if="isLocal" class="pack-button-container">
       <div class="save-pack-button-container">
         <el-button type="primary" class="save-pack-button" @click="savePackMetadata">{{ $t('emoji.saveMetadata') }}</el-button>
         <el-button class="delete-pack-button" @click="deletePack">{{ $t('emoji.deletePack') }}</el-button>
@@ -93,7 +93,7 @@
         <div class="download-shared-pack">
           <el-input v-model="downloadSharedAs" :placeholder=" $t('emoji.downloadAsOptional')"/>
           <el-button type="primary" class="download-shared-pack-button" @click="downloadFromInstance">
-            {{ $t('emoji.downloadSharedPack') }}
+            {{ isDesktop ? $t('emoji.downloadSharedPack') : $t('emoji.downloadSharedPackMobile') }}
           </el-button>
         </div>
       </el-collapse-item>
@@ -283,6 +283,14 @@ export default {
   }
   .download-pack-button-container {
     width: 100%;
+  }
+  .download-shared-pack {
+    flex-direction: column;
+  }
+  .download-shared-pack-button {
+    margin-left: 0;
+    margin-top: 10px;
+    padding: 10px;
   }
   .pack-button-container {
     width: 100%;

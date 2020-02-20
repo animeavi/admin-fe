@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <div v-if="!isLocal" class="emoji-container">
+    <div v-if="!isLocal" :class="isDesktop ? 'emoji-container-grid' : 'emoji-container-flex'">
       <img
         :src="addressOfEmojiInPack(remoteInstance, packName, file)"
         class="emoji-preview-img">
