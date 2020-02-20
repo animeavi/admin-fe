@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isLocal" class="emoji-container">
+    <div v-if="isLocal" :class="isDesktop ? 'emoji-container-grid' : 'emoji-container-flex'">
       <img
         :src="addressOfEmojiInPack(host, packName, file)"
         class="emoji-preview-img">
@@ -92,6 +92,9 @@ export default {
       },
       set(val) { this.newFile = val }
     },
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
     localPacks() {
       return this.$store.state.emojiPacks.localPacks
     },
@@ -153,7 +156,7 @@ export default {
 }
 </script>
 
-<style>
+<style rel='stylesheet/scss' lang='scss'>
 .copy-popover {
   width: 330px
 }
@@ -161,7 +164,7 @@ export default {
   place-self: center;
   min-width: 200px
 }
-.emoji-container {
+.emoji-container-grid {
   display: grid;
   grid-template-columns: 75px auto auto 195px;
   grid-column-gap: 15px;
@@ -179,5 +182,31 @@ export default {
 }
 .copy-pack-select {
   width: 100%;
+}
+@media only screen and (max-width:480px) {
+  .emoji-container-flex {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #dcdfe6;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    border-radius: 4px;
+    padding: 15px;
+    margin: 0 15px 15px 0;
+  }
+  .emoji-preview-img {
+    margin-bottom: 10px;
+  }
+  .emoji-info {
+    margin-bottom: 10px;
+  }
+  .emoji-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    button {
+      padding: 10px 5px;
+      width: 47%;
+    }
+  }
 }
 </style>
