@@ -185,6 +185,12 @@ export default {
   .divider {
     margin: 15px 0;
   }
+  .el-message {
+    min-width: 80%;
+  }
+  .el-message-box {
+    width: 80%;
+  }
   .emoji-packs-form {
     margin: 0 7px;
     label {
