@@ -1,7 +1,7 @@
 <template>
   <div class="emoji-packs">
     <h1 class="emoji-packs-header">{{ $t('emoji.emojiPacks') }}</h1>
-    <div class="button-container">
+    <div class="emoji-packs-header-button-container">
       <el-button type="primary" class="reload-emoji-button" @click="reloadEmoji">{{ $t('emoji.reloadEmoji') }}</el-button>
       <el-tooltip :content="$t('emoji.importEmojiTooltip')" effects="dark" placement="bottom" class="import-pack-button">
         <el-button type="primary" @click="importFromFS">
@@ -76,7 +76,7 @@ export default {
     },
     labelWidth() {
       if (this.isMobile) {
-        return '110px'
+        return '105px'
       } else if (this.isTablet) {
         return '200px'
       } else {
@@ -140,7 +140,7 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
-.button-container {
+.emoji-packs-header-button-container {
   display: flex;
   margin: 0 0 22px 15px;
 }
@@ -175,9 +175,14 @@ export default {
 }
 
 @media only screen and (max-width:480px) {
-  .button-container {
+  .emoji-packs-header-button-container {
     height: 82px;
     flex-direction: column;
+    .el-button+.el-button {
+      margin: 10px 0 0 0;
+      width: fit-content;
+
+    }
   }
   .create-pack {
     height: 82px;
@@ -191,17 +196,15 @@ export default {
   }
   .emoji-packs-form {
     margin: 0 10px;
+    label {
+      padding-right: 8px;
+    }
   }
   .emoji-packs-header {
     margin: 15px;
   }
-  .import-pack-button {
-    margin: 10px 0 0 0;
-    width: fit-content;
-  }
   .reload-emoji-button {
     width: fit-content;
   }
-
 }
 </style>

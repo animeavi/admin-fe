@@ -416,7 +416,7 @@ export default {
     shortcode: 'Shortcode',
     fallbackSrc: 'Fallback source',
     fallbackSrcSha: 'Fallback source SHA',
-    savePackMetadata: 'Save pack metadata',
+    saveMetadata: 'Save metadata',
     deletePack: 'Delete pack',
     downloadPack: 'Download pack',
     downloadPackArchive: 'Download pack archive',

@@ -1,6 +1,6 @@
 <template>
   <el-collapse-item :title="name" :name="name" class="has-background">
-    <el-form v-if="isLocal" label-width="120px" label-position="left" size="small" class="emoji-pack-metadata">
+    <el-form v-if="isLocal" :label-width="isDesktop ? '120px' : '90px'" label-position="left" size="small" class="emoji-pack-metadata">
       <el-form-item :label=" $t('emoji.sharePack')">
         <el-switch v-model="share" />
       </el-form-item>
@@ -21,11 +21,13 @@
         :label=" $t('emoji.fallbackSrcSha')">
         {{ pack.pack["fallback-src-sha256"] }}
       </el-form-item>
-      <el-form-item class="save-pack-button">
-        <el-button type="primary" @click="savePackMetadata">{{ $t('emoji.savePackMetadata') }}</el-button>
-        <el-button @click="deletePack">{{ $t('emoji.deletePack') }}</el-button>
-      </el-form-item>
-      <el-form-item>
+    </el-form>
+    <div class="pack-button-container">
+      <div class="save-pack-button-container">
+        <el-button type="primary" class="save-pack-button" @click="savePackMetadata">{{ $t('emoji.saveMetadata') }}</el-button>
+        <el-button class="delete-pack-button" @click="deletePack">{{ $t('emoji.deletePack') }}</el-button>
+      </div>
+      <div class="download-pack-button-container">
         <el-link
           v-if="pack.pack['can-download']"
           :href="`//${host}/api/pleroma/emoji/packs/${name}/download_shared`"
@@ -34,8 +36,8 @@
           target="_blank">
           <el-button class="download-archive">{{ $t('emoji.downloadPackArchive') }}</el-button>
         </el-link>
-      </el-form-item>
-    </el-form>
+      </div>
+    </div>
     <el-form v-if="!isLocal" label-width="120px" label-position="left" size="small" class="emoji-pack-metadata">
       <el-form-item :label=" $t('emoji.sharePack')">
         <el-switch v-model="share" disabled />
@@ -132,6 +134,9 @@ export default {
     }
   },
   computed: {
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
     share: {
       get() { return this.pack.pack['share-files'] },
       set(value) {
@@ -218,8 +223,23 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
+.pack-button-container {
+  margin: 0 0 18px 120px;
+}
 .download-archive {
   width: 250px
+}
+.download-pack-button-container {
+  width: 265px;
+  .el-link {
+    width: inherit;
+    span {
+      width: inherit;
+      .download-archive {
+        width: inherit;
+      }
+    }
+  }
 }
 .download-shared-pack {
   display: flex;
@@ -251,7 +271,38 @@ export default {
 .no-background .el-collapse-item__header {
   background: white;
 }
-.save-pack-button {
-  margin-bottom: 5px
+
+.save-pack-button-container {
+  margin-bottom: 8px;
+  width: 265px;
+  display: flex;
+  justify-content: space-between;
+}
+@media only screen and (max-width:480px) {
+  .delete-pack-button {
+    width: 45%;
+  }
+  .download-pack-button-container {
+    width: 100%;
+  }
+  .pack-button-container {
+    width: 100%;
+    margin: 0 0 22px 0;
+  }
+  .save-pack-button {
+    width: 54%;
+  }
+  .save-pack-button-container {
+    margin-bottom: 8px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    button {
+      padding: 10px 5px;
+    }
+    .el-button+.el-button {
+      margin-left: 3px;
+    }
+  }
 }
 </style>
