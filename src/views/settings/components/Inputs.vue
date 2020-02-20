@@ -33,8 +33,16 @@
         </el-tooltip>
       </span>
       <div class="input-row">
+        <image-upload-input
+          v-if="isImageUrl"
+          :data="data"
+          :setting-group="settingGroup"
+          :setting="setting"
+          :input-value="inputValue"
+          @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"
+        />
         <el-input
-          v-if="setting.type === 'string' || (setting.type.includes('string') && setting.type.includes('atom'))"
+          v-else-if="setting.type === 'string' || (setting.type.includes('string') && setting.type.includes('atom'))"
           :value="inputValue"
           :placeholder="setting.suggestions ? setting.suggestions[0] : null"
           :data-search="setting.key || setting.group"
@@ -125,6 +133,7 @@ import {
   CrontabInput,
   EditableKeywordInput,
   IconsInput,
+  ImageUploadInput,
   MascotsInput,
   ProxyUrlInput,
   PruneInput,
@@ -143,6 +152,7 @@ export default {
     CrontabInput,
     EditableKeywordInput,
     IconsInput,
+    ImageUploadInput,
     MascotsInput,
     ProxyUrlInput,
     PruneInput,
@@ -273,6 +283,9 @@ export default {
     },
     updatedSettings() {
       return this.$store.state.settings.updatedSettings
+    },
+    isImageUrl() {
+      return [':background', ':logo', ':nsfwCensorImage', ':default_user_avatar', ':instance_thumbnail'].includes(this.setting.key)
     }
   },
   methods: {
