@@ -1,5 +1,5 @@
 <template>
-  <el-form label-width="130px" label-position="left" size="small">
+  <el-form :label-position="isMobile ? 'top' : 'left'" label-width="130px" size="small" class="new-emoji-uploader-form">
     <el-form-item :label="$t('emoji.shortcode')">
       <el-input v-model="shortcode" :placeholder="$t('emoji.required')"/>
     </el-form-item>
@@ -25,30 +25,6 @@
   </el-form>
 </template>
 
-<style>
-.add-new-emoji {
-  height: 36px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #606266;
-}
-.text {
-  line-height: 20px;
-  margin-right: 15px
-}
-.upload-container {
-  display: flex;
-  align-items: baseline;
-}
-.upload-button {
-  margin-left: 10px;
-}
-.upload-file-url {
-  display: flex;
-  justify-content: space-between
-}
-</style>
-
 <script>
 export default {
   props: {
@@ -65,6 +41,9 @@ export default {
     }
   },
   computed: {
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
     shortcodePresent() {
       return this.shortcode.trim() === ''
     }
@@ -88,3 +67,34 @@ export default {
   }
 }
 </script>
+
+<style rel='stylesheet/scss' lang='scss'>
+.add-new-emoji {
+  height: 36px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #606266;
+}
+.text {
+  line-height: 20px;
+  margin-right: 15px;
+}
+.upload-container {
+  display: flex;
+  align-items: baseline;
+}
+.upload-button {
+  margin-left: 10px;
+}
+.upload-file-url {
+  display: flex;
+  justify-content: space-between;
+}
+@media only screen and (max-width:480px) {
+  .new-emoji-uploader-form {
+    label.el-form-item__label {
+      padding: 0;
+    }
+  }
+}
+</style>
