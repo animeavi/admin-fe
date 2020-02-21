@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isLocal" :class="isDesktop ? 'emoji-container-grid' : 'emoji-container-flex'">
+    <div v-if="isLocal" :class="isMobile ? 'emoji-container-flex' : 'emoji-container-grid'">
       <img
         :src="addressOfEmojiInPack(host, packName, file)"
         class="emoji-preview-img">
@@ -8,11 +8,11 @@
       <el-input v-model="emojiFile" :placeholder="$t('emoji.file')" class="emoji-info"/>
       <div class="emoji-buttons">
         <el-button type="primary" @click="update">{{ $t('emoji.update') }}</el-button>
-        <el-button @click="remove">{{ $t('emoji.remove') }}</el-button>
+        <el-button class="remove-emoji-button" @click="remove">{{ $t('emoji.remove') }}</el-button>
       </div>
     </div>
 
-    <div v-if="!isLocal" :class="isDesktop ? 'emoji-container-grid' : 'emoji-container-flex'">
+    <div v-if="!isLocal" :class="isMobile ? 'emoji-container-flex' : 'remote-emoji-container-grid'">
       <img
         :src="addressOfEmojiInPack(remoteInstance, packName, file)"
         class="emoji-preview-img">
@@ -166,7 +166,7 @@ export default {
 }
 .emoji-container-grid {
   display: grid;
-  grid-template-columns: 75px auto auto 195px;
+  grid-template-columns: 75px auto auto 200px;
   grid-column-gap: 15px;
   margin-bottom: 10px;
 }
@@ -182,6 +182,12 @@ export default {
 }
 .copy-pack-select {
   width: 100%;
+}
+.remote-emoji-container-grid {
+  display: grid;
+  grid-template-columns: 75px auto auto 160px;
+  grid-column-gap: 15px;
+  margin-bottom: 10px;
 }
 @media only screen and (max-width:480px) {
   .emoji-container-flex {
@@ -207,6 +213,20 @@ export default {
       padding: 10px 5px;
       width: 47%;
     }
+  }
+}
+
+@media only screen and (max-width:801px) and (min-width: 481px) {
+  .emoji-container-grid {
+    grid-column-gap: 10px;
+  }
+  .emoji-buttons {
+    .el-button+.el-button {
+      margin-left: 5px;
+    }
+  }
+  .remote-emoji-container-grid {
+    grid-column-gap: 10px;
   }
 }
 </style>

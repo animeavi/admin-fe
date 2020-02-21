@@ -1,6 +1,6 @@
 <template>
   <el-collapse-item :title="name" :name="name" class="has-background">
-    <el-form v-if="isLocal" :label-width="isDesktop ? '120px' : '90px'" label-position="left" size="small" class="emoji-pack-metadata">
+    <el-form v-if="isLocal" :label-width="labelWidth" label-position="left" size="small" class="emoji-pack-metadata">
       <el-form-item :label=" $t('emoji.sharePack')">
         <el-switch v-model="share" />
       </el-form-item>
@@ -38,7 +38,7 @@
         </el-link>
       </div>
     </div>
-    <el-form v-if="!isLocal" label-width="120px" label-position="left" size="small" class="emoji-pack-metadata">
+    <el-form v-if="!isLocal" :label-width="labelWidth" label-position="left" size="small" class="emoji-pack-metadata remote-pack-metadata">
       <el-form-item :label=" $t('emoji.sharePack')">
         <el-switch v-model="share" disabled />
       </el-form-item>
@@ -106,7 +106,6 @@ import SingleEmojiEditor from './SingleEmojiEditor.vue'
 import NewEmojiUploader from './NewEmojiUploader.vue'
 
 export default {
-
   components: { SingleEmojiEditor, NewEmojiUploader },
   props: {
     name: {
@@ -136,6 +135,21 @@ export default {
   computed: {
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
+    },
+    isMobile() {
+      return this.$store.state.app.device === 'mobile'
+    },
+    isTablet() {
+      return this.$store.state.app.device === 'tablet'
+    },
+    labelWidth() {
+      if (this.isMobile) {
+        return '90px'
+      } else if (this.isTablet) {
+        return '120px'
+      } else {
+        return '120px'
+      }
     },
     share: {
       get() { return this.pack.pack['share-files'] },
@@ -295,6 +309,12 @@ export default {
   .pack-button-container {
     width: 100%;
     margin: 0 0 22px 0;
+  }
+  .remote-pack-metadata {
+    .el-form-item__content {
+      line-height: 24px;
+      margin-top: 4px;
+    }
   }
   .save-pack-button {
     width: 54%;

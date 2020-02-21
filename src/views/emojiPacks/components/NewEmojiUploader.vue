@@ -1,5 +1,5 @@
 <template>
-  <el-form :label-position="isDesktop ? 'left' : 'top'" label-width="130px" size="small" class="new-emoji-uploader-form">
+  <el-form :label-position="isMobile ? 'top' : 'left'" label-width="130px" size="small" class="new-emoji-uploader-form">
     <el-form-item :label="$t('emoji.shortcode')">
       <el-input v-model="shortcode" :placeholder="$t('emoji.required')"/>
     </el-form-item>

@@ -78,7 +78,7 @@ export default {
       if (this.isMobile) {
         return '105px'
       } else if (this.isTablet) {
-        return '200px'
+        return '180px'
       } else {
         return '240px'
       }
