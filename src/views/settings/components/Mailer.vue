@@ -4,6 +4,10 @@
       <setting :setting-group="mailer" :data="mailerData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
+    <el-form ref="swoosh" :model="swooshData" :label-width="labelWidth">
+      <setting :setting-group="swoosh" :data="swooshData"/>
+    </el-form>
+    <el-divider class="divider thick-line"/>
     <el-form ref="emailNotifications" :model="emailNotificationsData" :label-width="labelWidth">
       <setting :setting-group="emailNotifications" :data="emailNotificationsData"/>
     </el-form>
@@ -60,6 +64,12 @@ export default {
     },
     mailerData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Emails.Mailer']) || {}
+    },
+    swoosh() {
+      return this.settings.description.find(setting => setting.group === ':swoosh')
+    },
+    swooshData() {
+      return _.get(this.settings.settings, [':swoosh']) || {}
     },
     userEmail() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Emails.UserEmail')

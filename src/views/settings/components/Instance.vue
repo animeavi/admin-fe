@@ -23,6 +23,14 @@
     <el-form ref="pleromaUser" :model="pleromaUserData" :label-width="labelWidth">
       <setting :setting-group="pleromaUser" :data="pleromaUserData"/>
     </el-form>
+    <el-divider class="divider thick-line"/>
+    <el-form ref="uriSchemes" :model="uriSchemesData" :label-width="labelWidth">
+      <setting :setting-group="uriSchemes" :data="uriSchemesData"/>
+    </el-form>
+    <el-divider class="divider thick-line"/>
+    <el-form ref="feed" :model="feedData" :label-width="labelWidth">
+      <setting :setting-group="feed" :data="feedData"/>
+    </el-form>
     <div class="submit-button-container">
       <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
     </div>
@@ -49,6 +57,12 @@ export default {
     },
     adminTokenData() {
       return _.get(this.settings.settings, [':pleroma', ':admin_token']) || {}
+    },
+    feed() {
+      return this.settings.description.find(setting => setting.key === ':feed')
+    },
+    feedData() {
+      return _.get(this.settings.settings, [':pleroma', ':feed']) || {}
     },
     fetchInitialPosts() {
       return this.settings.description.find(setting => setting.key === ':fetch_initial_posts')
@@ -97,6 +111,12 @@ export default {
     },
     scheduledActivityData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.ScheduledActivity']) || {}
+    },
+    uriSchemes() {
+      return this.settings.description.find(setting => setting.key === ':uri_schemes')
+    },
+    uriSchemesData() {
+      return _.get(this.settings.settings, [':pleroma', ':uri_schemes']) || {}
     }
   },
   methods: {

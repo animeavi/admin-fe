@@ -29,6 +29,14 @@
     <el-form ref="mrfVocabulary" :model="mrfVocabularyData" :label-width="labelWidth">
       <setting :setting-group="mrfVocabulary" :data="mrfVocabularyData"/>
     </el-form>
+    <el-divider class="divider thick-line"/>
+    <el-form ref="mrfObjectAge" :model="mrfObjectAgeData" :label-width="labelWidth">
+      <setting :setting-group="mrfObjectAge" :data="mrfObjectAgeData"/>
+    </el-form>
+    <el-divider class="divider thick-line"/>
+    <el-form ref="modules" :model="modulesData" :label-width="labelWidth">
+      <setting :setting-group="modules" :data="modulesData"/>
+    </el-form>
     <div class="submit-button-container">
       <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
     </div>
@@ -66,6 +74,12 @@ export default {
     loading() {
       return this.settings.loading
     },
+    modules() {
+      return this.settings.description.find(setting => setting.key === ':modules')
+    },
+    modulesData() {
+      return _.get(this.settings.settings, [':pleroma', ':modules']) || {}
+    },
     mrfSimple() {
       return this.settings.description.find(setting => setting.key === ':mrf_simple')
     },
@@ -89,6 +103,12 @@ export default {
     },
     mrfKeywordData() {
       return _.get(this.settings.settings, [':pleroma', ':mrf_keyword']) || {}
+    },
+    mrfObjectAge() {
+      return this.settings.description.find(setting => setting.key === ':mrf_object_age')
+    },
+    mrfObjectAgeData() {
+      return _.get(this.settings.settings, [':pleroma', ':mrf_object_age']) || {}
     },
     mrfSubchain() {
       return this.settings.description.find(setting => setting.key === ':mrf_subchain')
