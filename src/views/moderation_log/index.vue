@@ -25,6 +25,7 @@
         <el-input
           v-model="search"
           placeholder="Search logs"
+          prefix-icon="el-icon-search"
           clearable
           @input="handleDebounceSearchInput" />
       </el-col>

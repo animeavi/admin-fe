@@ -172,7 +172,7 @@ export default {
 <style rel='stylesheet/scss' lang='scss'>
   .moderate-user-button {
     text-align: left;
-    width: 200px;
+    width: 350px;
     padding: 10px;
   }
   .moderate-user-button-container {

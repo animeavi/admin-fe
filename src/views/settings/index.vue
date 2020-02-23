@@ -23,6 +23,15 @@
               </span>
             </el-button>
           </el-link>
+          <el-autocomplete
+            v-model="state2"
+            :fetch-suggestions="querySearch"
+            :trigger-on-focus="false"
+            placeholder="Search"
+            prefix-icon="el-icon-search"
+            class="settings-search-input"
+            @select="handleSelect"
+          />
         </div>
       </div>
       <el-tabs v-model="activeTab" tab-position="left">
@@ -118,6 +127,17 @@
             </span>
           </el-button>
         </el-link>
+      </div>
+      <div class="settings-search-input-container">
+        <el-autocomplete
+          v-model="state2"
+          :fetch-suggestions="querySearch"
+          :trigger-on-focus="false"
+          placeholder="Search"
+          prefix-icon="el-icon-search"
+          class="settings-search-input"
+          @select="handleSelect"
+        />
       </div>
       <activity-pub v-if="activeTab === 'activityPub'"/>
       <authentication v-if="activeTab === 'auth'"/>
