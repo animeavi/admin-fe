@@ -24,14 +24,12 @@
             </el-button>
           </el-link>
           <el-autocomplete
-            v-model="state2"
+            v-model="searchQuery"
             :fetch-suggestions="querySearch"
             :trigger-on-focus="false"
             placeholder="Search"
             prefix-icon="el-icon-search"
-            class="settings-search-input"
-            @select="handleSelect"
-          />
+            class="settings-search-input"/>
         </div>
       </div>
       <el-tabs v-model="activeTab" tab-position="left">
@@ -234,7 +232,8 @@ export default {
         { value: 'webPush', label: i18n.t('settings.webPush') },
         { value: 'upload', label: i18n.t('settings.upload') },
         { value: 'other', label: i18n.t('settings.other') }
-      ]
+      ],
+      searchQuery: ''
     }
   },
   computed: {
@@ -260,6 +259,9 @@ export default {
     },
     needReboot() {
       return this.$store.state.settings.needReboot
+    },
+    searchData() {
+      return this.$store.state.settings.searchData
     }
   },
   mounted: function() {
@@ -276,6 +278,11 @@ export default {
         type: 'success',
         message: i18n.t('settings.restartSuccess')
       })
+    },
+    querySearch(queryString, cb) {
+      const results = this.searchData
+      // call callback function to return suggestions
+      cb(results)
     }
   }
 }

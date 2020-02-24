@@ -254,3 +254,13 @@ const wrapValues = (settings, currentState) => {
     }
   })
 }
+
+export const formSearchObject = description => {
+  return description.reduce((acc, setting) => {
+    if (setting.children) {
+      const updatedAcc = { ...acc, [setting.key]: _.compact([setting.key, setting.label, setting.description]) }
+      return { ...updatedAcc, ...formSearchObject(setting.children) }
+    }
+    return { ...acc, [setting.key]: _.compact([setting.key, setting.label, setting.description]) }
+  }, {})
+}
