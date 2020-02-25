@@ -34,65 +34,14 @@
         </div>
       </div>
       <el-tabs v-model="activeTab" tab-position="left">
-        <el-tab-pane :label="$t('settings.activityPub')" :disabled="configDisabled" name="activityPub" lazy>
-          <activity-pub/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.auth')" :disabled="configDisabled" name="auth" lazy>
-          <authentication/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.autoLinker')" :disabled="configDisabled" name="autoLinker" lazy>
-          <auto-linker/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.esshd')" :disabled="configDisabled" name="esshd" lazy>
-          <esshd/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.captcha')" :disabled="configDisabled" name="captcha" lazy>
-          <captcha/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.frontend')" :disabled="configDisabled" name="frontend" lazy>
-          <frontend/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.gopher')" :disabled="configDisabled" name="gopher" lazy>
-          <gopher/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.http')" :disabled="configDisabled" name="http" lazy>
-          <http/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.instance')" :disabled="configDisabled" name="instance">
-          <instance/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.jobQueue')" :disabled="configDisabled" name="jobQueue" lazy>
-          <job-queue/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.logger')" :disabled="configDisabled" name="logger" lazy>
-          <logger/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.mailer')" :disabled="configDisabled" name="mailer" lazy>
-          <mailer/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.mediaProxy')" :disabled="configDisabled" name="mediaProxy" lazy>
-          <media-proxy/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.metadata')" :disabled="configDisabled" name="metadata" lazy>
-          <metadata/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.mrf')" :disabled="configDisabled" name="mrf" lazy>
-          <mrf/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.rateLimiters')" :disabled="configDisabled" name="rateLimiters" lazy>
-          <rate-limiters/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.relays')" lazy name="relays">
-          <relays/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.webPush')" :disabled="configDisabled" name="webPush" lazy>
-          <web-push/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.upload')" :disabled="configDisabled" name="upload" lazy>
-          <upload/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.other')" :disabled="configDisabled" name="other" lazy>
-          <other/>
+        <el-tab-pane
+          v-for="(value, componentName) in tabs"
+          :label="$t(value.label)"
+          :disabled="configDisabled"
+          :key="componentName"
+          :name="componentName"
+          lazy>
+          <component :is="componentName"/>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -127,17 +76,7 @@
           </el-button>
         </el-link>
       </div>
-      <div class="settings-search-input-container">
-        <el-autocomplete
-          v-model="state2"
-          :fetch-suggestions="querySearch"
-          :trigger-on-focus="false"
-          placeholder="Search"
-          prefix-icon="el-icon-search"
-          class="settings-search-input"
-          @select="handleSelect"
-        />
-      </div>
+      <div class="settings-search-input-container"/>
       <activity-pub v-if="activeTab === 'activityPub'"/>
       <authentication v-if="activeTab === 'auth'"/>
       <auto-linker v-if="activeTab === 'autoLinker'"/>
@@ -164,6 +103,7 @@
 
 <script>
 import i18n from '@/lang'
+import { tabs } from './components/tabs'
 import {
   ActivityPub,
   Authentication,
@@ -263,6 +203,9 @@ export default {
     },
     searchData() {
       return this.$store.state.settings.searchData
+    },
+    tabs() {
+      return tabs
     }
   },
   mounted: function() {
