@@ -280,8 +280,9 @@ export default {
       })
     },
     querySearch(queryString, cb) {
-      const results = this.searchData
-      // call callback function to return suggestions
+      const results = Object.keys(this.searchData)
+        .filter(key => this.searchData[key].find(a => a.includes(queryString)))
+        .map(el => { return { value: el } })
       cb(results)
     }
   }
