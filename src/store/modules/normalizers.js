@@ -257,10 +257,11 @@ const wrapValues = (settings, currentState) => {
 
 export const formSearchObject = description => {
   return description.reduce((acc, setting) => {
+    const searchArray = _.compact([setting.key, setting.label, setting.description]).map(el => el.toLowerCase())
     if (setting.children) {
-      const updatedAcc = { ...acc, [setting.key]: _.compact([setting.key, setting.label, setting.description]) }
+      const updatedAcc = { ...acc, [setting.key]: searchArray }
       return { ...updatedAcc, ...formSearchObject(setting.children) }
     }
-    return { ...acc, [setting.key]: _.compact([setting.key, setting.label, setting.description]) }
+    return { ...acc, [setting.key]: searchArray }
   }, {})
 }

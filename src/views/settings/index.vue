@@ -29,7 +29,8 @@
             :trigger-on-focus="false"
             placeholder="Search"
             prefix-icon="el-icon-search"
-            class="settings-search-input"/>
+            class="settings-search-input"
+            @select="handleSearchSelect"/>
         </div>
       </div>
       <el-tabs v-model="activeTab" tab-position="left">
@@ -279,10 +280,12 @@ export default {
         message: i18n.t('settings.restartSuccess')
       })
     },
+    handleSearchSelect() {
+    },
     querySearch(queryString, cb) {
       const results = Object.keys(this.searchData)
-        .filter(key => this.searchData[key].find(a => a.includes(queryString)))
-        .map(el => { return { value: el } })
+        .filter(key => this.searchData[key].find(el => el.includes(queryString.toLowerCase())))
+        .map(key => { return { value: this.searchData[key][1] } })
       cb(results)
     }
   }
