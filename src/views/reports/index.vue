@@ -92,9 +92,8 @@ export default {
     font-size: 28px;
   }
 }
-@media
-only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px) {
+
+@media only screen and (max-width:480px) {
   .reports-container {
     h1 {
       margin: 7px 10px 15px 10px;
@@ -102,9 +101,6 @@ only screen and (max-width: 760px),
     .reports-filter-container {
       margin: 0 10px;
     }
-  }
-  #app > div > div.main-container > section > div > div.block > ul {
-    margin: 45px 45px 5px 19px;
   }
 }
 </style>
