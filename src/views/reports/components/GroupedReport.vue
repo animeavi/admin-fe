@@ -109,6 +109,9 @@ export default {
   .el-icon-arrow-right {
     margin-right: 6px;
   }
+  .divider {
+    margin: 15px 0;
+  }
   .grouped-report {
     .header-container {
       display: flex;
