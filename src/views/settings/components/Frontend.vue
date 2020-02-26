@@ -3,6 +3,10 @@
     <el-form ref="frontendData" :model="frontendData" :label-width="labelWidth">
       <setting :setting-group="frontend" :data="frontendData"/>
     </el-form>
+    <el-form ref="staticFeData" :model="staticFeData" :label-width="labelWidth">
+      <setting :setting-group="staticFe" :data="staticFeData"/>
+    </el-form>
+    <el-divider class="divider thick-line"/>
     <el-form ref="assetsData" :model="assetsData" :label-width="labelWidth">
       <el-form-item class="grouped-settings-header">
         <span class="label-font">{{ $t('settings.assets') }}</span>
@@ -70,12 +74,6 @@ export default {
     frontendData() {
       return _.get(this.settings.settings, [':pleroma', ':frontend_configurations']) || {}
     },
-    markup() {
-      return this.settings.description.find(setting => setting.key === ':markup')
-    },
-    markupData() {
-      return _.get(this.settings.settings, [':pleroma', ':markup']) || {}
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
@@ -93,6 +91,18 @@ export default {
     },
     loading() {
       return this.settings.loading
+    },
+    markup() {
+      return this.settings.description.find(setting => setting.key === ':markup')
+    },
+    markupData() {
+      return _.get(this.settings.settings, [':pleroma', ':markup']) || {}
+    },
+    staticFe() {
+      return this.settings.description.find(setting => setting.key === ':static_fe')
+    },
+    staticFeData() {
+      return _.get(this.settings.settings, [':pleroma', ':static_fe']) || {}
     }
   },
   methods: {

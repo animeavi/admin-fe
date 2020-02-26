@@ -95,6 +95,9 @@ export default {
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
     },
+    isMobile() {
+      return this.$store.state.app.device === 'mobile'
+    },
     localPacks() {
       return this.$store.state.emojiPacks.localPacks
     },
