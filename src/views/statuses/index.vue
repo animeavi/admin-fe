@@ -134,12 +134,14 @@ h1 {
     display: flex;
     height: 36px;
     flex-direction: column;
-    margin: 10px 10px
+    margin: 10px 0;
   }
-
   .select-field {
     width: 100%;
     margin-bottom: 5px;
+  }
+  .select-instance {
+    width: 100%;
   }
 }
 </style>
