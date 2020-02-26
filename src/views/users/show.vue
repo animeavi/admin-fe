@@ -204,6 +204,7 @@ table {
 }
 .show-private-statuses {
   margin-left: 28px;
+  margin-bottom: 20px;
 }
 .recent-statuses {
   margin-left: 28px;
@@ -235,11 +236,60 @@ table {
   .avatar-name-container {
     margin-bottom: 10px;
   }
+  .recent-statuses {
+    margin: 20px 10px 15px 10px;
+  }
+  .recent-statuses-container {
+    width: 100%;
+    margin: 0 10px;
+  }
+  .show-private-statuses {
+    margin: 0 10px 20px 10px;
+  }
   .user-page-header {
     flex-direction: column;
     align-items: flex-start;
     padding: 0;
     margin: 7px 0 15px 10px;
+  }
+  .user-profile-card {
+    margin: 0 10px;
+    width: 95%;
+    td {
+      width: 80px;
+    }
+  }
+  .user-profile-container {
+    flex-direction: column;
+  }
+}
+
+@media only screen and (max-width:801px) and (min-width: 481px) {
+  .avatar-name-container {
+    margin-bottom: 20px;
+  }
+  .recent-statuses {
+    margin: 20px 10px 15px 0;
+  }
+  .recent-statuses-container {
+    width: 97%;
+    margin: 0 20px;
+  }
+  .show-private-statuses {
+    margin: 0 10px 20px 0;
+  }
+  .user-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    margin: 7px 0 20px 20px;
+  }
+  .user-profile-card {
+    margin: 0 20px;
+    width: fit-content;
+  }
+  .user-profile-container {
+    flex-direction: column;
   }
 }
 </style>
