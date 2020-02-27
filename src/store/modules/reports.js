@@ -1,13 +1,11 @@
-import { changeState, fetchReports, fetchGroupedReports, createNote, deleteNote } from '@/api/reports'
+import { changeState, fetchReports, createNote, deleteNote } from '@/api/reports'
 
 const reports = {
   state: {
     fetchedReports: [],
-    fetchedGroupedReports: [],
     totalReportsCount: 0,
     currentPage: 1,
     pageSize: 50,
-    groupReports: false,
     stateFilter: '',
     loading: true
   },
@@ -24,17 +22,11 @@ const reports = {
     SET_REPORTS: (state, reports) => {
       state.fetchedReports = reports
     },
-    SET_GROUPED_REPORTS: (state, reports) => {
-      state.fetchedGroupedReports = reports
-    },
     SET_REPORTS_COUNT: (state, total) => {
       state.totalReportsCount = total
     },
     SET_REPORTS_FILTER: (state, filter) => {
       state.stateFilter = filter
-    },
-    SET_REPORTS_GROUPING: (state) => {
-      state.groupReports = !state.groupReports
     }
   },
   actions: {
@@ -46,14 +38,7 @@ const reports = {
         return updatedReportsIds.includes(report.id) ? { ...report, state: reportsData[0].state } : report
       })
 
-      const updatedGroupedReports = state.fetchedGroupedReports.map(group => {
-        const updatedReportsIds = reportsData.map(({ id }) => id)
-        const updatedReports = group.reports.map(report => updatedReportsIds.includes(report.id) ? { ...report, state: reportsData[0].state } : report)
-        return { ...group, reports: updatedReports }
-      })
-
       commit('SET_REPORTS', updatedReports)
-      commit('SET_GROUPED_REPORTS', updatedGroupedReports)
     },
     ClearFetchedReports({ commit }) {
       commit('SET_REPORTS', [])
@@ -67,18 +52,8 @@ const reports = {
       commit('SET_PAGE', page)
       commit('SET_LOADING', false)
     },
-    async FetchGroupedReports({ commit, getters }) {
-      commit('SET_LOADING', true)
-      const { data } = await fetchGroupedReports(getters.authHost, getters.token)
-
-      commit('SET_GROUPED_REPORTS', data.reports)
-      commit('SET_LOADING', false)
-    },
     SetFilter({ commit }, filter) {
       commit('SET_REPORTS_FILTER', filter)
-    },
-    ToggleReportsGrouping({ commit }) {
-      commit('SET_REPORTS_GROUPING')
     },
     CreateReportNote({ commit, getters, state, rootState }, { content, reportID }) {
       createNote(content, reportID, getters.authHost, getters.token)

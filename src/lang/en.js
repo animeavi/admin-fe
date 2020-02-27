@@ -273,7 +273,6 @@ export default {
   },
   reports: {
     reports: 'Reports',
-    groupedReports: 'Grouped reports',
     reply: 'Reply',
     from: 'From',
     showNotes: 'Show notes',
