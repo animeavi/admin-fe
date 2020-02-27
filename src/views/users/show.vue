@@ -23,81 +23,73 @@
         </p>
       </div>
     </el-dialog>
-    <el-row>
-      <el-col :span="8">
-        <el-card class="user-profile-card">
-          <div class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition el-table--medium">
-            <table class="user-profile-table">
-              <tbody>
-                <tr class="el-table__row">
-                  <td>{{ $t('userProfile.nickname') }}</td>
-                  <td>
-                    {{ user.nickname }}
-                  </td>
-                </tr>
-                <tr class="el-table__row">
-                  <td class="name-col">ID</td>
-                  <td class="value-col">
-                    {{ user.id }}
-                  </td>
-                </tr>
-                <tr class="el-table__row">
-                  <td>{{ $t('userProfile.tags') }}</td>
-                  <td>
-                    <el-tag v-for="tag in user.tags" :key="tag" class="user-profile-tag">{{ tag }}</el-tag>
-                    <span v-if="user.tags.length === 0">—</span>
-                  </td>
-                </tr>
-                <tr class="el-table__row">
-                  <td>{{ $t('userProfile.roles') }}</td>
-                  <td>
-                    <el-tag v-if="user.roles.admin" class="user-profile-tag">
-                      {{ $t('users.admin') }}
-                    </el-tag>
-                    <el-tag v-if="user.roles.moderator" class="user-profile-tag">
-                      {{ $t('users.moderator') }}
-                    </el-tag>
-                    <span v-if="!user.roles.moderator && !user.roles.admin">—</span>
-                  </td>
-                </tr>
-                <tr class="el-table__row">
-                  <td>{{ $t('userProfile.localUppercase') }}</td>
-                  <td>
-                    <el-tag v-if="user.local" type="info">{{ $t('userProfile.local') }}</el-tag>
-                    <el-tag v-if="!user.local" type="info">{{ $t('userProfile.external') }}</el-tag>
-                  </td>
-                </tr>
-                <tr class="el-table__row">
-                  <td>{{ $t('userProfile.activeUppercase') }}</td>
-                  <td>
-                    <el-tag v-if="!user.deactivated" type="success">{{ $t('userProfile.active') }}</el-tag>
-                    <el-tag v-if="user.deactivated" type="danger">{{ $t('userProfile.deactivated') }}</el-tag>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </el-card>
-      </el-col>
-      <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="18">
-          <h2 class="recent-statuses">{{ $t('userProfile.recentStatuses') }}</h2>
-        </el-col>
-        <el-col :span="6" class="show-private">
-          <el-checkbox v-model="showPrivate" @change="onTogglePrivate">
-            {{ $t('userProfile.showPrivateStatuses') }}
-          </el-checkbox>
-        </el-col>
-      </el-row>
-      <el-col :span="16">
+    <div class="user-profile-container">
+      <el-card class="user-profile-card">
+        <div class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition el-table--medium">
+          <table class="user-profile-table">
+            <tbody>
+              <tr class="el-table__row">
+                <td>{{ $t('userProfile.nickname') }}</td>
+                <td>
+                  {{ user.nickname }}
+                </td>
+              </tr>
+              <tr class="el-table__row">
+                <td class="name-col">ID</td>
+                <td class="value-col">
+                  {{ user.id }}
+                </td>
+              </tr>
+              <tr class="el-table__row">
+                <td>{{ $t('userProfile.tags') }}</td>
+                <td>
+                  <el-tag v-for="tag in user.tags" :key="tag" class="user-profile-tag">{{ tag }}</el-tag>
+                  <span v-if="user.tags.length === 0">—</span>
+                </td>
+              </tr>
+              <tr class="el-table__row">
+                <td>{{ $t('userProfile.roles') }}</td>
+                <td>
+                  <el-tag v-if="user.roles.admin" class="user-profile-tag">
+                    {{ $t('users.admin') }}
+                  </el-tag>
+                  <el-tag v-if="user.roles.moderator" class="user-profile-tag">
+                    {{ $t('users.moderator') }}
+                  </el-tag>
+                  <span v-if="!user.roles.moderator && !user.roles.admin">—</span>
+                </td>
+              </tr>
+              <tr class="el-table__row">
+                <td>{{ $t('userProfile.localUppercase') }}</td>
+                <td>
+                  <el-tag v-if="user.local" type="info">{{ $t('userProfile.local') }}</el-tag>
+                  <el-tag v-if="!user.local" type="info">{{ $t('userProfile.external') }}</el-tag>
+                </td>
+              </tr>
+              <tr class="el-table__row">
+                <td>{{ $t('userProfile.activeUppercase') }}</td>
+                <td>
+                  <el-tag v-if="!user.deactivated" type="success">{{ $t('userProfile.active') }}</el-tag>
+                  <el-tag v-if="user.deactivated" type="danger">{{ $t('userProfile.deactivated') }}</el-tag>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </el-card>
+      <div class="recent-statuses-container">
+        <h2 class="recent-statuses">{{ $t('userProfile.recentStatuses') }}</h2>
+        <el-checkbox v-model="showPrivate" class="show-private-statuses" @change="onTogglePrivate">
+          {{ $t('userProfile.showPrivateStatuses') }}
+        </el-checkbox>
         <el-timeline v-if="!statusesLoading" class="statuses">
           <el-timeline-item v-for="status in statuses" :key="status.id">
             <status :status="status" :show-checkbox="false" :user-id="user.id" :godmode="showPrivate"/>
           </el-timeline-item>
           <p v-if="statuses.length === 0" class="no-statuses">{{ $t('userProfile.noStatuses') }}</p>
         </el-timeline>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </main>
 </template>
 
@@ -193,6 +185,11 @@ table {
   margin-left: 28px;
   color: #606266;
 }
+.recent-statuses-container {
+  display: flex;
+  flex-direction: column;
+  width: 67%;
+}
 .recent-statuses-header {
   margin-top: 10px;
 }
@@ -204,6 +201,10 @@ table {
   text-align: left;
   line-height: 67px;
   margin-right: 20px;
+}
+.show-private-statuses {
+  margin-left: 28px;
+  margin-bottom: 20px;
 }
 .recent-statuses {
   margin-left: 28px;
@@ -218,11 +219,77 @@ table {
 }
 .user-profile-card {
   margin: 0 20px;
+  width: 30%;
+  height: fit-content;
+}
+.user-profile-container {
+  display: flex;
 }
 .user-profile-table {
   margin: 0;
 }
 .user-profile-tag {
   margin: 0 4px 4px 0;
+}
+
+@media only screen and (max-width:480px) {
+  .avatar-name-container {
+    margin-bottom: 10px;
+  }
+  .recent-statuses {
+    margin: 20px 10px 15px 10px;
+  }
+  .recent-statuses-container {
+    width: 100%;
+    margin: 0 10px;
+  }
+  .show-private-statuses {
+    margin: 0 10px 20px 10px;
+  }
+  .user-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    margin: 7px 0 15px 10px;
+  }
+  .user-profile-card {
+    margin: 0 10px;
+    width: 95%;
+    td {
+      width: 80px;
+    }
+  }
+  .user-profile-container {
+    flex-direction: column;
+  }
+}
+
+@media only screen and (max-width:801px) and (min-width: 481px) {
+  .avatar-name-container {
+    margin-bottom: 20px;
+  }
+  .recent-statuses {
+    margin: 20px 10px 15px 0;
+  }
+  .recent-statuses-container {
+    width: 97%;
+    margin: 0 20px;
+  }
+  .show-private-statuses {
+    margin: 0 10px 20px 0;
+  }
+  .user-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    margin: 7px 0 20px 20px;
+  }
+  .user-profile-card {
+    margin: 0 20px;
+    width: fit-content;
+  }
+  .user-profile-container {
+    flex-direction: column;
+  }
 }
 </style>

@@ -269,9 +269,8 @@ export default {
     font-size: 28px;
   }
 }
-@media
-only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px) {
+
+@media only screen and (max-width:480px) {
   .password-reset-token-dialog {
     width: 85%
   }

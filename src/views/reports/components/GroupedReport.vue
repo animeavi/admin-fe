@@ -109,6 +109,9 @@ export default {
   .el-icon-arrow-right {
     margin-right: 6px;
   }
+  .divider {
+    margin: 15px 0;
+  }
   .grouped-report {
     .header-container {
       display: flex;
@@ -137,9 +140,8 @@ export default {
   .reported-status {
     margin-top: 15px;
   }
-  @media
-  only screen and (max-width: 760px),
-  (min-device-width: 768px) and (max-device-width: 1024px) {
+
+  @media only screen and (max-width:480px) {
     .grouped-report {
       .header-container {
         display: flex;
@@ -153,6 +155,14 @@ export default {
       }
       .report-title {
         margin-bottom: 7px;
+      }
+    }
+    .block {
+      .reports-timeline .el-timeline {
+        margin: 20px 10px;
+        .el-timeline-item__wrapper {
+          padding-left: 20px;
+        }
       }
     }
   }

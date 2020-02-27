@@ -139,9 +139,8 @@ export default {
 .create-account-form-item-without-margin {
   margin-bottom: 0px;
 }
-@media
-only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px) {
+
+@media only screen and (max-width:480px) {
   .create-user-dialog {
     width: 85%
   }

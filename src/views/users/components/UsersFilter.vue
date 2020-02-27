@@ -61,12 +61,17 @@ export default {
 .select-field {
   width: 350px;
 }
-@media
-only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px) {
+
+@media only screen and (max-width:480px) {
   .select-field {
     width: 100%;
     margin-bottom: 5px;
+  }
+}
+
+@media only screen and (max-width:801px) and (min-width: 481px) {
+  .select-field {
+    width: 50%;
   }
 }
 </style>
