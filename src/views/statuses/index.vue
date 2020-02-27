@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import MultipleUsersMenu from '@/views/users/components/MultipleUsersMenu'
 import Status from '@/components/Status'
 
@@ -52,10 +51,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'instances',
-      'statuses'
-    ]),
+    instances() {
+      return ['Local statuses', ...this.$store.state.peers.fetchedPeers]
+    },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
     },
@@ -75,6 +73,9 @@ export default {
       set(instance) {
         this.$store.dispatch('HandleFilterChange', instance)
       }
+    },
+    statuses() {
+      return this.$store.state.status.fetchedStatuses
     }
   },
   mounted() {

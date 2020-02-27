@@ -1,4 +1,4 @@
-import { changeStatusScope, deleteStatus, fetchStatusesByInstance } from '@/api/status'
+import { changeStatusScope, deleteStatus, fetchStatuses, fetchStatusesByInstance } from '@/api/status'
 
 const status = {
   state: {
@@ -47,6 +47,11 @@ const status = {
       } else if (fetchStatusesByInstance) { // called from Statuses by Instance
         dispatch('FetchStatusesByInstance')
       }
+    },
+    async FetchStatuses({ commit, getters }, { godmode, localOnly }) {
+      commit('SET_LOADING', true)
+      await fetchStatuses({ godmode, localOnly, authHost: getters.authHost, token: getters.token })
+      commit('SET_LOADING', false)
     },
     async FetchStatusesByInstance({ commit, getters, state }) {
       commit('SET_LOADING', true)
