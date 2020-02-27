@@ -180,6 +180,9 @@ export default {
     height: 15px;
     margin-left: 5px;
   }
+  .divider {
+    margin: 15px 0;
+  }
   .el-card__body {
     padding: 17px;
   }
