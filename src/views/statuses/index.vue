@@ -22,6 +22,14 @@
         :selected-users="selectedUsers"
         @apply-action="clearSelection"/>
     </div>
+    <div v-if="currentInstance" class="checkbox-container">
+      <el-checkbox v-model="showLocal" class="show-private-statuses">
+        {{ $t('statuses.onlyLocalStatuses') }}
+      </el-checkbox>
+      <el-checkbox v-model="showPrivate" class="show-private-statuses">
+        {{ $t('statuses.showPrivateStatuses') }}
+      </el-checkbox>
+    </div>
     <p v-if="statuses.length === 0" class="no-statuses">{{ $t('userProfile.noStatuses') }}</p>
     <div v-for="status in statuses" :key="status.id" class="status-container">
       <status
@@ -52,6 +60,9 @@ export default {
     }
   },
   computed: {
+    currentInstance() {
+      return this.selectedInstance === this.$store.state.user.authHost
+    },
     instances() {
       return [this.$store.state.user.authHost, ...this.$store.state.peers.fetchedPeers]
     },
@@ -73,6 +84,22 @@ export default {
       },
       set(instance) {
         this.$store.dispatch('HandleFilterChange', instance)
+      }
+    },
+    showLocal: {
+      get() {
+        return this.$store.state.status.statusesByInstance.showLocal
+      },
+      set(value) {
+        this.$store.dispatch('HandleLocalCheckboxChange', value)
+      }
+    },
+    showPrivate: {
+      get() {
+        return this.$store.state.status.statusesByInstance.showPrivate
+      },
+      set(value) {
+        this.$store.dispatch('HandleGodmodeCheckboxChange', value)
       }
     },
     statuses() {
@@ -99,7 +126,6 @@ export default {
       if (this.selectedUsers.find(selectedUser => user.id === selectedUser.id) !== undefined) {
         return
       }
-
       this.selectedUsers = [...this.selectedUsers, user]
     }
   }
@@ -112,6 +138,9 @@ export default {
   .status-container {
     margin: 0 0 10px;
   }
+}
+.checkbox-container {
+  margin-bottom: 15px;
 }
 .filter-container {
   display: flex;
@@ -132,6 +161,9 @@ h1 {
 }
 
 @media only screen and (max-width:480px) {
+  .checkbox-container {
+    margin-bottom: 10px;
+  }
   .filter-container {
     display: flex;
     height: 36px;

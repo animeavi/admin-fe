@@ -6,11 +6,19 @@ const status = {
     loading: false,
     statusesByInstance: {
       selectedInstance: '',
+      showLocal: false,
+      showPrivate: false,
       page: 1,
       pageSize: 30
     }
   },
   mutations: {
+    CHANGE_GODMODE_CHECKBOX_VALUE: (state, value) => {
+      state.statusesByInstance.showPrivate = value
+    },
+    CHANGE_LOCAL_CHECKBOX_VALUE: (state, value) => {
+      state.statusesByInstance.showLocal = value
+    },
     CHANGE_PAGE: (state, page) => {
       state.statusesByInstance.page = page
     },
@@ -48,12 +56,6 @@ const status = {
         dispatch('FetchStatusesByInstance')
       }
     },
-    async FetchStatuses({ commit, getters }, { godmode, localOnly }) {
-      commit('SET_LOADING', true)
-      const statuses = await fetchStatuses({ godmode, localOnly, authHost: getters.authHost, token: getters.token })
-      commit('SET_STATUSES_BY_INSTANCE', statuses.data)
-      commit('SET_LOADING', false)
-    },
     async FetchStatusesByInstance({ commit, getters, state, rootState }) {
       commit('SET_LOADING', true)
       if (state.statusesByInstance.selectedInstance === '') {
@@ -62,8 +64,8 @@ const status = {
         const statuses = state.statusesByInstance.selectedInstance === rootState.user.authHost
           ? await fetchStatuses(
             {
-              godmode: false,
-              localOnly: false,
+              godmode: state.statusesByInstance.showPrivate,
+              localOnly: state.statusesByInstance.showLocal,
               authHost: getters.authHost,
               token: getters.token
             })
@@ -92,6 +94,14 @@ const status = {
 
       commit('PUSH_STATUSES', statuses.data)
       commit('SET_LOADING', false)
+    },
+    HandleGodmodeCheckboxChange({ commit, dispatch }, value) {
+      commit('CHANGE_GODMODE_CHECKBOX_VALUE', value)
+      dispatch('FetchStatusesByInstance')
+    },
+    HandleLocalCheckboxChange({ commit, dispatch }, value) {
+      commit('CHANGE_LOCAL_CHECKBOX_VALUE', value)
+      dispatch('FetchStatusesByInstance')
     },
     HandleFilterChange({ commit }, instance) {
       commit('CHANGE_SELECTED_INSTANCE', instance)
