@@ -50,23 +50,33 @@ const status = {
     },
     async FetchStatuses({ commit, getters }, { godmode, localOnly }) {
       commit('SET_LOADING', true)
-      await fetchStatuses({ godmode, localOnly, authHost: getters.authHost, token: getters.token })
+      const statuses = await fetchStatuses({ godmode, localOnly, authHost: getters.authHost, token: getters.token })
+      commit('SET_STATUSES_BY_INSTANCE', statuses.data)
       commit('SET_LOADING', false)
     },
-    async FetchStatusesByInstance({ commit, getters, state }) {
+    async FetchStatusesByInstance({ commit, getters, state, rootState }) {
       commit('SET_LOADING', true)
-      const statuses = state.statusesByInstance.selectedInstance === ''
-        ? { data: [] }
-        : await fetchStatusesByInstance(
-          {
-            instance: state.statusesByInstance.selectedInstance,
-            authHost: getters.authHost,
-            token: getters.token,
-            pageSize: state.statusesByInstance.pageSize,
-            page: state.statusesByInstance.page
-          })
-
-      commit('SET_STATUSES_BY_INSTANCE', statuses.data)
+      if (state.statusesByInstance.selectedInstance === '') {
+        commit('SET_STATUSES_BY_INSTANCE', [])
+      } else {
+        const statuses = state.statusesByInstance.selectedInstance === rootState.user.authHost
+          ? await fetchStatuses(
+            {
+              godmode: false,
+              localOnly: false,
+              authHost: getters.authHost,
+              token: getters.token
+            })
+          : await fetchStatusesByInstance(
+            {
+              instance: state.statusesByInstance.selectedInstance,
+              authHost: getters.authHost,
+              token: getters.token,
+              pageSize: state.statusesByInstance.pageSize,
+              page: state.statusesByInstance.page
+            })
+        commit('SET_STATUSES_BY_INSTANCE', statuses.data)
+      }
       commit('SET_LOADING', false)
     },
     async FetchStatusesPageByInstance({ commit, getters, state }) {

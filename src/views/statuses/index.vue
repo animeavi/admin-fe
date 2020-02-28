@@ -22,6 +22,7 @@
         :selected-users="selectedUsers"
         @apply-action="clearSelection"/>
     </div>
+    <p v-if="statuses.length === 0" class="no-statuses">{{ $t('userProfile.noStatuses') }}</p>
     <div v-for="status in statuses" :key="status.id" class="status-container">
       <status
         :status="status"
@@ -52,7 +53,7 @@ export default {
   },
   computed: {
     instances() {
-      return ['Local statuses', ...this.$store.state.peers.fetchedPeers]
+      return [this.$store.state.user.authHost, ...this.$store.state.peers.fetchedPeers]
     },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
