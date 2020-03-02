@@ -9,7 +9,7 @@ const status = {
       showLocal: false,
       showPrivate: false,
       page: 1,
-      pageSize: 1,
+      pageSize: 20,
       buttonLoading: false,
       allLoaded: false
     }
@@ -75,7 +75,9 @@ const status = {
               godmode: state.statusesByInstance.showPrivate,
               localOnly: state.statusesByInstance.showLocal,
               authHost: getters.authHost,
-              token: getters.token
+              token: getters.token,
+              pageSize: state.statusesByInstance.pageSize,
+              page: state.statusesByInstance.page
             })
           : await fetchStatusesByInstance(
             {
@@ -92,16 +94,26 @@ const status = {
       }
       commit('SET_LOADING', false)
     },
-    async FetchStatusesPageByInstance({ commit, getters, state }) {
+    async FetchStatusesPageByInstance({ commit, getters, rootState, state }) {
       commit('SET_BUTTON_LOADING', true)
-      const statuses = await fetchStatusesByInstance(
-        {
-          instance: state.statusesByInstance.selectedInstance,
-          authHost: getters.authHost,
-          token: getters.token,
-          pageSize: state.statusesByInstance.pageSize,
-          page: state.statusesByInstance.page
-        })
+      const statuses = state.statusesByInstance.selectedInstance === rootState.user.authHost
+        ? await fetchStatuses(
+          {
+            godmode: state.statusesByInstance.showPrivate,
+            localOnly: state.statusesByInstance.showLocal,
+            authHost: getters.authHost,
+            token: getters.token,
+            pageSize: state.statusesByInstance.pageSize,
+            page: state.statusesByInstance.page
+          })
+        : await fetchStatusesByInstance(
+          {
+            instance: state.statusesByInstance.selectedInstance,
+            authHost: getters.authHost,
+            token: getters.token,
+            pageSize: state.statusesByInstance.pageSize,
+            page: state.statusesByInstance.page
+          })
       commit('PUSH_STATUSES', statuses.data)
       commit('SET_BUTTON_LOADING', false)
       if (statuses.data.length < state.statusesByInstance.pageSize) {
@@ -109,10 +121,16 @@ const status = {
       }
     },
     HandleGodmodeCheckboxChange({ commit, dispatch }, value) {
+      dispatch('HandlePageChange', 1)
+      commit('SET_ALL_LOADED', false)
+
       commit('CHANGE_GODMODE_CHECKBOX_VALUE', value)
       dispatch('FetchStatusesByInstance')
     },
     HandleLocalCheckboxChange({ commit, dispatch }, value) {
+      dispatch('HandlePageChange', 1)
+      commit('SET_ALL_LOADED', false)
+
       commit('CHANGE_LOCAL_CHECKBOX_VALUE', value)
       dispatch('FetchStatusesByInstance')
     },

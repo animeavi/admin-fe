@@ -40,7 +40,7 @@
     </div>
     <div v-if="statuses.length > 0" class="statuses-pagination">
       <el-button v-if="!allLoaded" :loading="buttonLoading" @click="handleLoadMore">{{ $t('statuses.loadMore') }}</el-button>
-      <el-button v-else type="success" icon="el-icon-check" circle/>
+      <el-button v-else icon="el-icon-check" circle/>
     </div>
   </div>
 </template>
