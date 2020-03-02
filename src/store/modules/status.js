@@ -9,8 +9,9 @@ const status = {
       showLocal: false,
       showPrivate: false,
       page: 1,
-      pageSize: 30,
-      buttonLoading: false
+      pageSize: 1,
+      buttonLoading: false,
+      allLoaded: false
     }
   },
   mutations: {
@@ -31,6 +32,9 @@ const status = {
     },
     PUSH_STATUSES: (state, statuses) => {
       state.fetchedStatuses = [...state.fetchedStatuses, ...statuses]
+    },
+    SET_ALL_LOADED: (state, status) => {
+      state.statusesByInstance.allLoaded = status
     },
     SET_BUTTON_LOADING: (state, status) => {
       state.statusesByInstance.buttonLoading = status
@@ -82,6 +86,9 @@ const status = {
               page: state.statusesByInstance.page
             })
         commit('SET_STATUSES_BY_INSTANCE', statuses.data)
+        if (statuses.data.length < state.statusesByInstance.pageSize) {
+          commit('SET_ALL_LOADED', true)
+        }
       }
       commit('SET_LOADING', false)
     },
@@ -95,9 +102,11 @@ const status = {
           pageSize: state.statusesByInstance.pageSize,
           page: state.statusesByInstance.page
         })
-
       commit('PUSH_STATUSES', statuses.data)
       commit('SET_BUTTON_LOADING', false)
+      if (statuses.data.length < state.statusesByInstance.pageSize) {
+        commit('SET_ALL_LOADED', true)
+      }
     },
     HandleGodmodeCheckboxChange({ commit, dispatch }, value) {
       commit('CHANGE_GODMODE_CHECKBOX_VALUE', value)
@@ -109,6 +118,7 @@ const status = {
     },
     HandleFilterChange({ commit }, instance) {
       commit('CHANGE_SELECTED_INSTANCE', instance)
+      commit('SET_ALL_LOADED', false)
     },
     HandlePageChange({ commit }, page) {
       commit('CHANGE_PAGE', page)

@@ -39,7 +39,8 @@
         @status-selection="handleStatusSelection" />
     </div>
     <div v-if="statuses.length > 0" class="statuses-pagination">
-      <el-button :loading="buttonLoading" @click="handleLoadMore">{{ $t('statuses.loadMore') }}</el-button>
+      <el-button v-if="!allLoaded" :loading="buttonLoading" @click="handleLoadMore">{{ $t('statuses.loadMore') }}</el-button>
+      <el-button v-else type="success" icon="el-icon-check" circle/>
     </div>
   </div>
 </template>
@@ -60,6 +61,9 @@ export default {
     }
   },
   computed: {
+    allLoaded() {
+      return this.$store.state.status.statusesByInstance.allLoaded
+    },
     buttonLoading() {
       return this.$store.state.status.statusesByInstance.buttonLoading
     },
