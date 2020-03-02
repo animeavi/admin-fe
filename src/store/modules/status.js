@@ -9,7 +9,8 @@ const status = {
       showLocal: false,
       showPrivate: false,
       page: 1,
-      pageSize: 30
+      pageSize: 30,
+      buttonLoading: false
     }
   },
   mutations: {
@@ -30,6 +31,9 @@ const status = {
     },
     PUSH_STATUSES: (state, statuses) => {
       state.fetchedStatuses = [...state.fetchedStatuses, ...statuses]
+    },
+    SET_BUTTON_LOADING: (state, status) => {
+      state.statusesByInstance.buttonLoading = status
     },
     SET_LOADING: (state, status) => {
       state.loading = status
@@ -82,6 +86,7 @@ const status = {
       commit('SET_LOADING', false)
     },
     async FetchStatusesPageByInstance({ commit, getters, state }) {
+      commit('SET_BUTTON_LOADING', true)
       const statuses = await fetchStatusesByInstance(
         {
           instance: state.statusesByInstance.selectedInstance,
@@ -92,6 +97,7 @@ const status = {
         })
 
       commit('PUSH_STATUSES', statuses.data)
+      commit('SET_BUTTON_LOADING', false)
     },
     HandleGodmodeCheckboxChange({ commit, dispatch }, value) {
       commit('CHANGE_GODMODE_CHECKBOX_VALUE', value)

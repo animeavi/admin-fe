@@ -39,7 +39,7 @@
         @status-selection="handleStatusSelection" />
     </div>
     <div v-if="statuses.length > 0" class="statuses-pagination">
-      <el-button @click="handleLoadMore">{{ $t('statuses.loadMore') }}</el-button>
+      <el-button :loading="buttonLoading" @click="handleLoadMore">{{ $t('statuses.loadMore') }}</el-button>
     </div>
   </div>
 </template>
@@ -60,6 +60,9 @@ export default {
     }
   },
   computed: {
+    buttonLoading() {
+      return this.$store.state.status.statusesByInstance.buttonLoading
+    },
     currentInstance() {
       return this.selectedInstance === this.$store.state.user.authHost
     },
