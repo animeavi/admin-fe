@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Ability to see local statuses in Statuses by instance section
+- Ability to configure Oban.Cron settings and settings for notifications streamer
 
 ## [2.0] - 2020-02-27
 
