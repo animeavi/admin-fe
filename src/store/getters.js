@@ -17,8 +17,6 @@ const getters = {
   errorLogs: state => state.errorLog.logs,
   users: state => state.users.fetchedUsers,
   authHost: state => state.user.authHost,
-  settings: state => state.settings,
-  instances: state => state.peers.fetchedPeers,
-  statuses: state => state.status.fetchedStatuses
+  settings: state => state.settings
 }
 export default getters

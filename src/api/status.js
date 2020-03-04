@@ -21,6 +21,15 @@ export async function deleteStatus(id, authHost, token) {
   })
 }
 
+export async function fetchStatuses({ godmode, localOnly, authHost, token, pageSize, page }) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/statuses?godmode=${godmode}&local_only=${localOnly}&page=${page}&page_size=${pageSize}`,
+    method: 'get',
+    headers: authHeaders(token)
+  })
+}
+
 export async function fetchStatusesByInstance({ instance, authHost, token, pageSize, page }) {
   return await request({
     baseURL: baseName(authHost),

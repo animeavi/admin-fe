@@ -80,7 +80,7 @@
       <div class="recent-statuses-container">
         <h2 class="recent-statuses">{{ $t('userProfile.recentStatuses') }}</h2>
         <el-checkbox v-model="showPrivate" class="show-private-statuses" @change="onTogglePrivate">
-          {{ $t('userProfile.showPrivateStatuses') }}
+          {{ $t('statuses.showPrivateStatuses') }}
         </el-checkbox>
         <el-timeline v-if="!statusesLoading" class="statuses">
           <el-timeline-item v-for="status in statuses" :key="status.id">
