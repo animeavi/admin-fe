@@ -80,7 +80,12 @@ export const parseTuples = (tuples, key) => {
       accum[item.tuple[0]] = item.tuple[1].reduce((acc, mascot) => {
         return [...acc, { [mascot.tuple[0]]: { ...mascot.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
       }, [])
-    } else if (item.tuple[0] === ':groups' || item.tuple[0] === ':replace' || item.tuple[0] === ':retries') {
+    } else if (
+      item.tuple[0] === ':groups' ||
+      item.tuple[0] === ':replace' ||
+      item.tuple[0] === ':retries' ||
+      item.tuple[0] === ':crontab'
+    ) {
       accum[item.tuple[0]] = item.tuple[1].reduce((acc, group) => {
         return [...acc, { [group.tuple[0]]: { value: group.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
       }, [])
@@ -218,7 +223,12 @@ export const wrapUpdatedSettings = (group, settings, currentState) => {
 const wrapValues = (settings, currentState) => {
   return Object.keys(settings).map(setting => {
     const [type, value] = settings[setting]
-    if (type === 'keyword' || type.includes('keyword') || setting === ':replace') {
+    if (
+      type === 'keyword' ||
+      type.includes('keyword') ||
+      type.includes('tuple') && type.includes('list') ||
+      setting === ':replace'
+    ) {
       return { 'tuple': [setting, wrapValues(value, currentState)] }
     } else if (type === 'atom' && value.length > 0) {
       return { 'tuple': [setting, `:${value}`] }
@@ -226,8 +236,8 @@ const wrapValues = (settings, currentState) => {
       return typeof value === 'string'
         ? { 'tuple': [setting, value] }
         : { 'tuple': [setting, { 'tuple': value }] }
-    } else if (type.includes('tuple') && type.includes('list')) {
-      return { 'tuple': [setting, value] }
+    } else if (type === 'reversed_tuple') {
+      return { 'tuple': [value, setting] }
     } else if (type === 'map') {
       const mapValue = Object.keys(value).reduce((acc, key) => {
         acc[key] = setting === ':match_actor' ? value[key] : value[key][1]

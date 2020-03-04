@@ -31,6 +31,9 @@
     <el-form ref="feed" :model="feedData" :label-width="labelWidth">
       <setting :setting-group="feed" :data="feedData"/>
     </el-form>
+    <el-form ref="streamer" :model="streamerData" :label-width="labelWidth">
+      <setting :setting-group="streamer" :data="streamerData"/>
+    </el-form>
     <div class="submit-button-container">
       <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
     </div>
@@ -111,6 +114,12 @@ export default {
     },
     scheduledActivityData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.ScheduledActivity']) || {}
+    },
+    streamer() {
+      return this.$store.state.settings.description.find(setting => setting.key === ':streamer')
+    },
+    streamerData() {
+      return _.get(this.settings.settings, [':pleroma', ':streamer']) || {}
     },
     uriSchemes() {
       return this.settings.description.find(setting => setting.key === ':uri_schemes')

@@ -8,6 +8,14 @@
       </div>
       <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
     </div>
+    <div v-if="setting.key === ':crontab'">
+      <div v-for="element in data" :key="getId(element)" class="setting-input">
+        <el-input :value="getValue(element)" placeholder="worker" class="crontab-value-input" @input="parseEditableKeyword($event, 'value', element)"/> :
+        <el-input :value="getKey(element)" placeholder="crontab format" class="crontab-name-input" @input="parseEditableKeyword($event, 'key', element)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" class="icon-minus-button" icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
+      </div>
+      <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
+    </div>
     <div v-else-if="editableKeywordWithInteger">
       <div v-for="element in data" :key="getId(element)" class="setting-input">
         <el-input :value="getKey(element)" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', element)"/> :
@@ -96,15 +104,24 @@ export default {
       this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
     updateSetting(value, group, key, input, type) {
-      const updatedSettings = type !== 'map'
-        ? value.reduce((acc, element) => {
-          return { ...acc, [Object.keys(element)[0]]: ['list', Object.values(element)[0].value] }
-        }, {})
-        : value.reduce((acc, element) => {
-          return { ...acc, [Object.keys(element)[0]]: Object.values(element)[0].value }
-        }, {})
+      const updatedSettings = this.wrapUpdatedSettings(value, input, type)
       this.$store.dispatch('UpdateSettings', { group, key, input, value: updatedSettings, type })
       this.$store.dispatch('UpdateState', { group, key, input, value })
+    },
+    wrapUpdatedSettings(value, input, type) {
+      if (type === 'map') {
+        return value.reduce((acc, element) => {
+          return { ...acc, [Object.keys(element)[0]]: Object.values(element)[0].value }
+        }, {})
+      } else if (input === ':crontab') {
+        return value.reduce((acc, element) => {
+          return { ...acc, [Object.values(element)[0].value]: ['reversed_tuple', Object.keys(element)[0]] }
+        }, {})
+      } else {
+        return value.reduce((acc, element) => {
+          return { ...acc, [Object.keys(element)[0]]: ['list', Object.values(element)[0].value] }
+        }, {})
+      }
     }
   }
 }

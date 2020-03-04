@@ -223,7 +223,11 @@ export default {
       }
     },
     keywordData() {
-      return Array.isArray(this.data) ? this.data : []
+      if (this.setting.key === ':crontab') {
+        return this.data[this.setting.key] || []
+      } else {
+        return Array.isArray(this.data) ? this.data : []
+      }
     },
     rewritePolicyValue() {
       return typeof this.data[this.setting.key] === 'string' ? [this.data[this.setting.key]] : this.data[this.setting.key]
@@ -238,9 +242,10 @@ export default {
   methods: {
     editableKeyword(key, type) {
       return key === ':replace' ||
-        (Array.isArray(type) && type.includes('keyword') && type.includes('integer')) ||
         type === 'map' ||
-        (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
+        (Array.isArray(type) && type.includes('keyword') && type.includes('integer')) ||
+        (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1) ||
+        (Array.isArray(type) && type.includes('list') && type.includes('tuple'))
     },
     getFormattedDescription(desc) {
       return marked(desc)
