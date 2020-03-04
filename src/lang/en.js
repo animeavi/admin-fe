@@ -244,7 +244,9 @@ export default {
     statuses: 'Statuses by instance',
     instanceFilter: 'Instance filter',
     loadMore: 'Load more',
-    noInstances: 'No other instances found'
+    noInstances: 'No other instances found',
+    onlyLocalStatuses: 'Show only local statuses',
+    showPrivateStatuses: 'Show private statuses'
   },
   userProfile: {
     tags: 'Tags',
@@ -255,7 +257,6 @@ export default {
     localUppercase: 'Local',
     nickname: 'Nickname',
     recentStatuses: 'Recent Statuses',
-    showPrivateStatuses: 'Show private statuses',
     roles: 'Roles',
     activeUppercase: 'Active',
     active: 'active',
