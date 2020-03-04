@@ -104,7 +104,7 @@ export default {
       this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
     updateSetting(value, group, key, input, type) {
-      const updatedSettings = this.wrapUpdatedSettings(value, group, key, input, type)
+      const updatedSettings = this.wrapUpdatedSettings(value, input, type)
       this.$store.dispatch('UpdateSettings', { group, key, input, value: updatedSettings, type })
       this.$store.dispatch('UpdateState', { group, key, input, value })
     },
