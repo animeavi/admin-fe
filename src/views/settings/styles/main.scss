@@ -14,6 +14,15 @@
     font-family: monospace;
     padding: 0 3px 0 3px;
   }
+  .crontab-name-input {
+    width: 30%;
+    margin-left: 8px;
+    margin-right: 10px
+  }
+  .crontab-value-input {
+    width: 70%;
+    margin-right: 8px
+  }
   .delete-setting-button {
     margin-left: 5px;
   }
@@ -324,6 +333,7 @@
     margin-left: 8px;
     margin-right: 10px
   }
+
 
   @media only screen and (min-width: 1824px) {
     .submit-button-container {
