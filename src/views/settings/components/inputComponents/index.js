@@ -1,5 +1,6 @@
 export { default as AutoLinkerInput } from './AutoLinkerInput'
 export { default as EditableKeywordInput } from './EditableKeywordInput'
+export { default as CrontabInput } from './CrontabInput'
 export { default as IconsInput } from './IconsInput'
 export { default as MascotsInput } from './MascotsInput'
 export { default as MultipleSelect } from './MultipleSelect'

@@ -81,13 +81,13 @@ export const parseTuples = (tuples, key) => {
         return [...acc, { [mascot.tuple[0]]: { ...mascot.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
       }, [])
     } else if (
-      item.tuple[0] === ':groups' ||
-      item.tuple[0] === ':replace' ||
-      item.tuple[0] === ':retries' ||
-      item.tuple[0] === ':crontab'
-    ) {
+      item.tuple[0] === ':groups' || item.tuple[0] === ':replace' || item.tuple[0] === ':retries') {
       accum[item.tuple[0]] = item.tuple[1].reduce((acc, group) => {
         return [...acc, { [group.tuple[0]]: { value: group.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
+      }, [])
+    } else if (item.tuple[0] === ':crontab') {
+      accum[item.tuple[0]] = item.tuple[1].reduce((acc, group) => {
+        return [...acc, { [group.tuple[1]]: group.tuple[0] }]
       }, [])
     } else if (item.tuple[0] === ':match_actor') {
       accum[item.tuple[0]] = Object.keys(item.tuple[1]).reduce((acc, regex) => {
