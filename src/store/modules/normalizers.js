@@ -87,8 +87,8 @@ export const parseTuples = (tuples, key) => {
       }, [])
     } else if (item.tuple[0] === ':crontab') {
       accum[item.tuple[0]] = item.tuple[1].reduce((acc, group) => {
-        return [...acc, { [group.tuple[1]]: group.tuple[0] }]
-      }, [])
+        return { ...acc, [group.tuple[1]]: group.tuple[0] }
+      }, {})
     } else if (item.tuple[0] === ':match_actor') {
       accum[item.tuple[0]] = Object.keys(item.tuple[1]).reduce((acc, regex) => {
         return [...acc, { [regex]: { value: item.tuple[1][regex], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
