@@ -1,16 +1,13 @@
 <template>
-  <div class="crontab">
-    <el-form-item v-for="worker in workers" :key="worker" :label="worker" :label-width="labelWidth" class="crontab-container">
-      <span slot="label" class="crontab-label">
-        {{ worker }}
-      </span>
+  <el-form :label-width="labelWidth" :label-position="isMobile ? 'top' : 'right'" class="crontab">
+    <el-form-item v-for="worker in workers" :key="worker" :label="worker" class="crontab-container">
       <el-input
         :value="data[worker]"
         :placeholder="getSuggestion(worker) || null"
-        class="input setting-input crontab-input"
+        class="input setting-input"
         @input="update($event, worker)"/>
     </el-form-item>
-  </div>
+  </el-form>
 </template>
 
 <script>
@@ -48,7 +45,7 @@ export default {
     },
     labelWidth() {
       if (this.isMobile) {
-        return '120px'
+        return '100%'
       } else {
         return '380px'
       }
