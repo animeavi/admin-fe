@@ -84,11 +84,12 @@
         </el-input>
         <!-- special inputs -->
         <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :data="data" :setting-group="settingGroup" :setting="setting"/>
-        <mascots-input v-if="setting.key === ':mascots'" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
+        <crontab-input v-if="setting.key === ':crontab'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
         <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
         <icons-input v-if="setting.key === ':icons'" :data="iconsData" :setting-group="settingGroup" :setting="setting"/>
-        <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
+        <mascots-input v-if="setting.key === ':mascots'" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
         <multiple-select v-if="setting.key === ':backends' || setting.key === ':args'" :data="data" :setting-group="settingGroup" :setting="setting"/>
+        <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
         <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
         <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <!-------------------->
@@ -106,7 +107,7 @@
 
 <script>
 import i18n from '@/lang'
-import { AutoLinkerInput, EditableKeywordInput, IconsInput, MascotsInput, MultipleSelect, ProxyUrlInput, PruneInput, RateLimitInput } from './inputComponents'
+import { AutoLinkerInput, CrontabInput, EditableKeywordInput, IconsInput, MascotsInput, MultipleSelect, ProxyUrlInput, PruneInput, RateLimitInput } from './inputComponents'
 import { processNested } from '@/store/modules/normalizers'
 import _ from 'lodash'
 import marked from 'marked'
@@ -115,6 +116,7 @@ export default {
   name: 'Inputs',
   components: {
     AutoLinkerInput,
+    CrontabInput,
     EditableKeywordInput,
     IconsInput,
     MascotsInput,
@@ -223,11 +225,7 @@ export default {
       }
     },
     keywordData() {
-      if (this.setting.key === ':crontab') {
-        return this.data[this.setting.key] || []
-      } else {
-        return Array.isArray(this.data) ? this.data : []
-      }
+      return Array.isArray(this.data) ? this.data : []
     },
     rewritePolicyValue() {
       return typeof this.data[this.setting.key] === 'string' ? [this.data[this.setting.key]] : this.data[this.setting.key]
@@ -244,8 +242,7 @@ export default {
       return key === ':replace' ||
         type === 'map' ||
         (Array.isArray(type) && type.includes('keyword') && type.includes('integer')) ||
-        (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1) ||
-        (Array.isArray(type) && type.includes('list') && type.includes('tuple'))
+        (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
     },
     getFormattedDescription(desc) {
       return marked(desc)
