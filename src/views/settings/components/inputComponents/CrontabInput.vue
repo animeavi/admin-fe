@@ -59,12 +59,18 @@ export default {
       return this.setting.suggestions.find(suggestion => suggestion[1] === worker)[0]
     },
     update(value, worker) {
-      const updatedValue = {
-        ...this.$store.state.settings.settings[this.settingGroup.group][this.settingGroup.key][this.setting.key],
-        [worker]: value
-      }
+      const currentValue = this.$store.state.settings.settings[this.settingGroup.group][this.settingGroup.key][this.setting.key]
+      const updatedValue = { ...currentValue, [worker]: value }
+      const updatedValueWithType = Object.keys(currentValue).reduce((acc, key) => {
+        if (key === worker) {
+          return { ...acc, [key]: ['reversed_tuple', value] }
+        } else {
+          return { ...acc, [key]: ['reversed_tuple', currentValue[key]] }
+        }
+      }, {})
+
       this.$store.dispatch('UpdateSettings',
-        { group: this.settingGroup.group, key: this.settingGroup.key, input: this.setting.key, value: updatedValue, type: 'reversed_tuple' }
+        { group: this.settingGroup.group, key: this.settingGroup.key, input: this.setting.key, value: updatedValueWithType, type: this.setting.type }
       )
       this.$store.dispatch('UpdateState',
         { group: this.settingGroup.group, key: this.settingGroup.key, input: this.setting.key, value: updatedValue }
