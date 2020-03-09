@@ -3,6 +3,7 @@ import _ from 'lodash'
 export const tabs = {
   'activity-pub': {
     label: 'settings.activityPub',
+    settings: [':activitypub', ':user'],
     activitypub: () => this.settings.description.find(setting => setting.key === ':activitypub'),
     activitypubData: () => _.get(this.settings.settings, [':pleroma', ':activitypub']) || {},
     user: () => this.settings.description.find(setting => setting.key === ':user'),

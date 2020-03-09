@@ -256,21 +256,21 @@ const wrapValues = (settings, currentState) => {
 }
 
 export const formSearchObject = description => {
-  const parseNestedSettings = (description, key) => description.reduce((acc, setting) => {
+  const parseNestedSettings = (description, label, key) => description.reduce((acc, setting) => {
     const searchArray = _.compact([setting.key, setting.label, setting.description]).map(el => el.toLowerCase())
     if (setting.children) {
-      const updatedAcc = [...acc, { key: setting.label, group: key, search: searchArray }]
-      return [...updatedAcc, ...parseNestedSettings(setting.children, setting.label)]
+      const updatedAcc = [...acc, { label: setting.label, key: setting.key, groupKey: key, groupLabel: label, search: searchArray }]
+      return [...updatedAcc, ...parseNestedSettings(setting.children, setting.label, setting.key)]
     }
-    return [...acc, { key: [setting.label], group: key, search: searchArray }]
+    return [...acc, { label: setting.label, key: setting.label, groupKey: key, groupLabel: label, search: searchArray }]
   }, [])
 
   return description.reduce((acc, setting) => {
     const searchArray = _.compact([setting.key, setting.label, setting.description]).map(el => el.toLowerCase())
     if (setting.children) {
-      const updatedAcc = [...acc, { key: setting.label, group: setting.label, search: searchArray }]
-      return [...updatedAcc, ...parseNestedSettings(setting.children, setting.label)]
+      const updatedAcc = [...acc, { label: setting.label, key: setting.key, groupKey: setting.key, groupLabel: setting.label, search: searchArray }]
+      return [...updatedAcc, ...parseNestedSettings(setting.children, setting.label, setting.key)]
     }
-    return [...acc, { key: setting.label, group: setting.label, search: searchArray }]
+    return [...acc, { label: setting.label, key: setting.label, groupKey: setting.key, groupLabel: setting.label, search: searchArray }]
   }, [])
 }

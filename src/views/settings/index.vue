@@ -223,12 +223,16 @@ export default {
         message: i18n.t('settings.restartSuccess')
       })
     },
-    handleSearchSelect() {
+    handleSearchSelect(selectedValue) {
+      const tab = Object.keys(this.tabs).find(tab => {
+        return this.tabs[tab].settings.includes(selectedValue.group)
+      })
+      this.$store.dispatch('SetActiveTab', tab)
     },
     querySearch(queryString, cb) {
       const results = this.searchData.filter(searchObj => searchObj.search.find(el => el.includes(queryString.toLowerCase())))
         .map(searchObj => {
-          return { value: `${searchObj.key} in ${searchObj.group}` }
+          return { value: `${searchObj.label} in ${searchObj.groupLabel}`, group: searchObj.groupKey }
         })
       cb(results)
     }
