@@ -226,9 +226,10 @@ export default {
     handleSearchSelect() {
     },
     querySearch(queryString, cb) {
-      const results = Object.keys(this.searchData)
-        .filter(key => this.searchData[key].find(el => el.includes(queryString.toLowerCase())))
-        .map(key => { return { value: this.searchData[key][1] } })
+      const results = this.searchData.filter(searchObj => searchObj.search.find(el => el.includes(queryString.toLowerCase())))
+        .map(searchObj => {
+          return { value: `${searchObj.key} in ${searchObj.group}` }
+        })
       cb(results)
     }
   }

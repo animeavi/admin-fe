@@ -256,12 +256,21 @@ const wrapValues = (settings, currentState) => {
 }
 
 export const formSearchObject = description => {
+  const parseNestedSettings = (description, key) => description.reduce((acc, setting) => {
+    const searchArray = _.compact([setting.key, setting.label, setting.description]).map(el => el.toLowerCase())
+    if (setting.children) {
+      const updatedAcc = [...acc, { key: setting.label, group: key, search: searchArray }]
+      return [...updatedAcc, ...parseNestedSettings(setting.children, setting.label)]
+    }
+    return [...acc, { key: [setting.label], group: key, search: searchArray }]
+  }, [])
+
   return description.reduce((acc, setting) => {
     const searchArray = _.compact([setting.key, setting.label, setting.description]).map(el => el.toLowerCase())
     if (setting.children) {
-      const updatedAcc = { ...acc, [setting.key]: searchArray }
-      return { ...updatedAcc, ...formSearchObject(setting.children) }
+      const updatedAcc = [...acc, { key: setting.label, group: setting.label, search: searchArray }]
+      return [...updatedAcc, ...parseNestedSettings(setting.children, setting.label)]
     }
-    return { ...acc, [setting.key]: searchArray }
-  }, {})
+    return [...acc, { key: setting.label, group: setting.label, search: searchArray }]
+  }, [])
 }
