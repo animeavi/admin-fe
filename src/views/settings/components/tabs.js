@@ -1,69 +1,82 @@
-import _ from 'lodash'
-
 export const tabs = {
   'activity-pub': {
     label: 'settings.activityPub',
-    settings: [':activitypub', ':user'],
-    activitypub: () => this.settings.description.find(setting => setting.key === ':activitypub'),
-    activitypubData: () => _.get(this.settings.settings, [':pleroma', ':activitypub']) || {},
-    user: () => this.settings.description.find(setting => setting.key === ':user'),
-    userData: () => _.get(this.settings.settings, [':pleroma', ':user']) || {}
+    settings: [':activitypub', ':user']
   },
   'authentication': {
-    label: 'settings.auth'
+    label: 'settings.auth',
+    settings: [':auth', ':ldap', ':oauth2', 'Pleroma.Web.Auth.Authenticator']
   },
   'auto-linker': {
-    label: 'settings.autoLinker'
+    label: 'settings.autoLinker',
+    settings: [':opts']
   },
   'esshd': {
-    label: 'settings.esshd'
+    label: 'settings.esshd',
+    settings: [':esshd']
   },
   'captcha': {
-    label: 'settings.captcha'
+    label: 'settings.captcha',
+    settings: ['Pleroma.Captcha', 'Pleroma.Captcha.Kocaptcha']
   },
   'frontend': {
-    label: 'settings.frontend'
+    label: 'settings.frontend',
+    settings: [':assets', ':chat', ':emoji', ':frontend_configurations', ':markup']
   },
   'gopher': {
-    label: 'settings.gopher'
+    label: 'settings.gopher',
+    settings: [':gopher']
   },
   'http': {
-    label: 'settings.http'
+    label: 'settings.http',
+    settings: [':cors_plug', ':http', ':http_security', ':http_signatures', ':tesla', ':web_cache_ttl']
   },
   'instance': {
-    label: 'settings.instance'
+    label: 'settings.instance',
+    settings: [':admin_token', ':fetch_initial_posts', ':instance', ':manifest', 'Pleroma.User', 'Pleroma.ScheduledActivity']
   },
   'job-queue': {
-    label: 'settings.jobQueue'
+    label: 'settings.jobQueue',
+    settings: ['Pleroma.ActivityExpiration', 'Oban', ':workers']
   },
   'logger': {
-    label: 'settings.logger'
+    label: 'settings.logger',
+    settings: [':console', ':ex_syslogger', ':quack', ':logger']
   },
   'mailer': {
-    label: 'settings.mailer'
+    label: 'settings.mailer',
+    settings: [':email_notifications', 'Pleroma.Emails.Mailer', 'Pleroma.Emails.UserEmail']
   },
   'media-proxy': {
-    label: 'settings.mediaProxy'
+    label: 'settings.mediaProxy',
+    settings: [':media_proxy']
   },
   'metadata': {
-    label: 'settings.metadata'
+    label: 'settings.metadata',
+    settings: ['Pleroma.Web.Metadata', ':rich_media']
   },
   'mrf': {
-    label: 'settings.mrf'
+    label: 'settings.mrf',
+    settings: [':mrf_simple', ':mrf_rejectnonpublic', ':mrf_hellthread', ':mrf_keyword', ':mrf_subchain', ':mrf_mention', ':mrf_normalize_markup', ':mrf_vocabulary']
   },
   'rate-limiters': {
-    label: 'settings.rateLimiters'
+    label: 'settings.rateLimiters',
+    settings: [':rate_limit']
   },
   'relays': {
-    label: 'settings.relays'
+    label: 'settings.relays',
+    settings: []
   },
   'web-push': {
-    label: 'settings.webPush'
+    label: 'settings.webPush',
+    settings: [':vapid_details']
   },
   'upload': {
-    label: 'settings.upload'
+    label: 'settings.upload',
+    settings: ['Pleroma.Upload.Filter.AnonymizeFilename', 'Pleroma.Upload.Filter.Mogrify', 'Pleroma.Uploaders.S3', 'Pleroma.Uploaders.Local', 'Pleroma.Upload']
   },
   'other': {
-    label: 'settings.other'
+    label: 'settings.other',
+    settings: [':mime', 'Pleroma.Plugs.RemoteIp']
   }
 }
