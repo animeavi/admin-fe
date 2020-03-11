@@ -63,6 +63,9 @@ export const parseNonTuples = (key, value) => {
     return updated
   }
   if (key === ':args') {
+    if (typeof value === 'string') {
+      return [value]
+    }
     const index = value.findIndex(el => typeof el === 'object' && el.tuple.includes('implode'))
     const updated = value.map((el, i) => i === index ? 'implode' : el)
     return updated
@@ -80,8 +83,8 @@ export const parseTuples = (tuples, key) => {
       accum[item.tuple[0]] = item.tuple[1].reduce((acc, mascot) => {
         return [...acc, { [mascot.tuple[0]]: { ...mascot.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
       }, [])
-    } else if (
-      item.tuple[0] === ':groups' || item.tuple[0] === ':replace' || item.tuple[0] === ':retries') {
+    } else if (Array.isArray(item.tuple[1]) &&
+      (item.tuple[0] === ':groups' || item.tuple[0] === ':replace' || item.tuple[0] === ':retries')) {
       accum[item.tuple[0]] = item.tuple[1].reduce((acc, group) => {
         return [...acc, { [group.tuple[0]]: { value: group.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
       }, [])
