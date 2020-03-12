@@ -1,5 +1,5 @@
 <template>
-  <div class="rate-limit-container">
+  <div :data-search="setting.key" class="rate-limit-container">
     <div v-if="!rateLimitAuthUsers">
       <el-input
         :value="rateLimitAllUsers[0]"

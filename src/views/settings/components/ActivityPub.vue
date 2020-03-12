@@ -1,10 +1,10 @@
 <template>
   <div v-if="!loading" class="form-container">
-    <el-form ref="activitypubData" :model="activitypubData" :label-width="labelWidth">
+    <el-form ref="activitypubData" :model="activitypubData" :label-width="labelWidth" data-search=":activitypub">
       <setting :setting-group="activitypub" :data="activitypubData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="userData" :model="userData" :label-width="labelWidth">
+    <el-form ref="userData" :model="userData" :label-width="labelWidth" data-search=":user">
       <setting :setting-group="user" :data="userData"/>
     </el-form>
     <div class="submit-button-container">

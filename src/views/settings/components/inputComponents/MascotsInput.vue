@@ -1,5 +1,5 @@
 <template>
-  <div class="mascot-container">
+  <div :data-search="setting.key" class="mascot-container">
     <div v-for="mascot in data" :key="getId(mascot)" class="mascot">
       <el-form-item label="Name" label-width="85px" class="mascot-form-item">
         <div class="mascot-name-container">

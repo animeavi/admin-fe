@@ -1,7 +1,11 @@
 <template>
   <div class="input-container">
     <div v-if="setting.type === 'keyword'" class="keyword-container">
-      <el-form-item :label-width="customLabelWidth" :class="labelClass" :style="`margin-left:${margin}px;margin-bottom:0`" >
+      <el-form-item
+        :label-width="customLabelWidth"
+        :class="labelClass"
+        :style="`margin-left:${margin}px;margin-bottom:0`"
+        :data-search="setting.key">
         <span slot="label">
           {{ setting.label }}
           <el-tooltip v-if="canBeDeleted && isDesktop" :content="$t('settings.removeFromDB')" placement="bottom-end">
@@ -33,11 +37,13 @@
           v-if="setting.type === 'string' || (setting.type.includes('string') && setting.type.includes('atom'))"
           :value="inputValue"
           :placeholder="setting.suggestions ? setting.suggestions[0] : null"
+          :data-search="setting.key"
           class="input"
           @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
         <el-switch
           v-if="setting.type === 'boolean'"
           :value="inputValue"
+          :data-search="setting.key"
           class="switch-input"
           @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
         <el-input-number
@@ -46,10 +52,12 @@
           :placeholder="setting.suggestions ? setting.suggestions[0].toString() : null"
           :min="0"
           :size="isDesktop ? 'large' : 'medium'"
+          :data-search="setting.key"
           @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
         <el-select
           v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown'))"
           :value="inputValue === false ? 'false' : inputValue"
+          :data-search="setting.key"
           clearable
           class="input"
           @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
@@ -61,6 +69,7 @@
         <el-select
           v-if="renderMultipleSelect(setting.type)"
           :value="setting.key === ':rewrite_policy' ? rewritePolicyValue : inputValue"
+          :data-search="setting.key"
           multiple
           filterable
           allow-create
@@ -71,6 +80,7 @@
         <el-input
           v-if="setting.key === ':ip'"
           :value="inputValue"
+          :data-search="setting.key"
           placeholder="xxx.xxx.xxx.xx"
           class="input"
           @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
@@ -78,6 +88,7 @@
           v-if="setting.type === 'atom'"
           :value="inputValue"
           :placeholder="setting.suggestions[0] ? setting.suggestions[0].substr(1) : ''"
+          :data-search="setting.key"
           class="input"
           @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
           <template slot="prepend">:</template>

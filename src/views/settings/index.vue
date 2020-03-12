@@ -223,16 +223,18 @@ export default {
         message: i18n.t('settings.restartSuccess')
       })
     },
-    handleSearchSelect(selectedValue) {
+    async handleSearchSelect(selectedValue) {
       const tab = Object.keys(this.tabs).find(tab => {
         return this.tabs[tab].settings.includes(selectedValue.group)
       })
-      this.$store.dispatch('SetActiveTab', tab)
+      await this.$store.dispatch('SetActiveTab', tab)
+      const selectedSetting = document.querySelector(`[data-search="${selectedValue.key}"]`)
+      selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
     },
     querySearch(queryString, cb) {
       const results = this.searchData.filter(searchObj => searchObj.search.find(el => el.includes(queryString.toLowerCase())))
         .map(searchObj => {
-          return { value: `${searchObj.label} in ${searchObj.groupLabel}`, group: searchObj.groupKey }
+          return { value: `${searchObj.label} in ${searchObj.groupLabel}`, group: searchObj.groupKey, key: searchObj.key }
         })
       cb(results)
     }

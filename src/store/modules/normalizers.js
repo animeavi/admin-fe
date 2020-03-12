@@ -262,7 +262,7 @@ export const formSearchObject = description => {
       const updatedAcc = [...acc, { label: setting.label, key: setting.key, groupKey: key, groupLabel: label, search: searchArray }]
       return [...updatedAcc, ...parseNestedSettings(setting.children, setting.label, setting.key)]
     }
-    return [...acc, { label: setting.label, key: setting.label, groupKey: key, groupLabel: label, search: searchArray }]
+    return [...acc, { label: setting.label, key: setting.key, groupKey: key, groupLabel: label, search: searchArray }]
   }, [])
 
   return description.reduce((acc, setting) => {
@@ -271,6 +271,6 @@ export const formSearchObject = description => {
       const updatedAcc = [...acc, { label: setting.label, key: setting.key, groupKey: setting.key, groupLabel: setting.label, search: searchArray }]
       return [...updatedAcc, ...parseNestedSettings(setting.children, setting.label, setting.key)]
     }
-    return [...acc, { label: setting.label, key: setting.label, groupKey: setting.key, groupLabel: setting.label, search: searchArray }]
+    return [...acc, { label: setting.label, key: setting.key, groupKey: setting.key, groupLabel: setting.label, search: searchArray }]
   }, [])
 }

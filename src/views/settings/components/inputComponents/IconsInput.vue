@@ -1,5 +1,5 @@
 <template>
-  <div class="mascot-container">
+  <div :data-search="setting.key" class="mascot-container">
     <div v-for="(icon, index) in data" :key="index" class="mascot">
       <div class="icons-container">
         <div class="icon-container">
