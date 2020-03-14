@@ -3,7 +3,7 @@
     <el-select
       v-if="setting.key === ':backends'"
       :value="data.value"
-      :data-search="setting.key"
+      :data-search="setting.key || setting.group"
       multiple
       filterable
       allow-create
@@ -16,7 +16,7 @@
     <el-select
       v-if="setting.key === ':args'"
       :value="data[setting.key]"
-      :data-search="setting.key"
+      :data-search="setting.key || setting.group"
       multiple
       filterable
       allow-create

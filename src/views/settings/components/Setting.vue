@@ -1,6 +1,6 @@
 <template>
   <div v-if="!loading">
-    <el-form-item v-if="settingGroup.description" class="description-container">
+    <el-form-item v-if="settingGroup.description" :data-search="settingGroup.key || settingGroup.group" class="description-container">
       <span class="description" v-html="getFormattedDescription(settingGroup.description)"/>
     </el-form-item>
     <div v-if="settingGroup.key === 'Pleroma.Emails.Mailer'">
@@ -39,7 +39,7 @@
           </div>
           <div v-else>
             <div class="input-container">
-              <el-form-item class="grouped-settings-header">
+              <el-form-item :data-search="setting.key || setting.group" class="grouped-settings-header">
                 <span slot="label">
                   <el-tooltip v-if="isDesktop && canBeDeleted(setting.key)" :content="$t('settings.removeFromDB')" placement="bottom-end">
                     <el-button icon="el-icon-delete" circle size="mini" style="margin-left:5px" @click="removeSetting(setting.key)"/>

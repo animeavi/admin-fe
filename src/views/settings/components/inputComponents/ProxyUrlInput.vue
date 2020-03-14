@@ -1,5 +1,5 @@
 <template>
-  <div :data-search="setting.key" class="proxy-url-input">
+  <div :data-search="setting.key || setting.group" class="proxy-url-input">
     <el-input
       :value="proxyUrlData.host"
       placeholder="host (e.g. localhost or 127.0.0.1)"

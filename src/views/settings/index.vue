@@ -27,6 +27,7 @@
             v-model="searchQuery"
             :fetch-suggestions="querySearch"
             :trigger-on-focus="false"
+            clearable
             placeholder="Search"
             prefix-icon="el-icon-search"
             class="settings-search-input"
@@ -229,7 +230,9 @@ export default {
       })
       await this.$store.dispatch('SetActiveTab', tab)
       const selectedSetting = document.querySelector(`[data-search="${selectedValue.key}"]`)
-      selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
     },
     querySearch(queryString, cb) {
       const results = this.searchData.filter(searchObj => searchObj.search.find(el => el.includes(queryString.toLowerCase())))
