@@ -44,6 +44,9 @@ export default {
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
     },
+    isMobile() {
+      return this.$store.state.app.device === 'mobile'
+    },
     shortcodePresent() {
       return this.shortcode.trim() === ''
     }

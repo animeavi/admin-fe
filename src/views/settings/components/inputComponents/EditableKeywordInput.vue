@@ -96,15 +96,18 @@ export default {
       this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
     updateSetting(value, group, key, input, type) {
-      const updatedSettings = type !== 'map'
-        ? value.reduce((acc, element) => {
-          return { ...acc, [Object.keys(element)[0]]: ['list', Object.values(element)[0].value] }
-        }, {})
-        : value.reduce((acc, element) => {
-          return { ...acc, [Object.keys(element)[0]]: Object.values(element)[0].value }
-        }, {})
+      const updatedSettings = this.wrapUpdatedSettings(value, input, type)
       this.$store.dispatch('UpdateSettings', { group, key, input, value: updatedSettings, type })
       this.$store.dispatch('UpdateState', { group, key, input, value })
+    },
+    wrapUpdatedSettings(value, input, type) {
+      return type === 'map'
+        ? value.reduce((acc, element) => {
+          return { ...acc, [Object.keys(element)[0]]: Object.values(element)[0].value }
+        }, {})
+        : value.reduce((acc, element) => {
+          return { ...acc, [Object.keys(element)[0]]: ['list', Object.values(element)[0].value] }
+        }, {})
     }
   }
 }

@@ -85,7 +85,7 @@
         sortable/>
       <el-table-column
         :label="$t('invites.token')"
-        :min-width="isDesktop ? 350 : 125"
+        :min-width="isDesktop ? 320 : 120"
         prop="token"/>
       <el-table-column
         v-if="isDesktop"
@@ -119,7 +119,9 @@
         <template slot-scope="scope">
           <el-tag
             :type="scope.row.used ? 'danger' : 'success'"
-            disable-transitions>{{ scope.row.used ? $t('invites.used') : $t('invites.active') }}</el-tag>
+            disable-transitions>
+            {{ scope.row.used ? $t('invites.used') : $t('invites.active') }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -268,9 +270,8 @@ export default {
     margin: 0 0 10px 0;
   }
 }
-@media
-only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px) {
+
+@media only screen and (max-width:480px) {
   .invites-container {
     .actions-container {
       display: flex;
@@ -278,6 +279,9 @@ only screen and (max-width: 760px),
       flex-direction: column;
       align-items: center;
       margin: 15px 10px 7px 10px;
+    }
+    .cell {
+      padding: 0;
     }
     .create-invite-token {
       width: 100%;
@@ -296,7 +300,9 @@ only screen and (max-width: 760px),
     }
     .invite-token-table {
       width: 100%;
-      margin: 0;
+      margin: 0 5px;
+      font-size: 12px;
+      font-weight: 500;
     }
     .invite-via-email {
       width: 100%;
@@ -307,6 +313,11 @@ only screen and (max-width: 760px),
     }
     .info {
       margin: 0 0 10px 5px;
+    }
+    th {
+      .cell {
+        padding: 0;
+      }
     }
   }
   .create-invite-token {

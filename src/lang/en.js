@@ -193,7 +193,7 @@ export default {
     deleteAccount: 'Delete Account',
     deleteAccounts: 'Delete Accounts',
     forceNsfw: 'Force posts to be NSFW',
-    stripMedia: 'Force posts not to have media',
+    stripMedia: 'Force posts to not have media',
     forceUnlisted: 'Force posts to be unlisted',
     sandbox: 'Force posts to be followers-only',
     disableRemoteSubscription: 'Disallow following user from remote instances',
@@ -244,7 +244,9 @@ export default {
     statuses: 'Statuses by instance',
     instanceFilter: 'Instance filter',
     loadMore: 'Load more',
-    noInstances: 'No other instances found'
+    noInstances: 'No other instances found',
+    onlyLocalStatuses: 'Show only local statuses',
+    showPrivateStatuses: 'Show private statuses'
   },
   userProfile: {
     tags: 'Tags',
@@ -254,8 +256,7 @@ export default {
     external: 'external',
     localUppercase: 'Local',
     nickname: 'Nickname',
-    recentStatuses: 'Recent Statues',
-    showPrivateStatuses: 'Show private statuses',
+    recentStatuses: 'Recent Statuses',
     roles: 'Roles',
     activeUppercase: 'Active',
     active: 'active',
@@ -273,7 +274,6 @@ export default {
   },
   reports: {
     reports: 'Reports',
-    groupedReports: 'Grouped reports',
     reply: 'Reply',
     from: 'From',
     showNotes: 'Show notes',

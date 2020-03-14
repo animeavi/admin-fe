@@ -6,31 +6,40 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
-### Changed
+### Added
 
-- **breaking** PleromaFE login feature relies on `admin` scope presence in PleromaFE token (older versions of PleromaFE don't support it)
-- Moves emoji pack configuration from the main menu to settings tab, redesigns it and fixes bugs
-- `mailerEnabled` must be set to `true` in order to require password reset (password reset currently only works via email)
-- Remove fetching initial data for configuring server settings
-- Actions in users module (ActivateUsers, AddRight, DeactivateUsers, DeleteRight, DeleteUsers) now accept an array of users instead of one user
-- Leave dropdown menu open after clicking an action
-- Move current try/catch error handling from view files to module, add it where necessary
-- Display checkboxes in status card and fetch statuses only when status card was rendered from Statuses by instance page
-- Move statuses by instance state from local state to store state
-- Pass user's ID to actions that moderate users when action is called from user's profile page
+- Ability to see local statuses in Statuses by instance section
+- Ability to configure Oban.Cron settings and settings for notifications streamer
+
+### Fixed
+
+- Fix parsing tuples in Pleroma.Upload.Filter.Mogrify and Pleroma.Emails.Mailer settings
+
+## [2.0] - 2020-02-27
 
 ### Added
 
 - Optimistic update for actions in users module and fetching users after api function finished its execution
 - Relay management
 - Ability to fetch all statuses from a given instance
-- Grouped reports: now you can view reports, which are grouped by status (pagination is not implemented yet, though)
 - Ability to confirm users' emails and resend confirmation emails
 - Report notes
 - Ability to moderate users on the statuses page
 - Ability to moderate user on the user's page
+- Ability to remove setting's updated value and set it back to initial value
 - Ability to restart an application when settings that require instance reboot were changed
-- Mobile UI for Settings tab
+- Mobile and Tablet UI for all sections
+
+### Changed
+
+- **breaking** PleromaFE login feature relies on `admin` scope presence in PleromaFE token (older versions of PleromaFE don't support it)
+- `mailerEnabled` must be set to `true` in order to require password reset (password reset currently only works via email)
+- Render inputs for configuring settings based on description that comes from the BE
+- Remove fetching initial data for configuring server settings
+- Actions in users module (ActivateUsers, AddRight, DeactivateUsers, DeleteRight, DeleteUsers) now accept an array of users instead of one user
+- Leave dropdown menu open after clicking an action
+- Display checkboxes in status card and fetch statuses only when status card was rendered from Statuses by instance page
+- Move statuses by instance state from local state to store state
 
 ### Fixed
 
@@ -39,6 +48,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove duplicated success message
 - Fix styles for Statuses by instance page
 - Fix styles for Reports section
+- Fix listing remote emoji
 
 ## [1.2.0] - 2019-09-27
 

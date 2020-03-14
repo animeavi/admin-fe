@@ -1,47 +1,40 @@
 <template>
   <div v-if="!loading" class="moderation-log-container">
     <h1>{{ $t('moderationLog.moderationLog') }}</h1>
-    <el-row type="flex" class="row-bg" justify="space-between">
-      <el-col :span="9">
-        <el-select
-          v-model="user"
-          class="user-select"
-          clearable
-          placeholder="Filter by admin/moderator"
-          @change="fetchLogWithFilters">
-          <el-option-group
-            v-for="group in users"
-            :key="group.label"
-            :label="group.label">
-            <el-option
-              v-for="item in group.options"
-              :key="item.id"
-              :label="item.nickname"
-              :value="item.id" />
-          </el-option-group>
-        </el-select>
-      </el-col>
-      <el-col :span="6" class="search-container">
-        <el-input
-          v-model="search"
-          placeholder="Search logs"
-          prefix-icon="el-icon-search"
-          clearable
-          @input="handleDebounceSearchInput" />
-      </el-col>
-    </el-row>
-    <el-row type="flex" class="row-bg" justify="space-between">
-      <el-col :span="9" class="date-container">
-        <el-date-picker
-          :default-time="['00:00:00', '23:59:59']"
-          v-model="dateRange"
-          type="daterange"
-          start-placeholder="Start date"
-          end-placeholder="End date"
-          unlink-panels
-          @change="fetchLogWithFilters" />
-      </el-col>
-    </el-row>
+    <div class="moderation-log-nav-container">
+      <el-select
+        v-model="user"
+        class="moderation-log-user-select"
+        clearable
+        placeholder="Filter by admin/moderator"
+        @change="fetchLogWithFilters">
+        <el-option-group
+          v-for="group in users"
+          :key="group.label"
+          :label="group.label">
+          <el-option
+            v-for="item in group.options"
+            :key="item.id"
+            :label="item.nickname"
+            :value="item.id"/>
+        </el-option-group>
+      </el-select>
+      <el-input
+        v-model="search"
+        placeholder="Search logs"
+        clearable
+        class="moderation-log-search"
+        @input="handleDebounceSearchInput"/>
+    </div>
+    <el-date-picker
+      :default-time="['00:00:00', '23:59:59']"
+      v-model="dateRange"
+      type="daterange"
+      start-placeholder="Start date"
+      end-placeholder="End date"
+      unlink-panels
+      class="moderation-log-date-panel"
+      @change="fetchLogWithFilters" />
     <el-timeline>
       <el-timeline-item
         v-for="(logEntry, index) in log"
@@ -56,6 +49,7 @@
         :hide-on-single-page="true"
         :page-size="50"
         :total="total"
+        :small="isMobile"
         layout="prev, pager, next"
         @current-change="fetchLogWithFilters" />
     </div>
@@ -77,6 +71,9 @@ export default {
     }
   },
   computed: {
+    isMobile() {
+      return this.$store.state.app.device === 'mobile'
+    },
     loading() {
       return this.$store.state.moderationLog.logLoading &&
              this.$store.state.moderationLog.adminsLoading
@@ -139,7 +136,17 @@ h1 {
   margin: 25px 45px 0 0;
   padding: 0px;
 }
-.user-select {
+.moderation-log-date-panel {
+  width: 350px;
+}
+.moderation-log-nav-container {
+  display: flex;
+  justify-content: space-between;
+}
+.moderation-log-search {
+  width: 350px;
+}
+.moderation-log-user-select {
   margin: 0 0 20px;
   width: 350px;
 }
@@ -148,5 +155,31 @@ h1 {
 }
 .pagination {
   text-align: center;
+}
+
+@media only screen and (max-width:480px) {
+  .moderation-log-date-panel {
+    width: 100%;
+  }
+  .moderation-log-user-select {
+    margin: 0 0 10px;
+    width: 55%;
+  }
+  .moderation-log-search {
+    width: 40%;
+  }
+}
+
+@media only screen and (max-width:801px) and (min-width: 481px) {
+  .moderation-log-date-panel {
+    width: 55%;
+  }
+  .moderation-log-user-select {
+    margin: 0 0 10px;
+    width: 55%;
+  }
+  .moderation-log-search {
+    width: 40%;
+  }
 }
 </style>

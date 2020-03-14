@@ -74,7 +74,7 @@
                 v-model="notes[report.id]"
                 :placeholder="$t('reports.leaveNote')"
                 type="textarea"
-                rows="3"/>
+                rows="2"/>
               <div class="report-post-note">
                 <el-button @click="handleNewNote(report.id)">{{ $t('reports.postNote') }}</el-button>
               </div>
@@ -180,6 +180,9 @@ export default {
     height: 15px;
     margin-left: 5px;
   }
+  .divider {
+    margin: 15px 0;
+  }
   .el-card__body {
     padding: 17px;
   }
@@ -279,9 +282,8 @@ export default {
     font-style: italic;
     color: gray;
   }
-  @media
-  only screen and (max-width: 760px),
-  (min-device-width: 768px) and (max-device-width: 1024px) {
+
+  @media only screen and (max-width:480px) {
     .report {
       .header-container {
         display: flex;
@@ -301,6 +303,12 @@ export default {
       }
       .title-container {
         margin-bottom: 7px;
+      }
+    }
+    .reports-timeline {
+      margin: 20px 10px;
+      .el-timeline-item__wrapper {
+        padding-left: 20px;
       }
     }
   }
