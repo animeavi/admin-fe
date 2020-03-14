@@ -21,7 +21,7 @@ export const tabs = {
   },
   'frontend': {
     label: 'settings.frontend',
-    settings: [':assets', ':chat', ':emoji', ':frontend_configurations', ':markup']
+    settings: [':assets', ':chat', ':emoji', ':frontend_configurations', ':markup', ':static_fe']
   },
   'gopher': {
     label: 'settings.gopher',
@@ -33,7 +33,7 @@ export const tabs = {
   },
   'instance': {
     label: 'settings.instance',
-    settings: [':admin_token', ':fetch_initial_posts', ':instance', ':manifest', 'Pleroma.User', 'Pleroma.ScheduledActivity']
+    settings: [':admin_token', ':fetch_initial_posts', ':instance', ':manifest', 'Pleroma.User', 'Pleroma.ScheduledActivity', ':uri_schemes', ':feed']
   },
   'job-queue': {
     label: 'settings.jobQueue',
@@ -45,7 +45,7 @@ export const tabs = {
   },
   'mailer': {
     label: 'settings.mailer',
-    settings: [':email_notifications', 'Pleroma.Emails.Mailer', 'Pleroma.Emails.UserEmail']
+    settings: [':email_notifications', 'Pleroma.Emails.Mailer', 'Pleroma.Emails.UserEmail', ':swoosh']
   },
   'media-proxy': {
     label: 'settings.mediaProxy',
@@ -57,7 +57,7 @@ export const tabs = {
   },
   'mrf': {
     label: 'settings.mrf',
-    settings: [':mrf_simple', ':mrf_rejectnonpublic', ':mrf_hellthread', ':mrf_keyword', ':mrf_subchain', ':mrf_mention', ':mrf_normalize_markup', ':mrf_vocabulary']
+    settings: [':mrf_simple', ':mrf_rejectnonpublic', ':mrf_hellthread', ':mrf_keyword', ':mrf_subchain', ':mrf_mention', ':mrf_normalize_markup', ':mrf_vocabulary', ':mrf_object_age', ':modules']
   },
   'rate-limiters': {
     label: 'settings.rateLimiters',
