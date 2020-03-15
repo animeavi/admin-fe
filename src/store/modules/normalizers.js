@@ -283,9 +283,9 @@ export const formSearchObject = description => {
     const searchArray = _.compact([setting.key, setting.label, setting.description]).map(el => el.toLowerCase())
     const resultObject = { label: setting.label, key: setting.key || setting.group, groupKey: setting.key || setting.group, groupLabel: setting.label, search: searchArray }
     if (setting.children) {
-      const updatedAcc = [...acc, resultObject]
+      const updatedAcc = !setting.key && setting.group === ':pleroma' ? acc : [...acc, resultObject]
       return [...updatedAcc, ...parseNestedSettings(setting.children, setting.label, setting.key || setting.group)]
     }
-    return [...acc, resultObject]
+    return !setting.key && setting.group === ':pleroma' ? acc : [...acc, resultObject]
   }, [])
 }
