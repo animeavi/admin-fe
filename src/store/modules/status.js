@@ -1,4 +1,4 @@
-import { changeStatusScope, deleteStatus, fetchStatuses, fetchStatusesByInstance } from '@/api/status'
+import { changeStatusScope, deleteStatus, fetchStatuses, fetchStatusesCount, fetchStatusesByInstance } from '@/api/status'
 
 const status = {
   state: {
@@ -12,7 +12,8 @@ const status = {
       pageSize: 20,
       buttonLoading: false,
       allLoaded: false
-    }
+    },
+    statusVisibility: {}
   },
   mutations: {
     CHANGE_GODMODE_CHECKBOX_VALUE: (state, value) => {
@@ -41,6 +42,9 @@ const status = {
     },
     SET_LOADING: (state, status) => {
       state.loading = status
+    },
+    SET_STATUS_VISIBILITY: (state, visibility) => {
+      state.statusVisibility = visibility
     }
   },
   actions: {
@@ -63,6 +67,12 @@ const status = {
       } else if (fetchStatusesByInstance) { // called from Statuses by Instance
         dispatch('FetchStatusesByInstance')
       }
+    },
+    async FetchStatusesCount({ commit, getters }) {
+      commit('SET_LOADING', true)
+      const { data } = await fetchStatusesCount(getters.authHost, getters.token)
+      commit('SET_STATUS_VISIBILITY', data.status_visibility)
+      commit('SET_LOADING', false)
     },
     async FetchStatusesByInstance({ commit, getters, state, rootState }) {
       commit('SET_LOADING', true)
