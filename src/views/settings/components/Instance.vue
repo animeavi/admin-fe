@@ -20,7 +20,7 @@
       <setting :setting-group="manifest" :data="manifestData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="pleromaUser" :model="pleromaUserData" :label-width="labelWidth">
+    <el-form ref="pleromaUser" :model="pleromaUserData" :label-width="labelWidth" data-search="Pleroma.User">
       <setting :setting-group="pleromaUser" :data="pleromaUserData"/>
     </el-form>
     <el-divider class="divider thick-line"/>

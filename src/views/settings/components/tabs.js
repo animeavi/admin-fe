@@ -29,11 +29,11 @@ export const tabs = {
   },
   'http': {
     label: 'settings.http',
-    settings: [':cors_plug', ':http', ':http_security', ':http_signatures', ':tesla', ':web_cache_ttl']
+    settings: [':cors_plug', ':http', ':http_security', ':http_signatures', ':web_cache_ttl']
   },
   'instance': {
     label: 'settings.instance',
-    settings: [':admin_token', ':fetch_initial_posts', ':instance', ':manifest', 'Pleroma.User', 'Pleroma.ScheduledActivity', ':uri_schemes', ':feed']
+    settings: [':admin_token', ':fetch_initial_posts', ':instance', ':manifest', 'Pleroma.User', 'Pleroma.ScheduledActivity', ':uri_schemes', ':feed', ':streamer']
   },
   'job-queue': {
     label: 'settings.jobQueue',
@@ -45,7 +45,7 @@ export const tabs = {
   },
   'mailer': {
     label: 'settings.mailer',
-    settings: [':email_notifications', 'Pleroma.Emails.Mailer', 'Pleroma.Emails.UserEmail', ':swoosh']
+    settings: [':email_notifications', 'Pleroma.Emails.Mailer', 'Pleroma.Emails.UserEmail', ':swoosh', 'Pleroma.Emails.NewUsersDigestEmail']
   },
   'media-proxy': {
     label: 'settings.mediaProxy',
