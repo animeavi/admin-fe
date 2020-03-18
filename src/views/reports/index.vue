@@ -50,7 +50,7 @@ export default {
     padding-bottom: 0
   }
   h1 {
-    margin: 22px 0 0 15px;
+    margin: 10px 0 0 15px;
   }
   .no-reports-message {
     color: gray;

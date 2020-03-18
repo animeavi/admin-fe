@@ -3,6 +3,12 @@
     <h1>
       {{ $t('statuses.statuses') }}
     </h1>
+    <el-button-group>
+      <el-button plain>{{ $t('statuses.direct') }}: {{ statusVisibility.direct }}</el-button>
+      <el-button plain>{{ $t('statuses.private') }}: {{ statusVisibility.private }}</el-button>
+      <el-button plain>{{ $t('statuses.public') }}: {{ statusVisibility.public }}</el-button>
+      <el-button plain>{{ $t('statuses.unlisted') }}: {{ statusVisibility.unlisted }}</el-button>
+    </el-button-group>
     <div class="filter-container">
       <el-select
         v-model="selectedInstance"
@@ -111,10 +117,14 @@ export default {
     },
     statuses() {
       return this.$store.state.status.fetchedStatuses
+    },
+    statusVisibility() {
+      return this.$store.state.status.statusVisibility
     }
   },
   mounted() {
     this.$store.dispatch('FetchPeers')
+    this.$store.dispatch('FetchStatusesCount')
   },
   methods: {
     handleFilterChange() {
@@ -142,6 +152,9 @@ export default {
 <style rel='stylesheet/scss' lang='scss'>
 .statuses-container {
   padding: 0 15px;
+  h1 {
+    margin: 10px 0 15px 0;
+  }
   .status-container {
     margin: 0 0 10px;
   }
@@ -162,9 +175,6 @@ export default {
 .statuses-pagination {
   padding: 15px 0;
   text-align: center;
-}
-h1 {
-  margin: 22px 0 0 0;
 }
 
 @media only screen and (max-width:480px) {
