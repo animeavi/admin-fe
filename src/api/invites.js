@@ -13,14 +13,13 @@ export async function generateInviteToken(max_use, expires_at, authHost, token) 
 }
 
 export async function inviteViaEmail(email, name, authHost, token) {
-  const url = name.length > 0
-    ? `/api/pleroma/admin/users/email_invite?email=${email}&name=${name}`
-    : `/api/pleroma/admin/users/email_invite?email=${email}`
+  const data = name.length > 0 ? { email, name } : { email }
   return await request({
     baseURL: baseName(authHost),
-    url,
+    url: '/api/pleroma/admin/users/email_invite',
     method: 'post',
-    headers: authHeaders(token)
+    headers: authHeaders(token),
+    data
   })
 }
 
