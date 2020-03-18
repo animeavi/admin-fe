@@ -246,7 +246,7 @@ export default {
     padding: 5px 20px 0 20px
   }
   h1 {
-    margin: 22px 0 0 15px;
+    margin: 10px 0 0 15px;
   }
   .icon {
     margin-right: 5px;

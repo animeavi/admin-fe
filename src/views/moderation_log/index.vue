@@ -130,7 +130,7 @@ export default {
   margin: 0 15px;
 }
 h1 {
-  margin: 22px 0 20px 0;
+  margin: 10px 0 20px 0;
 }
 .el-timeline {
   margin: 25px 45px 0 0;
