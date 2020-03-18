@@ -155,7 +155,7 @@ export default {
   margin: 0 30px;
 }
 .emoji-packs-header {
-  margin: 22px 0 20px 15px;
+  margin: 10px 0 20px 15px;
 }
 .import-pack-button {
   margin-left: 10px;

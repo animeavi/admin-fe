@@ -241,12 +241,16 @@ export default {
     resendConfirmation: 'Resend confirmation email'
   },
   statuses: {
-    statuses: 'Statuses by instance',
+    statuses: 'Statuses',
     instanceFilter: 'Instance filter',
     loadMore: 'Load more',
     noInstances: 'No other instances found',
     onlyLocalStatuses: 'Show only local statuses',
-    showPrivateStatuses: 'Show private statuses'
+    showPrivateStatuses: 'Show private statuses',
+    direct: 'Direct',
+    private: 'Private',
+    public: 'Public',
+    unlisted: 'Unlisted'
   },
   userProfile: {
     tags: 'Tags',
