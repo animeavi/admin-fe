@@ -4,11 +4,11 @@ import Element from 'element-ui'
 import Settings from '@/views/settings/index'
 import flushPromises from 'flush-promises'
 import app from '@/store/modules/app'
-import getters from '@/store/getters'
 import relays from '@/store/modules/relays'
 import settings from '@/store/modules/settings'
 import user from '@/store/modules/user'
 import users from '@/store/modules/users'
+import getters from '@/store/getters'
 
 config.mocks["$t"] = () => {}
 
@@ -19,17 +19,18 @@ localVue.use(Element)
 describe('Settings search', () => {
   let store
   let actions
+  let permission
 
   beforeEach(() => {
     actions = { SetActiveTab: jest.fn() }
-
+    permission = { addRouters: jest.fn() }
     store = new Vuex.Store({
       modules: {
         app,
+        permission,
         relays,
         settings: { ...settings, actions },
         user,
-        users
       },
       getters
     })
@@ -55,6 +56,8 @@ describe('Settings search', () => {
     await flushPromises()
     wrapper.vm.handleSearchSelect({ group: 'Pleroma.Upload', key: 'Pleroma.Upload' })
     expect(actions.SetActiveTab).toHaveBeenCalled()
+    expect(actions.SetActiveTab).toHaveBeenCalledWith(expect.anything(), 'upload', undefined)
+
     done()
   })
 })
