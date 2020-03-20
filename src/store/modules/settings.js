@@ -33,8 +33,8 @@ const settings = {
     SET_LOADING: (state, status) => {
       state.loading = status
     },
-    SET_SEARCH: (state, description) => {
-      state.searchData = description
+    SET_SEARCH: (state, searchObject) => {
+      state.searchData = searchObject
     },
     SET_SETTINGS: (state, data) => {
       const newSettings = data.reduce((acc, { group, key, value }) => {
@@ -81,8 +81,8 @@ const settings = {
         const response = await fetchSettings(getters.authHost, getters.token)
         const description = await fetchDescription(getters.authHost, getters.token)
         commit('SET_DESCRIPTION', description.data)
-        const res = formSearchObject(description.data)
-        commit('SET_SEARCH', res)
+        const searchObject = formSearchObject(description.data)
+        commit('SET_SEARCH', searchObject)
         commit('SET_SETTINGS', response.data.configs)
         commit('TOGGLE_REBOOT', response.data.need_reboot)
       } catch (_e) {
