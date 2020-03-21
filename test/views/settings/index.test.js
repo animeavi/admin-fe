@@ -4,10 +4,7 @@ import Element from 'element-ui'
 import Settings from '@/views/settings/index'
 import flushPromises from 'flush-promises'
 import app from '@/store/modules/app'
-import relays from '@/store/modules/relays'
 import settings from '@/store/modules/settings'
-import user from '@/store/modules/user'
-import users from '@/store/modules/users'
 import getters from '@/store/getters'
 
 config.mocks["$t"] = () => {}
@@ -19,18 +16,13 @@ localVue.use(Element)
 describe('Settings search', () => {
   let store
   let actions
-  let permission
 
   beforeEach(() => {
-    actions = { SetActiveTab: jest.fn() }
-    permission = { addRouters: jest.fn() }
+    actions = { ...settings.actions, FetchSettings: jest.fn() }
     store = new Vuex.Store({
       modules: {
         app,
-        permission,
-        relays,
-        settings: { ...settings, actions },
-        user,
+        settings: { ...settings, actions }
       },
       getters
     })
@@ -47,17 +39,25 @@ describe('Settings search', () => {
     expect(searchInput.exists()).toBe(true)
     done()
   })
-
   it('changes tab when search value was selected', async (done) => {
     const wrapper = mount(Settings, {
       store,
       localVue
     })
-    await flushPromises()
     wrapper.vm.handleSearchSelect({ group: 'Pleroma.Upload', key: 'Pleroma.Upload' })
-    expect(actions.SetActiveTab).toHaveBeenCalled()
-    expect(actions.SetActiveTab).toHaveBeenCalledWith(expect.anything(), 'upload', undefined)
+    expect(store.state.settings.activeTab).toBe('upload')
 
+    wrapper.vm.handleSearchSelect({ group: ':swoosh', key: ':serve_mailbox' })
+    expect(store.state.settings.activeTab).toBe('mailer')
+
+    wrapper.vm.handleSearchSelect({ group: ':pleroma', key: ':admin_token' })
+    expect(store.state.settings.activeTab).toBe('instance')
+
+    wrapper.vm.handleSearchSelect({ group: ':media_proxy', key: ':ssl_options' })
+    expect(store.state.settings.activeTab).toBe('media-proxy')
+
+    wrapper.vm.handleSearchSelect({ group: ':opts', key: ':opts' })
+    expect(store.state.settings.activeTab).toBe('auto-linker')
     done()
   })
 })

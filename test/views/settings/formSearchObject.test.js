@@ -86,7 +86,7 @@ describe('Form search object', () => {
     expect(_.isEqual(formSearchObject(description), expected)).toBeTruthy()
   })
 
-  it('forms search object for setting without key', () => {
+  it('forms search object for setting without key and description', () => {
     const description = [{
       group: ":cors_plug",
       label: "Cors plug",
