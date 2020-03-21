@@ -277,6 +277,10 @@
     padding: 10px;
     margin-right: 5px;
   }
+  .settings-search-input {
+    width: 350px;
+    margin-left: 5px;
+  }
   .single-input {
     margin-right: 10px
   }
@@ -406,6 +410,13 @@
     .limit-input {
       width: 45%;
     }
+    .nav-container {
+      display: flex;
+      height: 36px;
+      justify-content: space-between;
+      align-items: center;
+      margin: 15px;
+    }
     .proxy-url-input {
       flex-direction: column;
       align-items: flex-start;
@@ -446,12 +457,12 @@
     .settings-header-container {
       margin: 10px 15px 15px 15px;
     }
-    .nav-container {
-      display: flex;
-      height: 36px;
-      justify-content: space-between;
-      align-items: center;
-      margin: 15px;
+    .settings-search-input {
+      width: 100%;
+      margin-left: 0;
+    }
+    .settings-search-input-container {
+      margin: 0 15px 15px 15px;
     }
     .settings-menu {
       width: 163px;
@@ -530,7 +541,6 @@
       margin-right: 8px
     }
   }
-
   @media only screen and (max-width:801px) and (min-width: 481px) {
     .delete-setting-button {
       margin: 4px 0 0 10px;
@@ -574,6 +584,10 @@
     }
     .settings-delete-button {
       float: right;
+    }
+    .settings-search-input {
+      width: 250px;
+      margin: 0 0 15px 15px;
     }
   }
 }

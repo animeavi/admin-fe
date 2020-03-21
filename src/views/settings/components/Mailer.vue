@@ -11,8 +11,11 @@
     <el-form ref="emailNotifications" :model="emailNotificationsData" :label-width="labelWidth">
       <setting :setting-group="emailNotifications" :data="emailNotificationsData"/>
     </el-form>
-    <el-form ref="userEmail" :model="userEmail" :label-width="labelWidth">
+    <el-form ref="userEmail" :model="userEmailData" :label-width="labelWidth">
       <setting :setting-group="userEmail" :data="userEmailData"/>
+    </el-form>
+    <el-form ref="newUsersDigestEmail" :model="newUsersDigestEmailData" :label-width="labelWidth">
+      <setting :setting-group="newUsersDigestEmail" :data="newUsersDigestEmailData"/>
     </el-form>
     <div class="submit-button-container">
       <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
@@ -64,6 +67,12 @@ export default {
     },
     mailerData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Emails.Mailer']) || {}
+    },
+    newUsersDigestEmail() {
+      return this.settings.description.find(setting => setting.key === 'Pleroma.Emails.NewUsersDigestEmail')
+    },
+    newUsersDigestEmailData() {
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Emails.NewUsersDigestEmail']) || {}
     },
     swoosh() {
       return this.settings.description.find(setting => setting.group === ':swoosh')

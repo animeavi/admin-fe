@@ -239,21 +239,21 @@ describe('Users actions', () => {
     })
     await flushPromises()
 
-    const dialog = wrapper.find('.password-reset-token-dialog')
+    wrapper.setData({ resetPasswordDialogOpen: false })
     const closeDialogButton = wrapper.find('.password-reset-token-dialog button')
-    expect(dialog.isVisible()).toBe(false)
+    expect(wrapper.vm.resetPasswordDialogOpen).toBe(false)
     expect(store.state.users.passwordResetToken.token).toBe('')
 
     wrapper.find(htmlElement(1, 11)).trigger('click')
     await flushPromises()
 
-    expect(dialog.isVisible()).toBe(true)
+    expect(wrapper.vm.resetPasswordDialogOpen).toBe(true)
     expect(store.state.users.passwordResetToken.token).toBe('g05lxnBJQnL')
     expect(store.state.users.passwordResetToken.link).toBe('http://url/api/pleroma/password_reset/g05lxnBJQnL')
 
     closeDialogButton.trigger('click')
     await flushPromises()
-    expect(dialog.isVisible()).toBe(false)
+    expect(wrapper.vm.resetPasswordDialogOpen).toBe(false)
     done()
   })
 })
@@ -278,19 +278,18 @@ describe('Creates new account', () => {
     })
     await flushPromises()
 
-    const dialog = wrapper.find('div.el-dialog__wrapper')
-    expect(dialog.isVisible()).toBe(false)
-
+    wrapper.setData({ createAccountDialogOpen: false })
     const openDialogButton = wrapper.find('button.actions-button')
     const closeDialogButton = wrapper.find('div.el-dialog__footer button')
+    expect(wrapper.vm.createAccountDialogOpen).toBe(false)
 
     openDialogButton.trigger('click')
     await flushPromises()
-    expect(dialog.isVisible()).toBe(true)
+    expect(wrapper.vm.createAccountDialogOpen).toBe(true)
 
     closeDialogButton.trigger('click')
     await flushPromises()
-    expect(dialog.isVisible()).toBe(false)
+    expect(wrapper.vm.createAccountDialogOpen).toBe(false)
     done()
   })
 

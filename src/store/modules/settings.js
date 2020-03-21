@@ -1,5 +1,5 @@
 import { fetchDescription, fetchSettings, removeSettings, restartApp, updateSettings } from '@/api/settings'
-import { checkPartialUpdate, parseNonTuples, parseTuples, valueHasTuples, wrapUpdatedSettings } from './normalizers'
+import { checkPartialUpdate, formSearchObject, parseNonTuples, parseTuples, valueHasTuples, wrapUpdatedSettings } from './normalizers'
 import _ from 'lodash'
 
 const settings = {
@@ -10,6 +10,7 @@ const settings = {
     description: [],
     loading: true,
     needReboot: false,
+    searchData: {},
     settings: {},
     updatedSettings: {}
   },
@@ -31,6 +32,9 @@ const settings = {
     },
     SET_LOADING: (state, status) => {
       state.loading = status
+    },
+    SET_SEARCH: (state, searchObject) => {
+      state.searchData = searchObject
     },
     SET_SETTINGS: (state, data) => {
       const newSettings = data.reduce((acc, { group, key, value }) => {
@@ -77,6 +81,8 @@ const settings = {
         const response = await fetchSettings(getters.authHost, getters.token)
         const description = await fetchDescription(getters.authHost, getters.token)
         commit('SET_DESCRIPTION', description.data)
+        const searchObject = formSearchObject(description.data)
+        commit('SET_SEARCH', searchObject)
         commit('SET_SETTINGS', response.data.configs)
         commit('TOGGLE_REBOOT', response.data.need_reboot)
       } catch (_e) {

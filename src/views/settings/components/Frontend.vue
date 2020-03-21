@@ -15,7 +15,7 @@
     </el-form>
     <el-divider class="divider thick-line"/>
     <el-form ref="emojiData" :model="emojiData" :label-width="labelWidth">
-      <el-form-item class="grouped-settings-header">
+      <el-form-item data-search=":emoji" class="grouped-settings-header">
         <span class="label-font">{{ $t('settings.emoji') }}</span>
       </el-form-item>
       <setting :setting-group="emoji" :data="emojiData"/>
@@ -26,7 +26,7 @@
     </el-form>
     <el-divider class="divider thick-line"/>
     <el-form ref="markupData" :model="markupData" :label-width="labelWidth">
-      <el-form-item class="grouped-settings-header">
+      <el-form-item data-search=":markup" class="grouped-settings-header">
         <span class="label-font">{{ $t('settings.markup') }}</span>
       </el-form-item>
       <setting :setting-group="markup" :data="markupData"/>

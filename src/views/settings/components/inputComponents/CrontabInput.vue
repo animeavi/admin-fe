@@ -1,6 +1,6 @@
 <template>
   <el-form :label-width="labelWidth" :label-position="isMobile ? 'top' : 'right'" class="crontab">
-    <el-form-item v-for="worker in workers" :key="worker" :label="worker" class="crontab-container">
+    <el-form-item v-for="worker in workers" :key="worker" :label="worker" :data-search="setting.key" class="crontab-container">
       <el-input
         :value="data[worker]"
         :placeholder="getSuggestion(worker) || null"

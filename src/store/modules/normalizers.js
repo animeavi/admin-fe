@@ -267,3 +267,25 @@ const wrapValues = (settings, currentState) => {
     }
   })
 }
+
+export const formSearchObject = description => {
+  const parseNestedSettings = (description, label, key) => description.reduce((acc, setting) => {
+    const searchArray = _.compact([setting.key, setting.label, setting.description]).map(el => el.toLowerCase())
+    const resultObject = { label: setting.label, key: setting.key || setting.group, groupKey: key, groupLabel: label, search: searchArray }
+    if (setting.children) {
+      const updatedAcc = [...acc, resultObject]
+      return [...updatedAcc, ...parseNestedSettings(setting.children, label, key)]
+    }
+    return [...acc, resultObject]
+  }, [])
+
+  return description.reduce((acc, setting) => {
+    const searchArray = _.compact([setting.key, setting.label, setting.description]).map(el => el.toLowerCase())
+    const resultObject = { label: setting.label, key: setting.key || setting.group, groupKey: setting.key || setting.group, groupLabel: setting.label, search: searchArray }
+    if (setting.children) {
+      const updatedAcc = !setting.key && setting.group === ':pleroma' ? acc : [...acc, resultObject]
+      return [...updatedAcc, ...parseNestedSettings(setting.children, setting.label, setting.key || setting.group)]
+    }
+    return !setting.key && setting.group === ':pleroma' ? acc : [...acc, resultObject]
+  }, [])
+}

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div v-if="setting.key === ':class' || setting.key === ':rel'">
+    <div v-if="setting.key === ':class' || setting.key === ':rel'" :data-search="setting.key || setting.group">
       <el-switch :value="autoLinkerBooleanValue(setting.key)" @change="processTwoTypeValue($event, setting.key)"/>
       <el-input v-if="autoLinkerBooleanValue(setting.key)" :value="autoLinkerStringValue(setting.key)" @input="processTwoTypeValue($event, setting.key)"/>
     </div>
-    <div v-if="setting.key === ':truncate'">
+    <div v-if="setting.key === ':truncate'" :data-search="setting.key || setting.group">
       <el-switch :value="autoLinkerBooleanValue(setting.key)" @change="processTwoTypeValue($event, setting.key)"/>
       <el-input-number v-if="autoLinkerBooleanValue(setting.key)" :value="autoLinkerIntegerValue(setting.key)" @input="processTwoTypeValue($event, setting.key)"/>
     </div>

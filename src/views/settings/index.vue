@@ -23,68 +23,26 @@
               </span>
             </el-button>
           </el-link>
+          <el-autocomplete
+            v-model="searchQuery"
+            :fetch-suggestions="querySearch"
+            :trigger-on-focus="false"
+            clearable
+            placeholder="Search"
+            prefix-icon="el-icon-search"
+            class="settings-search-input"
+            @select="handleSearchSelect"/>
         </div>
       </div>
       <el-tabs v-model="activeTab" tab-position="left">
-        <el-tab-pane :label="$t('settings.activityPub')" :disabled="configDisabled" name="activityPub" lazy>
-          <activity-pub/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.auth')" :disabled="configDisabled" name="auth" lazy>
-          <authentication/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.autoLinker')" :disabled="configDisabled" name="autoLinker" lazy>
-          <auto-linker/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.esshd')" :disabled="configDisabled" name="esshd" lazy>
-          <esshd/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.captcha')" :disabled="configDisabled" name="captcha" lazy>
-          <captcha/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.frontend')" :disabled="configDisabled" name="frontend" lazy>
-          <frontend/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.gopher')" :disabled="configDisabled" name="gopher" lazy>
-          <gopher/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.http')" :disabled="configDisabled" name="http" lazy>
-          <http/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.instance')" :disabled="configDisabled" name="instance">
-          <instance/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.jobQueue')" :disabled="configDisabled" name="jobQueue" lazy>
-          <job-queue/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.logger')" :disabled="configDisabled" name="logger" lazy>
-          <logger/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.mailer')" :disabled="configDisabled" name="mailer" lazy>
-          <mailer/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.mediaProxy')" :disabled="configDisabled" name="mediaProxy" lazy>
-          <media-proxy/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.metadata')" :disabled="configDisabled" name="metadata" lazy>
-          <metadata/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.mrf')" :disabled="configDisabled" name="mrf" lazy>
-          <mrf/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.rateLimiters')" :disabled="configDisabled" name="rateLimiters" lazy>
-          <rate-limiters/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.relays')" lazy name="relays">
-          <relays/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.webPush')" :disabled="configDisabled" name="webPush" lazy>
-          <web-push/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.upload')" :disabled="configDisabled" name="upload" lazy>
-          <upload/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('settings.other')" :disabled="configDisabled" name="other" lazy>
-          <other/>
+        <el-tab-pane
+          v-for="(value, componentName) in tabs"
+          :label="$t(value.label)"
+          :disabled="configDisabled"
+          :key="componentName"
+          :name="componentName"
+          lazy>
+          <component :is="componentName"/>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -119,6 +77,7 @@
           </el-button>
         </el-link>
       </div>
+      <div class="settings-search-input-container"/>
       <activity-pub v-if="activeTab === 'activityPub'"/>
       <authentication v-if="activeTab === 'auth'"/>
       <auto-linker v-if="activeTab === 'autoLinker'"/>
@@ -145,6 +104,7 @@
 
 <script>
 import i18n from '@/lang'
+import { tabs } from './components/tabs'
 import {
   ActivityPub,
   Authentication,
@@ -214,7 +174,8 @@ export default {
         { value: 'webPush', label: i18n.t('settings.webPush') },
         { value: 'upload', label: i18n.t('settings.upload') },
         { value: 'other', label: i18n.t('settings.other') }
-      ]
+      ],
+      searchQuery: ''
     }
   },
   computed: {
@@ -240,6 +201,12 @@ export default {
     },
     needReboot() {
       return this.$store.state.settings.needReboot
+    },
+    searchData() {
+      return this.$store.state.settings.searchData
+    },
+    tabs() {
+      return tabs
     }
   },
   mounted: function() {
@@ -256,6 +223,25 @@ export default {
         type: 'success',
         message: i18n.t('settings.restartSuccess')
       })
+    },
+    async handleSearchSelect(selectedValue) {
+      const tab = Object.keys(this.tabs).find(tab => {
+        return this.tabs[tab].settings.includes(selectedValue.group === ':pleroma' ? selectedValue.key : selectedValue.group)
+      })
+      await this.$store.dispatch('SetActiveTab', tab)
+      const selectedSetting = document.querySelector(`[data-search="${selectedValue.key}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+    },
+    querySearch(queryString, cb) {
+      const results = this.searchData.filter(searchObj => searchObj.search.find(el => el.includes(queryString.toLowerCase())))
+        .map(searchObj => {
+          return searchObj.groupKey === ':opts'
+            ? { value: `${searchObj.label} in Auto Linker`, group: searchObj.groupKey, key: searchObj.key }
+            : { value: `${searchObj.label} in ${searchObj.groupLabel}`, group: searchObj.groupKey, key: searchObj.key }
+        })
+      cb(results)
     }
   }
 }

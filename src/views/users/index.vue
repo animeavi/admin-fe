@@ -6,7 +6,12 @@
     </h1>
     <div class="filter-container">
       <users-filter/>
-      <el-input :placeholder="$t('users.search')" v-model="search" class="search" @input="handleDebounceSearchInput"/>
+      <el-input
+        :placeholder="$t('users.search')"
+        v-model="search"
+        prefix-icon="el-icon-search"
+        class="search"
+        @input="handleDebounceSearchInput"/>
     </div>
     <div class="actions-container">
       <el-button class="actions-button" @click="createAccountDialogOpen = true">

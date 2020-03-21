@@ -33,7 +33,8 @@ describe('Status in reports', () => {
         status,
         page: 1,
         userId: '7',
-        godmode: false
+        godmode: false,
+        showCheckbox: false
       }
     })
     await flushPromises()
@@ -58,7 +59,8 @@ describe('Status in reports', () => {
         status,
         page: 1,
         userId: '7',
-        godmode: false
+        godmode: false,
+        showCheckbox: false
       }
     })
     await flushPromises()
@@ -83,7 +85,8 @@ describe('Status in reports', () => {
         status,
         page: 1,
         userId: '7',
-        godmode: false
+        godmode: false,
+        showCheckbox: false
       }
     })
     await flushPromises()
@@ -108,7 +111,8 @@ describe('Status in reports', () => {
         status,
         page: 1,
         userId: '7',
-        godmode: false
+        godmode: false,
+        showCheckbox: false
       }
     })
     await flushPromises()
@@ -133,7 +137,8 @@ describe('Status in reports', () => {
         status,
         page: 1,
         userId: '7',
-        godmode: false
+        godmode: false,
+        showCheckbox: false
       }
     })
     await flushPromises()
