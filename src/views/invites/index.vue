@@ -39,7 +39,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer">
-        <el-button @click="closeDialogWindow">{{ $t('invites.cancel') }}</el-button>
+        <el-button class="invites-close-dialog" @click="closeDialogWindow">{{ $t('invites.cancel') }}</el-button>
         <el-button type="primary" @click="createToken">{{ $t('invites.create') }}</el-button>
       </span>
       <el-card v-if="'token' in newToken">

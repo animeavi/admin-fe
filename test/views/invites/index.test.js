@@ -44,19 +44,18 @@ describe('Invite tokens', () => {
     })
     await flushPromises()
 
-    const dialog = wrapper.find('div.el-dialog__wrapper .create-new-token-dialog')
-    expect(dialog.isVisible()).toBe(false)
-
+    wrapper.setData({ createTokenDialogVisible: false })
     const openDialogButton = wrapper.find('button.create-invite-token')
-    const closeDialogButton = wrapper.find('div.el-dialog__footer button')
+    const closeDialogButton = wrapper.find('div.el-dialog__footer button.invites-close-dialog')
+    expect(wrapper.vm.createTokenDialogVisible).toBe(false)
 
     openDialogButton.trigger('click')
     await flushPromises()
-    expect(dialog.isVisible()).toBe(true)
+    expect(wrapper.vm.createTokenDialogVisible).toBe(true)
 
     closeDialogButton.trigger('click')
     await flushPromises()
-    expect(dialog.isVisible()).toBe(false)
+    expect(wrapper.vm.createTokenDialogVisible).toBe(false)
     done()
   })
 
