@@ -92,7 +92,7 @@
         </p>
         <div class="download-shared-pack">
           <el-input v-model="downloadSharedAs" :placeholder=" $t('emoji.downloadAsOptional')"/>
-          <el-button type="primary" class="download-shared-pack-button" @click="downloadFromInstance">
+          <el-button type="primary" class="download-shared-pack-button" @click="downloadFromInstance(pack.pack['homepage'])">
             {{ isDesktop ? $t('emoji.downloadSharedPack') : $t('emoji.downloadSharedPackMobile') }}
           </el-button>
         </div>
@@ -209,10 +209,11 @@ export default {
     }
   },
   methods: {
-    downloadFromInstance() {
+    downloadFromInstance(url) {
+      const instanceAddress = `${new URL(url).protocol}//${new URL(url).hostname}`
       this.$store.dispatch(
         'DownloadFrom',
-        { instanceAddress: this.host, packName: this.name, as: this.downloadSharedAs }
+        { instanceAddress, packName: this.name, as: this.downloadSharedAs }
       ).then(() => this.$store.dispatch('ReloadEmoji'))
         .then(() => this.$store.dispatch('SetLocalEmojiPacks'))
     },
