@@ -73,6 +73,18 @@
                   <el-tag v-if="user.deactivated" type="danger">{{ $t('userProfile.deactivated') }}</el-tag>
                 </td>
               </tr>
+              <tr class="el-table__row">
+                <td>
+                  <el-button icon="el-icon-lock" @click="securitySettingsModalVisible = true">
+                    {{ $t('userProfile.securitySettings.securitySettings') }}
+                  </el-button>
+                  <SecuritySettingsModal
+                    :user="user"
+                    :visible="securitySettingsModalVisible"
+                    @close="securitySettingsModalVisible = false" />
+                </td>
+                <td />
+              </tr>
             </tbody>
           </table>
         </div>
@@ -96,14 +108,16 @@
 <script>
 import Status from '@/components/Status'
 import ModerationDropdown from './components/ModerationDropdown'
+import SecuritySettingsModal from './components/SecuritySettingsModal'
 
 export default {
   name: 'UsersShow',
-  components: { ModerationDropdown, Status },
+  components: { ModerationDropdown, Status, SecuritySettingsModal },
   data() {
     return {
       showPrivate: false,
-      resetPasswordDialogOpen: false
+      resetPasswordDialogOpen: false,
+      securitySettingsModalVisible: false
     }
   },
   computed: {
@@ -127,6 +141,9 @@ export default {
     },
     userProfileLoading() {
       return this.$store.state.userProfile.userProfileLoading
+    },
+    userCredentials() {
+      return this.$store.state.userProfile.userCredentials
     }
   },
   mounted: function() {
