@@ -1,7 +1,7 @@
 <template>
   <div class="settings-container">
     <div v-if="isDesktop">
-      <div class="settings-header-container">
+      <div :class="isSidebarOpen" class="settings-header-container">
         <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
         <div>
           <el-tooltip v-if="needReboot" :content="$t('settings.restartApp')" placement="bottom-end">
@@ -89,7 +89,7 @@
       </el-tabs>
     </div>
     <div v-if="isMobile || isTablet">
-      <div class="settings-header-container">
+      <div :class="isSidebarOpen" class="settings-header-container">
         <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
         <el-button v-if="needReboot" class="settings-reboot-button" @click="restartApp">
           <span>
@@ -234,6 +234,9 @@ export default {
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
+    },
+    isSidebarOpen() {
+      return this.$store.state.app.sidebar.opened ? 'header-sidebar-opened' : 'header-sidebar-closed'
     },
     isTablet() {
       return this.$store.state.app.device === 'tablet'
