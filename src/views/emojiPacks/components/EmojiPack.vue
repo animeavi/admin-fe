@@ -62,7 +62,7 @@
       <el-form-item>
         <el-link
           v-if="pack.pack['can-download']"
-          :href="`//${host}/api/pleroma/emoji/packs/${name}/download_shared`"
+          :href="pack.pack['fallback-src']"
           :underline="false"
           type="primary"
           target="_blank">
