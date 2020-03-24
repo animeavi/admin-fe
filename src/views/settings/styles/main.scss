@@ -264,10 +264,15 @@
   .settings-header {
     margin: 0;
   }
+  .header-sidebar-opened {
+    max-width: 1585px;
+  }
+  .header-sidebar-closed {
+    max-width: 1728px;
+  }
   .settings-header-container {
     display: flex;
     height: 36px;
-    max-width: 1728px;
     justify-content: space-between;
     align-items: center;
     margin: 22px 30px 15px 15px;
@@ -331,8 +336,11 @@
   }
 
   @media only screen and (min-width: 1824px) {
-    .form-container {
+    .sidebar-closed {
       max-width: 1586px;
+    }
+    .sidebar-opened {
+      max-width: 1442px;
     }
     .submit-button-container {
       width: 100%;
