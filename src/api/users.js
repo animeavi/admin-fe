@@ -71,6 +71,25 @@ export async function fetchUser(id, authHost, token) {
   })
 }
 
+export async function fetchUserCredentials(nickname, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/users/${nickname}/credentials`,
+    method: 'get',
+    headers: authHeaders(token)
+  })
+}
+
+export async function updateUserCredentials(nickname, credentials, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/users/${nickname}/credentials`,
+    method: 'patch',
+    headers: authHeaders(token),
+    data: credentials
+  })
+}
+
 export async function fetchUsers(filters, authHost, token, page = 1) {
   return await request({
     baseURL: baseName(authHost),
