@@ -264,6 +264,12 @@
   .settings-header {
     margin: 0;
   }
+  .header-sidebar-opened {
+    max-width: 1585px;
+  }
+  .header-sidebar-closed {
+    max-width: 1728px;
+  }
   .settings-header-container {
     display: flex;
     height: 36px;
@@ -330,8 +336,15 @@
   }
 
   @media only screen and (min-width: 1824px) {
+    .sidebar-closed {
+      max-width: 1586px;
+    }
+    .sidebar-opened {
+      max-width: 1442px;
+    }
     .submit-button-container {
-      max-width: 1637px;
+      width: 100%;
+      max-width: inherit;
       margin-left: auto;
       margin-right: auto;
       right: auto;
@@ -541,7 +554,7 @@
       margin-right: 8px
     }
   }
-  @media only screen and (max-width:801px) and (min-width: 481px) {
+  @media only screen and (max-width:818px) and (min-width: 481px) {
     .delete-setting-button {
       margin: 4px 0 0 10px;
       height: 28px;
