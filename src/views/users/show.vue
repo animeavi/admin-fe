@@ -73,21 +73,16 @@
                   <el-tag v-if="user.deactivated" type="danger">{{ $t('userProfile.deactivated') }}</el-tag>
                 </td>
               </tr>
-              <tr class="el-table__row">
-                <td>
-                  <el-button icon="el-icon-lock" @click="securitySettingsModalVisible = true">
-                    {{ $t('userProfile.securitySettings.securitySettings') }}
-                  </el-button>
-                  <SecuritySettingsModal
-                    :user="user"
-                    :visible="securitySettingsModalVisible"
-                    @close="securitySettingsModalVisible = false" />
-                </td>
-                <td />
-              </tr>
             </tbody>
           </table>
         </div>
+        <el-button icon="el-icon-lock" class="security-setting-button" @click="securitySettingsModalVisible = true">
+          {{ $t('userProfile.securitySettings.securitySettings') }}
+        </el-button>
+        <SecuritySettingsModal
+          :user="user"
+          :visible="securitySettingsModalVisible"
+          @close="securitySettingsModalVisible = false" />
       </el-card>
       <div class="recent-statuses-container">
         <h2 class="recent-statuses">{{ $t('userProfile.recentStatuses') }}</h2>
@@ -165,10 +160,6 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss' scoped>
-.avatar-name-container {
-  display: flex;
-  align-items: center;
-}
 header {
   align-items: center;
   display: flex;
@@ -184,13 +175,13 @@ table {
     width: 150px;
   }
 }
+.avatar-name-container {
+  display: flex;
+  align-items: center;
+}
+
 .el-table--border::after, .el-table--group::after, .el-table::before {
   background-color: transparent;
-}
-.poll ul {
-  list-style-type: none;
-  padding: 0;
-  width: 30%;
 }
 .image {
   width: 20%;
@@ -202,6 +193,11 @@ table {
   margin-left: 28px;
   color: #606266;
 }
+.poll ul {
+  list-style-type: none;
+  padding: 0;
+  width: 30%;
+}
 .recent-statuses-container {
   display: flex;
   flex-direction: column;
@@ -209,6 +205,10 @@ table {
 }
 .recent-statuses-header {
   margin-top: 10px;
+}
+.security-setting-button {
+  margin-top: 20px;
+  width: 100%;
 }
 .statuses {
   padding: 0 20px 0 0;
