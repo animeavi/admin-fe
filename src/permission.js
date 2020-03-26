@@ -33,7 +33,11 @@ export const beforeEachRoute = (to, from, next) => {
           })
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {
-            Message.error(err)
+            Message({
+              message: err,
+              type: 'error',
+              duration: 7 * 1000
+            })
             next({ path: '/' })
           })
         })

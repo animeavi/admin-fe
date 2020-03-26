@@ -89,7 +89,7 @@ const user = {
           if (data.pleroma && data.pleroma.is_admin) {
             commit('SET_ROLES', ['admin'])
           } else {
-            reject('getInfo: roles must be a non-null array!')
+            reject('This user doesn\`t have admin rights. Try another credentials or run `MIX_ENV=prod mix pleroma.user set NICKNAME --admin`')
           }
 
           commit('SET_NAME', data.username)
