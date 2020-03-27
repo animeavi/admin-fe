@@ -1,6 +1,6 @@
 <template>
   <el-collapse-item :title="name" :name="name" class="has-background">
-    <el-form v-if="isLocal" :label-width="labelWidth" label-position="left" size="small" class="emoji-pack-metadata">
+    <el-form :label-width="labelWidth" label-position="left" size="small" class="emoji-pack-metadata">
       <el-form-item :label=" $t('emoji.sharePack')">
         <el-switch v-model="share" />
       </el-form-item>
@@ -22,7 +22,7 @@
         {{ pack.pack["fallback-src-sha256"] }}
       </el-form-item>
     </el-form>
-    <div v-if="isLocal" class="pack-button-container">
+    <div class="pack-button-container">
       <div class="save-pack-button-container">
         <el-button type="primary" class="save-pack-button" @click="savePackMetadata">{{ $t('emoji.saveMetadata') }}</el-button>
         <el-button class="delete-pack-button" @click="deletePack">{{ $t('emoji.deletePack') }}</el-button>
@@ -38,38 +38,6 @@
         </el-link>
       </div>
     </div>
-    <el-form v-if="!isLocal" :label-width="labelWidth" label-position="left" size="small" class="emoji-pack-metadata remote-pack-metadata">
-      <el-form-item :label=" $t('emoji.sharePack')">
-        <el-switch v-model="share" disabled />
-      </el-form-item>
-      <el-form-item v-if="homepage" :label=" $t('emoji.homepage')">
-        <span>{{ homepage }}</span>
-      </el-form-item>
-      <el-form-item v-if="description" :label=" $t('emoji.description')">
-        <span>{{ description }}</span>
-      </el-form-item>
-      <el-form-item v-if="license" :label=" $t('emoji.license')">
-        <span>{{ license }}</span>
-      </el-form-item>
-      <el-form-item v-if="fallbackSrc" :label=" $t('emoji.fallbackSrc')">
-        <span>{{ fallbackSrc }}</span>
-      </el-form-item>
-      <el-form-item
-        v-if="fallbackSrc && fallbackSrc.trim() !== ''"
-        :label=" $t('emoji.fallbackSrcSha')">
-        {{ pack.pack["fallback-src-sha256"] }}
-      </el-form-item>
-      <el-form-item>
-        <el-link
-          v-if="pack.pack['can-download']"
-          :href="pack.pack['fallback-src']"
-          :underline="false"
-          type="primary"
-          target="_blank">
-          <el-button class="download-archive">{{ $t('emoji.downloadPackArchive') }}</el-button>
-        </el-link>
-      </el-form-item>
-    </el-form>
     <el-collapse v-model="showPackContent" class="contents-collapse">
       <el-collapse-item v-if="isLocal" :title=" $t('emoji.addNewEmoji')" name="addEmoji" class="no-background">
         <new-emoji-uploader :pack-name="name"/>
@@ -83,19 +51,6 @@
           :name="ename"
           :file="file"
           :is-local="isLocal" />
-      </el-collapse-item>
-      <el-collapse-item v-if="!isLocal" :title=" $t('emoji.downloadPack')" name="downloadPack" class="no-background">
-        <p>
-          {{ $t('emoji.thisWillDownload') }} "{{ name }}" {{ $t('emoji.downloadToCurrentInstance') }}
-          "{{ downloadSharedAs.trim() === '' ? name : downloadSharedAs }}" ({{ $t('emoji.canBeChanged') }}).
-          {{ $t('emoji.willBeUsable') }}.
-        </p>
-        <div class="download-shared-pack">
-          <el-input v-model="downloadSharedAs" :placeholder=" $t('emoji.downloadAsOptional')"/>
-          <el-button type="primary" class="download-shared-pack-button" @click="downloadFromInstance(pack.pack['homepage'])">
-            {{ isDesktop ? $t('emoji.downloadSharedPack') : $t('emoji.downloadSharedPackMobile') }}
-          </el-button>
-        </div>
       </el-collapse-item>
     </el-collapse>
   </el-collapse-item>
@@ -125,17 +80,12 @@ export default {
       required: true
     }
   },
-
   data() {
     return {
-      showPackContent: [],
-      downloadSharedAs: ''
+      showPackContent: []
     }
   },
   computed: {
-    isDesktop() {
-      return this.$store.state.app.device === 'desktop'
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
@@ -209,15 +159,6 @@ export default {
     }
   },
   methods: {
-    downloadFromInstance(url) {
-      const instanceAddress = `${new URL(url).protocol}//${new URL(url).hostname}`
-      this.$store.dispatch(
-        'DownloadFrom',
-        { instanceAddress, packName: this.name, as: this.downloadSharedAs }
-      ).then(() => this.$store.dispatch('ReloadEmoji'))
-        .then(() => this.$store.dispatch('SetLocalEmojiPacks'))
-    },
-
     deletePack() {
       this.$confirm('This will delete the pack, are you sure?', 'Warning', {
         confirmButtonText: 'Yes, delete the pack',
@@ -229,7 +170,6 @@ export default {
           .then(() => this.$store.dispatch('SetLocalEmojiPacks'))
       }).catch(() => {})
     },
-
     savePackMetadata() {
       this.$store.dispatch('SavePackMetadata', { packName: this.name })
     }

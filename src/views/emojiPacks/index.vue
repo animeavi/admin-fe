@@ -27,7 +27,7 @@
       </el-form-item>
       <el-form-item v-if="Object.keys(localPacks).length > 0" :label="$t('emoji.packs')">
         <el-collapse v-for="(pack, name) in localPacks" :key="name" v-model="activeLocalPack">
-          <emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="true" />
+          <local-emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="true" />
         </el-collapse>
       </el-form-item>
       <el-divider class="divider"/>
@@ -46,7 +46,7 @@
       </el-form-item>
       <el-form-item v-if="Object.keys(remotePacks).length > 0" :label="$t('emoji.packs')">
         <el-collapse v-for="(pack, name) in remotePacks" :key="name" v-model="activeRemotePack">
-          <emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="false" />
+          <remote-emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="false" />
         </el-collapse>
       </el-form-item>
     </el-form>
@@ -54,11 +54,12 @@
 </template>
 
 <script>
-import EmojiPack from './components/EmojiPack'
+import LocalEmojiPack from './components/LocalEmojiPack'
+import RemoteEmojiPack from './components/RemoteEmojiPack'
 import i18n from '@/lang'
 
 export default {
-  components: { EmojiPack },
+  components: { LocalEmojiPack, RemoteEmojiPack },
   data() {
     return {
       remoteInstanceAddress: '',
@@ -103,6 +104,13 @@ export default {
           this.$store.dispatch('ReloadEmoji')
         })
     },
+    importFromFS() {
+      this.$store.dispatch('ImportFromFS')
+        .then(() => {
+          this.$store.dispatch('SetLocalEmojiPacks')
+          this.$store.dispatch('ReloadEmoji')
+        })
+    },
     refreshLocalPacks() {
       try {
         this.$store.dispatch('SetLocalEmojiPacks')
@@ -127,13 +135,6 @@ export default {
         type: 'success',
         message: i18n.t('emoji.reloaded')
       })
-    },
-    importFromFS() {
-      this.$store.dispatch('ImportFromFS')
-        .then(() => {
-          this.$store.dispatch('SetLocalEmojiPacks')
-          this.$store.dispatch('ReloadEmoji')
-        })
     }
   }
 }
