@@ -37,6 +37,7 @@
             v-model="remoteInstanceAddress"
             :placeholder="$t('emoji.remoteInstanceAddress')" />
           <el-button
+            v-loading.fullscreen.lock="fullscreenLoading"
             :disabled="remoteInstanceAddress.trim() === ''"
             class="create-pack-button"
             @click="refreshRemotePacks">
@@ -65,7 +66,8 @@ export default {
       remoteInstanceAddress: '',
       newPackName: '',
       activeLocalPack: [],
-      activeRemotePack: []
+      activeRemotePack: [],
+      fullscreenLoading: false
     }
   },
   computed: {
@@ -122,8 +124,10 @@ export default {
         message: i18n.t('emoji.refreshed')
       })
     },
-    refreshRemotePacks() {
-      this.$store.dispatch('SetRemoteEmojiPacks', { remoteInstance: this.remoteInstanceAddress })
+    async refreshRemotePacks() {
+      this.fullscreenLoading = true
+      await this.$store.dispatch('SetRemoteEmojiPacks', { remoteInstance: this.remoteInstanceAddress })
+      this.fullscreenLoading = false
     },
     async reloadEmoji() {
       try {
