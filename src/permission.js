@@ -34,6 +34,7 @@ export const beforeEachRoute = (to, from, next) => {
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {
             Message({
+              dangerouslyUseHTMLString: true,
               message: err,
               type: 'error',
               duration: 7 * 1000
