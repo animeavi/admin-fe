@@ -37,7 +37,7 @@ export const beforeEachRoute = (to, from, next) => {
               dangerouslyUseHTMLString: true,
               message: err,
               type: 'error',
-              duration: 7 * 1000
+              duration: 10 * 1000
             })
             next({ path: '/' })
           })
