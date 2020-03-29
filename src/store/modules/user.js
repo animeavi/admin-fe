@@ -81,6 +81,9 @@ const user = {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token, state.authHost).then(response => {
           const data = response.data
+          const message = '<span>This user doesn\`t have admin rights. Try another credentials or see the </span>' +
+            '<u><a target="_blank" href="https://docs.pleroma.social/backend/administration/CLI_tasks/user/#set-the-value-of-the-given-users-settings">docs</a></u>' +
+            '<span> to find out how to make this user an admin</span>'
 
           if (!data) {
             reject('Verification failed, please login again.')
@@ -89,7 +92,7 @@ const user = {
           if (data.pleroma && data.pleroma.is_admin) {
             commit('SET_ROLES', ['admin'])
           } else {
-            reject('This user doesn\`t have admin rights. Try another credentials or run `MIX_ENV=prod mix pleroma.user set NICKNAME --admin`')
+            reject(message)
           }
 
           commit('SET_NAME', data.username)
