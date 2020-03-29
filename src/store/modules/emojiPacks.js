@@ -15,11 +15,15 @@ import Vue from 'vue'
 
 const packs = {
   state: {
+    activeCollapseItems: [],
     localPacks: {},
     remoteInstance: '',
     remotePacks: {}
   },
   mutations: {
+    SET_ACTIVE_COLLAPSE_ITEMS: (state, items) => {
+      state.activeCollapseItems = items
+    },
     SET_LOCAL_PACKS: (state, packs) => {
       state.localPacks = packs
     },
@@ -98,6 +102,9 @@ const packs = {
 
         commit('UPDATE_LOCAL_PACK_PACK', { name: packName, pack: result.data })
       }
+    },
+    SetActiveCollapseItems({ commit, state }, activeItems) {
+      commit('SET_ACTIVE_COLLAPSE_ITEMS', activeItems)
     },
     async SetLocalEmojiPacks({ commit, getters }) {
       const { data } = await listPacks(getters.authHost)

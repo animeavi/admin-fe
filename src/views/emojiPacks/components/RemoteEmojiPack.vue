@@ -1,62 +1,64 @@
 <template>
   <el-collapse-item :title="name" :name="name" class="has-background">
-    <el-form :label-width="labelWidth" label-position="left" size="small" class="emoji-pack-metadata remote-pack-metadata">
-      <el-form-item :label=" $t('emoji.sharePack')">
-        <el-switch v-model="share" disabled />
-      </el-form-item>
-      <el-form-item v-if="homepage" :label=" $t('emoji.homepage')">
-        <span>{{ homepage }}</span>
-      </el-form-item>
-      <el-form-item v-if="description" :label=" $t('emoji.description')">
-        <span>{{ description }}</span>
-      </el-form-item>
-      <el-form-item v-if="license" :label=" $t('emoji.license')">
-        <span>{{ license }}</span>
-      </el-form-item>
-      <el-form-item v-if="fallbackSrc" :label=" $t('emoji.fallbackSrc')">
-        <span>{{ fallbackSrc }}</span>
-      </el-form-item>
-      <el-form-item
-        v-if="fallbackSrc && fallbackSrc.trim() !== ''"
-        :label=" $t('emoji.fallbackSrcSha')">
-        {{ pack.pack["fallback-src-sha256"] }}
-      </el-form-item>
-      <el-form-item>
-        <el-link
-          v-if="pack.pack['can-download']"
-          :href="pack.pack['fallback-src']"
-          :underline="false"
-          type="primary"
-          target="_blank">
-          <el-button class="download-archive">{{ $t('emoji.downloadPackArchive') }}</el-button>
-        </el-link>
-      </el-form-item>
-    </el-form>
-    <el-collapse v-model="showPackContent" class="contents-collapse">
-      <el-collapse-item v-if="Object.keys(pack.files).length > 0" :title=" $t('emoji.manageEmoji')" name="manageEmoji" class="no-background">
-        <single-emoji-editor
-          v-for="(file, ename) in pack.files"
-          :key="ename"
-          :host="host"
-          :pack-name="name"
-          :name="ename"
-          :file="file"
-          :is-local="isLocal" />
-      </el-collapse-item>
-      <el-collapse-item :title=" $t('emoji.downloadPack')" name="downloadPack" class="no-background">
-        <p>
-          {{ $t('emoji.thisWillDownload') }} "{{ name }}" {{ $t('emoji.downloadToCurrentInstance') }}
-          "{{ downloadSharedAs.trim() === '' ? name : downloadSharedAs }}" ({{ $t('emoji.canBeChanged') }}).
-          {{ $t('emoji.willBeUsable') }}.
-        </p>
-        <div class="download-shared-pack">
-          <el-input v-model="downloadSharedAs" :placeholder=" $t('emoji.downloadAsOptional')"/>
-          <el-button type="primary" class="download-shared-pack-button" @click="downloadFromInstance(pack.pack['homepage'])">
-            {{ isDesktop ? $t('emoji.downloadSharedPack') : $t('emoji.downloadSharedPackMobile') }}
-          </el-button>
-        </div>
-      </el-collapse-item>
-    </el-collapse>
+    <div v-if="loadRemotePack">
+      <el-form :label-width="labelWidth" label-position="left" size="small" class="emoji-pack-metadata remote-pack-metadata">
+        <el-form-item :label=" $t('emoji.sharePack')">
+          <el-switch v-model="share" disabled />
+        </el-form-item>
+        <el-form-item v-if="homepage" :label=" $t('emoji.homepage')">
+          <span>{{ homepage }}</span>
+        </el-form-item>
+        <el-form-item v-if="description" :label=" $t('emoji.description')">
+          <span>{{ description }}</span>
+        </el-form-item>
+        <el-form-item v-if="license" :label=" $t('emoji.license')">
+          <span>{{ license }}</span>
+        </el-form-item>
+        <el-form-item v-if="fallbackSrc" :label=" $t('emoji.fallbackSrc')">
+          <span>{{ fallbackSrc }}</span>
+        </el-form-item>
+        <el-form-item
+          v-if="fallbackSrc && fallbackSrc.trim() !== ''"
+          :label=" $t('emoji.fallbackSrcSha')">
+          {{ pack.pack["fallback-src-sha256"] }}
+        </el-form-item>
+        <el-form-item>
+          <el-link
+            v-if="pack.pack['can-download']"
+            :href="pack.pack['fallback-src']"
+            :underline="false"
+            type="primary"
+            target="_blank">
+            <el-button class="download-archive">{{ $t('emoji.downloadPackArchive') }}</el-button>
+          </el-link>
+        </el-form-item>
+      </el-form>
+      <el-collapse v-model="showPackContent" class="contents-collapse">
+        <el-collapse-item v-if="Object.keys(pack.files).length > 0" :title=" $t('emoji.manageEmoji')" name="manageEmoji" class="no-background">
+          <single-emoji-editor
+            v-for="(file, ename) in pack.files"
+            :key="ename"
+            :host="host"
+            :pack-name="name"
+            :name="ename"
+            :file="file"
+            :is-local="isLocal" />
+        </el-collapse-item>
+        <el-collapse-item :title=" $t('emoji.downloadPack')" name="downloadPack" class="no-background">
+          <p>
+            {{ $t('emoji.thisWillDownload') }} "{{ name }}" {{ $t('emoji.downloadToCurrentInstance') }}
+            "{{ downloadSharedAs.trim() === '' ? name : downloadSharedAs }}" ({{ $t('emoji.canBeChanged') }}).
+            {{ $t('emoji.willBeUsable') }}.
+          </p>
+          <div class="download-shared-pack">
+            <el-input v-model="downloadSharedAs" :placeholder=" $t('emoji.downloadAsOptional')"/>
+            <el-button type="primary" class="download-shared-pack-button" @click="downloadFromInstance(pack.pack['homepage'])">
+              {{ isDesktop ? $t('emoji.downloadSharedPack') : $t('emoji.downloadSharedPackMobile') }}
+            </el-button>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+    </div>
   </el-collapse-item>
 </template>
 
@@ -107,6 +109,9 @@ export default {
       } else {
         return '120px'
       }
+    },
+    loadRemotePack() {
+      return this.$store.state.emojiPacks.activeCollapseItems.includes(this.name)
     },
     share: {
       get() { return this.pack.pack['share-files'] },

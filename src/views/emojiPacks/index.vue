@@ -46,7 +46,7 @@
         </div>
       </el-form-item>
       <el-form-item v-if="Object.keys(remotePacks).length > 0" :label="$t('emoji.packs')">
-        <el-collapse v-for="(pack, name) in remotePacks" :key="name" v-model="activeRemotePack">
+        <el-collapse v-for="(pack, name) in remotePacks" :key="name" v-model="activeRemotePack" @change="setActiveCollapseItems">
           <remote-emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="false" />
         </el-collapse>
       </el-form-item>
@@ -139,6 +139,10 @@ export default {
         type: 'success',
         message: i18n.t('emoji.reloaded')
       })
+    },
+    setActiveCollapseItems(activeItems) {
+      const items = Array.isArray(activeItems) ? activeItems : [activeItems]
+      this.$store.dispatch('SetActiveCollapseItems', items)
     }
   }
 }
