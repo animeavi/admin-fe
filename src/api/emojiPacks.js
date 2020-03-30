@@ -57,17 +57,17 @@ export async function listRemotePacks(host, token, instance) {
   })
 }
 
-export async function downloadFrom(host, instance_address, pack_name, as, token) {
+export async function downloadFrom(host, instance, pack_name, as, token) {
   if (as.trim() === '') {
     as = null
   }
 
   return await request({
     baseURL: baseName(host),
-    url: '/api/pleroma/emoji/packs/download_from',
+    url: '/api/pleroma/emoji/packs/download',
     method: 'post',
     headers: authHeaders(token),
-    data: { instance_address: baseName(instance_address), pack_name, as },
+    data: { url: baseName(instance), name: pack_name, as },
     timeout: 0
   })
 }

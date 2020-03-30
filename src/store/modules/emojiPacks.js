@@ -116,6 +116,9 @@ const packs = {
       commit('SET_REMOTE_INSTANCE', remoteInstance)
       commit('SET_REMOTE_PACKS', data)
     },
+    SetRemoteInstance({ commit }, instance) {
+      commit('SET_REMOTE_INSTANCE', instance)
+    },
     async UpdateAndSavePackFile({ commit, getters }, args) {
       const result = await updatePackFile(getters.authHost, getters.token, args)
 

@@ -63,7 +63,6 @@ export default {
   components: { LocalEmojiPack, RemoteEmojiPack },
   data() {
     return {
-      remoteInstanceAddress: '',
       newPackName: '',
       activeLocalPack: [],
       activeRemotePack: [],
@@ -88,6 +87,14 @@ export default {
     },
     localPacks() {
       return this.$store.state.emojiPacks.localPacks
+    },
+    remoteInstanceAddress: {
+      get() {
+        return this.$store.state.emojiPacks.remoteInstance
+      },
+      set(instance) {
+        this.$store.dispatch('SetRemoteInstance', instance)
+      }
     },
     remotePacks() {
       return this.$store.state.emojiPacks.remotePacks
