@@ -25,8 +25,8 @@ export async function reloadEmoji(host, token) {
 export async function importFromFS(host, token) {
   return await request({
     baseURL: baseName(host),
-    url: '/api/pleroma/emoji/packs/import_from_fs',
-    method: 'post',
+    url: '/api/pleroma/emoji/packs/import',
+    method: 'get',
     headers: authHeaders(token)
   })
 }
@@ -51,10 +51,9 @@ export async function listPacks(host) {
 export async function listRemotePacks(host, token, instance) {
   return await request({
     baseURL: baseName(host),
-    url: `/api/pleroma/emoji/packs/list_from`,
-    method: 'post',
-    headers: authHeaders(token),
-    data: { instance_address: baseName(instance) }
+    url: `/api/pleroma/emoji/packs/remote?url=${baseName(instance)}`,
+    method: 'get',
+    headers: authHeaders(token)
   })
 }
 
