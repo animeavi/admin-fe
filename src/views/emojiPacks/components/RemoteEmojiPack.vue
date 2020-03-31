@@ -36,11 +36,11 @@
       <el-collapse v-model="showPackContent" class="contents-collapse">
         <el-collapse-item v-if="Object.keys(pack.files).length > 0" :title=" $t('emoji.manageEmoji')" name="manageEmoji" class="no-background">
           <single-emoji-editor
-            v-for="(file, ename) in pack.files"
-            :key="ename"
+            v-for="(file, shortcode) in pack.files"
+            :key="shortcode"
             :host="host"
             :pack-name="name"
-            :name="ename"
+            :shortcode="shortcode"
             :file="file"
             :is-local="isLocal" />
         </el-collapse-item>

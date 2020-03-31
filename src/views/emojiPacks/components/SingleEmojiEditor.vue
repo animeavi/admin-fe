@@ -54,7 +54,7 @@ export default {
       type: String,
       required: true
     },
-    name: {
+    shortcode: {
       type: String,
       required: true
     },
@@ -69,7 +69,7 @@ export default {
   },
   data() {
     return {
-      newName: null,
+      newShortcode: null,
       newFile: null,
       copyToLocalPackName: null,
       copyPopoverVisible: false,
@@ -80,14 +80,14 @@ export default {
   computed: {
     emojiName: {
       get() {
-        // Return a modified name if it was modified, otherwise return the old name
-        return this.newName !== null ? this.newName : this.name
+        // Return a modified shortcode if it was modified, otherwise return the old shortcode
+        return this.newShortcode !== null ? this.newShortcode : this.shortcode
       },
-      set(val) { this.newName = val }
+      set(val) { this.newShortcode = val }
     },
     emojiFile: {
       get() {
-        // Return a modified name if it was modified, otherwise return the old name
+        // Return a modified file name if it was modified, otherwise return the old file name
         return this.newFile !== null ? this.newFile : this.file
       },
       set(val) { this.newFile = val }
@@ -110,7 +110,7 @@ export default {
       try {
         this.$store.dispatch('UpdateEmojiFile', {
           packName: this.packName,
-          shortcode: this.name,
+          shortcode: this.shortcode,
           newShortcode: this.emojiName,
           newFilename: this.emojiFile,
           force: true
@@ -118,7 +118,7 @@ export default {
       } catch (e) {
         return
       }
-      this.newName = null
+      this.newShortcode = null
       this.newFile = null
 
       this.$store.dispatch('ReloadEmoji')
@@ -131,9 +131,9 @@ export default {
       }).then(() => {
         this.$store.dispatch('DeleteEmojiFile', {
           packName: this.packName,
-          shortcode: this.name
+          shortcode: this.shortcode
         }).then(() => {
-          this.newName = null
+          this.newShortcode = null
           this.newFile = null
 
           this.$store.dispatch('ReloadEmoji')
@@ -145,7 +145,7 @@ export default {
         this.$store.dispatch('AddNewEmojiFile', {
           packName: this.copyToLocalPackName,
           file: this.addressOfEmojiInPack(this.host, this.packName, this.file),
-          shortcode: this.copyToShortcode.trim() !== '' ? this.copyToShortcode.trim() : this.name,
+          shortcode: this.copyToShortcode.trim() !== '' ? this.copyToShortcode.trim() : this.shortcode,
           filename: this.copyToFilename.trim() !== '' ? this.copyToFilename.trim() : this.file
         })
       } catch (e) {
