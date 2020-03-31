@@ -1,7 +1,7 @@
 <template>
   <el-form :label-position="isMobile ? 'top' : 'left'" label-width="130px" size="small" class="new-emoji-uploader-form">
     <el-form-item :label="$t('emoji.shortcode')">
-      <el-input v-model="shortcode" :placeholder="$t('emoji.required')"/>
+      <el-input v-model="shortcode" :placeholder="$t('emoji.optional')"/>
     </el-form-item>
     <el-form-item :label="$t('emoji.customFilename')">
       <el-input v-model="customFileName" :placeholder="$t('emoji.optional')"/>
@@ -9,7 +9,7 @@
     <el-form-item :label="$t('emoji.uploadFile')">
       <div class="upload-file-url">
         <el-input v-model="imageUploadURL" :placeholder="$t('emoji.url')"/>
-        <el-button :disabled="shortcodePresent" type="primary" class="upload-button" @click="uploadEmoji">{{ $t('emoji.upload') }}</el-button>
+        <el-button type="primary" class="upload-button" @click="uploadEmoji">{{ $t('emoji.upload') }}</el-button>
       </div>
       <div class="upload-container">
         <p class="text">or</p>
@@ -18,7 +18,7 @@
           :multiple="false"
           :show-file-list="false"
           action="add">
-          <el-button :disabled="shortcodePresent" type="primary">{{ $t('emoji.clickToUpload') }}</el-button>
+          <el-button type="primary">{{ $t('emoji.clickToUpload') }}</el-button>
         </el-upload>
       </div>
     </el-form-item>
@@ -46,9 +46,6 @@ export default {
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
-    },
-    shortcodePresent() {
-      return this.shortcode.trim() === ''
     }
   },
   methods: {
