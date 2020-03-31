@@ -34,6 +34,7 @@
         <el-button
           :disabled="!copyToLocalPackName"
           type="primary"
+          class="copy-to-local-pack-button"
           @click="copyToLocal">{{ $t('emoji.copy') }}</el-button>
         <el-button slot="reference" type="primary" class="emoji-button">{{ $t('emoji.copyToLocalPack') }}</el-button>
       </el-popover>
@@ -102,7 +103,7 @@ export default {
       return this.$store.state.emojiPacks.localPacks
     },
     remoteInstance() {
-      return this.$store.state.emojiPacks.remoteInstance
+      return new URL(this.$store.state.emojiPacks.remoteInstance).host
     }
   },
   methods: {
@@ -166,6 +167,10 @@ export default {
 <style rel='stylesheet/scss' lang='scss'>
 .copy-popover {
   width: 330px
+}
+.copy-to-local-pack-button {
+  margin-top: 15px;
+  float: right;
 }
 .emoji-buttons {
   place-self: center;
