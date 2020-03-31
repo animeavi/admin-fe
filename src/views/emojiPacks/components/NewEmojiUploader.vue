@@ -52,20 +52,22 @@ export default {
     }
   },
   methods: {
-    uploadEmoji({ file }) {
-      this.$store.dispatch('UpdateAndSavePackFile', {
-        action: 'add',
-        packName: this.packName,
-        shortcode: this.shortcode,
-        file: file || this.imageUploadURL,
-        fileName: this.customFileName
-      }).then(() => {
-        this.shortcode = ''
-        this.imageUploadURL = ''
-        this.customFileName = ''
+    async uploadEmoji({ file }) {
+      try {
+        this.$store.dispatch('AddNewEmojiFile', {
+          packName: this.packName,
+          file: file || this.imageUploadURL,
+          shortcode: this.shortcode,
+          filename: this.customFileName
+        })
+      } catch (e) {
+        return
+      }
+      this.shortcode = ''
+      this.imageUploadURL = ''
+      this.customFileName = ''
 
-        this.$store.dispatch('ReloadEmoji')
-      })
+      this.$store.dispatch('ReloadEmoji')
     }
   }
 }

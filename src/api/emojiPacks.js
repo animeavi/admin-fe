@@ -2,8 +2,6 @@ import request from '@/utils/request'
 import { getToken } from '@/utils/auth'
 import { baseName } from './utils'
 
-import _ from 'lodash'
-
 export async function deletePack(host, token, name) {
   return await request({
     baseURL: baseName(host),
@@ -35,7 +33,7 @@ export async function createPack(host, token, name) {
   return await request({
     baseURL: baseName(host),
     url: `/api/pleroma/emoji/packs/${name}`,
-    method: 'put',
+    method: 'post',
     headers: authHeaders(token)
   })
 }
@@ -72,79 +70,44 @@ export async function downloadFrom(host, instance, pack_name, as, token) {
   })
 }
 
-export async function savePackMetadata(host, token, name, new_data) {
+export async function savePackMetadata(host, token, name, metadata) {
   return await request({
     baseURL: baseName(host),
-    url: `/api/pleroma/emoji/packs/${name}/update_metadata`,
-    method: 'post',
+    url: `/api/pleroma/emoji/packs/${name}`,
+    method: 'patch',
     headers: authHeaders(token),
-    data: { name, new_data },
+    data: { metadata },
     timeout: 0 // This might take a long time
   })
 }
 
-function fileUpdateFormData(d) {
-  const data = new FormData()
-
-  _.each(d, (v, k) => {
-    data.set(k, v)
-  })
-
-  return data
-}
-
-export async function updatePackFile(host, token, args) {
-  let data = null
-
-  switch (args.action) {
-    case 'add': {
-      const { shortcode, file, fileName } = args
-
-      data = fileUpdateFormData({
-        action: 'add',
-        shortcode: shortcode,
-        file: file
-      })
-      if (fileName.trim() !== '') {
-        data.set('filename', fileName)
-      }
-
-      break
-    }
-
-    case 'update': {
-      const { oldName, newName, newFilename } = args
-
-      data = fileUpdateFormData({
-        action: 'update',
-        shortcode: oldName,
-        new_shortcode: newName,
-        new_filename: newFilename
-      })
-
-      break
-    }
-
-    case 'remove': {
-      const { name } = args
-      data = fileUpdateFormData({
-        action: 'remove',
-        shortcode: name
-      })
-
-      break
-    }
-  }
-
-  const { packName } = args
-
+export async function addNewEmojiFile(packName, file, shortcode, filename, host, token) {
   return await request({
     baseURL: baseName(host),
-    url: `/api/pleroma/emoji/packs/${packName}/update_file`,
+    url: `/api/pleroma/emoji/packs/${packName}/files`,
     method: 'post',
     headers: authHeaders(token),
-    data: data,
-    timeout: 0
+    data: { file, shortcode, filename: filename || null }
+  })
+}
+
+export async function updateEmojiFile(packName, shortcode, newShortcode, newFilename, force, host, token) {
+  return await request({
+    baseURL: baseName(host),
+    url: `/api/pleroma/emoji/packs/${packName}/files`,
+    method: 'patch',
+    headers: authHeaders(token),
+    data: { shortcode, new_shortcode: newShortcode, new_filename: newFilename, force }
+  })
+}
+
+export async function deleteEmojiFile(packName, shortcode, host, token) {
+  return await request({
+    baseURL: baseName(host),
+    url: `/api/pleroma/emoji/packs/${packName}/files`,
+    method: 'delete',
+    headers: authHeaders(token),
+    data: { shortcode }
   })
 }
 

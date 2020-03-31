@@ -106,19 +106,22 @@ export default {
     }
   },
   methods: {
-    update() {
-      this.$store.dispatch('UpdateAndSavePackFile', {
-        action: 'update',
-        packName: this.packName,
-        oldName: this.name,
-        newName: this.emojiName,
-        newFilename: this.emojiFile
-      }).then(() => {
-        this.newName = null
-        this.newFile = null
+    async update() {
+      try {
+        this.$store.dispatch('UpdateEmojiFile', {
+          packName: this.packName,
+          shortcode: this.name,
+          newShortcode: this.emojiName,
+          newFilename: this.emojiFile,
+          force: true
+        })
+      } catch (e) {
+        return
+      }
+      this.newName = null
+      this.newFile = null
 
-        this.$store.dispatch('ReloadEmoji')
-      })
+      this.$store.dispatch('ReloadEmoji')
     },
     remove() {
       this.$confirm('This will delete the emoji, are you sure?', 'Warning', {
@@ -126,10 +129,9 @@ export default {
         cancelButtonText: 'No, leave it be',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('UpdateAndSavePackFile', {
-          action: 'remove',
+        this.$store.dispatch('DeleteEmojiFile', {
           packName: this.packName,
-          name: this.name
+          shortcode: this.name
         }).then(() => {
           this.newName = null
           this.newFile = null
@@ -139,20 +141,22 @@ export default {
       })
     },
     copyToLocal() {
-      this.$store.dispatch('UpdateAndSavePackFile', {
-        action: 'add',
-        packName: this.copyToLocalPackName,
-        shortcode: this.copyToShortcode.trim() !== '' ? this.copyToShortcode.trim() : this.name,
-        fileName: this.copyToFilename.trim() !== '' ? this.copyToFilename.trim() : this.file,
-        file: this.addressOfEmojiInPack(this.host, this.packName, this.file)
-      }).then(() => {
-        this.copyToLocalPackName = null
-        this.copyToLocalVisible = false
-        this.copyToShortcode = ''
-        this.copyToFilename = ''
+      try {
+        this.$store.dispatch('AddNewEmojiFile', {
+          packName: this.copyToLocalPackName,
+          file: this.addressOfEmojiInPack(this.host, this.packName, this.file),
+          shortcode: this.copyToShortcode.trim() !== '' ? this.copyToShortcode.trim() : this.name,
+          filename: this.copyToFilename.trim() !== '' ? this.copyToFilename.trim() : this.file
+        })
+      } catch (e) {
+        return
+      }
+      this.copyToLocalPackName = null
+      this.copyToLocalVisible = false
+      this.copyToShortcode = ''
+      this.copyToFilename = ''
 
-        this.$store.dispatch('ReloadEmoji')
-      })
+      this.$store.dispatch('ReloadEmoji')
     },
     addressOfEmojiInPack
   }

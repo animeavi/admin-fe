@@ -96,9 +96,9 @@ export default {
       if (this.isMobile) {
         return '90px'
       } else if (this.isTablet) {
-        return '120px'
+        return '155px'
       } else {
-        return '120px'
+        return '155px'
       }
     },
     share: {
