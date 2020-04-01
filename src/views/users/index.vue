@@ -245,7 +245,7 @@ export default {
 }
 .users-container {
   h1 {
-    margin: 22px 0 0 15px;
+    margin: 10px 0 0 15px;
   }
 
   .pagination {

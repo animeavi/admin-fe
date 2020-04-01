@@ -241,12 +241,16 @@ export default {
     resendConfirmation: 'Resend confirmation email'
   },
   statuses: {
-    statuses: 'Statuses by instance',
+    statuses: 'Statuses',
     instanceFilter: 'Instance filter',
     loadMore: 'Load more',
     noInstances: 'No other instances found',
     onlyLocalStatuses: 'Show only local statuses',
-    showPrivateStatuses: 'Show private statuses'
+    showPrivateStatuses: 'Show private statuses',
+    direct: 'Direct',
+    private: 'Private',
+    public: 'Public',
+    unlisted: 'Unlisted'
   },
   userProfile: {
     tags: 'Tags',
@@ -261,7 +265,22 @@ export default {
     activeUppercase: 'Active',
     active: 'active',
     deactivated: 'deactivated',
-    noStatuses: 'No statuses to show'
+    noStatuses: 'No statuses to show',
+    securitySettings: {
+      email: 'Email',
+      password: 'Password',
+      securitySettings: 'Security settings',
+      passwordChangeWarning1: 'Setting a new password will cause the user to be signed out from any client they have used before.',
+      passwordChangeWarning2: 'When the user signs in with this password, they will be asked to set a new one.',
+      passwordLengthNotice: 'Make sure it\'s at least {minLength} characters long.',
+      inputNewEmail: 'Input new email',
+      inputNewPassword: 'Input new password',
+      passwordUpdated: 'The password has been updated',
+      emailUpdated: 'The email has been updated',
+      success: 'Success',
+      submit: 'Submit',
+      close: 'Close'
+    }
   },
   usersFilter: {
     inputPlaceholder: 'Select filter',

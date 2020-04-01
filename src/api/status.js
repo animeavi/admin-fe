@@ -30,6 +30,15 @@ export async function fetchStatuses({ godmode, localOnly, authHost, token, pageS
   })
 }
 
+export async function fetchStatusesCount(authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/stats`,
+    method: 'get',
+    headers: authHeaders(token)
+  })
+}
+
 export async function fetchStatusesByInstance({ instance, authHost, token, pageSize, page }) {
   return await request({
     baseURL: baseName(authHost),
