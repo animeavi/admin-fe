@@ -145,7 +145,7 @@ export default {
       try {
         this.$store.dispatch('AddNewEmojiFile', {
           packName: this.copyToLocalPackName,
-          file: this.addressOfEmojiInPack(this.host, this.packName, this.file),
+          file: this.addressOfEmojiInPack(this.remoteInstance, this.packName, this.file),
           shortcode: this.copyToShortcode.trim() !== '' ? this.copyToShortcode.trim() : this.shortcode,
           filename: this.copyToFilename.trim() !== '' ? this.copyToFilename.trim() : this.file
         })
