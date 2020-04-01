@@ -3,15 +3,21 @@ import { getToken } from '@/utils/auth'
 import { baseName } from './utils'
 
 export async function addNewEmojiFile(packName, file, shortcode, filename, host, token) {
+  const data = new FormData()
+  if (filename.trim() !== '') {
+    data.set('filename', filename)
+  }
+  if (shortcode.trim() !== '') {
+    data.set('shortcode', shortcode)
+  }
+  data.set('file', file)
+
   return await request({
     baseURL: baseName(host),
     url: `/api/pleroma/emoji/packs/${packName}/files`,
     method: 'post',
     headers: authHeaders(token),
-    data: {
-      file,
-      shortcode: shortcode.trim() !== '' ? shortcode : null,
-      filename: filename.trim() !== '' ? filename : null }
+    data
   })
 }
 
