@@ -12,10 +12,6 @@
       <setting :setting-group="scheduledActivity" :data="scheduledActivityData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="fetchInitialPosts" :model="fetchInitialPostsData" :label-width="labelWidth">
-      <setting :setting-group="fetchInitialPosts" :data="fetchInitialPostsData"/>
-    </el-form>
-    <el-divider class="divider thick-line"/>
     <el-form ref="manifest" :model="manifestData" :label-width="labelWidth">
       <setting :setting-group="manifest" :data="manifestData"/>
     </el-form>
@@ -66,12 +62,6 @@ export default {
     },
     feedData() {
       return _.get(this.settings.settings, [':pleroma', ':feed']) || {}
-    },
-    fetchInitialPosts() {
-      return this.settings.description.find(setting => setting.key === ':fetch_initial_posts')
-    },
-    fetchInitialPostsData() {
-      return _.get(this.settings.settings, [':pleroma', ':fetch_initial_posts']) || {}
     },
     instance() {
       return this.settings.description.find(setting => setting.key === ':instance')

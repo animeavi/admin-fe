@@ -41,7 +41,7 @@
           class="input"
           @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
         <el-switch
-          v-if="setting.type === 'boolean'"
+          v-if="setting.type === 'boolean' && ![':registrations_open', ':invites_enabled'].includes(setting.key)"
           :value="inputValue"
           :data-search="setting.key || setting.group"
           class="switch-input"
@@ -103,6 +103,7 @@
         <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
         <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
         <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
+        <reg-invites-input v-if="[':registrations_open', ':invites_enabled'].includes(setting.key)" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <!-------------------->
         <el-tooltip v-if="canBeDeleted && (isMobile || isTablet)" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
           <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
@@ -118,7 +119,17 @@
 
 <script>
 import i18n from '@/lang'
-import { AutoLinkerInput, CrontabInput, EditableKeywordInput, IconsInput, MascotsInput, MultipleSelect, ProxyUrlInput, PruneInput, RateLimitInput } from './inputComponents'
+import {
+  AutoLinkerInput,
+  CrontabInput,
+  EditableKeywordInput,
+  IconsInput,
+  MascotsInput,
+  MultipleSelect,
+  ProxyUrlInput,
+  PruneInput,
+  RateLimitInput,
+  RegInvitesInput } from './inputComponents'
 import { processNested } from '@/store/modules/normalizers'
 import _ from 'lodash'
 import marked from 'marked'
@@ -134,7 +145,8 @@ export default {
     MultipleSelect,
     ProxyUrlInput,
     PruneInput,
-    RateLimitInput
+    RateLimitInput,
+    RegInvitesInput
   },
   props: {
     customLabelWidth: {
