@@ -11,12 +11,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Ability to see local statuses in Statuses by instance section
 - Ability to configure Oban.Cron settings and settings for notifications streamer
 - Settings search
+- Link settings that enable registrations and invites
+- Display status count by scope on Statuses page
 
 ### Fixed
 
 - Fix parsing tuples in Pleroma.Upload.Filter.Mogrify and Pleroma.Emails.Mailer settings
 - Fix settings submit button position on wide screens when sidebar menu is open
 - Updates links for downloading remote emoji packs
+- Disable Invites tab when invites are disabled on BE
 
 ## [2.0] - 2020-02-27
 
