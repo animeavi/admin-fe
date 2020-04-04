@@ -4,19 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## [2.0.2] - 2020-04-01
 
 ### Added
 
 - Ability to see local statuses in Statuses by instance section
 - Ability to configure Oban.Cron settings and settings for notifications streamer
 - Settings search
+- Ability to set user's password and email on user's page
+- Display status count by scope on Statuses page
+
+### Changed
+
+- Link to Pleroma docs when a non-admin user tries to log in 
 
 ### Fixed
 
 - Fix parsing tuples in Pleroma.Upload.Filter.Mogrify and Pleroma.Emails.Mailer settings
 - Fix settings submit button position on wide screens when sidebar menu is open
 - Updates links for downloading remote emoji packs
+- Fix parsing emails that have symbols in it
 
 ## [2.0] - 2020-02-27
 
