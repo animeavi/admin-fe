@@ -72,10 +72,11 @@ const user = {
         })
       })
     },
-    async GetNodeInfo({ commit, state }) {
+    async GetNodeInfo({ commit, dispatch, state }) {
       const nodeInfo = await getNodeInfo(state.authHost)
 
       commit('SET_NODE_INFO', nodeInfo.data)
+      dispatch('SetInvitesEnabled', nodeInfo.data.metadata.invitesEnabled)
     },
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {

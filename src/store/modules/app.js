@@ -8,7 +8,8 @@ const app = {
     },
     device: 'desktop',
     language: Cookies.get('language') || 'en',
-    size: Cookies.get('size') || 'medium'
+    size: Cookies.get('size') || 'medium',
+    invitesEnabled: false
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
@@ -28,6 +29,9 @@ const app = {
     TOGGLE_DEVICE: (state, device) => {
       state.device = device
     },
+    SET_INVITES_ENABLED: (state, invitesEnabled) => {
+      state.invitesEnabled = invitesEnabled
+    },
     SET_LANGUAGE: (state, language) => {
       state.language = language
       Cookies.set('language', language)
@@ -46,6 +50,9 @@ const app = {
     },
     toggleDevice({ commit }, device) {
       commit('TOGGLE_DEVICE', device)
+    },
+    SetInvitesEnabled({ commit }, invitesEnabled) {
+      commit('SET_INVITES_ENABLED', invitesEnabled)
     },
     setLanguage({ commit }, language) {
       commit('SET_LANGUAGE', language)
