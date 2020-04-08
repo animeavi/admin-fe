@@ -41,7 +41,7 @@
               <span class="deactivated"> (deactivated)</span>
             </span>
           </div>
-          <div v-if="report.content.length > 0">
+          <div v-if="report.content && report.content.length > 0">
             <el-divider class="divider"/>
             <span class="report-row-key">{{ $t('reports.content') }}:
               <span>{{ report.content }}</span>
@@ -151,7 +151,7 @@ export default {
           return 'primary'
       }
     },
-    getStatusesTitle(statuses) {
+    getStatusesTitle(statuses = []) {
       return `Reported statuses: ${statuses.length} item(s)`
     },
     getNotesTitle(notes = []) {
@@ -167,7 +167,7 @@ export default {
     parseTimestamp(timestamp) {
       return moment(timestamp).format('L HH:mm')
     },
-    showStatuses(statuses) {
+    showStatuses(statuses = []) {
       return statuses.length > 0
     }
   }
