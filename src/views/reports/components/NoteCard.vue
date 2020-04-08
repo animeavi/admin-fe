@@ -8,7 +8,7 @@
             <h3 class="note-actor-name">{{ note.user.display_name }}</h3>
           </div>
           <a :href="note.user.url" target="_blank">
-            @{{ note.user.acct }}
+            @{{ note.user.display_name }}
           </a>
         </div>
         <div>

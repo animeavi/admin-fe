@@ -91,7 +91,7 @@
         </el-checkbox>
         <el-timeline v-if="!statusesLoading" class="statuses">
           <el-timeline-item v-for="status in statuses" :key="status.id">
-            <status :status="status" :show-checkbox="false" :user-id="user.id" :godmode="showPrivate"/>
+            <status :status="status" :account="status.account" :show-checkbox="false" :user-id="user.id" :godmode="showPrivate"/>
           </el-timeline-item>
           <p v-if="statuses.length === 0" class="no-statuses">{{ $t('userProfile.noStatuses') }}</p>
         </el-timeline>

@@ -33,9 +33,13 @@
               :src="report.account.avatar"
               alt="avatar"
               class="avatar-img">
-            <a :href="report.account.url" target="_blank" class="account">
-              <span>{{ report.account.acct }}</span>
+            <a v-if="!report.account.deactivated" :href="report.account.url" target="_blank" class="account">
+              <span>{{ report.account.display_name }}</span>
             </a>
+            <span v-else>
+              {{ report.account.display_name }}
+              <span class="deactivated"> (deactivated)</span>
+            </span>
           </div>
           <div v-if="report.content.length > 0">
             <el-divider class="divider"/>
@@ -51,14 +55,14 @@
               alt="avatar"
               class="avatar-img">
             <a :href="report.actor.url" target="_blank" class="account">
-              <span>{{ report.actor.acct }}</span>
+              <span>{{ report.actor.display_name }}</span>
             </a>
           </div>
           <div v-if="showStatuses(report.statuses)" class="statuses">
             <el-collapse>
               <el-collapse-item :title="getStatusesTitle(report.statuses)">
                 <div v-for="status in report.statuses" :key="status.id">
-                  <status :status="status" :show-checkbox="false" :page="currentPage"/>
+                  <status :status="status" :account="status.account.display_name ? status.account : report.account" :show-checkbox="false" :page="currentPage"/>
                 </div>
               </el-collapse-item>
             </el-collapse>
@@ -182,6 +186,9 @@ export default {
   }
   .divider {
     margin: 15px 0;
+  }
+  .deactivated {
+    color: gray;
   }
   .el-card__body {
     padding: 17px;
