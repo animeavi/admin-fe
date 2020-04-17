@@ -23,7 +23,9 @@ describe('Log out', () => {
     store = new Vuex.Store(cloneDeep(storeConfig))
     router = new VueRouter(cloneDeep(routerConfig))
     router.beforeEach(beforeEachRoute)
-    window.location.reload = jest.fn()
+
+    delete window.location
+    window.location = { href: '' }
   })
 
   it('logs out user', async (done) => {

@@ -8,7 +8,7 @@
         placement="top"
         class="timeline-item-container">
         <el-card class="report">
-          <div class="header-container">
+          <div class="report-header-container">
             <div class="title-container">
               <h3 class="report-title">{{ $t('reports.reportOn') }} {{ report.account.display_name }}</h3>
               <h5 class="id">{{ $t('reports.id') }}: {{ report.id }}</h5>
@@ -212,7 +212,7 @@ export default {
     height: 17px;
   }
   .report {
-    .header-container {
+    .report-header-container {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
@@ -285,7 +285,7 @@ export default {
 
   @media only screen and (max-width:480px) {
     .report {
-      .header-container {
+      .report-header-container {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;

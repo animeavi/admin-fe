@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie'
+import { needReboot, restartApp } from '@/api/app'
 
 const app = {
   state: {
@@ -8,6 +9,7 @@ const app = {
     },
     device: 'desktop',
     language: Cookies.get('language') || 'en',
+    needReboot: false,
     size: Cookies.get('size') || 'medium',
     invitesEnabled: false
   },
@@ -36,20 +38,25 @@ const app = {
       state.language = language
       Cookies.set('language', language)
     },
+    TOGGLE_REBOOT: (state, needReboot) => {
+      state.needReboot = needReboot
+    },
     SET_SIZE: (state, size) => {
       state.size = size
       Cookies.set('size', size)
     }
   },
   actions: {
-    toggleSideBar({ commit }) {
-      commit('TOGGLE_SIDEBAR')
-    },
     closeSideBar({ commit }, { withoutAnimation }) {
       commit('CLOSE_SIDEBAR', withoutAnimation)
     },
-    toggleDevice({ commit }, device) {
-      commit('TOGGLE_DEVICE', device)
+    async NeedReboot({ commit, getters }) {
+      const response = await needReboot(getters.authHost, getters.token)
+      commit('TOGGLE_REBOOT', response.data['need_reboot'])
+    },
+    async RestartApplication({ commit, getters }) {
+      await restartApp(getters.authHost, getters.token)
+      commit('TOGGLE_REBOOT', false)
     },
     SetInvitesEnabled({ commit }, invitesEnabled) {
       commit('SET_INVITES_ENABLED', invitesEnabled)
@@ -59,6 +66,12 @@ const app = {
     },
     setSize({ commit }, size) {
       commit('SET_SIZE', size)
+    },
+    toggleDevice({ commit }, device) {
+      commit('TOGGLE_DEVICE', device)
+    },
+    toggleSideBar({ commit }) {
+      commit('TOGGLE_SIDEBAR')
     }
   }
 }

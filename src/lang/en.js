@@ -383,7 +383,7 @@ export default {
     emoji: 'Emoji',
     markup: 'Markup settings',
     corsPlug: 'CORS plug config',
-    instanceReboot: 'Instance Reboot',
+    instanceReboot: 'Reboot Instance',
     restartApp: 'You must restart the instance to apply settings',
     restartSuccess: 'Instance rebooted successfully!'
   },

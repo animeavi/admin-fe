@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading" class="form-container">
+  <div v-if="!loading" :class="isSidebarOpen" class="form-container">
     <el-form ref="mailer" :model="mailerData" :label-width="labelWidth">
       <setting :setting-group="mailer" :data="mailerData"/>
     </el-form>
@@ -46,6 +46,9 @@ export default {
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
+    },
+    isSidebarOpen() {
+      return this.$store.state.app.sidebar.opened ? 'sidebar-opened' : 'sidebar-closed'
     },
     isTablet() {
       return this.$store.state.app.device === 'tablet'

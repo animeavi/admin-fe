@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading" class="form-container">
+  <div v-if="!loading" :class="isSidebarOpen" class="form-container">
     <el-form v-if="!loading" ref="vapidDetailsData" :model="vapidDetailsData" :label-width="labelWidth">
       <setting :setting-group="vapidDetails" :data="vapidDetailsData"/>
     </el-form>
@@ -24,6 +24,9 @@ export default {
     ]),
     isMobile() {
       return this.$store.state.app.device === 'mobile'
+    },
+    isSidebarOpen() {
+      return this.$store.state.app.sidebar.opened ? 'sidebar-opened' : 'sidebar-closed'
     },
     isTablet() {
       return this.$store.state.app.device === 'tablet'

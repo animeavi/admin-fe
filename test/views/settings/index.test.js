@@ -16,12 +16,14 @@ localVue.use(Element)
 describe('Settings search', () => {
   let store
   let actions
+  let appActions
 
   beforeEach(() => {
-    actions = { ...settings.actions, FetchSettings: jest.fn() }
+    appActions = { ...app.actions, NeedReboot: jest.fn() }
+    actions = { ...settings.actions, FetchSettings: jest.fn(), GetNodeInfo: jest.fn() }
     store = new Vuex.Store({
       modules: {
-        app,
+        app: { ...app, actions: appActions },
         settings: { ...settings, actions }
       },
       getters

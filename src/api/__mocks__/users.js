@@ -28,6 +28,10 @@ export async function fetchUser(id, authHost, token) {
   return Promise.resolve({ data: userProfile })
 }
 
+export async function fetchUserCredentials(nickname, authHost, token) {
+  return Promise.resolve({ data: {}})
+}
+
 export async function fetchUsers(filters, authHost, token, page = 1) {
   const filteredUsers = filterUsers(filters)
   return Promise.resolve({ data: {
