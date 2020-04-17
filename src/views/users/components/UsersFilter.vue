@@ -68,10 +68,4 @@ export default {
     margin-bottom: 5px;
   }
 }
-
-@media only screen and (max-width:801px) and (min-width: 481px) {
-  .select-field {
-    width: 50%;
-  }
-}
 </style>

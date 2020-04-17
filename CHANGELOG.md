@@ -10,6 +10,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Link settings that enable registrations and invites
 
+### Changed
+
+- Put Instance Reboot button on all pages of admin-fe
+- Make Instance Reboot button's positon fixed on Settings page
+- Update jest and babel-jest
+
 ### Fixed
 
 - Disable Invites tab when invites are disabled on BE

@@ -1,14 +1,19 @@
 <template>
   <div v-if="!loadingPeers" class="statuses-container">
-    <h1>
-      {{ $t('statuses.statuses') }}
-    </h1>
-    <el-button-group>
-      <el-button plain>{{ $t('statuses.direct') }}: {{ statusVisibility.direct }}</el-button>
-      <el-button plain>{{ $t('statuses.private') }}: {{ statusVisibility.private }}</el-button>
-      <el-button plain>{{ $t('statuses.public') }}: {{ statusVisibility.public }}</el-button>
-      <el-button plain>{{ $t('statuses.unlisted') }}: {{ statusVisibility.unlisted }}</el-button>
-    </el-button-group>
+    <div class="statuses-header">
+      <h1>
+        {{ $t('statuses.statuses') }}
+      </h1>
+      <reboot-button/>
+    </div>
+    <div class="statuses-header-container">
+      <el-button-group>
+        <el-button plain>{{ $t('statuses.direct') }}: {{ statusVisibility.direct }}</el-button>
+        <el-button plain>{{ $t('statuses.private') }}: {{ statusVisibility.private }}</el-button>
+        <el-button plain>{{ $t('statuses.public') }}: {{ statusVisibility.public }}</el-button>
+        <el-button plain>{{ $t('statuses.unlisted') }}: {{ statusVisibility.unlisted }}</el-button>
+      </el-button-group>
+    </div>
     <div class="filter-container">
       <el-select
         v-model="selectedInstance"
@@ -54,11 +59,13 @@
 <script>
 import MultipleUsersMenu from '@/views/users/components/MultipleUsersMenu'
 import Status from '@/components/Status'
+import RebootButton from '@/components/RebootButton'
 
 export default {
   name: 'Statuses',
   components: {
     MultipleUsersMenu,
+    RebootButton,
     Status
   },
   data() {
@@ -81,6 +88,12 @@ export default {
     },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
+    },
+    isMobile() {
+      return this.$store.state.app.device === 'mobile'
+    },
+    isTablet() {
+      return this.$store.state.app.device === 'tablet'
     },
     loadingPeers() {
       return this.$store.state.peers.loading
@@ -123,6 +136,8 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch('GetNodeInfo')
+    this.$store.dispatch('NeedReboot')
     this.$store.dispatch('FetchPeers')
     this.$store.dispatch('FetchStatusesCount')
   },
@@ -169,8 +184,23 @@ export default {
   align-items: center;
   margin: 22px 0 15px 0;
 }
+.reboot-button {
+  padding: 10px;
+  margin: 0;
+  width: 145px;
+}
 .select-instance {
-  width: 350px;
+  width: 396px;
+}
+.statuses-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.statuses-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .statuses-pagination {
   padding: 15px 0;
@@ -193,6 +223,16 @@ export default {
   }
   .select-instance {
     width: 100%;
+  }
+  .statuses-header-container {
+    flex-direction: column;
+    align-items: flex-start;
+    .el-button {
+      padding: 10px 6.5px;
+    }
+    .reboot-button {
+      margin: 10px 0 0 0;
+    }
   }
 }
 </style>

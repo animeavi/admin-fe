@@ -1,6 +1,9 @@
 <template>
   <div v-if="!loading" class="moderation-log-container">
-    <h1>{{ $t('moderationLog.moderationLog') }}</h1>
+    <div class="moderation-log-header-container">
+      <h1>{{ $t('moderationLog.moderationLog') }}</h1>
+      <reboot-button/>
+    </div>
     <div class="moderation-log-nav-container">
       <el-select
         v-model="user"
@@ -60,8 +63,10 @@
 import moment from 'moment'
 import _ from 'lodash'
 import debounce from 'lodash.debounce'
+import RebootButton from '@/components/RebootButton'
 
 export default {
+  components: { RebootButton },
   data() {
     return {
       dateRange: '',
@@ -103,6 +108,8 @@ export default {
     }, 500)
   },
   mounted() {
+    this.$store.dispatch('GetNodeInfo')
+    this.$store.dispatch('NeedReboot')
     this.$store.dispatch('FetchModerationLog')
     this.$store.dispatch('FetchAdmins')
   },
@@ -130,7 +137,7 @@ export default {
   margin: 0 15px;
 }
 h1 {
-  margin: 10px 0 20px 0;
+  margin: 0;
 }
 .el-timeline {
   margin: 25px 45px 0 0;
@@ -138,6 +145,12 @@ h1 {
 }
 .moderation-log-date-panel {
   width: 350px;
+}
+.moderation-log-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0 15px 0;
 }
 .moderation-log-nav-container {
   display: flex;
@@ -150,6 +163,11 @@ h1 {
   margin: 0 0 20px;
   width: 350px;
 }
+.reboot-button {
+  padding: 10px;
+  margin: 0;
+  width: 145px;
+}
 .search-container {
   text-align: right;
 }
@@ -158,6 +176,9 @@ h1 {
 }
 
 @media only screen and (max-width:480px) {
+  h1 {
+    font-size: 24px;
+  }
   .moderation-log-date-panel {
     width: 100%;
   }
