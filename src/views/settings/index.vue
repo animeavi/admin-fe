@@ -1,17 +1,12 @@
 <template>
-  <div class="settings-container">
+  <div :class="rebootIsSidebarOpen" class="settings-container">
+    <div class="reboot-button-container">
+      <reboot-button/>
+    </div>
     <div v-if="isDesktop">
       <div :class="isSidebarOpen" class="settings-header-container">
         <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
-        <div>
-          <el-tooltip v-if="needReboot" :content="$t('settings.restartApp')" placement="bottom-end">
-            <el-button type="warning" class="settings-reboot-button" @click="restartApp">
-              <span>
-                <i class="el-icon-refresh"/>
-                {{ $t('settings.instanceReboot') }}
-              </span>
-            </el-button>
-          </el-tooltip>
+        <div class="docs-search-container">
           <el-link
             :underline="false"
             href="https://docs-develop.pleroma.social/backend/administration/CLI_tasks/config/"
@@ -49,12 +44,6 @@
     <div v-if="isMobile || isTablet">
       <div :class="isSidebarOpen" class="settings-header-container">
         <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
-        <el-button v-if="needReboot" class="settings-reboot-button" @click="restartApp">
-          <span>
-            <i class="el-icon-refresh"/>
-            {{ $t('settings.instanceReboot') }}
-          </span>
-        </el-button>
       </div>
       <div class="nav-container">
         <el-select v-model="activeTab" class="settings-menu" placeholder="Select">
@@ -127,6 +116,7 @@ import {
   Upload,
   WebPush
 } from './components'
+import RebootButton from '@/components/RebootButton'
 
 export default {
   components: {
@@ -148,6 +138,7 @@ export default {
     Other,
     RateLimiters,
     Relays,
+    RebootButton,
     Upload,
     WebPush
   },
@@ -202,8 +193,8 @@ export default {
     isTablet() {
       return this.$store.state.app.device === 'tablet'
     },
-    needReboot() {
-      return this.$store.state.settings.needReboot
+    rebootIsSidebarOpen() {
+      return this.$store.state.app.sidebar.opened ? 'reboot-sidebar-opened' : 'reboot-sidebar-closed'
     },
     searchData() {
       return this.$store.state.settings.searchData
@@ -213,20 +204,11 @@ export default {
     }
   },
   mounted: function() {
+    this.$store.dispatch('GetNodeInfo')
+    this.$store.dispatch('NeedReboot')
     this.$store.dispatch('FetchSettings')
   },
   methods: {
-    async restartApp() {
-      try {
-        await this.$store.dispatch('RestartApplication')
-      } catch (e) {
-        return
-      }
-      this.$message({
-        type: 'success',
-        message: i18n.t('settings.restartSuccess')
-      })
-    },
     async handleSearchSelect(selectedValue) {
       const tab = Object.keys(this.tabs).find(tab => {
         return this.tabs[tab].settings.includes(selectedValue.group === ':pleroma' ? selectedValue.key : selectedValue.group)
@@ -250,7 +232,7 @@ export default {
 }
 </script>
 
-<style rel='stylesheet/scss' lang='scss'>
+<style rel='stylesheet/scss' lang='scss' scoped>
 @import './styles/main';
 @include settings
 </style>

@@ -1,6 +1,9 @@
 <template>
   <div class="invites-container">
-    <h1>{{ $t('invites.inviteTokens') }}</h1>
+    <div class="invites-header-container">
+      <h1>{{ $t('invites.inviteTokens') }}</h1>
+      <reboot-button/>
+    </div>
     <div class="actions-container">
       <el-button class="create-invite-token" @click="createTokenDialogVisible = true">
         <span>
@@ -140,7 +143,10 @@
 </template>
 
 <script>
+import RebootButton from '@/components/RebootButton'
+
 export default {
+  components: { RebootButton },
   data() {
     return {
       rules: {
@@ -178,6 +184,8 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch('GetNodeInfo')
+    this.$store.dispatch('NeedReboot')
     this.$store.dispatch('FetchInviteTokens')
   },
   methods: {
@@ -232,7 +240,7 @@ export default {
     height: 36px;
     justify-content: space-between;
     align-items: center;
-    margin: 20px 15px 15px 15px;
+    margin: 15px 15px 15px 15px;
   }
   .create-invite-token {
     text-align: left;
@@ -246,7 +254,7 @@ export default {
     padding: 5px 20px 0 20px
   }
   h1 {
-    margin: 10px 0 0 15px;
+    margin: 0;
   }
   .icon {
     margin-right: 5px;
@@ -263,11 +271,22 @@ export default {
   .invite-via-email-dialog {
     width: 50%
   }
+  .invites-header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 15px;
+  }
   .info {
     color: #666666;
     font-size: 13px;
     line-height: 22px;
     margin: 0 0 10px 0;
+  }
+  .reboot-button {
+    padding: 10px;
+    margin: 0;
+    width: 145px;
   }
 }
 
@@ -296,7 +315,7 @@ export default {
       padding: 5px 15px 0 15px
     }
     h1 {
-      margin: 7px 10px 15px 10px;
+      margin: 0;
     }
     .invite-token-table {
       width: 100%;
@@ -310,6 +329,9 @@ export default {
     }
     .invite-via-email-dialog {
       width: 85%
+    }
+    .invites-header-container {
+      margin: 0 10px;
     }
     .info {
       margin: 0 0 10px 5px;

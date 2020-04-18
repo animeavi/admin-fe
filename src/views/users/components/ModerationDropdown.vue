@@ -179,4 +179,9 @@ export default {
     display: flex;
     justify-content: space-between;
   }
+  @media only screen and (max-width:480px) {
+    .moderate-user-button {
+      width: 100%
+    }
+  }
 </style>

@@ -12,7 +12,9 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 localVue.use(Element)
 
+jest.mock('@/api/app')
 jest.mock('@/api/invites')
+jest.mock('@/api/nodeInfo')
 
 describe('Invite tokens', () => {
   let store

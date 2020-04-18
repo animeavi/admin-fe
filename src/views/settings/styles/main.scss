@@ -40,6 +40,10 @@
   .divider.thick-line {
     height: 2px;
   }
+  .docs-search-container {
+    float: right;
+    margin-right: 30px;
+  }
   .editable-keyword-container {
     width: 100%;
   }
@@ -230,6 +234,20 @@
     width: 100%;
     margin-right: 10px;
   }
+  .reboot-button {
+    width: 145px;
+    text-align: left;
+    padding: 10px;
+    float: right;
+    margin: 0 30px 0 0;
+  }
+  .reboot-button-container {
+    width: 100%;
+    position: fixed;
+    top: 60px;
+    right: 0;
+    z-index: 2000;
+  }
   .relays-container {
     margin: 0 15px;
   }
@@ -262,7 +280,7 @@
     padding: 10px;
   }
   .settings-header {
-    margin: 0;
+    margin: 10px 15px 15px 15px;
   }
   .header-sidebar-opened {
     max-width: 1585px;
@@ -271,17 +289,7 @@
     max-width: 1728px;
   }
   .settings-header-container {
-    display: flex;
-    height: 36px;
-    justify-content: space-between;
-    align-items: center;
-    margin: 22px 30px 15px 15px;
-  }
-  .settings-reboot-button {
-    width: 145px;
-    text-align: left;
-    padding: 10px;
-    margin-right: 5px;
+    height: 87px;
   }
   .settings-search-input {
     width: 350px;
@@ -336,6 +344,25 @@
   }
 
   @media only screen and (min-width: 1824px) {
+    .header-sidebar-closed {
+      max-width: 1772px;
+    }
+    .header-sidebar-opened {
+      max-width: 1630px;
+    }
+    .reboot-button-container {
+      width: 100%;
+      max-width: inherit;
+      margin-left: auto;
+      margin-right: auto;
+      right: auto;
+    }
+    .reboot-sidebar-opened {
+      max-width: 1630px;
+    }
+    .reboot-sidebar-closed {
+      max-width: 1772px;
+    }
     .sidebar-closed {
       max-width: 1586px;
     }
@@ -391,6 +418,9 @@
     .follow-relay-container {
       display: flex;
       justify-content: space-between;
+    }
+    h1 {
+      font-size: 24px;
     }
     .input {
       flex: 1 1 auto;
@@ -455,6 +485,12 @@
     .rate-limit-label {
       float: left;
     }
+    .reboot-button {
+      margin: 0 15px 0 0;
+    }
+    .reboot-button-container {
+      top: 57px;
+    }
     .scale-input {
       width: 45%;
     }
@@ -465,10 +501,10 @@
     .settings-header {
       width: fit-content;
       display: inline-block;
-      margin: 0;
-    }
-    .settings-header-container {
       margin: 10px 15px 15px 15px;
+    }
+    .docs-search-container {
+      float: right;
     }
     .settings-search-input {
       width: 100%;
@@ -479,6 +515,7 @@
     }
     .settings-menu {
       width: 163px;
+      margin-right: 5px;
     }
     .socks5-checkbox-container {
       width: 100%;
@@ -548,6 +585,9 @@
       margin-left: 4px;
       margin-right: 5px
     }
+    .settings-header-container {
+      height: 45px;
+    }
     .value-input {
       width: 60%;
       margin-left: 5px;
@@ -597,6 +637,9 @@
     }
     .settings-delete-button {
       float: right;
+    }
+    .settings-header-container {
+      height: 36px;
     }
     .settings-search-input {
       width: 250px;

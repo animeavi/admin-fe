@@ -1,15 +1,31 @@
 <template>
   <main v-if="!userProfileLoading">
-    <header class="user-page-header">
+    <header v-if="isDesktop || isTablet" class="user-page-header">
       <div class="avatar-name-container">
         <el-avatar :src="user.avatar" size="large" />
         <h1>{{ user.display_name }}</h1>
       </div>
+      <div class="left-header-container">
+        <moderation-dropdown
+          :user="user"
+          :page="'userPage'"
+          @open-reset-token-dialog="openResetPasswordDialog"/>
+        <reboot-button/>
+      </div>
+    </header>
+    <div v-if="isMobile" class="user-page-header-container">
+      <header class="user-page-header">
+        <div class="avatar-name-container">
+          <el-avatar :src="user.avatar" size="large" />
+          <h1>{{ user.display_name }}</h1>
+        </div>
+        <reboot-button/>
+      </header>
       <moderation-dropdown
         :user="user"
         :page="'userPage'"
         @open-reset-token-dialog="openResetPasswordDialog"/>
-    </header>
+    </div>
     <el-dialog
       v-loading="loading"
       :visible.sync="resetPasswordDialogOpen"
@@ -104,10 +120,11 @@
 import Status from '@/components/Status'
 import ModerationDropdown from './components/ModerationDropdown'
 import SecuritySettingsModal from './components/SecuritySettingsModal'
+import RebootButton from '@/components/RebootButton'
 
 export default {
   name: 'UsersShow',
-  components: { ModerationDropdown, Status, SecuritySettingsModal },
+  components: { ModerationDropdown, RebootButton, Status, SecuritySettingsModal },
   data() {
     return {
       showPrivate: false,
@@ -116,6 +133,15 @@ export default {
     }
   },
   computed: {
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
+    isMobile() {
+      return this.$store.state.app.device === 'mobile'
+    },
+    isTablet() {
+      return this.$store.state.app.device === 'tablet'
+    },
     loading() {
       return this.$store.state.users.loading
     },
@@ -142,6 +168,8 @@ export default {
     }
   },
   mounted: function() {
+    this.$store.dispatch('NeedReboot')
+    this.$store.dispatch('GetNodeInfo')
     this.$store.dispatch('FetchUserProfile', { userId: this.$route.params.id, godmode: false })
   },
   methods: {
@@ -189,6 +217,11 @@ table {
     width: 100%;
   }
 }
+.left-header-container {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
 .no-statuses {
   margin-left: 28px;
   color: #606266;
@@ -197,6 +230,10 @@ table {
   list-style-type: none;
   padding: 0;
   width: 30%;
+}
+.reboot-button {
+  padding: 10px;
+  margin-left: 10px;
 }
 .recent-statuses-container {
   display: flex;
@@ -229,7 +266,8 @@ table {
 .user-page-header {
   display: flex;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 15px 0 20px;
+  align-items: center;
   h1 {
     display: inline
   }
@@ -264,10 +302,14 @@ table {
     margin: 0 10px 20px 10px;
   }
   .user-page-header {
-    flex-direction: column;
-    align-items: flex-start;
     padding: 0;
-    margin: 7px 0 15px 10px;
+    margin: 7px 15px 15px 10px;
+  }
+  .user-page-header-container {
+    .el-dropdown {
+      width: 95%;
+      margin: 0 15px 15px 10px;
+    }
   }
   .user-profile-card {
     margin: 0 10px;
@@ -282,9 +324,6 @@ table {
 }
 
 @media only screen and (max-width:801px) and (min-width: 481px) {
-  .avatar-name-container {
-    margin-bottom: 20px;
-  }
   .recent-statuses {
     margin: 20px 10px 15px 0;
   }
@@ -296,10 +335,8 @@ table {
     margin: 0 10px 20px 0;
   }
   .user-page-header {
-    flex-direction: column;
-    align-items: flex-start;
     padding: 0;
-    margin: 7px 0 20px 20px;
+    margin: 7px 15px 20px 20px;
   }
   .user-profile-card {
     margin: 0 20px;

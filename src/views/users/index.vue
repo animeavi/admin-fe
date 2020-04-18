@@ -1,9 +1,12 @@
 <template>
   <div class="users-container">
-    <h1>
-      {{ $t('users.users') }}
-      <span class="user-count">({{ normalizedUsersCount }})</span>
-    </h1>
+    <div class="users-header-container">
+      <h1>
+        {{ $t('users.users') }}
+        <span class="user-count">({{ normalizedUsersCount }})</span>
+      </h1>
+      <reboot-button/>
+    </div>
     <div class="filter-container">
       <users-filter/>
       <el-input
@@ -111,6 +114,7 @@ import UsersFilter from './components/UsersFilter'
 import MultipleUsersMenu from './components/MultipleUsersMenu'
 import NewAccountDialog from './components/NewAccountDialog'
 import ModerationDropdown from './components/ModerationDropdown'
+import RebootButton from '@/components/RebootButton'
 
 export default {
   name: 'Users',
@@ -118,6 +122,7 @@ export default {
     NewAccountDialog,
     ModerationDropdown,
     MultipleUsersMenu,
+    RebootButton,
     UsersFilter
   },
   data() {
@@ -169,6 +174,7 @@ export default {
     }, 500)
   },
   mounted: function() {
+    this.$store.dispatch('NeedReboot')
     this.$store.dispatch('FetchUsers', { page: 1 })
   },
   methods: {
@@ -222,6 +228,9 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin: 0 15px 10px 15px;
+  .el-dropdown {
+    margin-left: 10px;
+  }
 }
 .active-tag {
   color: #409EFF;
@@ -239,6 +248,11 @@ export default {
 .create-account > .el-icon-plus {
   margin-right: 5px;
 }
+.users-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .password-reset-token {
   margin: 0 0 14px 0;
 }
@@ -251,23 +265,28 @@ export default {
 .users-container {
   h1 {
     margin: 10px 0 0 15px;
+    height: 40px;
   }
-
   .pagination {
     margin: 25px 0;
     text-align: center;
   }
-
+  .reboot-button {
+    margin: 0 15px 0 0;
+    padding: 10px;
+    width: 145px;
+  }
   .search {
     width: 350px;
     float: right;
+    margin-left: 10px;
   }
   .filter-container {
     display: flex;
     height: 36px;
     justify-content: space-between;
     align-items: center;
-    margin: 22px 15px 15px 15px
+    margin: 15px
   }
   .user-count {
     color: gray;
@@ -281,7 +300,7 @@ export default {
   }
   .users-container {
     h1 {
-      margin: 7px 10px 15px 10px;
+      margin: 0;
     }
     .actions-button {
       width: 100%;
@@ -296,6 +315,7 @@ export default {
     }
     .search {
       width: 100%;
+      margin-left: 0;
     }
     .filter-container {
       display: flex;
@@ -315,6 +335,25 @@ export default {
         padding-left: 8px;
       }
     }
+    .reboot-button {
+      margin: 0;
+    }
+    .users-header-container {
+      margin: 7px 10px 12px 10px;
+    }
+    .user-count {
+      color: gray;
+      font-size: 22px;
+    }
+  }
+}
+
+@media only screen and (max-width:801px) and (min-width: 481px) {
+  .actions-button {
+    width: 49%;
+  }
+  .search {
+    width: 49%;
   }
 }
 </style>

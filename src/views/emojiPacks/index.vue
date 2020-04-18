@@ -1,13 +1,18 @@
 <template>
   <div class="emoji-packs">
-    <h1 class="emoji-packs-header">{{ $t('emoji.emojiPacks') }}</h1>
-    <div class="emoji-packs-header-button-container">
-      <el-button type="primary" class="reload-emoji-button" @click="reloadEmoji">{{ $t('emoji.reloadEmoji') }}</el-button>
-      <el-tooltip :content="$t('emoji.importEmojiTooltip')" effects="dark" placement="bottom" class="import-pack-button">
-        <el-button type="primary" @click="importFromFS">
-          {{ $t('emoji.importPacks') }}
-        </el-button>
-      </el-tooltip>
+    <div class="emoji-packs-header">
+      <h1>{{ $t('emoji.emojiPacks') }}</h1>
+      <reboot-button/>
+    </div>
+    <div class="emoji-header-container">
+      <div class="emoji-packs-header-button-container">
+        <el-button type="primary" class="reload-emoji-button" @click="reloadEmoji">{{ $t('emoji.reloadEmoji') }}</el-button>
+        <el-tooltip :content="$t('emoji.importEmojiTooltip')" effects="dark" placement="bottom" class="import-pack-button">
+          <el-button type="primary" @click="importFromFS">
+            {{ $t('emoji.importPacks') }}
+          </el-button>
+        </el-tooltip>
+      </div>
     </div>
     <el-divider class="divider"/>
     <el-form :label-width="labelWidth" class="emoji-packs-form">
@@ -58,9 +63,10 @@
 import LocalEmojiPack from './components/LocalEmojiPack'
 import RemoteEmojiPack from './components/RemoteEmojiPack'
 import i18n from '@/lang'
+import RebootButton from '@/components/RebootButton'
 
 export default {
-  components: { LocalEmojiPack, RemoteEmojiPack },
+  components: { LocalEmojiPack, RebootButton, RemoteEmojiPack },
   data() {
     return {
       remoteInstanceAddress: '',
@@ -94,6 +100,8 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch('GetNodeInfo')
+    this.$store.dispatch('NeedReboot')
     this.refreshLocalPacks()
   },
   methods: {
@@ -149,9 +157,14 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
+.emoji-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 15px 22px 15px;
+}
 .emoji-packs-header-button-container {
   display: flex;
-  margin: 0 0 22px 15px;
 }
 .create-pack {
   display: flex;
@@ -164,17 +177,28 @@ export default {
   margin: 0 30px;
 }
 .emoji-packs-header {
-  margin: 10px 0 20px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 15px 15px 15px;
 }
 .import-pack-button {
   margin-left: 10px;
 }
+h1 {
+  margin: 0;
+}
 .line {
-    width: 100%;
-    height: 0;
-    border: 1px solid #eee;
-    margin-bottom: 22px;
-  }
+  width: 100%;
+  height: 0;
+  border: 1px solid #eee;
+  margin-bottom: 22px;
+}
+.reboot-button {
+  padding: 10px;
+  margin: 0;
+  width: 145px;
+}
 
 @media only screen and (min-width: 1824px) {
   .emoji-packs {
@@ -199,6 +223,10 @@ export default {
   }
   .el-message-box {
     width: 80%;
+  }
+  .emoji-header-container {
+    flex-direction: column;
+    align-items: flex-start;
   }
   .emoji-packs-form {
     margin: 0 7px;
