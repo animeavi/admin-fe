@@ -45,6 +45,7 @@
     <div v-for="status in statuses" :key="status.id" class="status-container">
       <status
         :status="status"
+        :account="status.account"
         :show-checkbox="isDesktop"
         :fetch-statuses-by-instance="true"
         @status-selection="handleStatusSelection" />

@@ -5,13 +5,17 @@
         <div class="status-header">
           <div class="status-account-container">
             <div class="status-account">
-              <el-checkbox v-if="showCheckbox" class="status-checkbox" @change="handleStatusSelection(status.account)"/>
-              <img :src="status.account.avatar" class="status-avatar-img">
-              <h3 class="status-account-name">{{ status.account.display_name }}</h3>
+              <el-checkbox v-if="showCheckbox" class="status-checkbox" @change="handleStatusSelection(account)"/>
+              <img :src="account.avatar" class="status-avatar-img">
+              <a v-if="!account.deactivated" :href="account.url" target="_blank" class="account">
+                <h3 class="status-account-name">{{ account.display_name }}</h3>
+              </a>
+              <span v-else>
+                <h3 class="status-account-name">{{ account.display_name }}</h3>
+                <h3 class="status-account-name deactivated"> (deactivated)</h3>
+              </span>
             </div>
-            <a :href="status.account.url" target="_blank" class="account">
-              @{{ status.account.acct }}
-            </a>
+
           </div>
           <div class="status-actions">
             <el-tag v-if="status.sensitive" type="warning" size="large">{{ $t('reports.sensitive') }}</el-tag>
@@ -121,6 +125,11 @@ import moment from 'moment'
 export default {
   name: 'Status',
   props: {
+    account: {
+      type: Object,
+      required: false,
+      default: () => { return {} }
+    },
     fetchStatusesByInstance: {
       type: Boolean,
       required: false,
