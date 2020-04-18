@@ -293,6 +293,7 @@ export default {
   },
   reports: {
     reports: 'Reports',
+    report: 'Report',
     reply: 'Reply',
     from: 'From',
     showNotes: 'Show notes',
@@ -332,7 +333,8 @@ export default {
     statusDeleted: 'This status has been deleted',
     leaveNote: 'Leave a note',
     postNote: 'Send',
-    deleteNote: 'Delete'
+    deleteNote: 'Delete',
+    notFound: 'account not found'
   },
   reportsFilter: {
     inputPlaceholder: 'Select filter',
