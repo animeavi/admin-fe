@@ -397,6 +397,7 @@ export default {
     expiresAt: 'Expires at',
     tokenCreated: 'Invite token was created',
     token: 'Token',
+    inviteLink: 'Invite link',
     uses: 'Uses',
     used: 'Used',
     cancel: 'Cancel',
