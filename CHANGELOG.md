@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Put Instance Reboot button on all pages of admin-fe
 - Make Instance Reboot button's positon fixed on Settings page
 - Update jest and babel-jest
+- Generate an invite link when an invite token has been generated
 
 ### Fixed
 

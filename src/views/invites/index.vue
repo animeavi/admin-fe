@@ -49,9 +49,22 @@
         <div slot="header" class="clearfix">
           <span>{{ $t('invites.tokenCreated') }}</span>
         </div>
-        <p>{{ this.$t('invites.token') }}: {{ newToken.token }}</p>
-        <p>{{ this.$t('invites.maxUse') }}: {{ newToken.maxUse }}</p>
-        <p>{{ this.$t('invites.expiresAt') }}: {{ newToken.expiresAt }}</p>
+        <el-form label-width="80px" class="new-token-card">
+          <el-form-item :label="$t('invites.inviteLink')">
+            <el-link :href="inviteLink" :underline="false" target="_blank">
+              {{ inviteLink }}
+            </el-link>
+          </el-form-item>
+          <el-form-item :label="$t('invites.token')">
+            {{ newToken.token }}
+          </el-form-item>
+          <el-form-item :label="$t('invites.maxUse')">
+            {{ newToken.maxUse }}
+          </el-form-item>
+          <el-form-item :label="$t('invites.expiresAt')">
+            {{ newToken.expiresAt || '(not set)' }}
+          </el-form-item>
+        </el-form>
       </el-card>
     </el-dialog>
     <el-dialog
@@ -144,6 +157,8 @@
 
 <script>
 import RebootButton from '@/components/RebootButton'
+import { mapGetters } from 'vuex'
+import { baseName } from '@/api/utils'
 
 export default {
   components: { RebootButton },
@@ -167,8 +182,14 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'authHost'
+    ]),
     getLabelWidth() {
       return this.isDesktop ? '100px' : '80px'
+    },
+    inviteLink() {
+      return `${baseName(this.authHost)}/registration/${this.newToken.token}`
     },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
@@ -248,7 +269,13 @@ export default {
     padding: 10px;
   }
   .create-new-token-dialog {
-    width: 40%
+    width: 50%;
+    a {
+      margin-bottom: 3px;
+    }
+    .el-card__body {
+      padding: 10px 20px;
+    }
   }
   .el-dialog__body {
     padding: 5px 20px 0 20px
@@ -282,6 +309,11 @@ export default {
     font-size: 13px;
     line-height: 22px;
     margin: 0 0 10px 0;
+  }
+  .new-token-card {
+    .el-form-item {
+      margin: 0;
+    }
   }
   .reboot-button {
     padding: 10px;
