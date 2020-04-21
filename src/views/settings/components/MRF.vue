@@ -1,40 +1,40 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="mrfSimple" :model="mrfSimpleData" :label-width="labelWidth">
+    <el-form ref="mrfSimple" :model="mrfSimpleData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="mrfSimple" :data="mrfSimpleData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="mrfRejectnonpublic" :model="mrfRejectnonpublicData" :label-width="labelWidth">
+    <el-form ref="mrfRejectnonpublic" :model="mrfRejectnonpublicData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="mrfRejectnonpublic" :data="mrfRejectnonpublicData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="mrfHellthread" :model="mrfHellthreadData" :label-width="labelWidth">
+    <el-form ref="mrfHellthread" :model="mrfHellthreadData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="mrfHellthread" :data="mrfHellthreadData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="mrfKeyword" :model="mrfKeywordData" :label-width="labelWidth">
+    <el-form ref="mrfKeyword" :model="mrfKeywordData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="mrfKeyword" :data="mrfKeywordData"/>
     </el-form>
-    <el-form ref="mrfSubchain" :model="mrfSubchainData" :label-width="labelWidth">
+    <el-form ref="mrfSubchain" :model="mrfSubchainData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="mrfSubchain" :data="mrfSubchainData"/>
     </el-form>
-    <el-form ref="mrfMention" :model="mrfMentionData" :label-width="labelWidth">
+    <el-form ref="mrfMention" :model="mrfMentionData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="mrfMention" :data="mrfMentionData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="mrfNormalizeMarkup" :model="mrfNormalizeMarkupData" :label-width="labelWidth">
+    <el-form ref="mrfNormalizeMarkup" :model="mrfNormalizeMarkupData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="mrfNormalizeMarkup" :data="mrfNormalizeMarkupData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="mrfVocabulary" :model="mrfVocabularyData" :label-width="labelWidth">
+    <el-form ref="mrfVocabulary" :model="mrfVocabularyData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="mrfVocabulary" :data="mrfVocabularyData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="mrfObjectAge" :model="mrfObjectAgeData" :label-width="labelWidth">
+    <el-form ref="mrfObjectAge" :model="mrfObjectAgeData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="mrfObjectAge" :data="mrfObjectAgeData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="modules" :model="modulesData" :label-width="labelWidth">
+    <el-form ref="modules" :model="modulesData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="modules" :data="modulesData"/>
     </el-form>
     <div class="submit-button-container">
@@ -64,6 +64,9 @@ export default {
     },
     isTablet() {
       return this.$store.state.app.device === 'tablet'
+    },
+    labelPosition() {
+      return this.isMobile ? 'top' : 'right'
     },
     labelWidth() {
       if (this.isMobile) {
