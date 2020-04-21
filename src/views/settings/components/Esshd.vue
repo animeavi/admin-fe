@@ -1,6 +1,6 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="esshdData" :model="esshdData" :label-width="labelWidth">
+    <el-form ref="esshdData" :model="esshdData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="esshd" :data="esshdData"/>
     </el-form>
     <div class="submit-button-container">
@@ -36,6 +36,9 @@ export default {
     },
     isTablet() {
       return this.$store.state.app.device === 'tablet'
+    },
+    labelPosition() {
+      return this.isMobile ? 'top' : 'right'
     },
     labelWidth() {
       if (this.isMobile) {
