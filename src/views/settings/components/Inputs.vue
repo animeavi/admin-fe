@@ -25,7 +25,7 @@
           :nested="true"/>
       </el-form-item>
     </div>
-    <el-form-item v-if="setting.type !== 'keyword'" :label-width="customLabelWidth" :class="labelClass">
+    <el-form-item v-if="setting.type !== 'keyword'" :label-width="customLabelWidth" :class="labelClass" :style="isDesktop ? '' : `margin-left:${margin}px`">
       <span slot="label">
         {{ setting.label }}
         <el-tooltip v-if="canBeDeleted && isDesktop" :content="$t('settings.removeFromDB')" placement="bottom-end">
