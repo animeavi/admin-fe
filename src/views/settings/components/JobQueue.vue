@@ -1,12 +1,12 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="obanQueuesData" :model="obanQueuesData" :label-width="labelWidth">
+    <el-form ref="obanQueuesData" :model="obanQueuesData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="obanQueues" :data="obanQueuesData"/>
     </el-form>
-    <el-form ref="workersData" :model="workersData" :label-width="labelWidth">
+    <el-form ref="workersData" :model="workersData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="workers" :data="workersData"/>
     </el-form>
-    <el-form ref="activityExpiration" :model="activityExpirationData" :label-width="labelWidth">
+    <el-form ref="activityExpiration" :model="activityExpirationData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="activityExpiration" :data="activityExpirationData"/>
     </el-form>
     <div class="submit-button-container">
@@ -42,6 +42,9 @@ export default {
     },
     isTablet() {
       return this.$store.state.app.device === 'tablet'
+    },
+    labelPosition() {
+      return this.isMobile ? 'top' : 'right'
     },
     labelWidth() {
       if (this.isMobile) {

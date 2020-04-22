@@ -1,33 +1,33 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="instanceData" :model="instanceData" :label-width="labelWidth">
+    <el-form ref="instanceData" :model="instanceData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="instance" :data="instanceData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="adminToken" :model="adminTokenData" :label-width="labelWidth">
+    <el-form ref="adminToken" :model="adminTokenData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="adminToken" :data="adminTokenData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="scheduledActivity" :model="scheduledActivityData" :label-width="labelWidth">
+    <el-form ref="scheduledActivity" :model="scheduledActivityData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="scheduledActivity" :data="scheduledActivityData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="manifest" :model="manifestData" :label-width="labelWidth">
+    <el-form ref="manifest" :model="manifestData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="manifest" :data="manifestData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="pleromaUser" :model="pleromaUserData" :label-width="labelWidth" data-search="Pleroma.User">
+    <el-form ref="pleromaUser" :model="pleromaUserData" :label-position="labelPosition" :label-width="labelWidth" data-search="Pleroma.User">
       <setting :setting-group="pleromaUser" :data="pleromaUserData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="uriSchemes" :model="uriSchemesData" :label-width="labelWidth">
+    <el-form ref="uriSchemes" :model="uriSchemesData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uriSchemes" :data="uriSchemesData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="feed" :model="feedData" :label-width="labelWidth">
+    <el-form ref="feed" :model="feedData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="feed" :data="feedData"/>
     </el-form>
-    <el-form ref="streamer" :model="streamerData" :label-width="labelWidth">
+    <el-form ref="streamer" :model="streamerData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="streamer" :data="streamerData"/>
     </el-form>
     <div class="submit-button-container">
@@ -77,6 +77,9 @@ export default {
     },
     isTablet() {
       return this.$store.state.app.device === 'tablet'
+    },
+    labelPosition() {
+      return this.isMobile ? 'top' : 'right'
     },
     labelWidth() {
       if (this.isMobile) {

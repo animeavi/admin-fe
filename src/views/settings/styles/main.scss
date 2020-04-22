@@ -450,6 +450,9 @@
       display: flex;
       justify-content: space-between;
     }
+    .label-with-margin {
+      margin-left: 15px;
+    }
     .limit-input {
       width: 45%;
     }
@@ -561,6 +564,12 @@
     }
     .line {
       margin-bottom: 10px;
+    }
+    .mascot-form-item {
+      .el-form-item__label:not(.no-top-margin) {
+        margin: 0;
+        padding: 0;
+      }
     }
     .mascot-container {
       margin-bottom: 5px;
