@@ -533,6 +533,13 @@
       padding-bottom: 5px;
       line-height: 22px;
       margin-top: 7px;
+      width: 100%;
+      span {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
     }
     .el-message {
       min-width: 80%;

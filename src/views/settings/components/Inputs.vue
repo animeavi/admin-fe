@@ -28,7 +28,7 @@
     <el-form-item v-if="setting.type !== 'keyword'" :label-width="customLabelWidth" :class="labelClass" :style="isDesktop ? '' : `margin-left:${margin}px`">
       <span slot="label">
         {{ setting.label }}
-        <el-tooltip v-if="canBeDeleted && isDesktop" :content="$t('settings.removeFromDB')" placement="bottom-end">
+        <el-tooltip v-if="canBeDeleted && (isDesktop || isMobile)" :content="$t('settings.removeFromDB')" placement="bottom-end">
           <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
         </el-tooltip>
       </span>
@@ -73,7 +73,6 @@
             :data-search="setting.key || setting.group"
             multiple
             filterable
-            allow-create
             class="input"
             @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
             <el-option v-for="(option, index) in rewritePolicyOptions(setting.suggestions)" :key="index" :value="option.value" :label="option.label" />
@@ -118,7 +117,7 @@
         <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <reg-invites-input v-if="[':registrations_open', ':invites_enabled'].includes(setting.key)" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <!-------------------->
-        <el-tooltip v-if="canBeDeleted && (isMobile || isTablet)" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
+        <el-tooltip v-if="canBeDeleted && isTablet" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
           <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
         </el-tooltip>
       </div>
