@@ -66,17 +66,30 @@
             :value="option"
             :key="index"/>
         </el-select>
-        <el-select
-          v-if="renderMultipleSelect(setting.type)"
-          :value="setting.key === ':rewrite_policy' ? rewritePolicyValue : inputValue"
-          :data-search="setting.key || setting.group"
-          multiple
-          filterable
-          allow-create
-          class="input"
-          @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
-          <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
-        </el-select>
+        <div v-if="renderMultipleSelect(setting.type)" class="input">
+          <el-select
+            v-if="setting.key === ':rewrite_policy'"
+            :value="rewritePolicyValue"
+            :data-search="setting.key || setting.group"
+            multiple
+            filterable
+            allow-create
+            class="input"
+            @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
+            <el-option v-for="(option, index) in rewritePolicyOptions(setting.suggestions)" :key="index" :value="option.value" :label="option.label" />
+          </el-select>
+          <el-select
+            v-else
+            :value="inputValue"
+            :data-search="setting.key || setting.group"
+            multiple
+            filterable
+            allow-create
+            class="input"
+            @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
+            <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
+          </el-select>
+        </div>
         <el-input
           v-if="setting.key === ':ip'"
           :value="inputValue"
@@ -302,6 +315,14 @@ export default {
         (type.includes('regex') && type.includes('string')) ||
         this.setting.key === ':args'
       )
+    },
+    rewritePolicyOptions(suggestions) {
+      return suggestions.map(element => {
+        const label = element.split('Pleroma.Web.ActivityPub.MRF.')[1]
+          ? element.split('Pleroma.Web.ActivityPub.MRF.')[1]
+          : element
+        return { value: element, label }
+      })
     },
     update(value, group, key, parents, input, type, nested) {
       nested
