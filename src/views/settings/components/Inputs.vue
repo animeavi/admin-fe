@@ -66,29 +66,17 @@
             :value="option"
             :key="index"/>
         </el-select>
-        <div v-if="renderMultipleSelect(setting.type)" class="input">
-          <el-select
-            v-if="setting.key === ':rewrite_policy'"
-            :value="rewritePolicyValue"
-            :data-search="setting.key || setting.group"
-            multiple
-            filterable
-            class="input"
-            @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
-            <el-option v-for="(option, index) in rewritePolicyOptions(setting.suggestions)" :key="index" :value="option.value" :label="option.label" />
-          </el-select>
-          <el-select
-            v-else
-            :value="inputValue"
-            :data-search="setting.key || setting.group"
-            multiple
-            filterable
-            allow-create
-            class="input"
-            @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
-            <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
-          </el-select>
-        </div>
+        <el-select
+          v-if="!setting.key === ':rewrite_policy' && renderMultipleSelect(setting.type)"
+          :value="inputValue"
+          :data-search="setting.key || setting.group"
+          multiple
+          filterable
+          allow-create
+          class="input"
+          @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
+          <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
+        </el-select>
         <el-input
           v-if="setting.key === ':ip'"
           :value="inputValue"
@@ -116,6 +104,7 @@
         <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
         <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <reg-invites-input v-if="[':registrations_open', ':invites_enabled'].includes(setting.key)" :data="data" :setting-group="settingGroup" :setting="setting"/>
+        <rewrite-policy-input v-if="setting.key === ':rewrite_policy'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
         <!-------------------->
         <el-tooltip v-if="canBeDeleted && isTablet" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
           <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
@@ -141,7 +130,8 @@ import {
   ProxyUrlInput,
   PruneInput,
   RateLimitInput,
-  RegInvitesInput } from './inputComponents'
+  RegInvitesInput,
+  RewritePolicyInput } from './inputComponents'
 import { processNested } from '@/store/modules/normalizers'
 import _ from 'lodash'
 import marked from 'marked'
@@ -158,7 +148,8 @@ export default {
     ProxyUrlInput,
     PruneInput,
     RateLimitInput,
-    RegInvitesInput
+    RegInvitesInput,
+    RewritePolicyInput
   },
   props: {
     customLabelWidth: {
@@ -262,9 +253,6 @@ export default {
     keywordData() {
       return Array.isArray(this.data) ? this.data : []
     },
-    rewritePolicyValue() {
-      return typeof this.data[this.setting.key] === 'string' ? [this.data[this.setting.key]] : this.data[this.setting.key]
-    },
     settings() {
       return this.$store.state.settings.settings
     },
@@ -314,14 +302,6 @@ export default {
         (type.includes('regex') && type.includes('string')) ||
         this.setting.key === ':args'
       )
-    },
-    rewritePolicyOptions(suggestions) {
-      return suggestions.map(element => {
-        const label = element.split('Pleroma.Web.ActivityPub.MRF.')[1]
-          ? element.split('Pleroma.Web.ActivityPub.MRF.')[1]
-          : element
-        return { value: element, label }
-      })
     },
     update(value, group, key, parents, input, type, nested) {
       nested
