@@ -2,23 +2,23 @@
   <div class="input">
     <el-select
       v-if="renderMultipleSelect(setting.type)"
-      :value="rewritePolicyValue"
+      :value="inputValue"
       :data-search="setting.key"
       multiple
       filterable
       class="input"
       @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key, setting.type)">
-      <el-option v-for="(option, index) in rewritePolicyOptions(setting.suggestions)" :key="index" :value="option.value" :label="option.label" />
+      <el-option v-for="(option, index) in options(setting.suggestions)" :key="index" :value="option.value" :label="option.label" />
     </el-select>
     <el-select
       v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown'))"
-      :value="data.value"
+      :value="inputValue"
       :data-search="setting.key || setting.group"
       clearable
       class="input"
       @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key, setting.type)">
       <el-option
-        v-for="(option, index) in authenticatorOptions(setting.suggestions)"
+        v-for="(option, index) in options(setting.suggestions)"
         :value="option.value"
         :label="option.label"
         :key="index"/>
@@ -50,18 +50,42 @@ export default {
     }
   },
   computed: {
+    inputValue() {
+      if (this.setting.key === 'Pleroma.Web.Auth.Authenticator') {
+        return this.data.value
+      } else if (this.setting.key === ':rewrite_policy') {
+        return typeof this.data[this.setting.key] === 'string'
+          ? [this.data[this.setting.key]]
+          : this.data[this.setting.key]
+      } else {
+        return this.data[this.setting.key]
+      }
+    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
-    },
-    rewritePolicyValue() {
-      return typeof this.data[this.setting.key] === 'string' ? [this.data[this.setting.key]] : this.data[this.setting.key]
     }
   },
   methods: {
-    authenticatorOptions(suggestions) {
+    options(suggestions) {
+      let prefix
+
+      switch (this.setting.key) {
+        case ':rewrite_policy':
+          prefix = 'Pleroma.Web.ActivityPub.MRF.'
+          break
+        case 'Pleroma.Web.Auth.Authenticator':
+          prefix = 'Pleroma.Web.Auth.'
+          break
+        case ':method':
+          prefix = 'Pleroma.Captcha.'
+          break
+        default:
+          prefix = ''
+      }
+
       return suggestions.map(element => {
-        const label = element.split('Pleroma.Web.Auth.')[1]
-          ? element.split('Pleroma.Web.Auth.')[1]
+        const label = element.split(prefix)[1]
+          ? element.split(prefix)[1]
           : element
         return { value: element, label }
       })

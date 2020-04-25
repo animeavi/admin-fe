@@ -55,7 +55,7 @@
           :data-search="setting.key || setting.group"
           @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
         <el-select
-          v-if="setting.key !== 'Pleroma.Web.Auth.Authenticator' && (setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown')))"
+          v-if="!reducedSelects && (setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown')))"
           :value="inputValue === false ? 'false' : inputValue"
           :data-search="setting.key || setting.group"
           clearable
@@ -67,7 +67,7 @@
             :key="index"/>
         </el-select>
         <el-select
-          v-if="renderMultipleSelect(setting.type) && setting.key !== ':rewrite_policy'"
+          v-if="renderMultipleSelect(setting.type) && !reducedSelects"
           :value="inputValue"
           :data-search="setting.key || setting.group"
           multiple
@@ -254,7 +254,7 @@ export default {
       return Array.isArray(this.data) ? this.data : []
     },
     reducedSelects() {
-      return [':rewrite_policy', 'Pleroma.Web.Auth.Authenticator'].includes(this.setting.key)
+      return [':method', ':rewrite_policy', 'Pleroma.Web.Auth.Authenticator'].includes(this.setting.key)
     },
     settings() {
       return this.$store.state.settings.settings
