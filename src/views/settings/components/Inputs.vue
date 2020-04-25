@@ -55,7 +55,7 @@
           :data-search="setting.key || setting.group"
           @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
         <el-select
-          v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown'))"
+          v-if="setting.key !== 'Pleroma.Web.Auth.Authenticator' && (setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown')))"
           :value="inputValue === false ? 'false' : inputValue"
           :data-search="setting.key || setting.group"
           clearable
@@ -67,7 +67,7 @@
             :key="index"/>
         </el-select>
         <el-select
-          v-if="!setting.key === ':rewrite_policy' && renderMultipleSelect(setting.type)"
+          v-if="renderMultipleSelect(setting.type) && setting.key !== ':rewrite_policy'"
           :value="inputValue"
           :data-search="setting.key || setting.group"
           multiple
@@ -104,7 +104,7 @@
         <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
         <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <reg-invites-input v-if="[':registrations_open', ':invites_enabled'].includes(setting.key)" :data="data" :setting-group="settingGroup" :setting="setting"/>
-        <rewrite-policy-input v-if="setting.key === ':rewrite_policy'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
+        <rewrite-policy-input v-if="reducedSelects" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <!-------------------->
         <el-tooltip v-if="canBeDeleted && isTablet" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
           <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
@@ -252,6 +252,9 @@ export default {
     },
     keywordData() {
       return Array.isArray(this.data) ? this.data : []
+    },
+    reducedSelects() {
+      return [':rewrite_policy', 'Pleroma.Web.Auth.Authenticator'].includes(this.setting.key)
     },
     settings() {
       return this.$store.state.settings.settings

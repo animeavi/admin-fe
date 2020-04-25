@@ -1,7 +1,7 @@
 <template>
   <div class="input">
     <el-select
-      v-if="isMobile"
+      v-if="renderMultipleSelect(setting.type)"
       :value="rewritePolicyValue"
       :data-search="setting.key"
       multiple
@@ -11,15 +11,17 @@
       <el-option v-for="(option, index) in rewritePolicyOptions(setting.suggestions)" :key="index" :value="option.value" :label="option.label" />
     </el-select>
     <el-select
-      v-else
-      :value="rewritePolicyValue"
-      :data-search="setting.key"
-      multiple
-      filterable
-      allow-create
+      v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown'))"
+      :value="data.value"
+      :data-search="setting.key || setting.group"
+      clearable
       class="input"
       @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key, setting.type)">
-      <el-option v-for="(option, index) in setting.suggestions" :key="index" :value="option"/>
+      <el-option
+        v-for="(option, index) in authenticatorOptions(setting.suggestions)"
+        :value="option.value"
+        :label="option.label"
+        :key="index"/>
     </el-select>
   </div>
 </template>
@@ -29,7 +31,7 @@ export default {
   name: 'RewritePolicyInput',
   props: {
     data: {
-      type: [String, Array],
+      type: [Array, Object],
       default: function() {
         return {}
       }
@@ -52,10 +54,27 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     rewritePolicyValue() {
-      return typeof this.data === 'string' ? [this.data] : this.data
+      return typeof this.data[this.setting.key] === 'string' ? [this.data[this.setting.key]] : this.data[this.setting.key]
     }
   },
   methods: {
+    authenticatorOptions(suggestions) {
+      return suggestions.map(element => {
+        const label = element.split('Pleroma.Web.Auth.')[1]
+          ? element.split('Pleroma.Web.Auth.')[1]
+          : element
+        return { value: element, label }
+      })
+    },
+    renderMultipleSelect(type) {
+      return Array.isArray(type) && this.setting.key !== ':backends' && this.setting.key !== ':args' && (
+        type.includes('module') ||
+        (type.includes('list') && type.includes('string')) ||
+        (type.includes('list') && type.includes('atom')) ||
+        (type.includes('regex') && type.includes('string')) ||
+        this.setting.key === ':args'
+      )
+    },
     rewritePolicyOptions(suggestions) {
       return suggestions.map(element => {
         const label = element.split('Pleroma.Web.ActivityPub.MRF.')[1]
