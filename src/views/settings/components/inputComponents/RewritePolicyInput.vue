@@ -91,6 +91,18 @@ export default {
         case ':ttl_setters':
           prefix = 'Pleroma.Web.RichMedia.Parser.'
           break
+        case ':scrub_policy':
+          prefix = 'Pleroma.HTML.'
+          break
+        case ':federation_publisher_modules':
+          prefix = 'Pleroma.Web.'
+          break
+        case ':uploader':
+          prefix = 'Pleroma.Uploaders.'
+          break
+        case ':filters':
+          prefix = 'Pleroma.Upload.Filter.'
+          break
         default:
           prefix = ''
       }

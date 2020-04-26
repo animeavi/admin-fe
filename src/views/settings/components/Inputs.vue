@@ -254,7 +254,18 @@ export default {
       return Array.isArray(this.data) ? this.data : []
     },
     reducedSelects() {
-      return [':ttl_setters', ':parsers', ':providers', ':method', ':rewrite_policy', 'Pleroma.Web.Auth.Authenticator'].includes(this.setting.key) ||
+      return [
+        ':filters',
+        ':uploader',
+        ':federation_publisher_modules',
+        ':scrub_policy',
+        ':ttl_setters',
+        ':parsers',
+        ':providers',
+        ':method',
+        ':rewrite_policy',
+        'Pleroma.Web.Auth.Authenticator'
+      ].includes(this.setting.key) ||
         (this.settingGroup.key === 'Pleroma.Emails.Mailer' && this.setting.key === ':adapter')
     },
     settings() {
