@@ -79,6 +79,18 @@ export default {
         case ':method':
           prefix = 'Pleroma.Captcha.'
           break
+        case ':adapter':
+          prefix = 'Swoosh.Adapters.'
+          break
+        case ':providers':
+          prefix = 'Pleroma.Web.Metadata.Providers.'
+          break
+        case ':parsers':
+          prefix = 'Pleroma.Web.RichMedia.Parsers.'
+          break
+        case ':ttl_setters':
+          prefix = 'Pleroma.Web.RichMedia.Parser.'
+          break
         default:
           prefix = ''
       }
