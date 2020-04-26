@@ -6,6 +6,7 @@
       :data-search="setting.key"
       multiple
       filterable
+      allow-create
       class="input"
       @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key, setting.type)">
       <el-option v-for="(option, index) in options(setting.suggestions)" :key="index" :value="option.value" :label="option.label" />
@@ -28,7 +29,7 @@
 
 <script>
 export default {
-  name: 'RewritePolicyInput',
+  name: 'SelectInputWithReducedLabels',
   props: {
     data: {
       type: [Array, Object],
@@ -67,49 +68,23 @@ export default {
   },
   methods: {
     options(suggestions) {
-      let prefix
-
-      switch (this.setting.key) {
-        case ':rewrite_policy':
-          prefix = 'Pleroma.Web.ActivityPub.MRF.'
-          break
-        case 'Pleroma.Web.Auth.Authenticator':
-          prefix = 'Pleroma.Web.Auth.'
-          break
-        case ':method':
-          prefix = 'Pleroma.Captcha.'
-          break
-        case ':adapter':
-          prefix = 'Swoosh.Adapters.'
-          break
-        case ':providers':
-          prefix = 'Pleroma.Web.Metadata.Providers.'
-          break
-        case ':parsers':
-          prefix = 'Pleroma.Web.RichMedia.Parsers.'
-          break
-        case ':ttl_setters':
-          prefix = 'Pleroma.Web.RichMedia.Parser.'
-          break
-        case ':scrub_policy':
-          prefix = 'Pleroma.HTML.'
-          break
-        case ':federation_publisher_modules':
-          prefix = 'Pleroma.Web.'
-          break
-        case ':uploader':
-          prefix = 'Pleroma.Uploaders.'
-          break
-        case ':filters':
-          prefix = 'Pleroma.Upload.Filter.'
-          break
-        default:
-          prefix = ''
+      const prefixes = {
+        ':rewrite_policy': 'Pleroma.Web.ActivityPub.MRF.',
+        'Pleroma.Web.Auth.Authenticator': 'Pleroma.Web.Auth.',
+        ':method': 'Pleroma.Captcha.',
+        ':adapter': 'Swoosh.Adapters.',
+        ':providers': 'Pleroma.Web.Metadata.Providers.',
+        ':parsers': 'Pleroma.Web.RichMedia.Parsers.',
+        ':ttl_setters': 'Pleroma.Web.RichMedia.Parser.',
+        ':scrub_policy': 'Pleroma.HTML.',
+        ':federation_publisher_modules': 'Pleroma.Web.',
+        ':uploader': 'Pleroma.Uploaders.',
+        ':filters': 'Pleroma.Upload.Filter.'
       }
 
       return suggestions.map(element => {
-        const label = element.split(prefix)[1]
-          ? element.split(prefix)[1]
+        const label = element.split(prefixes[this.setting.key])[1]
+          ? element.split(prefixes[this.setting.key])[1]
           : element
         return { value: element, label }
       })

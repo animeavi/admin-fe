@@ -67,7 +67,7 @@
             :key="index"/>
         </el-select>
         <el-select
-          v-if="renderMultipleSelect(setting.type) && !reducedSelects"
+          v-if="!reducedSelects && renderMultipleSelect(setting.type)"
           :value="inputValue"
           :data-search="setting.key || setting.group"
           multiple
@@ -104,7 +104,7 @@
         <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
         <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <reg-invites-input v-if="[':registrations_open', ':invites_enabled'].includes(setting.key)" :data="data" :setting-group="settingGroup" :setting="setting"/>
-        <rewrite-policy-input v-if="reducedSelects" :data="data" :setting-group="settingGroup" :setting="setting"/>
+        <select-input-with-reduced-labels v-if="reducedSelects" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <!-------------------->
         <el-tooltip v-if="canBeDeleted && isTablet" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
           <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
@@ -131,7 +131,7 @@ import {
   PruneInput,
   RateLimitInput,
   RegInvitesInput,
-  RewritePolicyInput } from './inputComponents'
+  SelectInputWithReducedLabels } from './inputComponents'
 import { processNested } from '@/store/modules/normalizers'
 import _ from 'lodash'
 import marked from 'marked'
@@ -149,7 +149,7 @@ export default {
     PruneInput,
     RateLimitInput,
     RegInvitesInput,
-    RewritePolicyInput
+    SelectInputWithReducedLabels
   },
   props: {
     customLabelWidth: {
