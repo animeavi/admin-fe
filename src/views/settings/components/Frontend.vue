@@ -1,33 +1,33 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="frontendData" :model="frontendData" :label-width="labelWidth">
+    <el-form ref="frontendData" :model="frontendData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="frontend" :data="frontendData"/>
     </el-form>
-    <el-form ref="staticFeData" :model="staticFeData" :label-width="labelWidth">
+    <el-form ref="staticFeData" :model="staticFeData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="staticFe" :data="staticFeData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="assetsData" :model="assetsData" :label-width="labelWidth">
+    <el-form ref="assetsData" :model="assetsData" :label-position="labelPosition" :label-width="labelWidth">
       <el-form-item class="grouped-settings-header">
-        <span class="label-font">{{ $t('settings.assets') }}</span>
+        <span class="label-font label-with-margin">{{ $t('settings.assets') }}</span>
       </el-form-item>
       <setting :setting-group="assets" :data="assetsData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="emojiData" :model="emojiData" :label-width="labelWidth">
+    <el-form ref="emojiData" :model="emojiData" :label-position="labelPosition" :label-width="labelWidth">
       <el-form-item data-search=":emoji" class="grouped-settings-header">
-        <span class="label-font">{{ $t('settings.emoji') }}</span>
+        <span class="label-font label-with-margin">{{ $t('settings.emoji') }}</span>
       </el-form-item>
       <setting :setting-group="emoji" :data="emojiData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="chatData" :model="chatData" :label-width="labelWidth">
+    <el-form ref="chatData" :model="chatData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="chat" :data="chatData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="markupData" :model="markupData" :label-width="labelWidth">
+    <el-form ref="markupData" :model="markupData" :label-position="labelPosition" :label-width="labelWidth">
       <el-form-item data-search=":markup" class="grouped-settings-header">
-        <span class="label-font">{{ $t('settings.markup') }}</span>
+        <span class="label-font label-with-margin">{{ $t('settings.markup') }}</span>
       </el-form-item>
       <setting :setting-group="markup" :data="markupData"/>
     </el-form>
@@ -82,6 +82,9 @@ export default {
     },
     isTablet() {
       return this.$store.state.app.device === 'tablet'
+    },
+    labelPosition() {
+      return this.isMobile ? 'top' : 'right'
     },
     labelWidth() {
       if (this.isMobile) {

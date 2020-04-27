@@ -1,24 +1,24 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="uploadData" :model="uploadData" :label-width="labelWidth">
+    <el-form ref="uploadData" :model="uploadData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="upload" :data="uploadData"/>
     </el-form>
-    <el-form v-if="showUploadersLocal" ref="uploadersLocal" :model="uploadersLocalData" :label-width="labelWidth">
+    <el-form v-if="showUploadersLocal" ref="uploadersLocal" :model="uploadersLocalData" :label-position="labelPosition" :label-width="labelWidth">
       <el-form-item class="grouped-settings-header">
-        <span class="label-font">Pleroma.Uploaders.Local</span>
+        <span class="label-font label-with-margin">Pleroma.Uploaders.Local</span>
       </el-form-item>
       <setting :setting-group="uploadersLocal" :data="uploadersLocalData"/>
       <el-divider class="divider thick-line"/>
     </el-form>
-    <el-form v-if="showUploadersS3" ref="uploadersS3" :model="uploadersS3Data" :label-width="labelWidth">
+    <el-form v-if="showUploadersS3" ref="uploadersS3" :model="uploadersS3Data" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uploadersS3" :data="uploadersS3Data"/>
       <el-divider class="divider thick-line"/>
     </el-form>
-    <el-form ref="uploadFilterMogrify" :model="uploadFilterMogrifyData" :label-width="labelWidth">
+    <el-form ref="uploadFilterMogrify" :model="uploadFilterMogrifyData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uploadFilterMogrify" :data="uploadFilterMogrifyData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="uploadAnonymizeFilename" :model="uploadAnonymizeFilenameData" :label-width="labelWidth">
+    <el-form ref="uploadAnonymizeFilename" :model="uploadAnonymizeFilenameData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uploadAnonymizeFilename" :data="uploadAnonymizeFilenameData"/>
     </el-form>
     <div class="submit-button-container">
@@ -48,6 +48,9 @@ export default {
     },
     isTablet() {
       return this.$store.state.app.device === 'tablet'
+    },
+    labelPosition() {
+      return this.isMobile ? 'top' : 'right'
     },
     labelWidth() {
       if (this.isMobile) {

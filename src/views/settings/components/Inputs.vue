@@ -25,10 +25,10 @@
           :nested="true"/>
       </el-form-item>
     </div>
-    <el-form-item v-if="setting.type !== 'keyword'" :label-width="customLabelWidth" :class="labelClass">
+    <el-form-item v-if="setting.type !== 'keyword'" :label-width="customLabelWidth" :class="labelClass" :style="isDesktop ? '' : `margin-left:${margin}px`">
       <span slot="label">
         {{ setting.label }}
-        <el-tooltip v-if="canBeDeleted && isDesktop" :content="$t('settings.removeFromDB')" placement="bottom-end">
+        <el-tooltip v-if="canBeDeleted && (isDesktop || isMobile)" :content="$t('settings.removeFromDB')" placement="bottom-end">
           <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
         </el-tooltip>
       </span>
@@ -55,7 +55,7 @@
           :data-search="setting.key || setting.group"
           @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
         <el-select
-          v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown'))"
+          v-if="!reducedSelects && (setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown')))"
           :value="inputValue === false ? 'false' : inputValue"
           :data-search="setting.key || setting.group"
           clearable
@@ -67,8 +67,8 @@
             :key="index"/>
         </el-select>
         <el-select
-          v-if="renderMultipleSelect(setting.type)"
-          :value="setting.key === ':rewrite_policy' ? rewritePolicyValue : inputValue"
+          v-if="!reducedSelects && renderMultipleSelect(setting.type)"
+          :value="inputValue"
           :data-search="setting.key || setting.group"
           multiple
           filterable
@@ -104,8 +104,9 @@
         <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
         <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <reg-invites-input v-if="[':registrations_open', ':invites_enabled'].includes(setting.key)" :data="data" :setting-group="settingGroup" :setting="setting"/>
+        <select-input-with-reduced-labels v-if="reducedSelects" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <!-------------------->
-        <el-tooltip v-if="canBeDeleted && (isMobile || isTablet)" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
+        <el-tooltip v-if="canBeDeleted && isTablet" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
           <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
         </el-tooltip>
       </div>
@@ -129,7 +130,8 @@ import {
   ProxyUrlInput,
   PruneInput,
   RateLimitInput,
-  RegInvitesInput } from './inputComponents'
+  RegInvitesInput,
+  SelectInputWithReducedLabels } from './inputComponents'
 import { processNested } from '@/store/modules/normalizers'
 import _ from 'lodash'
 import marked from 'marked'
@@ -146,7 +148,8 @@ export default {
     ProxyUrlInput,
     PruneInput,
     RateLimitInput,
-    RegInvitesInput
+    RegInvitesInput,
+    SelectInputWithReducedLabels
   },
   props: {
     customLabelWidth: {
@@ -250,8 +253,20 @@ export default {
     keywordData() {
       return Array.isArray(this.data) ? this.data : []
     },
-    rewritePolicyValue() {
-      return typeof this.data[this.setting.key] === 'string' ? [this.data[this.setting.key]] : this.data[this.setting.key]
+    reducedSelects() {
+      return [
+        ':filters',
+        ':uploader',
+        ':federation_publisher_modules',
+        ':scrub_policy',
+        ':ttl_setters',
+        ':parsers',
+        ':providers',
+        ':method',
+        ':rewrite_policy',
+        'Pleroma.Web.Auth.Authenticator'
+      ].includes(this.setting.key) ||
+        (this.settingGroup.key === 'Pleroma.Emails.Mailer' && this.setting.key === ':adapter')
     },
     settings() {
       return this.$store.state.settings.settings

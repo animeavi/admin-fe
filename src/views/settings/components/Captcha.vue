@@ -1,10 +1,10 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="captchaData" :model="captchaData" :label-width="labelWidth">
+    <el-form ref="captchaData" :model="captchaData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="captcha" :data="captchaData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="kocaptchaData" :model="kocaptchaData" :label-width="labelWidth">
+    <el-form ref="kocaptchaData" :model="kocaptchaData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="kocaptcha" :data="kocaptchaData"/>
     </el-form>
     <div class="submit-button-container">
@@ -46,6 +46,9 @@ export default {
     },
     kocaptchaData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Captcha.Kocaptcha']) || {}
+    },
+    labelPosition() {
+      return this.isMobile ? 'top' : 'right'
     },
     labelWidth() {
       if (this.isMobile) {

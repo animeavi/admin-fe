@@ -16,6 +16,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Make Instance Reboot button's positon fixed on Settings page
 - Update jest and babel-jest
 - Generate an invite link when an invite token has been generated
+- Put labels on top of inputs in mobile version
+- Shorten suggestions for a series of select inputs: Rewrite policy, Pleroma Authenticator, Captcha Method, Mailer adapter, Metadata providers, Rich Media parsers, TTL setters, Scrub policy, Uploader, Filters and Federation publisher modules
 
 ### Fixed
 

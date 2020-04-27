@@ -54,6 +54,9 @@
     padding-left: 10px;
     padding-right: 10px;
   }
+  .el-tabs__header {
+    z-index: 3000;
+  }
   .esshd-list {
     margin: 0;
   }
@@ -324,7 +327,7 @@
     position: fixed;
     bottom: 0px;
     right: 0;
-    z-index: 10000;
+    z-index: 2000;
   }
   .switch-input {
     height: 36px;
@@ -394,7 +397,7 @@
     }
     .description > p {
       line-height: 18px;
-      margin: 0 5px 7px 0;
+      margin: 0 5px 7px 15px;
       code {
         display: inline;
         line-height: 18px;
@@ -429,7 +432,7 @@
       width: 100%;
       .el-form-item:first-child {
         margin: 0;
-        padding: 0 15px 10px 0;
+        padding: 0 15px 10px 15px;
       }
       .el-form-item.crontab-container:first-child {
         margin: 0;
@@ -449,6 +452,9 @@
     .input-row {
       display: flex;
       justify-content: space-between;
+    }
+    .label-with-margin {
+      margin-left: 15px;
     }
     .limit-input {
       width: 45%;
@@ -527,10 +533,16 @@
     padding: 0 5px 0 5px
     }
     .el-form-item__label:not(.no-top-margin) {
-      padding-left: 3px;
-      padding-right: 10px;
+      padding-bottom: 5px;
       line-height: 22px;
       margin-top: 7px;
+      width: 100%;
+      span {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
     }
     .el-message {
       min-width: 80%;
@@ -562,6 +574,12 @@
     }
     .line {
       margin-bottom: 10px;
+    }
+    .mascot-form-item {
+      .el-form-item__label:not(.no-top-margin) {
+        margin: 0;
+        padding: 0;
+      }
     }
     .mascot-container {
       margin-bottom: 5px;

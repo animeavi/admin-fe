@@ -1,10 +1,10 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="activitypubData" :model="activitypubData" :label-width="labelWidth" data-search=":activitypub">
+    <el-form ref="activitypubData" :model="activitypubData" :label-position="labelPosition" :label-width="labelWidth" data-search=":activitypub">
       <setting :setting-group="activitypub" :data="activitypubData"/>
     </el-form>
     <el-divider class="divider thick-line"/>
-    <el-form ref="userData" :model="userData" :label-width="labelWidth" data-search=":user">
+    <el-form ref="userData" :model="userData" :label-position="labelPosition" :label-width="labelWidth" data-search=":user">
       <setting :setting-group="user" :data="userData"/>
     </el-form>
     <div class="submit-button-container">
@@ -40,6 +40,9 @@ export default {
     },
     isTablet() {
       return this.$store.state.app.device === 'tablet'
+    },
+    labelPosition() {
+      return this.isMobile ? 'top' : 'right'
     },
     labelWidth() {
       if (this.isMobile) {
