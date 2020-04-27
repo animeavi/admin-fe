@@ -54,6 +54,9 @@
     padding-left: 10px;
     padding-right: 10px;
   }
+  .el-tabs__header {
+    z-index: 3000;
+  }
   .esshd-list {
     margin: 0;
   }
@@ -324,7 +327,7 @@
     position: fixed;
     bottom: 0px;
     right: 0;
-    z-index: 10000;
+    z-index: 2000;
   }
   .switch-input {
     height: 36px;
