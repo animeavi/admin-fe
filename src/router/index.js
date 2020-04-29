@@ -172,5 +172,17 @@ export const asyncRouterMap = [
     ],
     hidden: true
   },
+  {
+    path: '/statuses/:id',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'StatusShow',
+        component: () => import('@/views/statuses/show')
+      }
+    ],
+    hidden: true
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
