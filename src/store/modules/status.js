@@ -1,7 +1,8 @@
-import { changeStatusScope, deleteStatus, fetchStatuses, fetchStatusesCount, fetchStatusesByInstance } from '@/api/status'
+import { changeStatusScope, deleteStatus, fetchStatus, fetchStatuses, fetchStatusesCount, fetchStatusesByInstance } from '@/api/status'
 
 const status = {
   state: {
+    fetchedStatus: {},
     fetchedStatuses: [],
     loading: false,
     statusesByInstance: {
@@ -27,6 +28,9 @@ const status = {
     },
     CHANGE_SELECTED_INSTANCE: (state, instance) => {
       state.statusesByInstance.selectedInstance = instance
+    },
+    SET_STATUS: (state, status) => {
+      state.fetchedStatus = status
     },
     SET_STATUSES_BY_INSTANCE: (state, statuses) => {
       state.fetchedStatuses = statuses
@@ -67,6 +71,13 @@ const status = {
       } else if (fetchStatusesByInstance) { // called from Statuses by Instance
         dispatch('FetchStatusesByInstance')
       }
+    },
+    async FetchStatus({ commit, getters }, id) {
+      commit('SET_LOADING', true)
+      const status = await fetchStatus(id, getters.authHost, getters.token)
+      console.log(status)
+      commit('SET_STATUS', status.data)
+      commit('SET_LOADING', false)
     },
     async FetchStatusesCount({ commit, getters }) {
       commit('SET_LOADING', true)
