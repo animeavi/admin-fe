@@ -1,13 +1,16 @@
 import {
+  addNewEmojiFile,
+  createPack,
+  deleteEmojiFile,
+  deletePack,
+  downloadFrom,
+  importFromFS,
   listPacks,
   listRemotePacks,
-  downloadFrom,
   reloadEmoji,
-  createPack,
-  deletePack,
   savePackMetadata,
-  importFromFS,
-  updatePackFile } from '@/api/emojiPacks'
+  updateEmojiFile
+} from '@/api/emojiPacks'
 import i18n from '@/lang'
 import { Message } from 'element-ui'
 
@@ -49,6 +52,36 @@ const packs = {
     }
   },
   actions: {
+    async AddNewEmojiFile({ commit, getters }, { packName, file, shortcode, filename }) {
+      let result
+      try {
+        result = await addNewEmojiFile(packName, file, shortcode, filename, getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      }
+      Message({
+        message: `${i18n.t('settings.successfullyUpdated')} ${packName} ${i18n.t('settings.metadatLowerCase')}`,
+        type: 'success',
+        duration: 5 * 1000
+      })
+
+      commit('UPDATE_LOCAL_PACK_FILES', { name: packName, files: result.data })
+    },
+    async DeleteEmojiFile({ commit, getters }, { packName, shortcode }) {
+      let result
+      try {
+        result = await deleteEmojiFile(packName, shortcode, getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      }
+      Message({
+        message: `${i18n.t('settings.successfullyUpdated')} ${packName} ${i18n.t('settings.metadatLowerCase')}`,
+        type: 'success',
+        duration: 5 * 1000
+      })
+
+      commit('UPDATE_LOCAL_PACK_FILES', { name: packName, files: result.data })
+    },
     async CreatePack({ getters }, { name }) {
       await createPack(getters.authHost, getters.token, name)
     },
@@ -116,20 +149,23 @@ const packs = {
       commit('SET_REMOTE_INSTANCE', remoteInstance)
       commit('SET_REMOTE_PACKS', data)
     },
-    async UpdateAndSavePackFile({ commit, getters }, args) {
-      const result = await updatePackFile(getters.authHost, getters.token, args)
-
-      if (result.status === 200) {
-        const { packName } = args
-
-        Message({
-          message: `${i18n.t('settings.successfullyUpdated')} ${packName} ${i18n.t('settings.metadatLowerCase')}`,
-          type: 'success',
-          duration: 5 * 1000
-        })
-
-        commit('UPDATE_LOCAL_PACK_FILES', { name: packName, files: result.data })
+    SetRemoteInstance({ commit }, instance) {
+      commit('SET_REMOTE_INSTANCE', instance)
+    },
+    async UpdateEmojiFile({ commit, getters }, { packName, shortcode, newShortcode, newFilename, force }) {
+      let result
+      try {
+        result = await updateEmojiFile(packName, shortcode, newShortcode, newFilename, force, getters.authHost, getters.token)
+      } catch (_e) {
+        return
       }
+      Message({
+        message: `${i18n.t('settings.successfullyUpdated')} ${packName} ${i18n.t('settings.metadatLowerCase')}`,
+        type: 'success',
+        duration: 5 * 1000
+      })
+
+      commit('UPDATE_LOCAL_PACK_FILES', { name: packName, files: result.data })
     },
     async UpdateLocalPackVal({ commit }, args) {
       commit('UPDATE_LOCAL_PACK_VAL', args)

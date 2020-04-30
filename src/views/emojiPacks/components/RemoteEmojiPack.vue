@@ -36,11 +36,11 @@
       <el-collapse v-model="showPackContent" class="contents-collapse">
         <el-collapse-item v-if="Object.keys(pack.files).length > 0" :title=" $t('emoji.manageEmoji')" name="manageEmoji" class="no-background">
           <single-emoji-editor
-            v-for="(file, ename) in pack.files"
-            :key="ename"
+            v-for="(file, shortcode) in pack.files"
+            :key="shortcode"
             :host="host"
             :pack-name="name"
-            :name="ename"
+            :shortcode="shortcode"
             :file="file"
             :is-local="isLocal" />
         </el-collapse-item>
@@ -52,7 +52,7 @@
           </p>
           <div class="download-shared-pack">
             <el-input v-model="downloadSharedAs" :placeholder=" $t('emoji.downloadAsOptional')"/>
-            <el-button type="primary" class="download-shared-pack-button" @click="downloadFromInstance(pack.pack['homepage'])">
+            <el-button type="primary" class="download-shared-pack-button" @click="downloadFromInstance">
               {{ isDesktop ? $t('emoji.downloadSharedPack') : $t('emoji.downloadSharedPackMobile') }}
             </el-button>
           </div>
@@ -113,6 +113,9 @@ export default {
     loadRemotePack() {
       return this.$store.state.emojiPacks.activeCollapseItems.includes(this.name)
     },
+    remoteInstanceAddress() {
+      return this.$store.state.emojiPacks.remoteInstance
+    },
     share: {
       get() { return this.pack.pack['share-files'] },
       set(value) {
@@ -171,11 +174,10 @@ export default {
     }
   },
   methods: {
-    downloadFromInstance(url) {
-      const instanceAddress = `${new URL(url).protocol}//${new URL(url).hostname}`
+    downloadFromInstance() {
       this.$store.dispatch(
         'DownloadFrom',
-        { instanceAddress, packName: this.name, as: this.downloadSharedAs }
+        { instanceAddress: this.remoteInstanceAddress, packName: this.name, as: this.downloadSharedAs }
       ).then(() => this.$store.dispatch('ReloadEmoji'))
         .then(() => this.$store.dispatch('SetLocalEmojiPacks'))
     }

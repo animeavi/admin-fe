@@ -34,6 +34,7 @@
         <el-button
           :disabled="!copyToLocalPackName"
           type="primary"
+          class="copy-to-local-pack-button"
           @click="copyToLocal">{{ $t('emoji.copy') }}</el-button>
         <el-button slot="reference" type="primary" class="emoji-button">{{ $t('emoji.copyToLocalPack') }}</el-button>
       </el-popover>
@@ -54,7 +55,7 @@ export default {
       type: String,
       required: true
     },
-    name: {
+    shortcode: {
       type: String,
       required: true
     },
@@ -69,7 +70,7 @@ export default {
   },
   data() {
     return {
-      newName: null,
+      newShortcode: null,
       newFile: null,
       copyToLocalPackName: null,
       copyPopoverVisible: false,
@@ -80,14 +81,14 @@ export default {
   computed: {
     emojiName: {
       get() {
-        // Return a modified name if it was modified, otherwise return the old name
-        return this.newName !== null ? this.newName : this.name
+        // Return a modified shortcode if it was modified, otherwise return the old shortcode
+        return this.newShortcode !== null ? this.newShortcode : this.shortcode
       },
-      set(val) { this.newName = val }
+      set(val) { this.newShortcode = val }
     },
     emojiFile: {
       get() {
-        // Return a modified name if it was modified, otherwise return the old name
+        // Return a modified file name if it was modified, otherwise return the old file name
         return this.newFile !== null ? this.newFile : this.file
       },
       set(val) { this.newFile = val }
@@ -102,23 +103,26 @@ export default {
       return this.$store.state.emojiPacks.localPacks
     },
     remoteInstance() {
-      return this.$store.state.emojiPacks.remoteInstance
+      return new URL(this.$store.state.emojiPacks.remoteInstance).host
     }
   },
   methods: {
-    update() {
-      this.$store.dispatch('UpdateAndSavePackFile', {
-        action: 'update',
-        packName: this.packName,
-        oldName: this.name,
-        newName: this.emojiName,
-        newFilename: this.emojiFile
-      }).then(() => {
-        this.newName = null
-        this.newFile = null
+    async update() {
+      try {
+        this.$store.dispatch('UpdateEmojiFile', {
+          packName: this.packName,
+          shortcode: this.shortcode,
+          newShortcode: this.emojiName,
+          newFilename: this.emojiFile,
+          force: true
+        })
+      } catch (e) {
+        return
+      }
+      this.newShortcode = null
+      this.newFile = null
 
-        this.$store.dispatch('ReloadEmoji')
-      })
+      this.$store.dispatch('ReloadEmoji')
     },
     remove() {
       this.$confirm('This will delete the emoji, are you sure?', 'Warning', {
@@ -126,12 +130,11 @@ export default {
         cancelButtonText: 'No, leave it be',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('UpdateAndSavePackFile', {
-          action: 'remove',
+        this.$store.dispatch('DeleteEmojiFile', {
           packName: this.packName,
-          name: this.name
+          shortcode: this.shortcode
         }).then(() => {
-          this.newName = null
+          this.newShortcode = null
           this.newFile = null
 
           this.$store.dispatch('ReloadEmoji')
@@ -139,20 +142,22 @@ export default {
       })
     },
     copyToLocal() {
-      this.$store.dispatch('UpdateAndSavePackFile', {
-        action: 'add',
-        packName: this.copyToLocalPackName,
-        shortcode: this.copyToShortcode.trim() !== '' ? this.copyToShortcode.trim() : this.name,
-        fileName: this.copyToFilename.trim() !== '' ? this.copyToFilename.trim() : this.file,
-        file: this.addressOfEmojiInPack(this.host, this.packName, this.file)
-      }).then(() => {
-        this.copyToLocalPackName = null
-        this.copyToLocalVisible = false
-        this.copyToShortcode = ''
-        this.copyToFilename = ''
+      try {
+        this.$store.dispatch('AddNewEmojiFile', {
+          packName: this.copyToLocalPackName,
+          file: this.addressOfEmojiInPack(this.remoteInstance, this.packName, this.file),
+          shortcode: this.copyToShortcode.trim() !== '' ? this.copyToShortcode.trim() : this.shortcode,
+          filename: this.copyToFilename.trim() !== '' ? this.copyToFilename.trim() : this.file
+        })
+      } catch (e) {
+        return
+      }
+      this.copyToLocalPackName = null
+      this.copyToLocalVisible = false
+      this.copyToShortcode = ''
+      this.copyToFilename = ''
 
-        this.$store.dispatch('ReloadEmoji')
-      })
+      this.$store.dispatch('ReloadEmoji')
     },
     addressOfEmojiInPack
   }
@@ -162,6 +167,10 @@ export default {
 <style rel='stylesheet/scss' lang='scss'>
 .copy-popover {
   width: 330px
+}
+.copy-to-local-pack-button {
+  margin-top: 15px;
+  float: right;
 }
 .emoji-buttons {
   place-self: center;
