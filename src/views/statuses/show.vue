@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <div v-if="!loading">
     <header v-if="isDesktop || isTablet" class="user-page-header">
       <div class="avatar-name-container">
         <el-avatar v-if="accountExists(user, 'avatar')" :src="user.avatar" size="large" />
@@ -29,7 +29,7 @@
     <div class="status-container">
       <status :status="status" :account="user" :show-checkbox="false" :godmode="showPrivate"/>
     </div>
-  </main>
+  </div>
 </template>
 
 <script>
@@ -56,6 +56,9 @@ export default {
     isTablet() {
       return this.$store.state.app.device === 'tablet'
     },
+    loading() {
+      return this.$store.state.status.loading
+    },
     status() {
       return this.$store.state.status.fetchedStatus
     },
@@ -63,7 +66,7 @@ export default {
       return this.$store.state.status.fetchedStatus.account
     }
   },
-  mounted: function() {
+  beforeMount: function() {
     this.$store.dispatch('NeedReboot')
     this.$store.dispatch('GetNodeInfo')
     this.$store.dispatch('FetchStatus', this.$route.params.id)
