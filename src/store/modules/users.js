@@ -24,6 +24,7 @@ const users = {
     searchQuery: '',
     totalUsersCount: 0,
     currentPage: 1,
+    pageSize: 50,
     filters: {
       local: false,
       external: false,
@@ -73,9 +74,6 @@ const users = {
     },
     SET_USERS_FILTERS: (state, filters) => {
       state.filters = filters
-    },
-    SET_USER_PROFILE: (state, user) => {
-      state.userProfile = user
     }
   },
   actions: {
