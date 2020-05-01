@@ -87,6 +87,10 @@ export default {
   display: flex;
   align-items: center;
 }
+.reboot-button {
+  padding: 10px;
+  margin-left: 6px;
+}
 .status-container {
   margin: 0 15px 0 20px;
 }
