@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading" class="status-show-container">
     <header v-if="isDesktop || isTablet" class="user-page-header">
       <div class="avatar-name-container">
         <el-avatar v-if="accountExists(user, 'avatar')" :src="user.avatar" size="large" />
@@ -103,7 +103,7 @@ export default {
 }
 </script>
 
-<style rel='stylesheet/scss' lang='scss' scoped>
+<style rel='stylesheet/scss' lang='scss'>
 .avatar-name-container {
   display: flex;
   align-items: center;
@@ -143,9 +143,20 @@ export default {
     margin: 0 0 0 10px;
   }
 }
+
+@media only screen and (min-width: 1824px) {
+  .status-show-container {
+    max-width: 1824px;
+    margin: auto;
+  }
+}
+
 @media only screen and (max-width:480px) {
   .avatar-name-container {
     margin-bottom: 10px;
+  }
+  .el-timeline-item__wrapper {
+    padding-left: 18px;
   }
   .left-header-container {
     align-items: center;
@@ -157,10 +168,17 @@ export default {
   }
   .recent-statuses-container {
     width: 100%;
-    margin: 0 10px;
+    margin: 0;
   }
   .show-private-statuses {
     margin: 0 10px 20px 10px;
+  }
+  .status-container {
+    margin: 0 10px;
+  }
+  .statuses {
+    padding-right: 10px;
+    margin-left: 8px;
   }
   .user-page-header {
     padding: 0;

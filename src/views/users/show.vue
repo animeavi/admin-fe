@@ -187,7 +187,7 @@ export default {
 }
 </script>
 
-<style rel='stylesheet/scss' lang='scss' scoped>
+<style rel='stylesheet/scss' lang='scss'>
 header {
   align-items: center;
   display: flex;
@@ -291,15 +291,25 @@ table {
   .avatar-name-container {
     margin-bottom: 10px;
   }
+  .el-timeline-item__wrapper {
+    padding-left: 18px;
+  }
   .recent-statuses {
     margin: 20px 10px 15px 10px;
   }
   .recent-statuses-container {
     width: 100%;
-    margin: 0 10px;
+    margin: 0;
   }
   .show-private-statuses {
     margin: 0 10px 20px 10px;
+  }
+  .status-container {
+    margin: 0 10px;
+  }
+  .statuses {
+    padding-right: 10px;
+    margin-left: 8px;
   }
   .user-page-header {
     padding: 0;
