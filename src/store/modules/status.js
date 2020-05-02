@@ -72,12 +72,13 @@ const status = {
         dispatch('FetchStatusesByInstance')
       }
     },
-    async FetchStatus({ commit, getters }, id) {
+    async FetchStatus({ commit, dispatch, getters, state }, id) {
       commit('SET_LOADING', true)
       const status = await fetchStatus(id, getters.authHost, getters.token)
-      console.log(status)
+
       commit('SET_STATUS', status.data)
       commit('SET_LOADING', false)
+      dispatch('FetchUserStatuses', { userId: state.fetchedStatus.account.id, godmode: false })
     },
     async FetchStatusesCount({ commit, getters }) {
       commit('SET_LOADING', true)

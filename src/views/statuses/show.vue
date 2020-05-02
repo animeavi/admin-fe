@@ -88,7 +88,6 @@ export default {
     this.$store.dispatch('NeedReboot')
     this.$store.dispatch('GetNodeInfo')
     this.$store.dispatch('FetchStatus', this.$route.params.id)
-    this.$store.dispatch('FetchUserStatuses', { userId: this.user.id, godmode: this.showPrivate })
   },
   methods: {
     accountExists(account, key) {
