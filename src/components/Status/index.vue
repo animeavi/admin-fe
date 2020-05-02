@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <router-link :to="{ name: 'StatusShow', params: { id: status.id }}">
     <el-card v-if="!status.deleted" class="status-card">
       <div slot="header">
         <div class="status-header">
@@ -15,7 +15,6 @@
                 <h3 class="status-account-name deactivated"> (deactivated)</h3>
               </span>
             </div>
-
           </div>
           <div class="status-actions">
             <el-tag v-if="status.sensitive" type="warning" size="large">{{ $t('reports.sensitive') }}</el-tag>
@@ -116,7 +115,7 @@
         {{ parseTimestamp(status.created_at) }}
       </a>
     </el-card>
-  </div>
+  </router-link>
 </template>
 
 <script>
