@@ -29,6 +29,18 @@
     <div class="status-container">
       <status :status="status" :account="user" :show-checkbox="false" :godmode="showPrivate"/>
     </div>
+    <div class="recent-statuses-container">
+      <h2 class="recent-statuses">{{ $t('userProfile.recentStatuses') }} by {{ user.display_name }}</h2>
+      <el-checkbox v-model="showPrivate" class="show-private-statuses" @change="onTogglePrivate">
+        {{ $t('statuses.showPrivateStatuses') }}
+      </el-checkbox>
+      <el-timeline v-if="!statusesLoading" class="statuses">
+        <el-timeline-item v-for="status in statuses" :key="status.id">
+          <status :status="status" :account="status.account" :show-checkbox="false" :user-id="user.id" :godmode="showPrivate"/>
+        </el-timeline-item>
+        <p v-if="statuses.length === 0" class="no-statuses">{{ $t('userProfile.noStatuses') }}</p>
+      </el-timeline>
+    </div>
   </div>
 </template>
 
@@ -42,7 +54,7 @@ export default {
   components: { ModerationDropdown, RebootButton, Status },
   data() {
     return {
-      showPrivate: true,
+      showPrivate: false,
       resetPasswordDialogOpen: false
     }
   },
@@ -62,6 +74,12 @@ export default {
     status() {
       return this.$store.state.status.fetchedStatus
     },
+    statuses() {
+      return this.$store.state.userProfile.statuses
+    },
+    statusesLoading() {
+      return this.$store.state.userProfile.statusesLoading
+    },
     user() {
       return this.$store.state.status.fetchedStatus.account
     }
@@ -70,10 +88,14 @@ export default {
     this.$store.dispatch('NeedReboot')
     this.$store.dispatch('GetNodeInfo')
     this.$store.dispatch('FetchStatus', this.$route.params.id)
+    this.$store.dispatch('FetchUserStatuses', { userId: this.user.id, godmode: this.showPrivate })
   },
   methods: {
     accountExists(account, key) {
       return account[key]
+    },
+    onTogglePrivate() {
+      this.$store.dispatch('FetchUserStatuses', { userId: this.user.id, godmode: this.showPrivate })
     },
     openResetPasswordDialog() {
       this.resetPasswordDialogOpen = true
@@ -87,12 +109,30 @@ export default {
   display: flex;
   align-items: center;
 }
+.no-statuses {
+  margin-left: 28px;
+  color: #606266;
+}
 .reboot-button {
   padding: 10px;
   margin-left: 6px;
 }
+.recent-statuses {
+  margin-left: 28px;
+}
+.recent-statuses-container {
+  display: flex;
+  flex-direction: column;
+}
+.show-private-statuses {
+  margin-left: 28px;
+  margin-bottom: 20px;
+}
 .status-container {
   margin: 0 15px 0 20px;
+}
+.statuses {
+  padding: 0 20px 0 0;
 }
 .user-page-header {
   display: flex;
@@ -113,6 +153,16 @@ export default {
     display: flex;
     justify-content: space-between;
   }
+  .recent-statuses {
+    margin: 20px 10px 15px 10px;
+  }
+  .recent-statuses-container {
+    width: 100%;
+    margin: 0 10px;
+  }
+  .show-private-statuses {
+    margin: 0 10px 20px 10px;
+  }
   .user-page-header {
     padding: 0;
     margin: 7px 15px 15px 10px;
@@ -125,6 +175,16 @@ export default {
   }
 }
 @media only screen and (max-width:801px) and (min-width: 481px) {
+  .recent-statuses {
+    margin: 20px 10px 15px 0;
+  }
+  .recent-statuses-container {
+    width: 97%;
+    margin: 0 20px;
+  }
+  .show-private-statuses {
+    margin: 0 10px 20px 0;
+  }
   .user-page-header {
     padding: 0;
     margin: 7px 15px 20px 20px;
