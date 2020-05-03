@@ -387,7 +387,8 @@ export default {
     corsPlug: 'CORS plug config',
     instanceReboot: 'Reboot Instance',
     restartApp: 'You must restart the instance to apply settings',
-    restartSuccess: 'Instance rebooted successfully!'
+    restartSuccess: 'Instance rebooted successfully!',
+    removeSettingConfirmation: 'Are you sure you want to remove this setting\'s value from the database?'
   },
   invites: {
     inviteTokens: 'Invite tokens',
