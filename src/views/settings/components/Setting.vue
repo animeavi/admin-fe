@@ -130,17 +130,30 @@ export default {
       return marked(desc)
     },
     async removeSetting(key) {
-      const config = this.settingGroup.key
-        ? [{ group: this.settingGroup.group, key: this.settingGroup.key, delete: true, subkeys: [key] }]
-        : [{ group: this.settingGroup.group, key, delete: true }]
-      try {
-        await this.$store.dispatch('RemoveSetting', config)
-      } catch (e) {
-        return
-      }
-      this.$message({
-        type: 'success',
-        message: i18n.t('settings.successfullyRemoved')
+      this.$confirm(
+        this.$t('settings.removeSettingConfirmation'),
+        {
+          confirmButtonText: this.$t('users.ok'),
+          cancelButtonText: this.$t('users.cancel'),
+          type: 'warning'
+        }).then(async() => {
+        const config = this.settingGroup.key
+          ? [{ group: this.settingGroup.group, key: this.settingGroup.key, delete: true, subkeys: [key] }]
+          : [{ group: this.settingGroup.group, key, delete: true }]
+        try {
+          await this.$store.dispatch('RemoveSetting', config)
+        } catch (e) {
+          return
+        }
+        this.$message({
+          type: 'success',
+          message: i18n.t('settings.successfullyRemoved')
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.$t('users.canceled')
+        })
       })
     },
     updateSetting(value, tab, input) {
