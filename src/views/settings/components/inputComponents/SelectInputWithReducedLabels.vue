@@ -13,7 +13,7 @@
     </el-select>
     <el-select
       v-if="setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown'))"
-      :value="inputValue"
+      :value="inputValue === false ? 'false' : inputValue"
       :data-search="setting.key || setting.group"
       clearable
       class="input"
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { getBooleanValue } from '@/store/modules/normalizers'
+
 export default {
   name: 'SelectInputWithReducedLabels',
   props: {
@@ -107,8 +109,9 @@ export default {
       })
     },
     updateSetting(value, group, key, input, type) {
-      this.$store.dispatch('UpdateSettings', { group, key, input, value, type })
-      this.$store.dispatch('UpdateState', { group, key, input, value })
+      const updatedValue = getBooleanValue(value)
+      this.$store.dispatch('UpdateSettings', { group, key, input, value: updatedValue, type })
+      this.$store.dispatch('UpdateState', { group, key, input, value: updatedValue })
     }
   }
 }
