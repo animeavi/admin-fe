@@ -99,12 +99,12 @@
         <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
         <icons-input v-if="setting.key === ':icons'" :data="iconsData" :setting-group="settingGroup" :setting="setting"/>
         <mascots-input v-if="setting.key === ':mascots'" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
-        <multiple-select v-if="setting.key === ':backends' || setting.key === ':args'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
         <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
         <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <reg-invites-input v-if="[':registrations_open', ':invites_enabled'].includes(setting.key)" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <select-input-with-reduced-labels v-if="reducedSelects" :data="data" :setting-group="settingGroup" :setting="setting"/>
+        <specific-multiple-select v-if="setting.key === ':backends' || setting.key === ':args'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <!-------------------->
         <el-tooltip v-if="canBeDeleted && isTablet" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
           <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
@@ -126,12 +126,12 @@ import {
   EditableKeywordInput,
   IconsInput,
   MascotsInput,
-  MultipleSelect,
   ProxyUrlInput,
   PruneInput,
   RateLimitInput,
   RegInvitesInput,
-  SelectInputWithReducedLabels } from './inputComponents'
+  SelectInputWithReducedLabels,
+  SpecificMultipleSelect } from './inputComponents'
 import { getBooleanValue, processNested } from '@/store/modules/normalizers'
 import _ from 'lodash'
 import marked from 'marked'
@@ -144,12 +144,12 @@ export default {
     EditableKeywordInput,
     IconsInput,
     MascotsInput,
-    MultipleSelect,
     ProxyUrlInput,
     PruneInput,
     RateLimitInput,
     RegInvitesInput,
-    SelectInputWithReducedLabels
+    SelectInputWithReducedLabels,
+    SpecificMultipleSelect
   },
   props: {
     customLabelWidth: {
