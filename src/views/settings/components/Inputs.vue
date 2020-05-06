@@ -132,7 +132,7 @@ import {
   RateLimitInput,
   RegInvitesInput,
   SelectInputWithReducedLabels } from './inputComponents'
-import { processNested } from '@/store/modules/normalizers'
+import { getBooleanValue, processNested } from '@/store/modules/normalizers'
 import _ from 'lodash'
 import marked from 'marked'
 
@@ -332,9 +332,10 @@ export default {
       )
     },
     update(value, group, key, parents, input, type, nested) {
+      const updatedValue = getBooleanValue(value)
       nested
-        ? this.processNestedData(value, group, key, parents)
-        : this.updateSetting(value, group, key, input, type)
+        ? this.processNestedData(updatedValue, group, key, parents)
+        : this.updateSetting(updatedValue, group, key, input, type)
     },
     updateSetting(value, group, key, input, type) {
       this.$store.dispatch('UpdateSettings', { group, key, input, value, type })
