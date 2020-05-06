@@ -55,7 +55,7 @@
           :data-search="setting.key || setting.group"
           @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
         <el-select
-          v-if="!reducedSelects && (setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown')))"
+          v-if="renderSingleSelect(setting.type)"
           :value="inputValue === false ? 'false' : inputValue"
           :data-search="setting.key || setting.group"
           clearable
@@ -67,7 +67,7 @@
             :key="index"/>
         </el-select>
         <el-select
-          v-if="!reducedSelects && renderMultipleSelect(setting.type)"
+          v-if="renderMultipleSelect(setting.type)"
           :value="inputValue"
           :data-search="setting.key || setting.group"
           multiple
@@ -323,7 +323,7 @@ export default {
       })
     },
     renderMultipleSelect(type) {
-      return Array.isArray(type) && this.setting.key !== ':backends' && this.setting.key !== ':args' && (
+      return !this.reducedSelects && Array.isArray(type) && this.setting.key !== ':backends' && this.setting.key !== ':args' && (
         type.includes('module') ||
         (type.includes('list') && type.includes('string')) ||
         (type.includes('list') && type.includes('atom')) ||
@@ -331,8 +331,11 @@ export default {
         this.setting.key === ':args'
       )
     },
+    renderSingleSelect(type) {
+      return !this.reducedSelects && (type === 'module' || (type.includes('atom') && type.includes('dropdown')))
+    },
     update(value, group, key, parents, input, type, nested) {
-      const updatedValue = getBooleanValue(value)
+      const updatedValue = this.renderSingleSelect(type) ? getBooleanValue(value) : value
       nested
         ? this.processNestedData(updatedValue, group, key, parents)
         : this.updateSetting(updatedValue, group, key, input, type)
