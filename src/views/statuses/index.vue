@@ -8,10 +8,18 @@
     </div>
     <div class="statuses-header-container">
       <el-button-group>
-        <el-button plain class="direct-button">{{ $t('statuses.direct') }}: {{ statusVisibility.direct }}</el-button>
-        <el-button plain class="private-button">{{ $t('statuses.private') }}: {{ statusVisibility.private }}</el-button>
-        <el-button plain class="public-button">{{ $t('statuses.public') }}: {{ statusVisibility.public }}</el-button>
-        <el-button plain class="unlisted-button">{{ $t('statuses.unlisted') }}: {{ statusVisibility.unlisted }}</el-button>
+        <el-button plain class="direct-button">
+          {{ $t('statuses.direct') }}: {{ normalizedCount(990934093) }}
+        </el-button>
+        <el-button plain class="private-button">
+          {{ $t('statuses.private') }}: {{ normalizedCount(statusVisibility.private) }}
+        </el-button>
+        <el-button plain class="public-button">
+          {{ $t('statuses.public') }}: {{ normalizedCount(statusVisibility.public) }}
+        </el-button>
+        <el-button plain class="unlisted-button">
+          {{ $t('statuses.unlisted') }}: {{ normalizedCount(statusVisibility.unlisted) }}
+        </el-button>
       </el-button-group>
     </div>
     <div class="filter-container">
@@ -61,6 +69,7 @@
 import MultipleUsersMenu from '@/views/users/components/MultipleUsersMenu'
 import Status from '@/components/Status'
 import RebootButton from '@/components/RebootButton'
+import numeral from 'numeral'
 
 export default {
   name: 'Statuses',
@@ -146,6 +155,9 @@ export default {
     this.$store.dispatch('ClearState')
   },
   methods: {
+    clearSelection() {
+      this.selectedUsers = []
+    },
     handleFilterChange() {
       this.$store.dispatch('HandlePageChange', 1)
       this.$store.dispatch('FetchStatusesByInstance')
@@ -155,14 +167,14 @@ export default {
 
       this.$store.dispatch('FetchStatusesPageByInstance')
     },
-    clearSelection() {
-      this.selectedUsers = []
-    },
     handleStatusSelection(user) {
       if (this.selectedUsers.find(selectedUser => user.id === selectedUser.id) !== undefined) {
         return
       }
       this.selectedUsers = [...this.selectedUsers, user]
+    },
+    normalizedCount(count) {
+      return numeral(count).format('0a')
     }
   }
 }
