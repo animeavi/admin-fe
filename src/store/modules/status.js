@@ -68,13 +68,15 @@ const status = {
         dispatch('FetchStatusesByInstance')
       }
     },
-    async FetchStatusesCount({ commit, getters }) {
+    async FetchStatusesCount({ commit, getters }, instance) {
       commit('SET_LOADING', true)
-      const { data } = await fetchStatusesCount(getters.authHost, getters.token)
+      const { data } = await fetchStatusesCount(instance, getters.authHost, getters.token)
       commit('SET_STATUS_VISIBILITY', data.status_visibility)
       commit('SET_LOADING', false)
     },
     async FetchStatusesByInstance({ commit, getters, state, rootState }) {
+      const { data } = await fetchStatusesCount(state.statusesByInstance.selectedInstance, getters.authHost, getters.token)
+      commit('SET_STATUS_VISIBILITY', data.status_visibility)
       commit('SET_LOADING', true)
       if (state.statusesByInstance.selectedInstance === '') {
         commit('SET_STATUSES_BY_INSTANCE', [])
