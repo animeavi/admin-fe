@@ -8,10 +8,10 @@
     </div>
     <div class="statuses-header-container">
       <el-button-group>
-        <el-button plain>{{ $t('statuses.direct') }}: {{ statusVisibility.direct }}</el-button>
-        <el-button plain>{{ $t('statuses.private') }}: {{ statusVisibility.private }}</el-button>
-        <el-button plain>{{ $t('statuses.public') }}: {{ statusVisibility.public }}</el-button>
-        <el-button plain>{{ $t('statuses.unlisted') }}: {{ statusVisibility.unlisted }}</el-button>
+        <el-button plain class="direct-button">{{ $t('statuses.direct') }}: {{ statusVisibility.direct }}</el-button>
+        <el-button plain class="private-button">{{ $t('statuses.private') }}: {{ statusVisibility.private }}</el-button>
+        <el-button plain class="public-button">{{ $t('statuses.public') }}: {{ statusVisibility.public }}</el-button>
+        <el-button plain class="unlisted-button">{{ $t('statuses.unlisted') }}: {{ statusVisibility.unlisted }}</el-button>
       </el-button-group>
     </div>
     <div class="filter-container">
@@ -238,8 +238,26 @@ export default {
   .statuses-header-container {
     flex-direction: column;
     align-items: flex-start;
+    .el-button-group {
+      width: 100%;
+    }
     .el-button {
       padding: 10px 6.5px;
+      width: 50%;
+    }
+    .el-button-group>.el-button:first-child {
+      border-bottom-left-radius: 0;
+    }
+    .el-button-group>.el-button:not(:first-child):not(:last-child).private-button {
+      border-top-right-radius: 4px;
+    }
+    .el-button-group>.el-button:not(:first-child):not(:last-child).public-button {
+      border-bottom-left-radius: 4px;
+      border-top: white;
+    }
+    .el-button-group>.el-button:last-child {
+      border-top-right-radius: 0;
+      border-top: white;
     }
     .reboot-button {
       margin: 10px 0 0 0;
