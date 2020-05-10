@@ -178,6 +178,13 @@ export default {
     margin: 0 0 10px;
   }
 }
+.statuses-header-container {
+  .el-button.is-plain:focus, .el-button.is-plain:hover {
+    border-color: #DCDFE6;
+    color: #606266;
+    cursor: default
+  }
+}
 .checkbox-container {
   margin-bottom: 15px;
 }
