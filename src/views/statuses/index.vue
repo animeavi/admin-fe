@@ -142,6 +142,9 @@ export default {
     this.$store.dispatch('FetchPeers')
     this.$store.dispatch('FetchStatusesCount')
   },
+  destroyed() {
+    this.$store.dispatch('ClearState')
+  },
   methods: {
     handleFilterChange() {
       this.$store.dispatch('HandlePageChange', 1)
