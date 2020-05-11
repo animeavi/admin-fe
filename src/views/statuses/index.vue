@@ -9,7 +9,7 @@
     <div class="statuses-header-container">
       <el-button-group>
         <el-button plain class="direct-button">
-          {{ $t('statuses.direct') }}: {{ normalizedCount(990934093) }}
+          {{ $t('statuses.direct') }}: {{ normalizedCount(statusVisibility.direct) }}
         </el-button>
         <el-button plain class="private-button">
           {{ $t('statuses.private') }}: {{ normalizedCount(statusVisibility.private) }}
