@@ -11,7 +11,7 @@ export default {
     peers,
     settings,
     status,
-    user
+    user: { ...user, state: { ...user.state, authHost: 'localhost:4000' }}
   },
   getters
 }

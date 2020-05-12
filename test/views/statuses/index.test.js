@@ -38,4 +38,24 @@ describe('Statuses', () => {
     expect(statusVisibilityCount.unlisted).toEqual(10)
     done()
   })
+
+  it('fetches statuses from selected instance and updates the count', async (done) => {
+    const wrapper = mount(Statuses, {
+      store,
+      localVue
+    })
+    await flushPromises()
+
+    store.dispatch('HandleFilterChange', 'heaven.com')
+    wrapper.vm.handleFilterChange()
+    await flushPromises()
+    const statusVisibilityCount = store.state.status.statusVisibility
+
+    expect(statusVisibilityCount.direct).toEqual(1)
+    expect(statusVisibilityCount.private).toEqual(2)
+    expect(statusVisibilityCount.public).toEqual(3)
+    expect(statusVisibilityCount.unlisted).toEqual(0)
+    expect(store.state.status.fetchedStatuses.length).toEqual(2)
+    done()
+  })
 })
