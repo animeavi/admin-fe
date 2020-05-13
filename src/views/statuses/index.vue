@@ -152,6 +152,7 @@ export default {
     this.$store.dispatch('FetchStatusesCount')
   },
   destroyed() {
+    this.clearSelection()
     this.$store.dispatch('ClearState')
   },
   methods: {
