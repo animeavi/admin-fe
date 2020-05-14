@@ -65,7 +65,7 @@ export const tabs = {
   },
   'relays': {
     label: 'settings.relays',
-    settings: []
+    settings: ['relays']
   },
   'web-push': {
     label: 'settings.webPush',
