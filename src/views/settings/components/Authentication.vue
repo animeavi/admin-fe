@@ -3,15 +3,15 @@
     <el-form ref="pleromaAuthenticatorData" :model="pleromaAuthenticatorData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="pleromaAuthenticator" :data="pleromaAuthenticatorData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="pleromaAuthenticator" class="divider thick-line"/>
     <el-form ref="authData" :model="authData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="auth" :data="authData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="auth" class="divider thick-line"/>
     <el-form ref="ldapData" :model="ldapData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="ldap" :data="ldapData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="oauth2" class="divider thick-line"/>
     <el-form ref="oauth2" :model="oauth2Data" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="oauth2" :data="oauth2Data"/>
     </el-form>

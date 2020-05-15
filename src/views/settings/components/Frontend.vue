@@ -6,27 +6,27 @@
     <el-form ref="staticFeData" :model="staticFeData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="staticFe" :data="staticFeData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="staticFe" class="divider thick-line"/>
     <el-form ref="assetsData" :model="assetsData" :label-position="labelPosition" :label-width="labelWidth">
-      <el-form-item class="grouped-settings-header">
+      <el-form-item v-if="assets" class="grouped-settings-header">
         <span class="label-font label-with-margin">{{ $t('settings.assets') }}</span>
       </el-form-item>
       <setting :setting-group="assets" :data="assetsData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="assets" class="divider thick-line"/>
     <el-form ref="emojiData" :model="emojiData" :label-position="labelPosition" :label-width="labelWidth">
-      <el-form-item data-search=":emoji" class="grouped-settings-header">
+      <el-form-item v-if="emoji" data-search=":emoji" class="grouped-settings-header">
         <span class="label-font label-with-margin">{{ $t('settings.emoji') }}</span>
       </el-form-item>
       <setting :setting-group="emoji" :data="emojiData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="emoji" class="divider thick-line"/>
     <el-form ref="chatData" :model="chatData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="chat" :data="chatData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="chat" class="divider thick-line"/>
     <el-form ref="markupData" :model="markupData" :label-position="labelPosition" :label-width="labelWidth">
-      <el-form-item data-search=":markup" class="grouped-settings-header">
+      <el-form-item v-if="markup" data-search=":markup" class="grouped-settings-header">
         <span class="label-font label-with-margin">{{ $t('settings.markup') }}</span>
       </el-form-item>
       <setting :setting-group="markup" :data="markupData"/>

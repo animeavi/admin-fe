@@ -4,20 +4,20 @@
       <setting :setting-group="upload" :data="uploadData"/>
     </el-form>
     <el-form v-if="showUploadersLocal" ref="uploadersLocal" :model="uploadersLocalData" :label-position="labelPosition" :label-width="labelWidth">
-      <el-form-item class="grouped-settings-header">
+      <el-form-item v-if="uploadersLocal" class="grouped-settings-header">
         <span class="label-font label-with-margin">Pleroma.Uploaders.Local</span>
       </el-form-item>
       <setting :setting-group="uploadersLocal" :data="uploadersLocalData"/>
-      <el-divider class="divider thick-line"/>
+      <el-divider v-if="uploadersLocal" class="divider thick-line"/>
     </el-form>
     <el-form v-if="showUploadersS3" ref="uploadersS3" :model="uploadersS3Data" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uploadersS3" :data="uploadersS3Data"/>
-      <el-divider class="divider thick-line"/>
+      <el-divider v-if="uploadersS3" class="divider thick-line"/>
     </el-form>
     <el-form ref="uploadFilterMogrify" :model="uploadFilterMogrifyData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uploadFilterMogrify" :data="uploadFilterMogrifyData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="uploadFilterMogrify" class="divider thick-line"/>
     <el-form ref="uploadAnonymizeFilename" :model="uploadAnonymizeFilenameData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uploadAnonymizeFilename" :data="uploadAnonymizeFilenameData"/>
     </el-form>
