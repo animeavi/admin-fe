@@ -3,7 +3,7 @@
     <el-form ref="metadata" :model="metadataData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="metadata" :data="metadataData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="metadata" class="divider thick-line"/>
     <el-form ref="richMedia" :model="richMediaData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="richMedia" :data="richMediaData"/>
     </el-form>
