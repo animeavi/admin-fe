@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Statuses count changes when an instance is selected and shows the amount of statuses from an originating instance
 - Add a dialog window with a confirmation when a remove button is clicked on the Settings page
+- Disable tab on the Settings page if there are no settings on this tab that can be changed in Admin FE
 
 ### Fixed
 
