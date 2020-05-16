@@ -215,7 +215,7 @@ export default {
       return Array.isArray(this.data[':icons']) ? this.data[':icons'] : []
     },
     inputValue() {
-      if ([':esshd', ':cors_plug', ':quack', ':http_signatures', ':tesla', ':swoosh'].includes(this.settingGroup.group) &&
+      if ([':esshd', ':cors_plug', ':quack', ':tesla', ':swoosh'].includes(this.settingGroup.group) &&
         this.data[this.setting.key]) {
         return this.setting.type === 'atom' && this.data[this.setting.key].value[0] === ':'
           ? this.data[this.setting.key].value.substr(1)

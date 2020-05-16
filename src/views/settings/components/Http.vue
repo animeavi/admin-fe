@@ -58,12 +58,6 @@ export default {
     httpSecurityData() {
       return _.get(this.settings.settings, [':pleroma', ':http_security']) || {}
     },
-    httpSignatures() {
-      return this.settings.description.find(setting => setting.group === ':http_signatures')
-    },
-    httpSignaturesData() {
-      return _.get(this.settings.settings, [':http_signatures']) || {}
-    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
