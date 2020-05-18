@@ -179,6 +179,9 @@ export default {
     this.$store.dispatch('NeedReboot')
     this.$store.dispatch('FetchUsers', { page: 1 })
   },
+  destroyed() {
+    this.$store.dispatch('ClearUsersState')
+  },
   methods: {
     activationIcon(status) {
       return status ? 'el-icon-error' : 'el-icon-success'
