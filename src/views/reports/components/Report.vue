@@ -24,7 +24,7 @@
                   <el-dropdown-item v-if="report.state !== 'closed'" @click.native="changeReportState('closed', report.id)">{{ $t('reports.close') }}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <moderate-user-dropdown :account="report.account"/>
+              <moderate-user-dropdown v-if="validAccount(report.account)" :account="report.account"/>
             </div>
           </div>
           <div>
@@ -179,6 +179,9 @@ export default {
     },
     showStatuses(statuses = []) {
       return statuses.length > 0
+    },
+    validAccount(account) {
+      return account.nickname && account.id
     }
   }
 }

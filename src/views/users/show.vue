@@ -7,6 +7,7 @@
       </div>
       <div class="left-header-container">
         <moderation-dropdown
+          v-if="validUser(user)"
           :user="user"
           :page="'userPage'"
           @open-reset-token-dialog="openResetPasswordDialog"/>
@@ -22,6 +23,7 @@
         <reboot-button/>
       </header>
       <moderation-dropdown
+        v-if="validUser(user)"
         :user="user"
         :page="'userPage'"
         @open-reset-token-dialog="openResetPasswordDialog"/>
@@ -182,6 +184,9 @@ export default {
     },
     openResetPasswordDialog() {
       this.resetPasswordDialogOpen = true
+    },
+    validUser(user) {
+      return user.nickname && user.id
     }
   }
 }

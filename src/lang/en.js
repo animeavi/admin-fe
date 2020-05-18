@@ -238,7 +238,8 @@ export default {
     unconfirmedEmail: 'User didn\'t confirm the email',
     confirmAccount: 'Confirm account',
     confirmAccounts: 'Confirm accounts',
-    resendConfirmation: 'Resend confirmation email'
+    resendConfirmation: 'Resend confirmation email',
+    invalidUser: 'This user is invalid and can\'t be modified'
   },
   statuses: {
     statuses: 'Statuses',

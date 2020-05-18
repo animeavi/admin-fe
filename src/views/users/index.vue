@@ -75,9 +75,11 @@
       <el-table-column :label="$t('users.actions')" fixed="right">
         <template slot-scope="scope">
           <moderation-dropdown
+            v-if="validUser(scope.row)"
             :user="scope.row"
             :page="'users'"
             @open-reset-token-dialog="openResetPasswordDialog"/>
+          <span v-else class="invalid-user">{{ $t('users.invalidUser') }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -140,12 +142,6 @@ export default {
     normalizedUsersCount() {
       return numeral(this.$store.state.users.totalUsersCount).format('0a')
     },
-    users() {
-      return this.$store.state.users.fetchedUsers
-    },
-    usersCount() {
-      return this.$store.state.users.totalUsersCount
-    },
     pageSize() {
       return this.$store.state.users.pageSize
     },
@@ -163,6 +159,12 @@ export default {
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
+    },
+    users() {
+      return this.$store.state.users.fetchedUsers
+    },
+    usersCount() {
+      return this.$store.state.users.totalUsersCount
     },
     width() {
       return this.isMobile ? 55 : false
@@ -211,6 +213,9 @@ export default {
     },
     showDeactivatedButton(id) {
       return this.$store.state.user.id !== id
+    },
+    validUser(user) {
+      return user.nickname && user.id
     }
   }
 }
@@ -247,6 +252,9 @@ export default {
   }
 .create-account > .el-icon-plus {
   margin-right: 5px;
+}
+.invalid-user {
+  color: gray;
 }
 .users-header-container {
   display: flex;
