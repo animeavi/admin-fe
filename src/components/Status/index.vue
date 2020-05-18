@@ -229,6 +229,10 @@ export default {
     line-height: 26px;
     font-size: 13px;
   }
+  .deactivated {
+    color: gray;
+    font-size: 15px;
+  }
   .image {
     width: 20%;
     img {
