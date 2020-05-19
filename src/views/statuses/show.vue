@@ -8,7 +8,8 @@
       <div class="left-header-container">
         <moderation-dropdown
           :user="user"
-          :page="'userPage'"
+          :page="'statusPage'"
+          :status-id="status.id"
           @open-reset-token-dialog="openResetPasswordDialog"/>
         <reboot-button/>
       </div>
@@ -81,7 +82,7 @@ export default {
       return this.$store.state.userProfile.statusesLoading
     },
     user() {
-      return this.$store.state.status.fetchedStatus.account
+      return this.$store.state.status.statusAuthor
     }
   },
   beforeMount: function() {

@@ -5,6 +5,7 @@ const status = {
     fetchedStatus: {},
     fetchedStatuses: [],
     loading: false,
+    statusAuthor: {},
     statusesByInstance: {
       selectedInstance: '',
       showLocal: false,
@@ -49,6 +50,9 @@ const status = {
     },
     SET_STATUS_VISIBILITY: (state, visibility) => {
       state.statusVisibility = visibility
+    },
+    SET_STATUS_AUTHOR: (state, user) => {
+      state.statusAuthor = user
     }
   },
   actions: {
@@ -77,6 +81,7 @@ const status = {
       const status = await fetchStatus(id, getters.authHost, getters.token)
 
       commit('SET_STATUS', status.data)
+      commit('SET_STATUS_AUTHOR', status.data.account)
       commit('SET_LOADING', false)
       dispatch('FetchUserStatuses', { userId: state.fetchedStatus.account.id, godmode: false })
     },
