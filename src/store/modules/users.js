@@ -77,14 +77,14 @@ const users = {
     }
   },
   actions: {
-    async ActivateUsers({ dispatch, getters }, { users, _userId, _statusId }) {
+    async ActivateUsers({ dispatch, getters }, { users, _userId }) {
       const updatedUsers = users.map(user => {
         return { ...user, deactivated: false }
       })
       const nicknames = users.map(user => user.nickname)
       const callApiFn = async() => await activateUsers(nicknames, getters.authHost, getters.token)
 
-      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId, statusId: _statusId })
+      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId })
     },
     async ApplyChanges({ commit, dispatch, state }, { updatedUsers, callApiFn, userId, statusId }) {
       commit('SWAP_USERS', updatedUsers)
@@ -135,14 +135,14 @@ const users = {
       }
       dispatch('SuccessMessage')
     },
-    async DeactivateUsers({ dispatch, getters }, { users, _userId, _statusId }) {
+    async DeactivateUsers({ dispatch, getters }, { users, _userId }) {
       const updatedUsers = users.map(user => {
         return { ...user, deactivated: true }
       })
       const nicknames = users.map(user => user.nickname)
       const callApiFn = async() => await deactivateUsers(nicknames, getters.authHost, getters.token)
 
-      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId, statusId: _statusId })
+      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId })
     },
     async ConfirmUsersEmail({ dispatch, getters }, { users, _userId, _statusId }) {
       const updatedUsers = users.map(user => {
@@ -171,7 +171,7 @@ const users = {
 
       dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId, statusId: _statusId })
     },
-    async DeleteUsers({ commit, dispatch, getters, state }, { users, _userId, _statusId }) {
+    async DeleteUsers({ commit, dispatch, getters, state }, { users, _userId }) {
       const usersNicknames = users.map(user => user.nickname)
       try {
         await deleteUsers(usersNicknames, getters.authHost, getters.token)
@@ -182,7 +182,7 @@ const users = {
       const updatedUsers = state.fetchedUsers.filter(user => !deletedUsersIds.includes(user.id))
       commit('SET_USERS', updatedUsers)
 
-      dispatch('FetchUserProfile', { userId: _userId, statusId: _statusId, godmode: false })
+      dispatch('FetchUserProfile', { userId: _userId, godmode: false })
       dispatch('SuccessMessage')
     },
     async FetchUsers({ commit, dispatch, getters, state }, { page }) {

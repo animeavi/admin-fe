@@ -27,13 +27,13 @@
         {{ user.roles.moderator ? $t('users.revokeModerator') : $t('users.grantModerator') }}
       </el-dropdown-item>
       <el-dropdown-item
-        v-if="showDeactivatedButton(user.id)"
+        v-if="showDeactivatedButton(user.id) && page !== 'statusPage'"
         :divided="showAdminAction(user)"
         @click.native="toggleActivation(user)">
         {{ user.deactivated ? $t('users.activateAccount') : $t('users.deactivateAccount') }}
       </el-dropdown-item>
       <el-dropdown-item
-        v-if="showDeactivatedButton(user.id)"
+        v-if="showDeactivatedButton(user.id) && page !== 'statusPage'"
         @click.native="handleDeletion(user)">
         {{ $t('users.deleteAccount') }}
       </el-dropdown-item>
@@ -135,7 +135,7 @@ export default {
       this.$store.dispatch('ResendConfirmationEmail', [user])
     },
     handleDeletion(user) {
-      this.$store.dispatch('DeleteUsers', { users: [user], _userId: user.id, _statusId: this.statusId })
+      this.$store.dispatch('DeleteUsers', { users: [user], _userId: user.id })
     },
     handleEmailConfirmation(user) {
       this.$store.dispatch('ConfirmUsersEmail', { users: [user], _userId: user.id, _statusId: this.statusId })
@@ -156,8 +156,8 @@ export default {
     },
     toggleActivation(user) {
       user.deactivated
-        ? this.$store.dispatch('ActivateUsers', { users: [user], _userId: user.id, _statusId: this.statusId })
-        : this.$store.dispatch('DeactivateUsers', { users: [user], _userId: user.id, _statusId: this.statusId })
+        ? this.$store.dispatch('ActivateUsers', { users: [user], _userId: user.id })
+        : this.$store.dispatch('DeactivateUsers', { users: [user], _userId: user.id })
     },
     toggleTag(user, tag) {
       user.tags.includes(tag)
