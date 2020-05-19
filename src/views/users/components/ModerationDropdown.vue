@@ -5,7 +5,7 @@
         {{ $t('users.moderation') }}
         <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
       </span>
-      <el-button v-if="page === 'userPage'" class="moderate-user-button">
+      <el-button v-if="page === 'userPage' || page === 'statusPage'" class="moderate-user-button">
         <span class="moderate-user-button-container">
           <span>
             <i class="el-icon-edit" />
@@ -115,6 +115,10 @@ export default {
     page: {
       type: String,
       default: 'users'
+    },
+    statusId: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -131,10 +135,10 @@ export default {
       this.$store.dispatch('ResendConfirmationEmail', [user])
     },
     handleDeletion(user) {
-      this.$store.dispatch('DeleteUsers', { users: [user], _userId: user.id })
+      this.$store.dispatch('DeleteUsers', { users: [user], _userId: user.id, _statusId: this.statusId })
     },
     handleEmailConfirmation(user) {
-      this.$store.dispatch('ConfirmUsersEmail', { users: [user], _userId: user.id })
+      this.$store.dispatch('ConfirmUsersEmail', { users: [user], _userId: user.id, _statusId: this.statusId })
     },
     requirePasswordReset(user) {
       const mailerEnabled = this.$store.state.user.nodeInfo.metadata.mailerEnabled
@@ -152,18 +156,18 @@ export default {
     },
     toggleActivation(user) {
       user.deactivated
-        ? this.$store.dispatch('ActivateUsers', { users: [user], _userId: user.id })
-        : this.$store.dispatch('DeactivateUsers', { users: [user], _userId: user.id })
+        ? this.$store.dispatch('ActivateUsers', { users: [user], _userId: user.id, _statusId: this.statusId })
+        : this.$store.dispatch('DeactivateUsers', { users: [user], _userId: user.id, _statusId: this.statusId })
     },
     toggleTag(user, tag) {
       user.tags.includes(tag)
-        ? this.$store.dispatch('RemoveTag', { users: [user], tag, _userId: user.id })
-        : this.$store.dispatch('AddTag', { users: [user], tag, _userId: user.id })
+        ? this.$store.dispatch('RemoveTag', { users: [user], tag, _userId: user.id, _statusId: this.statusId })
+        : this.$store.dispatch('AddTag', { users: [user], tag, _userId: user.id, _statusId: this.statusId })
     },
     toggleUserRight(user, right) {
       user.roles[right]
-        ? this.$store.dispatch('DeleteRight', { users: [user], right, _userId: user.id })
-        : this.$store.dispatch('AddRight', { users: [user], right, _userId: user.id })
+        ? this.$store.dispatch('DeleteRight', { users: [user], right, _userId: user.id, _statusId: this.statusId })
+        : this.$store.dispatch('AddRight', { users: [user], right, _userId: user.id, _statusId: this.statusId })
     }
   }
 }
