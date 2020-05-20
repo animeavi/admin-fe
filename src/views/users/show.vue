@@ -26,19 +26,9 @@
         :page="'userPage'"
         @open-reset-token-dialog="openResetPasswordDialog"/>
     </div>
-    <el-dialog
-      v-loading="loading"
-      :visible.sync="resetPasswordDialogOpen"
-      :title="$t('users.passwordResetTokenCreated')"
-      custom-class="password-reset-token-dialog"
-      @close="closeResetPasswordDialog">
-      <div>
-        <p class="password-reset-token">Password reset token was generated: {{ passwordResetToken }}</p>
-        <p>You can also use this link to reset password:
-          <a :href="passwordResetLink" target="_blank" class="reset-password-link">{{ passwordResetLink }}</a>
-        </p>
-      </div>
-    </el-dialog>
+    <reset-password-dialog
+      :reset-password-dialog-open="resetPasswordDialogOpen"
+      @close-reset-token-dialog="closeResetPasswordDialog"/>
     <div class="user-profile-container">
       <el-card class="user-profile-card">
         <div class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition el-table--medium">
@@ -121,10 +111,11 @@ import Status from '@/components/Status'
 import ModerationDropdown from './components/ModerationDropdown'
 import SecuritySettingsModal from './components/SecuritySettingsModal'
 import RebootButton from '@/components/RebootButton'
+import ResetPasswordDialog from './components/ResetPasswordDialog'
 
 export default {
   name: 'UsersShow',
-  components: { ModerationDropdown, RebootButton, Status, SecuritySettingsModal },
+  components: { ModerationDropdown, RebootButton, ResetPasswordDialog, Status, SecuritySettingsModal },
   data() {
     return {
       showPrivate: false,
@@ -144,12 +135,6 @@ export default {
     },
     loading() {
       return this.$store.state.users.loading
-    },
-    passwordResetLink() {
-      return this.$store.state.users.passwordResetToken.link
-    },
-    passwordResetToken() {
-      return this.$store.state.users.passwordResetToken.token
     },
     statuses() {
       return this.$store.state.userProfile.statuses
