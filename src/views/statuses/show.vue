@@ -27,6 +27,9 @@
         :page="'userPage'"
         @open-reset-token-dialog="openResetPasswordDialog"/>
     </div>
+    <reset-password-dialog
+      :reset-password-dialog-open="resetPasswordDialogOpen"
+      @close-reset-token-dialog="closeResetPasswordDialog"/>
     <div class="status-container">
       <status :status="status" :account="user" :show-checkbox="false" :godmode="showPrivate"/>
     </div>
@@ -49,10 +52,11 @@
 import Status from '@/components/Status'
 import ModerationDropdown from '../users/components/ModerationDropdown'
 import RebootButton from '@/components/RebootButton'
+import ResetPasswordDialog from '@/views/users/components/ResetPasswordDialog'
 
 export default {
   name: 'UsersShow',
-  components: { ModerationDropdown, RebootButton, Status },
+  components: { ModerationDropdown, RebootButton, ResetPasswordDialog, Status },
   data() {
     return {
       showPrivate: false,
@@ -94,6 +98,10 @@ export default {
     accountExists(account, key) {
       return account[key]
     },
+    closeResetPasswordDialog() {
+      this.resetPasswordDialogOpen = false
+      this.$store.dispatch('RemovePasswordToken')
+    },
     onTogglePrivate() {
       this.$store.dispatch('FetchUserStatuses', { userId: this.user.id, godmode: this.showPrivate })
     },
@@ -113,6 +121,12 @@ export default {
   margin-left: 28px;
   color: #606266;
 }
+.password-reset-token {
+  margin: 0 0 14px 0;
+}
+.password-reset-token-dialog {
+  width: 50%
+}
 .reboot-button {
   padding: 10px;
   margin-left: 6px;
@@ -123,6 +137,9 @@ export default {
 .recent-statuses-container {
   display: flex;
   flex-direction: column;
+}
+.reset-password-link {
+  text-decoration: underline;
 }
 .show-private-statuses {
   margin-left: 28px;
@@ -163,6 +180,9 @@ export default {
     align-items: center;
     display: flex;
     justify-content: space-between;
+  }
+  .password-reset-token-dialog {
+    width: 85%
   }
   .recent-statuses {
     margin: 20px 10px 15px 10px;

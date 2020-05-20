@@ -192,7 +192,6 @@ table {
   display: flex;
   align-items: center;
 }
-
 .el-table--border::after, .el-table--group::after, .el-table::before {
   background-color: transparent;
 }
@@ -211,6 +210,12 @@ table {
   margin-left: 28px;
   color: #606266;
 }
+.password-reset-token {
+  margin: 0 0 14px 0;
+}
+.password-reset-token-dialog {
+  width: 50%
+}
 .poll ul {
   list-style-type: none;
   padding: 0;
@@ -227,6 +232,9 @@ table {
 }
 .recent-statuses-header {
   margin-top: 10px;
+}
+.reset-password-link {
+  text-decoration: underline;
 }
 .security-setting-button {
   margin-top: 20px;
@@ -278,6 +286,9 @@ table {
   }
   .el-timeline-item__wrapper {
     padding-left: 18px;
+  }
+  .password-reset-token-dialog {
+    width: 85%
   }
   .recent-statuses {
     margin: 20px 10px 15px 10px;

@@ -45,14 +45,3 @@ export default {
 }
 </script>
 
-<style rel='stylesheet/scss' lang='scss'>
-.password-reset-token-dialog {
-  width: 50%
-}
-
-@media only screen and (max-width:480px) {
-  .password-reset-token-dialog {
-    width: 85%
-  }
-}
-</style>

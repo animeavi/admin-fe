@@ -234,16 +234,19 @@ export default {
 .create-account > .el-icon-plus {
   margin-right: 5px;
 }
+.password-reset-token {
+  margin: 0 0 14px 0;
+}
+.password-reset-token-dialog {
+  width: 50%
+}
+.reset-password-link {
+  text-decoration: underline;
+}
 .users-header-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-.password-reset-token {
-  margin: 0 0 14px 0;
-}
-.reset-password-link {
-  text-decoration: underline;
 }
 .users-container {
   h1 {
@@ -278,6 +281,9 @@ export default {
 }
 
 @media only screen and (max-width:480px) {
+  .password-reset-token-dialog {
+    width: 85%
+  }
   .users-container {
     h1 {
       margin: 0;
