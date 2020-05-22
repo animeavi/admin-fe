@@ -64,6 +64,8 @@ const status = {
         dispatch('FetchUserStatuses', { userId, godmode })
       } else if (fetchStatusesByInstance) { // called from Statuses by Instance
         dispatch('FetchStatusesByInstance')
+      } else { // called from Status show page
+        dispatch('FetchStatus', statusId)
       }
     },
     async DeleteStatus({ dispatch, getters }, { statusId, reportCurrentPage, userId, godmode, fetchStatusesByInstance }) {
