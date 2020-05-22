@@ -33,7 +33,7 @@
     <div class="status-container">
       <status :status="status" :account="user" :show-checkbox="false" :godmode="showPrivate"/>
     </div>
-    <div class="recent-statuses-container">
+    <div class="recent-statuses-container-show">
       <h2 class="recent-statuses">{{ $t('userProfile.recentStatuses') }} by {{ user.display_name }}</h2>
       <el-checkbox v-model="showPrivate" class="show-private-statuses" @change="onTogglePrivate">
         {{ $t('statuses.showPrivateStatuses') }}
@@ -131,19 +131,23 @@ export default {
   padding: 10px;
   margin-left: 6px;
 }
-.recent-statuses {
-  margin-left: 28px;
-}
-.recent-statuses-container {
+
+.recent-statuses-container-show {
   display: flex;
   flex-direction: column;
+  .el-timeline-item {
+    margin-left: 20px;
+  }
+  .recent-statuses {
+    margin-left: 20px;
+  }
+  .show-private-statuses {
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
 }
 .reset-password-link {
   text-decoration: underline;
-}
-.show-private-statuses {
-  margin-left: 28px;
-  margin-bottom: 20px;
 }
 .status-container {
   margin: 0 15px 0 20px;
@@ -187,9 +191,9 @@ export default {
   .recent-statuses {
     margin: 20px 10px 15px 10px;
   }
-  .recent-statuses-container {
+  .recent-statuses-container-show {
     width: 100%;
-    margin: 0;
+    margin: 0 0 0 15px;
   }
   .show-private-statuses {
     margin: 0 10px 20px 10px;
@@ -216,7 +220,7 @@ export default {
   .recent-statuses {
     margin: 20px 10px 15px 0;
   }
-  .recent-statuses-container {
+  .recent-statuses-container-show {
     width: 97%;
     margin: 0 20px;
   }
