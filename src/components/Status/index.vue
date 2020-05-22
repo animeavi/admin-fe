@@ -1,84 +1,68 @@
 <template>
-  <router-link :to="{ name: 'StatusShow', params: { id: status.id }}">
-    <el-card v-if="!status.deleted" class="status-card">
-      <div slot="header">
-        <div class="status-header">
-          <div class="status-account-container">
-            <div class="status-account">
-              <el-checkbox v-if="showCheckbox" class="status-checkbox" @change="handleStatusSelection(account)"/>
-              <img :src="account.avatar" class="status-avatar-img">
-              <a v-if="!account.deactivated" :href="account.url" target="_blank" class="account">
-                <h3 class="status-account-name">{{ account.display_name }}</h3>
-              </a>
-              <span v-else>
-                <h3 class="status-account-name">{{ account.display_name }}</h3>
-                <h3 class="status-account-name deactivated"> (deactivated)</h3>
-              </span>
-            </div>
+  <el-card v-if="!status.deleted" class="status-card" @click.native="handleRouteChange()">
+    <div slot="header">
+      <div class="status-header">
+        <div class="status-account-container">
+          <div class="status-account">
+            <el-checkbox v-if="showCheckbox" class="status-checkbox" @change="handleStatusSelection(account)"/>
+            <img :src="account.avatar" class="status-avatar-img">
+            <a v-if="!account.deactivated" :href="account.url" target="_blank" class="account">
+              <h3 class="status-account-name">{{ account.display_name }}</h3>
+            </a>
+            <span v-else>
+              <h3 class="status-account-name">{{ account.display_name }}</h3>
+              <h3 class="status-account-name deactivated"> (deactivated)</h3>
+            </span>
           </div>
-          <div class="status-actions">
-            <el-tag v-if="status.sensitive" type="warning" size="large">{{ $t('reports.sensitive') }}</el-tag>
-            <el-tag size="large">{{ capitalizeFirstLetter(status.visibility) }}</el-tag>
-            <el-dropdown trigger="click">
-              <el-button plain size="small" icon="el-icon-edit" class="status-actions-button">
-                {{ $t('reports.changeScope') }}<i class="el-icon-arrow-down el-icon--right"/>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item
-                  v-if="!status.sensitive"
-                  @click.native="changeStatus(status.id, true, status.visibility)">
-                  {{ $t('reports.addSensitive') }}
-                </el-dropdown-item>
-                <el-dropdown-item
-                  v-if="status.sensitive"
-                  @click.native="changeStatus(status.id, false, status.visibility)">
-                  {{ $t('reports.removeSensitive') }}
-                </el-dropdown-item>
-                <el-dropdown-item
-                  v-if="status.visibility !== 'public'"
-                  @click.native="changeStatus(status.id, status.sensitive, 'public')">
-                  {{ $t('reports.public') }}
-                </el-dropdown-item>
-                <el-dropdown-item
-                  v-if="status.visibility !== 'private'"
-                  @click.native="changeStatus(status.id, status.sensitive, 'private')">
-                  {{ $t('reports.private') }}
-                </el-dropdown-item>
-                <el-dropdown-item
-                  v-if="status.visibility !== 'unlisted'"
-                  @click.native="changeStatus(status.id, status.sensitive, 'unlisted')">
-                  {{ $t('reports.unlisted') }}
-                </el-dropdown-item>
-                <el-dropdown-item
-                  @click.native="deleteStatus(status.id)">
-                  {{ $t('reports.deleteStatus') }}
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </div>
+        </div>
+        <div class="status-actions">
+          <el-tag v-if="status.sensitive" type="warning" size="large">{{ $t('reports.sensitive') }}</el-tag>
+          <el-tag size="large">{{ capitalizeFirstLetter(status.visibility) }}</el-tag>
+          <el-dropdown trigger="click" @click.native.stop>
+            <el-button plain size="small" icon="el-icon-edit" class="status-actions-button">
+              {{ $t('reports.changeScope') }}<i class="el-icon-arrow-down el-icon--right"/>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                v-if="!status.sensitive"
+                @click.native="changeStatus(status.id, true, status.visibility)">
+                {{ $t('reports.addSensitive') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="status.sensitive"
+                @click.native="changeStatus(status.id, false, status.visibility)">
+                {{ $t('reports.removeSensitive') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="status.visibility !== 'public'"
+                @click.native="changeStatus(status.id, status.sensitive, 'public')">
+                {{ $t('reports.public') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="status.visibility !== 'private'"
+                @click.native="changeStatus(status.id, status.sensitive, 'private')">
+                {{ $t('reports.private') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="status.visibility !== 'unlisted'"
+                @click.native="changeStatus(status.id, status.sensitive, 'unlisted')">
+                {{ $t('reports.unlisted') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                @click.native="deleteStatus(status.id)">
+                {{ $t('reports.deleteStatus') }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </div>
-      <div class="status-body">
-        <div v-if="status.spoiler_text">
-          <strong>{{ status.spoiler_text }}</strong>
-          <el-button v-if="!showHiddenStatus" size="mini" class="show-more-button" @click="showHiddenStatus = true">Show more</el-button>
-          <el-button v-if="showHiddenStatus" size="mini" class="show-more-button" @click="showHiddenStatus = false">Show less</el-button>
-          <div v-if="showHiddenStatus">
-            <span class="status-content" v-html="status.content"/>
-            <div v-if="status.poll" class="poll">
-              <ul>
-                <li v-for="(option, index) in status.poll.options" :key="index">
-                  {{ option.title }}
-                  <el-progress :percentage="optionPercent(status.poll, option)" />
-                </li>
-              </ul>
-            </div>
-            <div v-for="(attachment, index) in status.media_attachments" :key="index" class="image">
-              <img :src="attachment.preview_url">
-            </div>
-          </div>
-        </div>
-        <div v-if="!status.spoiler_text">
+    </div>
+    <div class="status-body">
+      <div v-if="status.spoiler_text">
+        <strong>{{ status.spoiler_text }}</strong>
+        <el-button v-if="!showHiddenStatus" size="mini" class="show-more-button" @click="showHiddenStatus = true">Show more</el-button>
+        <el-button v-if="showHiddenStatus" size="mini" class="show-more-button" @click="showHiddenStatus = false">Show less</el-button>
+        <div v-if="showHiddenStatus">
           <span class="status-content" v-html="status.content"/>
           <div v-if="status.poll" class="poll">
             <ul>
@@ -92,30 +76,44 @@
             <img :src="attachment.preview_url">
           </div>
         </div>
-        <a :href="status.url" target="_blank" class="account">
-          {{ parseTimestamp(status.created_at) }}
-        </a>
       </div>
-    </el-card>
-    <el-card v-else class="status-card">
-      <div slot="header">
-        <div class="status-header">
-          <div class="status-account-container">
-            <div class="status-account">
-              <h4 class="status-deleted">{{ $t('reports.statusDeleted') }}</h4>
-            </div>
+      <div v-if="!status.spoiler_text">
+        <span class="status-content" v-html="status.content"/>
+        <div v-if="status.poll" class="poll">
+          <ul>
+            <li v-for="(option, index) in status.poll.options" :key="index">
+              {{ option.title }}
+              <el-progress :percentage="optionPercent(status.poll, option)" />
+            </li>
+          </ul>
+        </div>
+        <div v-for="(attachment, index) in status.media_attachments" :key="index" class="image">
+          <img :src="attachment.preview_url">
+        </div>
+      </div>
+      <a :href="status.url" target="_blank" class="account" @click.stop>
+        {{ parseTimestamp(status.created_at) }}
+      </a>
+    </div>
+  </el-card>
+  <el-card v-else class="status-card">
+    <div slot="header">
+      <div class="status-header">
+        <div class="status-account-container">
+          <div class="status-account">
+            <h4 class="status-deleted">{{ $t('reports.statusDeleted') }}</h4>
           </div>
         </div>
       </div>
-      <div class="status-body">
-        <span v-if="status.content" class="status-content" v-html="status.content"/>
-        <span v-else class="status-without-content">no content</span>
-      </div>
-      <a v-if="status.created_at" :href="status.url" target="_blank" class="account">
-        {{ parseTimestamp(status.created_at) }}
-      </a>
-    </el-card>
-  </router-link>
+    </div>
+    <div class="status-body">
+      <span v-if="status.content" class="status-content" v-html="status.content"/>
+      <span v-else class="status-without-content">no content</span>
+    </div>
+    <a v-if="status.created_at" :href="status.url" target="_blank" class="account">
+      {{ parseTimestamp(status.created_at) }}
+    </a>
+  </el-card>
 </template>
 
 <script>
@@ -215,6 +213,9 @@ export default {
     },
     handleStatusSelection(account) {
       this.$emit('status-selection', account)
+    },
+    handleRouteChange() {
+      this.$router.push({ name: 'StatusShow', params: { id: this.status.id }})
     }
   }
 }
@@ -223,6 +224,7 @@ export default {
 <style rel='stylesheet/scss' lang='scss'>
 .status-card {
   margin-bottom: 10px;
+  cursor: pointer;
   .account {
     text-decoration: underline;
     line-height: 26px;
