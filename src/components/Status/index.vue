@@ -91,9 +91,13 @@
           <img :src="attachment.preview_url">
         </div>
       </div>
-      <a :href="status.url" target="_blank" class="account" @click.stop>
-        {{ parseTimestamp(status.created_at) }}
-      </a>
+      <div class="status-footer">
+        <span class="status-created-at">{{ parseTimestamp(status.created_at) }}</span>
+        <a v-if="status.url" :href="status.url" target="_blank" class="account" @click.stop>
+          Open status in instance
+          <i class="el-icon-top-right"/>
+        </a>
+      </div>
     </div>
   </el-card>
   <el-card v-else class="status-card">
@@ -110,9 +114,13 @@
       <span v-if="status.content" class="status-content" v-html="status.content"/>
       <span v-else class="status-without-content">no content</span>
     </div>
-    <a v-if="status.created_at" :href="status.url" target="_blank" class="account">
-      {{ parseTimestamp(status.created_at) }}
-    </a>
+    <div class="status-footer">
+      <span v-if="status.created_at" class="status-created-at">{{ parseTimestamp(status.created_at) }}</span>
+      <a v-if="status.url" :href="status.url" target="_blank" class="account" @click.stop>
+        Open status in instance
+        <i class="el-icon-top-right"/>
+      </a>
+    </div>
   </el-card>
 </template>
 
@@ -226,9 +234,12 @@ export default {
   margin-bottom: 10px;
   cursor: pointer;
   .account {
-    text-decoration: underline;
     line-height: 26px;
     font-size: 13px;
+    color: #606266;
+  }
+  .account:hover {
+    text-decoration: underline;
   }
   .image {
     width: 20%;
@@ -265,9 +276,18 @@ export default {
     font-size: 15px;
     line-height: 26px;
   }
+  .status-created-at {
+    font-size: 14px;
+    color: #606266;
+  }
   .status-deleted {
     font-style: italic;
     margin-top: 3px;
+  }
+  .status-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   .status-header {
     display: flex;

@@ -4,6 +4,9 @@
       <div class="avatar-name-container">
         <el-avatar v-if="accountExists(user, 'avatar')" :src="user.avatar" size="large" />
         <h1 v-if="accountExists(user, 'display_name')">{{ user.display_name }}</h1>
+        <a v-if="accountExists(user, 'url')" :href="user.url" target="_blank" class="account">
+          <i class="el-icon-top-right"/>
+        </a>
       </div>
       <div class="left-header-container">
         <moderation-dropdown
@@ -116,6 +119,11 @@ export default {
 .avatar-name-container {
   display: flex;
   align-items: center;
+  .el-icon-top-right {
+    font-size: 2em;
+    line-height: 36px;
+    color: #606266;
+  }
 }
 .no-statuses {
   margin-left: 28px;
