@@ -5,10 +5,12 @@
         <div class="status-account-container">
           <div class="status-account">
             <el-checkbox v-if="showCheckbox" class="status-checkbox" @change="handleStatusSelection(account)"/>
-            <img :src="account.avatar" class="status-avatar-img">
-            <a v-if="!account.deactivated" :href="account.url" target="_blank" class="account">
-              <h3 class="status-account-name">{{ account.display_name }}</h3>
-            </a>
+            <router-link v-if="!account.deactivated && account.id" :to="{ name: 'UsersShow', params: { id: account.id }}" @click.native.stop>
+              <div class="status-card-header">
+                <img :src="account.avatar" class="status-avatar-img">
+                <h3 class="status-account-name">{{ account.display_name }}</h3>
+              </div>
+            </router-link>
             <span v-else>
               <h3 class="status-account-name">{{ account.display_name }}</h3>
               <h3 class="status-account-name deactivated"> (deactivated)</h3>
@@ -263,11 +265,15 @@ export default {
   .status-account-name {
     display: inline-block;
     margin: 0;
-    height: 22px;
+    font-size: 16px;
   }
   .status-body {
     display: flex;
     flex-direction: column;
+  }
+  .status-card-header {
+    display: flex;
+    align-items: center;
   }
   .status-checkbox {
     margin-right: 7px;
@@ -292,6 +298,7 @@ export default {
   .status-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
   .status-without-content {
     font-style: italic;

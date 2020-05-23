@@ -2,10 +2,14 @@
   <div v-if="!loading" class="status-show-container">
     <header v-if="isDesktop || isTablet" class="user-page-header">
       <div class="avatar-name-container">
-        <el-avatar v-if="accountExists(user, 'avatar')" :src="user.avatar" size="large" />
-        <h1 v-if="accountExists(user, 'display_name')">{{ user.display_name }}</h1>
+        <router-link :to="{ name: 'UsersShow', params: { id: user.id }}">
+          <div class="avatar-name-header">
+            <el-avatar v-if="accountExists(user, 'avatar')" :src="user.avatar" size="large" />
+            <h1 v-if="accountExists(user, 'display_name')">{{ user.display_name }}</h1>
+          </div>
+        </router-link>
         <a v-if="accountExists(user, 'url')" :href="user.url" target="_blank" class="account">
-          <i class="el-icon-top-right"/>
+          <i class="el-icon-top-right" title="Open user in instance"/>
         </a>
       </div>
       <div class="left-header-container">
@@ -124,6 +128,11 @@ export default {
     line-height: 36px;
     color: #606266;
   }
+}
+.avatar-name-header {
+  display: flex;
+  height: 40px;
+  align-items: center;
 }
 .no-statuses {
   margin-left: 28px;
