@@ -62,7 +62,7 @@ import RebootButton from '@/components/RebootButton'
 import ResetPasswordDialog from '@/views/users/components/ResetPasswordDialog'
 
 export default {
-  name: 'UsersShow',
+  name: 'StatusShow',
   components: { ModerationDropdown, RebootButton, ResetPasswordDialog, Status },
   data() {
     return {

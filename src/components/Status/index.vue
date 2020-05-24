@@ -211,6 +211,12 @@ export default {
         })
       })
     },
+    handleStatusSelection(account) {
+      this.$emit('status-selection', account)
+    },
+    handleRouteChange() {
+      this.$router.push({ name: 'StatusShow', params: { id: this.status.id }})
+    },
     optionPercent(poll, pollOption) {
       const allVotes = poll.options.reduce((acc, option) => (acc + option.votes_count), 0)
       if (allVotes === 0) {
@@ -220,12 +226,6 @@ export default {
     },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('YYYY-MM-DD HH:mm')
-    },
-    handleStatusSelection(account) {
-      this.$emit('status-selection', account)
-    },
-    handleRouteChange() {
-      this.$router.push({ name: 'StatusShow', params: { id: this.status.id }})
     }
   }
 }
