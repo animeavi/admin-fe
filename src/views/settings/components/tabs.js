@@ -29,7 +29,7 @@ export const tabs = {
   },
   'http': {
     label: 'settings.http',
-    settings: [':cors_plug', ':http', ':http_security', ':http_signatures', ':web_cache_ttl']
+    settings: [':cors_plug', ':http', ':http_security', ':web_cache_ttl']
   },
   'instance': {
     label: 'settings.instance',
@@ -65,7 +65,7 @@ export const tabs = {
   },
   'relays': {
     label: 'settings.relays',
-    settings: []
+    settings: ['relays']
   },
   'web-push': {
     label: 'settings.webPush',

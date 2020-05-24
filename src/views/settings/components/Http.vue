@@ -4,20 +4,20 @@
       <setting :setting-group="http" :data="httpData"/>
     </el-form>
     <el-form ref="corsPlugData" :model="corsPlugData" :label-position="labelPosition" :label-width="labelWidth">
-      <el-form-item data-search=":cors_plug" class="grouped-settings-header">
+      <el-form-item v-if="corsPlug" data-search=":cors_plug" class="grouped-settings-header">
         <span class="label-font label-with-margin">{{ $t('settings.corsPlug') }}</span>
       </el-form-item>
       <setting :setting-group="corsPlug" :data="corsPlugData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="corsPlug" class="divider thick-line"/>
     <el-form ref="httpSignatures" :model="httpSignaturesData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="httpSignatures" :data="httpSignaturesData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="httpSignatures" class="divider thick-line"/>
     <el-form ref="httpSecurityData" :model="httpSecurityData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="httpSecurity" :data="httpSecurityData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="httpSecurity" class="divider thick-line"/>
     <el-form ref="webCacheTtl" :model="webCacheTtlData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="webCacheTtl" :data="webCacheTtlData"/>
     </el-form>
@@ -57,12 +57,6 @@ export default {
     },
     httpSecurityData() {
       return _.get(this.settings.settings, [':pleroma', ':http_security']) || {}
-    },
-    httpSignatures() {
-      return this.settings.description.find(setting => setting.group === ':http_signatures')
-    },
-    httpSignaturesData() {
-      return _.get(this.settings.settings, [':http_signatures']) || {}
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'

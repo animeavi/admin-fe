@@ -55,7 +55,7 @@
           :data-search="setting.key || setting.group"
           @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"/>
         <el-select
-          v-if="!reducedSelects && (setting.type === 'module' || (setting.type.includes('atom') && setting.type.includes('dropdown')))"
+          v-if="renderSingleSelect(setting.type)"
           :value="inputValue === false ? 'false' : inputValue"
           :data-search="setting.key || setting.group"
           clearable
@@ -67,7 +67,7 @@
             :key="index"/>
         </el-select>
         <el-select
-          v-if="!reducedSelects && renderMultipleSelect(setting.type)"
+          v-if="renderMultipleSelect(setting.type)"
           :value="inputValue"
           :data-search="setting.key || setting.group"
           multiple
@@ -99,12 +99,12 @@
         <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
         <icons-input v-if="setting.key === ':icons'" :data="iconsData" :setting-group="settingGroup" :setting="setting"/>
         <mascots-input v-if="setting.key === ':mascots'" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
-        <multiple-select v-if="setting.key === ':backends' || setting.key === ':args'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
         <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
         <rate-limit-input v-if="settingGroup.key === ':rate_limit'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <reg-invites-input v-if="[':registrations_open', ':invites_enabled'].includes(setting.key)" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <select-input-with-reduced-labels v-if="reducedSelects" :data="data" :setting-group="settingGroup" :setting="setting"/>
+        <specific-multiple-select v-if="setting.key === ':backends' || setting.key === ':args'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <!-------------------->
         <el-tooltip v-if="canBeDeleted && isTablet" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
           <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
@@ -126,13 +126,13 @@ import {
   EditableKeywordInput,
   IconsInput,
   MascotsInput,
-  MultipleSelect,
   ProxyUrlInput,
   PruneInput,
   RateLimitInput,
   RegInvitesInput,
-  SelectInputWithReducedLabels } from './inputComponents'
-import { processNested } from '@/store/modules/normalizers'
+  SelectInputWithReducedLabels,
+  SpecificMultipleSelect } from './inputComponents'
+import { getBooleanValue, processNested } from '@/store/modules/normalizers'
 import _ from 'lodash'
 import marked from 'marked'
 
@@ -144,12 +144,12 @@ export default {
     EditableKeywordInput,
     IconsInput,
     MascotsInput,
-    MultipleSelect,
     ProxyUrlInput,
     PruneInput,
     RateLimitInput,
     RegInvitesInput,
-    SelectInputWithReducedLabels
+    SelectInputWithReducedLabels,
+    SpecificMultipleSelect
   },
   props: {
     customLabelWidth: {
@@ -215,7 +215,7 @@ export default {
       return Array.isArray(this.data[':icons']) ? this.data[':icons'] : []
     },
     inputValue() {
-      if ([':esshd', ':cors_plug', ':quack', ':http_signatures', ':tesla', ':swoosh'].includes(this.settingGroup.group) &&
+      if ([':esshd', ':cors_plug', ':quack', ':tesla', ':swoosh'].includes(this.settingGroup.group) &&
         this.data[this.setting.key]) {
         return this.setting.type === 'atom' && this.data[this.setting.key].value[0] === ':'
           ? this.data[this.setting.key].value.substr(1)
@@ -296,21 +296,34 @@ export default {
         { group, key: parentKey, input: setting.key, value: valueForState })
     },
     async removeSetting() {
-      const config = this.settingGroup.key
-        ? [{ group: this.settingGroup.group, key: this.settingGroup.key, delete: true, subkeys: [this.setting.key] }]
-        : [{ group: this.settingGroup.group, key: this.setting.key, delete: true }]
-      try {
-        await this.$store.dispatch('RemoveSetting', config)
-      } catch (e) {
-        return
-      }
-      this.$message({
-        type: 'success',
-        message: i18n.t('settings.successfullyRemoved')
+      this.$confirm(
+        this.$t('settings.removeSettingConfirmation'),
+        {
+          confirmButtonText: this.$t('users.ok'),
+          cancelButtonText: this.$t('users.cancel'),
+          type: 'warning'
+        }).then(async() => {
+        const config = this.settingGroup.key
+          ? [{ group: this.settingGroup.group, key: this.settingGroup.key, delete: true, subkeys: [this.setting.key] }]
+          : [{ group: this.settingGroup.group, key: this.setting.key, delete: true }]
+        try {
+          await this.$store.dispatch('RemoveSetting', config)
+        } catch (e) {
+          return
+        }
+        this.$message({
+          type: 'success',
+          message: i18n.t('settings.successfullyRemoved')
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.$t('users.canceled')
+        })
       })
     },
     renderMultipleSelect(type) {
-      return Array.isArray(type) && this.setting.key !== ':backends' && this.setting.key !== ':args' && (
+      return !this.reducedSelects && Array.isArray(type) && this.setting.key !== ':backends' && this.setting.key !== ':args' && (
         type.includes('module') ||
         (type.includes('list') && type.includes('string')) ||
         (type.includes('list') && type.includes('atom')) ||
@@ -318,10 +331,14 @@ export default {
         this.setting.key === ':args'
       )
     },
+    renderSingleSelect(type) {
+      return !this.reducedSelects && (type === 'module' || (type.includes('atom') && type.includes('dropdown')))
+    },
     update(value, group, key, parents, input, type, nested) {
+      const updatedValue = this.renderSingleSelect(type) ? getBooleanValue(value) : value
       nested
-        ? this.processNestedData(value, group, key, parents)
-        : this.updateSetting(value, group, key, input, type)
+        ? this.processNestedData(updatedValue, group, key, parents)
+        : this.updateSetting(updatedValue, group, key, input, type)
     },
     updateSetting(value, group, key, input, type) {
       this.$store.dispatch('UpdateSettings', { group, key, input, value, type })

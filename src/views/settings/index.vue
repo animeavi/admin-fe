@@ -33,7 +33,7 @@
         <el-tab-pane
           v-for="(value, componentName) in tabs"
           :label="$t(value.label)"
-          :disabled="configDisabled"
+          :disabled="configDisabled || settingsCantBeChanged(value.settings)"
           :key="componentName"
           :name="componentName"
           lazy>
@@ -227,6 +227,20 @@ export default {
             : { value: `${searchObj.label} in ${searchObj.groupLabel}`, group: searchObj.groupKey, key: searchObj.key }
         })
       cb(results)
+    },
+    settingsCantBeChanged(settings) {
+      const existingSettings = settings.filter(setting => {
+        if ([':esshd', ':cors_plug', ':quack', ':logger', ':swoosh', ':mime'].includes(setting)) {
+          return this.$store.state.settings.description.findIndex(el => el.group === setting) !== -1
+        } else if (setting === 'Pleroma.Web.Auth.Authenticator' || setting === ':admin_token') {
+          return this.$store.state.settings.description.findIndex(el => el.children[0].key === setting) !== -1
+        } else if (setting === 'relays') {
+          return [setting]
+        } else {
+          return this.$store.state.settings.description.findIndex(el => el.key === setting) !== -1
+        }
+      })
+      return existingSettings.length === 0
     }
   }
 }

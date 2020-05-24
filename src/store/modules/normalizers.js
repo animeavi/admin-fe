@@ -1,5 +1,14 @@
 import _ from 'lodash'
 
+export const getBooleanValue = value => {
+  if (value === 'true') {
+    return true
+  } else if (value === 'false') {
+    return false
+  }
+  return value
+}
+
 export const checkPartialUpdate = (settings, updatedSettings, description) => {
   return Object.keys(updatedSettings).reduce((acc, group) => {
     acc[group] = Object.keys(updatedSettings[group]).reduce((acc, key) => {

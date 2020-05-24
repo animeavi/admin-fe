@@ -3,11 +3,11 @@
     <el-form ref="mailer" :model="mailerData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="mailer" :data="mailerData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="mailer" class="divider thick-line"/>
     <el-form ref="swoosh" :model="swooshData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="swoosh" :data="swooshData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="swoosh" class="divider thick-line"/>
     <el-form ref="emailNotifications" :model="emailNotificationsData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="emailNotifications" :data="emailNotificationsData"/>
     </el-form>

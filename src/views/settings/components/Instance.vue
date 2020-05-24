@@ -3,27 +3,27 @@
     <el-form ref="instanceData" :model="instanceData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="instance" :data="instanceData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="instance" class="divider thick-line"/>
     <el-form ref="adminToken" :model="adminTokenData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="adminToken" :data="adminTokenData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="adminToken" class="divider thick-line"/>
     <el-form ref="scheduledActivity" :model="scheduledActivityData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="scheduledActivity" :data="scheduledActivityData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="scheduledActivity" class="divider thick-line"/>
     <el-form ref="manifest" :model="manifestData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="manifest" :data="manifestData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="manifest" class="divider thick-line"/>
     <el-form ref="pleromaUser" :model="pleromaUserData" :label-position="labelPosition" :label-width="labelWidth" data-search="Pleroma.User">
       <setting :setting-group="pleromaUser" :data="pleromaUserData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="pleromaUser" class="divider thick-line"/>
     <el-form ref="uriSchemes" :model="uriSchemesData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uriSchemes" :data="uriSchemesData"/>
     </el-form>
-    <el-divider class="divider thick-line"/>
+    <el-divider v-if="uriSchemes" class="divider thick-line"/>
     <el-form ref="feed" :model="feedData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="feed" :data="feedData"/>
     </el-form>

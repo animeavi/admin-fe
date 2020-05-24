@@ -68,6 +68,14 @@ const status = {
         dispatch('FetchStatus', statusId)
       }
     },
+    ClearState({ commit }) {
+      commit('CHANGE_SELECTED_INSTANCE', '')
+      commit('SET_STATUSES_BY_INSTANCE', [])
+      commit('CHANGE_LOCAL_CHECKBOX_VALUE', false)
+      commit('CHANGE_GODMODE_CHECKBOX_VALUE', false)
+      commit('SET_ALL_LOADED', false)
+      commit('CHANGE_PAGE', 1)
+    },
     async DeleteStatus({ dispatch, getters }, { statusId, reportCurrentPage, userId, godmode, fetchStatusesByInstance }) {
       await deleteStatus(statusId, getters.authHost, getters.token)
       if (reportCurrentPage !== 0) { // called from Reports
@@ -89,12 +97,13 @@ const status = {
     },
     async FetchStatusesCount({ commit, getters }) {
       commit('SET_LOADING', true)
-      const { data } = await fetchStatusesCount(getters.authHost, getters.token)
+      const { data } = await fetchStatusesCount(instance, getters.authHost, getters.token)
       commit('SET_STATUS_VISIBILITY', data.status_visibility)
       commit('SET_LOADING', false)
     },
-    async FetchStatusesByInstance({ commit, getters, state, rootState }) {
+    async FetchStatusesByInstance({ commit, dispatch, getters, state, rootState }) {
       commit('SET_LOADING', true)
+      dispatch('FetchStatusesCount', state.statusesByInstance.selectedInstance)
       if (state.statusesByInstance.selectedInstance === '') {
         commit('SET_STATUSES_BY_INSTANCE', [])
       } else {
