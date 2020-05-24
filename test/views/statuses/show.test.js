@@ -2,8 +2,8 @@ import Vuex from 'vuex'
 import { mount, createLocalVue, config } from '@vue/test-utils'
 import flushPromises from 'flush-promises'
 import Element from 'element-ui'
-import UsersShow from '@/views/users/show'
-import storeConfig from './store.conf'
+import StatusShow from '@/views/statuses/show'
+import storeConfig from './statusShowStore.conf'
 import { cloneDeep } from 'lodash'
 
 config.mocks["$t"] = () => {}
@@ -14,22 +14,24 @@ localVue.use(Element)
 
 const $route = {
   params: {
-    id: '2'
+    id: '9vJOO3iFPyjNaEhJ5s'
   }
 }
 
+jest.mock('@/api/app')
+jest.mock('@/api/status')
+jest.mock('@/api/peers')
 jest.mock('@/api/nodeInfo')
-jest.mock('@/api/users')
 
-describe('User profile', () => {
+describe('Status show page', () => {
   let store
 
   beforeEach(() => {
     store = new Vuex.Store(cloneDeep(storeConfig))
   })
 
-  it('fetches user profile', async (done) => {
-    const wrapper = mount(UsersShow, {
+  it('fetches status', async (done) => {
+    const wrapper = mount(StatusShow, {
       store,
       localVue,
       sync: false,
@@ -38,11 +40,11 @@ describe('User profile', () => {
         $route
       }
     })
-
     await flushPromises()
-    expect(wrapper.find('.user-profile-card').isVisible()).toBe(true)
-    expect(store.state.userProfile.user.nickname).toBe('allis')
-    expect(store.state.userProfile.user.roles.admin).toBe(true)
+
+    expect(wrapper.find('.status-container').isVisible()).toBe(true)
+    expect(store.state.status.fetchedStatus.id).toBe('9vJOO3iFPyjNaEhJ5s')
+    expect(store.state.status.fetchedStatus.account.display_name).toBe('dolin')
     done()
   })
 })
