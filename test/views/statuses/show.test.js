@@ -22,6 +22,7 @@ jest.mock('@/api/app')
 jest.mock('@/api/status')
 jest.mock('@/api/peers')
 jest.mock('@/api/nodeInfo')
+jest.mock('@/api/users')
 
 describe('Status show page', () => {
   let store
@@ -30,7 +31,7 @@ describe('Status show page', () => {
     store = new Vuex.Store(cloneDeep(storeConfig))
   })
 
-  it('fetches status', async (done) => {
+  it(`fetches single status and user's statuses`, async (done) => {
     const wrapper = mount(StatusShow, {
       store,
       localVue,
@@ -45,6 +46,7 @@ describe('Status show page', () => {
     expect(wrapper.find('.status-container').isVisible()).toBe(true)
     expect(store.state.status.fetchedStatus.id).toBe('9vJOO3iFPyjNaEhJ5s')
     expect(store.state.status.fetchedStatus.account.display_name).toBe('dolin')
+    expect(store.state.userProfile.statuses.length).toEqual(3)
     done()
   })
 })
