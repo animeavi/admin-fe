@@ -49,4 +49,43 @@ describe('Status show page', () => {
     expect(store.state.userProfile.statuses.length).toEqual(3)
     done()
   })
+
+  it(`renders links and user's moderation menu`, async (done) => {
+    const wrapper = mount(StatusShow, {
+      store,
+      localVue,
+      sync: false,
+      stubs: ['router-link'],
+      mocks: {
+        $route
+      }
+    })
+    await flushPromises()
+
+    expect(wrapper.find('router-link-stub h1').text()).toBe('dolin')
+    expect(wrapper.find('button.moderate-user-button').exists()).toBe(true)
+    expect(wrapper.find('.el-dropdown-menu').exists()).toBe(true)
+    done()
+  })
+
+  it(`renders status card`, async (done) => {
+    const wrapper = mount(StatusShow, {
+      store,
+      localVue,
+      sync: false,
+      stubs: ['router-link'],
+      mocks: {
+        $route
+      }
+    })
+    await flushPromises()
+
+    expect(wrapper.find('.status-card').exists()).toBe(true)
+    expect(wrapper.find('router-link-stub h3').text()).toBe('dolin')
+    expect(wrapper.find('span.el-tag').text()).not.toBe('Sensitive')
+    expect(wrapper.find('span.el-tag').text()).toBe('Public')
+    expect(wrapper.find('button.status-actions-button').exists()).toBe(true)
+    expect(wrapper.find('.status-body .status-content').text()).toBe('pizza makes everything better')
+    done()
+  })
 })
