@@ -95,7 +95,7 @@ const status = {
       commit('SET_LOADING', false)
       dispatch('FetchUserStatuses', { userId: state.fetchedStatus.account.id, godmode: false })
     },
-    async FetchStatusesCount({ commit, getters }) {
+    async FetchStatusesCount({ commit, getters }, instance) {
       commit('SET_LOADING', true)
       const { data } = await fetchStatusesCount(instance, getters.authHost, getters.token)
       commit('SET_STATUS_VISIBILITY', data.status_visibility)
