@@ -35,17 +35,20 @@ const userProfile = {
 
       dispatch('FetchUserStatuses', { userId, godmode })
     },
-    async FetchUserStatuses({ commit, getters }, { userId, godmode }) {
+    FetchUserStatuses({ commit, dispatch, getters }, { userId, godmode }) {
       commit('SET_STATUSES_LOADING', true)
 
-      const statuses = await fetchUserStatuses(userId, getters.authHost, godmode, getters.token)
+      fetchUserStatuses(userId, getters.authHost, godmode, getters.token)
+        .then(statuses => dispatch('SetStatuses', statuses.data))
 
-      commit('SET_STATUSES', statuses.data)
       commit('SET_STATUSES_LOADING', false)
     },
     async FetchUserCredentials({ commit, getters }, { nickname }) {
       const userResponse = await fetchUserCredentials(nickname, getters.authHost, getters.token)
       commit('SET_USER_CREDENTIALS', userResponse.data)
+    },
+    SetStatuses({ commit }, statuses) {
+      commit('SET_STATUSES', statuses)
     },
     async UpdateUserCredentials({ dispatch, getters }, { nickname, credentials }) {
       await updateUserCredentials(nickname, credentials, getters.authHost, getters.token)

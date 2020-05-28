@@ -65,7 +65,7 @@ const status = {
       } else if (fetchStatusesByInstance) { // called from Statuses by Instance
         dispatch('FetchStatusesByInstance')
       } else { // called from Status show page
-        dispatch('FetchStatus', statusId)
+        dispatch('FetchStatusAfterUserModeration', statusId)
       }
     },
     ClearState({ commit }) {
@@ -98,7 +98,7 @@ const status = {
     FetchStatusAfterUserModeration({ commit, dispatch, getters, state }, id) {
       commit('SET_LOADING', true)
       fetchStatus(id, getters.authHost, getters.token)
-        .then((status) => dispatch('SetStatus', status.data))
+        .then(status => dispatch('SetStatus', status.data))
       commit('SET_LOADING', false)
     },
     async FetchStatusesCount({ commit, getters }, instance) {
