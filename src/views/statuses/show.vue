@@ -21,7 +21,7 @@
         <reboot-button/>
       </div>
     </header>
-    <div v-if="isMobile" class="user-page-header-container">
+    <div v-if="isMobile" class="status-page-header-container">
       <header class="user-page-header">
         <div class="avatar-name-container">
           <el-avatar v-if="accountExists(user, 'avatar')" :src="user.avatar" size="large" />
@@ -210,36 +210,57 @@ export default {
   }
   .recent-statuses-container-show {
     width: 100%;
-    margin: 0 0 0 15px;
+    margin: 0 0 0 10px;
+    .el-timeline-item {
+      margin-left: 0;
+    }
+    .recent-statuses {
+      margin-left: 0;
+    }
+    .show-private-statuses {
+      margin: 0 10px 20px 0;
+    }
   }
-  .show-private-statuses {
-    margin: 0 10px 20px 10px;
+  .status-card {
+    .el-card__body {
+      padding: 15px;
+    }
   }
   .status-container {
     margin: 0 10px;
   }
   .statuses {
     padding-right: 10px;
-    margin-left: 8px;
+    margin-left: 0;
+    .el-timeline-item__wrapper {
+      margin-right: 10px;
+    }
   }
   .user-page-header {
     padding: 0;
-    margin: 7px 15px 15px 10px;
+    margin: 7px 15px 5px 10px;
   }
-  .user-page-header-container {
+  .status-page-header-container {
+    width: 100%;
     .el-dropdown {
-      width: 95%;
-      margin: 0 15px 15px 10px;
+      width: stretch;
+      margin: 0 10px 15px 10px;
     }
   }
 }
 @media only screen and (max-width:801px) and (min-width: 481px) {
-  .recent-statuses {
-    margin: 20px 10px 15px 0;
-  }
   .recent-statuses-container-show {
     width: 97%;
     margin: 0 20px;
+    .el-timeline-item {
+      margin-left: 2px;
+    }
+    .recent-statuses {
+      margin: 20px 10px 15px 0;
+    }
+    .show-private-statuses {
+      margin: 0 10px 20px 0;
+    }
   }
   .show-private-statuses {
     margin: 0 10px 20px 0;

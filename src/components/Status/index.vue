@@ -18,8 +18,10 @@
           </div>
         </div>
         <div class="status-actions">
-          <el-tag v-if="status.sensitive" type="warning" size="large">{{ $t('reports.sensitive') }}</el-tag>
-          <el-tag size="large">{{ capitalizeFirstLetter(status.visibility) }}</el-tag>
+          <div class="status-tags">
+            <el-tag v-if="status.sensitive" type="warning" size="large">{{ $t('reports.sensitive') }}</el-tag>
+            <el-tag size="large">{{ capitalizeFirstLetter(status.visibility) }}</el-tag>
+          </div>
           <el-dropdown trigger="click" @click.native.stop>
             <el-button plain size="small" icon="el-icon-edit" class="status-actions-button">
               {{ $t('reports.changeScope') }}<i class="el-icon-arrow-down el-icon--right"/>
@@ -283,7 +285,7 @@ export default {
     line-height: 26px;
   }
   .status-created-at {
-    font-size: 14px;
+    font-size: 13px;
     color: #606266;
   }
   .status-deleted {
@@ -299,6 +301,9 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  .status-tags {
+    display: inline;
   }
   .status-without-content {
     font-style: italic;
@@ -317,7 +322,7 @@ export default {
       padding: 10px 17px;
     }
     .el-tag {
-      margin: 3px 4px 3px 0;
+      margin: 3px 0;
     }
     .status-account-container {
       margin-bottom: 5px;
@@ -326,12 +331,20 @@ export default {
       margin: 3px 0 3px;
     }
     .status-actions {
+      width: 100%;
       display: flex;
       flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .status-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-top: 10px;
     }
     .status-header {
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
     }
   }
 }

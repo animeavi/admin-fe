@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown :hide-on-click="false" size="small" trigger="click">
+  <el-dropdown :hide-on-click="false" size="small" trigger="click" placement="top-start">
     <div>
       <span v-if="page === 'users'" class="el-dropdown-link">
         {{ $t('users.moderation') }}
