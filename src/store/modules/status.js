@@ -95,6 +95,12 @@ const status = {
       commit('SET_LOADING', false)
       dispatch('FetchUserStatuses', { userId: state.fetchedStatus.account.id, godmode: false })
     },
+    FetchStatusAfterUserModeration({ commit, dispatch, getters, state }, id) {
+      commit('SET_LOADING', true)
+      fetchStatus(id, getters.authHost, getters.token)
+        .then((status) => dispatch('SetStatus', status.data))
+      commit('SET_LOADING', false)
+    },
     async FetchStatusesCount({ commit, getters }, instance) {
       commit('SET_LOADING', true)
       const { data } = await fetchStatusesCount(instance, getters.authHost, getters.token)
@@ -178,6 +184,10 @@ const status = {
     },
     HandlePageChange({ commit }, page) {
       commit('CHANGE_PAGE', page)
+    },
+    SetStatus({ commit }, status) {
+      commit('SET_STATUS', status)
+      commit('SET_STATUS_AUTHOR', status.account)
     }
   }
 }

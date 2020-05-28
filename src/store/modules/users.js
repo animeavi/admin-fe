@@ -97,7 +97,7 @@ const users = {
         dispatch('SearchUsers', { query: state.searchQuery, page: state.currentPage })
       }
       if (statusId) {
-        dispatch('FetchStatus', statusId)
+        dispatch('FetchStatusAfterUserModeration', statusId)
       } else if (userId) {
         dispatch('FetchUserProfile', { userId, godmode: false })
       }
