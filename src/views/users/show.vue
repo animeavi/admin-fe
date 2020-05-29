@@ -59,7 +59,7 @@
               <tr class="el-table__row">
                 <td>{{ $t('userProfile.tags') }}</td>
                 <td>
-                  <el-tag v-for="tag in user.tags" :key="tag" class="user-profile-tag">{{ tag }}</el-tag>
+                  <el-tag v-for="tag in user.tags" :key="tag" class="user-profile-tag">{{ humanizeTag(tag) }}</el-tag>
                   <span v-if="user.tags.length === 0">—</span>
                 </td>
               </tr>
@@ -176,6 +176,17 @@ export default {
     closeResetPasswordDialog() {
       this.resetPasswordDialogOpen = false
       this.$store.dispatch('RemovePasswordToken')
+    },
+    humanizeTag(tag) {
+      const mapTags = {
+        'force_nsfw': 'Force NSFW',
+        'strip_media': 'Strip Media',
+        'force_unlisted': 'Force Unlisted',
+        'sandbox': 'Sandbox',
+        'disable_remote_subscription': 'Disable remote subscription',
+        'disable_any_subscription': 'Disable any subscription'
+      }
+      return mapTags[tag]
     },
     onTogglePrivate() {
       this.$store.dispatch('FetchUserProfile', { userId: this.$route.params.id, godmode: this.showPrivate })
