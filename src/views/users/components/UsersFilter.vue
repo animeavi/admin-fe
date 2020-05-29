@@ -6,7 +6,7 @@
     multiple
     class="select-field"
     @change="toggleFilters">
-    <el-option-group :label="$t('usersFilter.byUserType')">
+    <el-option-group :label="$t('usersFilter.byAccountType')">
       <el-option value="local">{{ $t('usersFilter.local') }}</el-option>
       <el-option value="external">{{ $t('usersFilter.external') }}</el-option>
     </el-option-group>

@@ -258,12 +258,12 @@ export default {
     admin: 'Admin',
     local: 'local',
     external: 'external',
-    localUppercase: 'Local',
+    accountType: 'Account type',
     nickname: 'Nickname',
     recentStatuses: 'Recent Statuses',
     roles: 'Roles',
-    activeUppercase: 'Active',
     active: 'active',
+    status: 'Status',
     deactivated: 'deactivated',
     noStatuses: 'No statuses to show',
     securitySettings: {
@@ -284,7 +284,7 @@ export default {
   },
   usersFilter: {
     inputPlaceholder: 'Select filter',
-    byUserType: 'By user type',
+    byAccountType: 'By account type',
     local: 'Local',
     external: 'External',
     byStatus: 'By status',

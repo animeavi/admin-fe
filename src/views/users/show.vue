@@ -76,14 +76,14 @@
                 </td>
               </tr>
               <tr class="el-table__row">
-                <td>{{ $t('userProfile.localUppercase') }}</td>
+                <td>{{ $t('userProfile.accountType') }}</td>
                 <td>
                   <el-tag v-if="user.local" type="info">{{ $t('userProfile.local') }}</el-tag>
                   <el-tag v-if="!user.local" type="info">{{ $t('userProfile.external') }}</el-tag>
                 </td>
               </tr>
               <tr class="el-table__row">
-                <td>{{ $t('userProfile.activeUppercase') }}</td>
+                <td>{{ $t('userProfile.status') }}</td>
                 <td>
                   <el-tag v-if="!user.deactivated" type="success">{{ $t('userProfile.active') }}</el-tag>
                   <el-tag v-if="user.deactivated" type="danger">{{ $t('userProfile.deactivated') }}</el-tag>
