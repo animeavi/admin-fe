@@ -59,7 +59,7 @@
               <tr class="el-table__row">
                 <td>{{ $t('userProfile.tags') }}</td>
                 <td>
-                  <el-tag v-for="tag in user.tags" :key="tag" class="user-profile-tag">{{ tag }}</el-tag>
+                  <el-tag v-for="tag in user.tags" :key="tag" class="user-profile-tag">{{ humanizeTag(tag) }}</el-tag>
                   <span v-if="user.tags.length === 0">—</span>
                 </td>
               </tr>
@@ -76,14 +76,14 @@
                 </td>
               </tr>
               <tr class="el-table__row">
-                <td>{{ $t('userProfile.localUppercase') }}</td>
+                <td>{{ $t('userProfile.accountType') }}</td>
                 <td>
                   <el-tag v-if="user.local" type="info">{{ $t('userProfile.local') }}</el-tag>
                   <el-tag v-if="!user.local" type="info">{{ $t('userProfile.external') }}</el-tag>
                 </td>
               </tr>
               <tr class="el-table__row">
-                <td>{{ $t('userProfile.activeUppercase') }}</td>
+                <td>{{ $t('userProfile.status') }}</td>
                 <td>
                   <el-tag v-if="!user.deactivated" type="success">{{ $t('userProfile.active') }}</el-tag>
                   <el-tag v-if="user.deactivated" type="danger">{{ $t('userProfile.deactivated') }}</el-tag>
@@ -176,6 +176,17 @@ export default {
     closeResetPasswordDialog() {
       this.resetPasswordDialogOpen = false
       this.$store.dispatch('RemovePasswordToken')
+    },
+    humanizeTag(tag) {
+      const mapTags = {
+        'force_nsfw': 'Force NSFW',
+        'strip_media': 'Strip Media',
+        'force_unlisted': 'Force Unlisted',
+        'sandbox': 'Sandbox',
+        'disable_remote_subscription': 'Disable remote subscription',
+        'disable_any_subscription': 'Disable any subscription'
+      }
+      return mapTags[tag]
     },
     onTogglePrivate() {
       this.$store.dispatch('FetchUserProfile', { userId: this.$route.params.id, godmode: this.showPrivate })
