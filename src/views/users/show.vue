@@ -44,6 +44,9 @@
     <div class="user-profile-container">
       <el-card class="user-profile-card">
         <div class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition el-table--medium">
+          <el-tag v-if="!isValid(user)" type="info" class="invalid-user-tag">
+            {{ $t('users.invalidUser') }}
+          </el-tag>
           <table class="user-profile-table">
             <tbody>
               <tr class="el-table__row">
@@ -222,6 +225,14 @@ table {
     width: 100%;
   }
 }
+.invalid-user-tag {
+  font-size: 14px;
+  width: inherit;
+  height: auto;
+  text-align: center;
+  word-wrap: break-word;
+  white-space: normal;
+}
 .left-header-container {
   align-items: center;
   display: flex;
@@ -287,6 +298,7 @@ table {
 }
 .user-profile-table {
   margin: 0;
+  width: inherit;
 }
 .user-profile-tag {
   margin: 0 4px 4px 0;
