@@ -7,7 +7,7 @@
       </div>
       <div class="left-header-container">
         <moderation-dropdown
-          v-if="validUser(user)"
+          v-if="isValid(user)"
           :user="user"
           :page="'userPage'"
           @open-reset-token-dialog="openResetPasswordDialog"/>
@@ -23,7 +23,7 @@
         <reboot-button/>
       </header>
       <moderation-dropdown
-        v-if="validUser(user)"
+        v-if="isValid(user)"
         :user="user"
         :page="'userPage'"
         @open-reset-token-dialog="openResetPasswordDialog"/>
@@ -179,14 +179,14 @@ export default {
       this.resetPasswordDialogOpen = false
       this.$store.dispatch('RemovePasswordToken')
     },
+    isValid(user) {
+      return user.nickname && user.id
+    },
     onTogglePrivate() {
       this.$store.dispatch('FetchUserProfile', { userId: this.$route.params.id, godmode: this.showPrivate })
     },
     openResetPasswordDialog() {
       this.resetPasswordDialogOpen = true
-    },
-    validUser(user) {
-      return user.nickname && user.id
     }
   }
 }

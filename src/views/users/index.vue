@@ -75,7 +75,7 @@
       <el-table-column :label="$t('users.actions')" fixed="right">
         <template slot-scope="scope">
           <moderation-dropdown
-            v-if="validUser(scope.row)"
+            v-if="isValid(scope.row)"
             :user="scope.row"
             :page="'users'"
             @open-reset-token-dialog="openResetPasswordDialog"/>
@@ -211,14 +211,14 @@ export default {
     handleSelectionChange(value) {
       this.$data.selectedUsers = value
     },
+    isValid(user) {
+      return user.nickname && user.id
+    },
     openResetPasswordDialog() {
       this.resetPasswordDialogOpen = true
     },
     showDeactivatedButton(id) {
       return this.$store.state.user.id !== id
-    },
-    validUser(user) {
-      return user.nickname && user.id
     }
   }
 }

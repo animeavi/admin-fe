@@ -165,33 +165,33 @@ export default {
       }
       return {
         grantRight: (right) => () => {
-          const filterUsersFn = user => user.nickname && user.id && user.local && !user.roles[right] && this.$store.state.user.id !== user.id
+          const filterUsersFn = user => this.isValid(user) && user.local && !user.roles[right] && this.$store.state.user.id !== user.id
           const addRightFn = async(users) => await this.$store.dispatch('AddRight', { users, right })
           const filtered = this.selectedUsers.filter(filterUsersFn)
 
           applyAction(filtered, addRightFn)
         },
         revokeRight: (right) => () => {
-          const filterUsersFn = user => user.nickname && user.id && user.local && user.roles[right] && this.$store.state.user.id !== user.id
+          const filterUsersFn = user => this.isValid(user) && user.local && user.roles[right] && this.$store.state.user.id !== user.id
           const deleteRightFn = async(users) => await this.$store.dispatch('DeleteRight', { users, right })
           const filtered = this.selectedUsers.filter(filterUsersFn)
 
           applyAction(filtered, deleteRightFn)
         },
         activate: () => {
-          const filtered = this.selectedUsers.filter(user => user.nickname && user.id && user.deactivated && this.$store.state.user.id !== user.id)
+          const filtered = this.selectedUsers.filter(user => this.isValid(user) && user.deactivated && this.$store.state.user.id !== user.id)
           const activateUsersFn = async(users) => await this.$store.dispatch('ActivateUsers', { users })
 
           applyAction(filtered, activateUsersFn)
         },
         deactivate: () => {
-          const filtered = this.selectedUsers.filter(user => user.nickname && user.id && !user.deactivated && this.$store.state.user.id !== user.id)
+          const filtered = this.selectedUsers.filter(user => this.isValid(user) && !user.deactivated && this.$store.state.user.id !== user.id)
           const deactivateUsersFn = async(users) => await this.$store.dispatch('DeactivateUsers', { users })
 
           applyAction(filtered, deactivateUsersFn)
         },
         remove: () => {
-          const filtered = this.selectedUsers.filter(user => user.nickname && user.id && this.$store.state.user.id !== user.id)
+          const filtered = this.selectedUsers.filter(user => this.isValid(user) && this.$store.state.user.id !== user.id)
           const deleteAccountFn = async(users) => await this.$store.dispatch('DeleteUsers', { users })
 
           applyAction(filtered, deleteAccountFn)
@@ -199,39 +199,42 @@ export default {
         addTag: (tag) => () => {
           const filtered = this.selectedUsers.filter(user =>
             tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
-              ? user.nickname && user.id && user.local && !user.tags.includes(tag)
-              : user.nickname && user.id && !user.tags.includes(tag))
+              ? this.isValid(user) && user.local && !user.tags.includes(tag)
+              : this.isValid(user) && !user.tags.includes(tag))
           const addTagFn = async(users) => await this.$store.dispatch('AddTag', { users, tag })
           applyAction(filtered, addTagFn)
         },
         removeTag: (tag) => async() => {
           const filtered = this.selectedUsers.filter(user =>
             tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
-              ? user.nickname && user.id && user.local && user.tags.includes(tag)
-              : user.nickname && user.id && user.tags.includes(tag))
+              ? this.isValid(user) && user.local && user.tags.includes(tag)
+              : this.isValid(user) && user.tags.includes(tag))
           const removeTagFn = async(users) => await this.$store.dispatch('RemoveTag', { users, tag })
 
           applyAction(filtered, removeTagFn)
         },
         requirePasswordReset: () => {
-          const filtered = this.selectedUsers.filter(user => user.nickname && user.id && user.local)
+          const filtered = this.selectedUsers.filter(user => this.isValid(user) && user.local)
           const requirePasswordResetFn = async(users) => await this.$store.dispatch('RequirePasswordReset', users)
 
           applyAction(filtered, requirePasswordResetFn)
         },
         confirmAccounts: () => {
-          const filtered = this.selectedUsers.filter(user => user.nickname && user.id && user.local && user.confirmation_pending)
+          const filtered = this.selectedUsers.filter(user => this.isValid(user) && user.local && user.confirmation_pending)
           const confirmAccountFn = async(users) => await this.$store.dispatch('ConfirmUsersEmail', { users })
 
           applyAction(filtered, confirmAccountFn)
         },
         resendConfirmation: () => {
-          const filtered = this.selectedUsers.filter(user => user.nickname && user.id && user.local && user.confirmation_pending)
+          const filtered = this.selectedUsers.filter(user => this.isValid(user) && user.local && user.confirmation_pending)
           const resendConfirmationFn = async(users) => await this.$store.dispatch('ResendConfirmationEmail', users)
 
           applyAction(filtered, resendConfirmationFn)
         }
       }
+    },
+    isValid(user) {
+      return user.nickname && user.id
     },
     grantRightToMultipleUsers(right) {
       const { grantRight } = this.mappers()

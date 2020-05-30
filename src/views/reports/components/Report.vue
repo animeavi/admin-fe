@@ -24,7 +24,7 @@
                   <el-dropdown-item v-if="report.state !== 'closed'" @click.native="changeReportState('closed', report.id)">{{ $t('reports.close') }}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <moderate-user-dropdown v-if="validAccount(report.account)" :account="report.account"/>
+              <moderate-user-dropdown v-if="isValid(report.account)" :account="report.account"/>
             </div>
           </div>
           <div>
@@ -174,14 +174,14 @@ export default {
     handlePageChange(page) {
       this.$store.dispatch('FetchReports', page)
     },
+    isValid(account) {
+      return account.nickname && account.id
+    },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('L HH:mm')
     },
     showStatuses(statuses = []) {
       return statuses.length > 0
-    },
-    validAccount(account) {
-      return account.nickname && account.id
     }
   }
 }
