@@ -6,16 +6,14 @@
           <div class="status-account-container">
             <div class="status-account">
               <el-checkbox v-if="showCheckbox" class="status-checkbox" @change="handleStatusSelection(account)"/>
-              <img :src="account.avatar" class="status-avatar-img">
-              <a v-if="!account.deactivated" :href="account.url" target="_blank" class="account">
-                <h3 class="status-account-name">{{ account.display_name }}</h3>
+              <img v-if="isValid(account)" :src="account.avatar" class="status-avatar-img">
+              <a v-if="isValid(account)" :href="account.url" target="_blank" class="account">
+                <h3 class="status-account-name">{{ account.nickname }}</h3>
               </a>
-              <span v-else>
-                <h3 class="status-account-name">{{ account.display_name }}</h3>
-                <h3 class="status-account-name deactivated"> (deactivated)</h3>
+              <span v-else class="deactivated">
+                <h3 class="status-account-name">({{ $t('users.invalidNickname') }})</h3>
               </span>
             </div>
-
           </div>
           <div class="status-actions">
             <el-tag v-if="status.sensitive" type="warning" size="large">{{ $t('reports.sensitive') }}</el-tag>
@@ -204,6 +202,9 @@ export default {
         })
       })
     },
+    isValid(account) {
+      return account.nickname && account.id
+    },
     optionPercent(poll, pollOption) {
       const allVotes = poll.options.reduce((acc, option) => (acc + option.votes_count), 0)
       if (allVotes === 0) {
@@ -231,7 +232,8 @@ export default {
   }
   .deactivated {
     color: gray;
-    font-size: 15px;
+    line-height: 32px;
+    vertical-align: middle;
   }
   .image {
     width: 20%;
