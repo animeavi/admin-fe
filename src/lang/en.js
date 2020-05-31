@@ -239,7 +239,8 @@ export default {
     confirmAccount: 'Confirm account',
     confirmAccounts: 'Confirm accounts',
     resendConfirmation: 'Resend confirmation email',
-    invalidUser: 'This account is invalid and can\'t be modified'
+    invalidUser: 'This account is invalid and can\'t be modified',
+    invalidNickname: 'invalid nickname'
   },
   statuses: {
     statuses: 'Statuses',

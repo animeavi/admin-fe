@@ -3,7 +3,8 @@
     <header v-if="isDesktop || isTablet" class="user-page-header">
       <div class="avatar-name-container">
         <el-avatar :src="user.avatar" size="large" />
-        <h1>{{ user.display_name }}</h1>
+        <h1 v-if="isValid(user)">{{ user.nickname }}</h1>
+        <h1 v-else class="invalid">({{ $t('users.invalidNickname') }})</h1>
       </div>
       <div class="left-header-container">
         <moderation-dropdown
@@ -18,7 +19,8 @@
       <header class="user-page-header">
         <div class="avatar-name-container">
           <el-avatar :src="user.avatar" size="large" />
-          <h1>{{ user.display_name }}</h1>
+          <h1 v-if="isValid(user)">{{ user.nickname }}</h1>
+          <h1 v-else class="invalid">({{ $t('users.invalidNickname') }})</h1>
         </div>
         <reboot-button/>
       </header>
@@ -97,10 +99,11 @@
             </tbody>
           </table>
         </div>
-        <el-button icon="el-icon-lock" class="security-setting-button" @click="securitySettingsModalVisible = true">
+        <el-button v-if="isValid(user)" icon="el-icon-lock" class="security-setting-button" @click="securitySettingsModalVisible = true">
           {{ $t('userProfile.securitySettings.securitySettings') }}
         </el-button>
         <SecuritySettingsModal
+          v-if="isValid(user)"
           :user="user"
           :visible="securitySettingsModalVisible"
           @close="securitySettingsModalVisible = false" />
@@ -215,7 +218,9 @@ table {
   display: flex;
   align-items: center;
 }
-
+.invalid {
+    color: gray;
+  }
 .el-table--border::after, .el-table--group::after, .el-table::before {
   background-color: transparent;
 }
