@@ -4,12 +4,9 @@
       <div class="note-header">
         <div class="note-actor-container">
           <div class="note-actor">
-            <img :src="note.user.avatar" class="note-avatar-img">
-            <h3 class="note-actor-name">{{ note.user.display_name }}</h3>
+            <img v-if="isValid(note.user)" :src="note.user.avatar" class="note-avatar-img">
+            <h3 v-if="isValid(note.user)" class="note-actor-name">{{ note.user.nickname }}</h3>
           </div>
-          <a :href="note.user.url" target="_blank">
-            @{{ note.user.display_name }}
-          </a>
         </div>
         <div>
           <el-popconfirm
@@ -47,6 +44,9 @@ export default {
     }
   },
   methods: {
+    isValid(account) {
+      return account.nickname && account.id
+    },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('YYYY-MM-DD HH:mm')
     },

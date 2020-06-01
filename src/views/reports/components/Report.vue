@@ -10,7 +10,7 @@
         <el-card class="report">
           <div class="report-header-container">
             <div class="title-container">
-              <h3 v-if="accountExists(report.account, 'display_name')" class="report-title">{{ $t('reports.reportOn') }} {{ report.account.display_name }}</h3>
+              <h3 v-if="isValid(report.account)" class="report-title">{{ $t('reports.reportOn') }} {{ report.account.nickname }}</h3>
               <h3 v-else class="report-title">{{ $t('reports.report') }}</h3>
               <h5 class="id">{{ $t('reports.id') }}: {{ report.id }}</h5>
             </div>
@@ -30,16 +30,16 @@
           <div>
             <el-divider class="divider"/>
             <span class="report-row-key">{{ $t('reports.account') }}:</span>
-            <span v-if="accountExists(report.account, 'avatar') && accountExists(report.account, 'display_name')">
+            <span v-if="isValid(report.account)">
               <img
                 :src="report.account.avatar"
                 alt="avatar"
                 class="avatar-img">
-              <a v-if="!report.account.deactivated" :href="report.account.url" target="_blank" class="account">
-                <span>{{ report.account.display_name }}</span>
+              <a v-if="isValid(report.account)" :href="report.account.url" target="_blank" class="account">
+                <span>{{ report.account.nickname }}</span>
               </a>
               <span v-else>
-                {{ report.account.display_name }}
+                {{ report.account.nickname }}
                 <span class="deactivated"> (deactivated)</span>
               </span>
             </span>
@@ -54,13 +54,13 @@
           <div :style="showStatuses(report.statuses) ? '' : 'margin-bottom:15px'">
             <el-divider class="divider"/>
             <span class="report-row-key">{{ $t('reports.actor') }}:</span>
-            <span v-if="accountExists(report.actor, 'avatar') && accountExists(report.actor, 'display_name')">
+            <span v-if="isValid(report.actor)">
               <img
                 :src="report.actor.avatar"
                 alt="avatar"
                 class="avatar-img">
               <a :href="report.actor.url" target="_blank" class="account">
-                <span>{{ report.actor.display_name }}</span>
+                <span>{{ report.actor.nickname }}</span>
               </a>
             </span>
             <span v-else class="deactivated">({{ $t('reports.notFound') }})</span>
@@ -69,7 +69,7 @@
             <el-collapse>
               <el-collapse-item :title="getStatusesTitle(report.statuses)">
                 <div v-for="status in report.statuses" :key="status.id">
-                  <status :status="status" :account="status.account.display_name ? status.account : report.account" :show-checkbox="false" :page="currentPage"/>
+                  <status :status="status" :account="status.account.nickname ? status.account : report.account" :show-checkbox="false" :page="currentPage"/>
                 </div>
               </el-collapse-item>
             </el-collapse>
@@ -142,9 +142,6 @@ export default {
     }
   },
   methods: {
-    accountExists(account, key) {
-      return account[key]
-    },
     changeReportState(state, id) {
       this.$store.dispatch('ChangeReportState', [{ state, id }])
     },
