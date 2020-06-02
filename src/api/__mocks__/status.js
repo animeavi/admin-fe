@@ -6,6 +6,29 @@ export async function deleteStatus(id, authHost, token) {
   return Promise.resolve()
 }
 
+export async function fetchStatus(id, authHost, token) {
+  const data = {
+    account: {
+      id: '9n1bySks25olxWrku0',
+      avatar: 'http://localhost:4000/images/avi.png',
+      display_name: 'dolin',
+      tags: ['strip_media', 'sandbox', 'disable_any_subscription', 'force_nsfw'],
+      url: 'http://localhost:4000/users/dolin'
+    },
+    content: 'pizza makes everything better',
+    created_at: '2020-05-22T17:34:34.000Z',
+    id: '9vJOO3iFPyjNaEhJ5s',
+    media_attachments: [],
+    poll: null,
+    sensitive: false,
+    spoiler_text: '',
+    visibility: 'public',
+    url: 'http://localhost:4000/notice/9vJOO3iFPyjNaEhJ5s'
+  }
+
+  return Promise.resolve({ data })
+}
+
 export async function fetchStatusesByInstance({ instance, authHost, token, pageSize, page }) {
   let data
   if (pageSize === 1) {

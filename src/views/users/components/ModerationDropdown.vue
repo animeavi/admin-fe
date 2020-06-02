@@ -1,11 +1,11 @@
 <template>
-  <el-dropdown :hide-on-click="false" size="small" trigger="click">
+  <el-dropdown :hide-on-click="false" size="small" trigger="click" placement="top-start">
     <div>
       <span v-if="page === 'users'" class="el-dropdown-link">
         {{ $t('users.moderation') }}
         <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
       </span>
-      <el-button v-if="page === 'userPage'" class="moderate-user-button">
+      <el-button v-if="page === 'userPage' || page === 'statusPage'" class="moderate-user-button">
         <span class="moderate-user-button-container">
           <span>
             <i class="el-icon-edit" />
@@ -27,13 +27,13 @@
         {{ user.roles.moderator ? $t('users.revokeModerator') : $t('users.grantModerator') }}
       </el-dropdown-item>
       <el-dropdown-item
-        v-if="showDeactivatedButton(user.id)"
+        v-if="showDeactivatedButton(user.id) && page !== 'statusPage'"
         :divided="showAdminAction(user)"
         @click.native="toggleActivation(user)">
         {{ user.deactivated ? $t('users.activateAccount') : $t('users.deactivateAccount') }}
       </el-dropdown-item>
       <el-dropdown-item
-        v-if="showDeactivatedButton(user.id)"
+        v-if="showDeactivatedButton(user.id) && page !== 'statusPage'"
         @click.native="handleDeletion(user)">
         {{ $t('users.deleteAccount') }}
       </el-dropdown-item>
@@ -115,6 +115,10 @@ export default {
     page: {
       type: String,
       default: 'users'
+    },
+    statusId: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -134,7 +138,7 @@ export default {
       this.$store.dispatch('DeleteUsers', { users: [user], _userId: user.id })
     },
     handleEmailConfirmation(user) {
-      this.$store.dispatch('ConfirmUsersEmail', { users: [user], _userId: user.id })
+      this.$store.dispatch('ConfirmUsersEmail', { users: [user], _userId: user.id, _statusId: this.statusId })
     },
     requirePasswordReset(user) {
       const mailerEnabled = this.$store.state.user.nodeInfo.metadata.mailerEnabled
@@ -157,13 +161,13 @@ export default {
     },
     toggleTag(user, tag) {
       user.tags.includes(tag)
-        ? this.$store.dispatch('RemoveTag', { users: [user], tag, _userId: user.id })
-        : this.$store.dispatch('AddTag', { users: [user], tag, _userId: user.id })
+        ? this.$store.dispatch('RemoveTag', { users: [user], tag, _userId: user.id, _statusId: this.statusId })
+        : this.$store.dispatch('AddTag', { users: [user], tag, _userId: user.id, _statusId: this.statusId })
     },
     toggleUserRight(user, right) {
       user.roles[right]
-        ? this.$store.dispatch('DeleteRight', { users: [user], right, _userId: user.id })
-        : this.$store.dispatch('AddRight', { users: [user], right, _userId: user.id })
+        ? this.$store.dispatch('DeleteRight', { users: [user], right, _userId: user.id, _statusId: this.statusId })
+        : this.$store.dispatch('AddRight', { users: [user], right, _userId: user.id, _statusId: this.statusId })
     }
   }
 }

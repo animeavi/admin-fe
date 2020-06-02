@@ -1,9 +1,11 @@
-import { changeStatusScope, deleteStatus, fetchStatuses, fetchStatusesCount, fetchStatusesByInstance } from '@/api/status'
+import { changeStatusScope, deleteStatus, fetchStatus, fetchStatuses, fetchStatusesCount, fetchStatusesByInstance } from '@/api/status'
 
 const status = {
   state: {
+    fetchedStatus: {},
     fetchedStatuses: [],
     loading: false,
+    statusAuthor: {},
     statusesByInstance: {
       selectedInstance: '',
       showLocal: false,
@@ -28,6 +30,9 @@ const status = {
     CHANGE_SELECTED_INSTANCE: (state, instance) => {
       state.statusesByInstance.selectedInstance = instance
     },
+    SET_STATUS: (state, status) => {
+      state.fetchedStatus = status
+    },
     SET_STATUSES_BY_INSTANCE: (state, statuses) => {
       state.fetchedStatuses = statuses
     },
@@ -45,6 +50,9 @@ const status = {
     },
     SET_STATUS_VISIBILITY: (state, visibility) => {
       state.statusVisibility = visibility
+    },
+    SET_STATUS_AUTHOR: (state, user) => {
+      state.statusAuthor = user
     }
   },
   actions: {
@@ -56,6 +64,8 @@ const status = {
         dispatch('FetchUserStatuses', { userId, godmode })
       } else if (fetchStatusesByInstance) { // called from Statuses by Instance
         dispatch('FetchStatusesByInstance')
+      } else { // called from Status show page
+        dispatch('FetchStatusAfterUserModeration', statusId)
       }
     },
     ClearState({ commit }) {
@@ -75,6 +85,21 @@ const status = {
       } else if (fetchStatusesByInstance) { // called from Statuses by Instance
         dispatch('FetchStatusesByInstance')
       }
+    },
+    async FetchStatus({ commit, dispatch, getters, state }, id) {
+      commit('SET_LOADING', true)
+      const status = await fetchStatus(id, getters.authHost, getters.token)
+
+      commit('SET_STATUS', status.data)
+      commit('SET_STATUS_AUTHOR', status.data.account)
+      commit('SET_LOADING', false)
+      dispatch('FetchUserStatuses', { userId: state.fetchedStatus.account.id, godmode: false })
+    },
+    FetchStatusAfterUserModeration({ commit, dispatch, getters, state }, id) {
+      commit('SET_LOADING', true)
+      fetchStatus(id, getters.authHost, getters.token)
+        .then(status => dispatch('SetStatus', status.data))
+      commit('SET_LOADING', false)
     },
     async FetchStatusesCount({ commit, getters }, instance) {
       commit('SET_LOADING', true)
@@ -159,6 +184,10 @@ const status = {
     },
     HandlePageChange({ commit }, page) {
       commit('CHANGE_PAGE', page)
+    },
+    SetStatus({ commit }, status) {
+      commit('SET_STATUS', status)
+      commit('SET_STATUS_AUTHOR', status.account)
     }
   }
 }
