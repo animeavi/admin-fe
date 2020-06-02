@@ -52,9 +52,11 @@ const users = {
         return
       }
 
-      state.fetchedUsers = [...usersWithoutSwapped, ...users].sort((a, b) =>
-        a.nickname.localeCompare(b.nickname)
-      )
+      const updatedUsers = [...usersWithoutSwapped, ...users]
+      state.fetchedUsers = updatedUsers
+        .filter(user => user.nickname && user.id)
+        .sort((a, b) => a.nickname.localeCompare(b.nickname))
+        .concat(updatedUsers.filter(user => !user.nickname || !user.id))
     },
     SET_COUNT: (state, count) => {
       state.totalUsersCount = count
