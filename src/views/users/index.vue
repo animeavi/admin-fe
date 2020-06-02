@@ -37,6 +37,7 @@
       :data="users"
       row-key="id"
       style="width: 100%"
+      @row-click="handleRowClick($event)"
       @selection-change="handleSelectionChange">
       <el-table-column
         v-if="isDesktop"
@@ -47,7 +48,7 @@
       <el-table-column :min-width="width" :label="$t('users.id')" prop="id" />
       <el-table-column :label="$t('users.name')" prop="nickname">
         <template slot-scope="scope">
-          <router-link :to="{ name: 'UsersShow', params: { id: scope.row.id }}">{{ scope.row.nickname }}</router-link>
+          {{ scope.row.nickname }}
           <el-tag v-if="isDesktop" type="info" size="mini">
             <span>{{ scope.row.local ? $t('users.local') : $t('users.external') }}</span>
           </el-tag>
@@ -208,6 +209,11 @@ export default {
         this.$store.dispatch('SearchUsers', { query: searchQuery, page })
       }
     },
+    handleRowClick(row) {
+      if (row.id) {
+        this.$router.push({ name: 'UsersShow', params: { id: row.id }})
+      }
+    },
     handleSelectionChange(value) {
       this.$data.selectedUsers = value
     },
@@ -277,6 +283,9 @@ export default {
   h1 {
     margin: 10px 0 0 15px;
     height: 40px;
+  }
+  .el-table__row:hover {
+    cursor: pointer;
   }
   .pagination {
     margin: 25px 0;
