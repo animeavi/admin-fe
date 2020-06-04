@@ -7,7 +7,7 @@
     <div class="emoji-header-container">
       <div class="emoji-packs-header-button-container">
         <el-button type="primary" class="reload-emoji-button" @click="reloadEmoji">{{ $t('emoji.reloadEmoji') }}</el-button>
-        <el-tooltip :content="$t('emoji.importEmojiTooltip')" effects="dark" placement="bottom" class="import-pack-button">
+        <el-tooltip :content="$t('emoji.importEmojiTooltip')" effects="dark" placement="bottom" popper-class="import-pack-button">
           <el-button type="primary" @click="importFromFS">
             {{ $t('emoji.importPacks') }}
           </el-button>
@@ -191,6 +191,8 @@ export default {
 }
 .import-pack-button {
   margin-left: 10px;
+  width: 30%;
+  max-width: 700px;
 }
 h1 {
   margin: 0;
@@ -254,6 +256,9 @@ h1 {
       margin: 7px 0 0 0;
       width: fit-content;
     }
+  }
+  .import-pack-button {
+    width: 90%;
   }
   .reload-emoji-button {
     width: fit-content;
