@@ -42,9 +42,9 @@
       <el-collapse-item v-if="isLocal" :title=" $t('emoji.addNewEmoji')" name="addEmoji" class="no-background">
         <new-emoji-uploader :pack-name="name"/>
       </el-collapse-item>
-      <el-collapse-item v-if="Object.keys(pack.files).length > 0" :title=" $t('emoji.manageEmoji')" name="manageEmoji" class="no-background">
+      <el-collapse-item v-if="pack.files.length > 0" :title=" $t('emoji.manageEmoji')" name="manageEmoji" class="no-background">
         <single-emoji-editor
-          v-for="(file, shortcode) in pack.files"
+          v-for="[shortcode, file] in pack.files"
           :key="shortcode"
           :host="host"
           :pack-name="name"
