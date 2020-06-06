@@ -1,86 +1,74 @@
 <template>
-  <div>
-    <el-card v-if="!status.deleted" class="status-card">
-      <div slot="header">
-        <div class="status-header">
-          <div class="status-account-container">
-            <div class="status-account">
-              <el-checkbox v-if="showCheckbox" class="status-checkbox" @change="handleStatusSelection(account)"/>
-              <img v-if="propertyExists(account, 'avatar')" :src="account.avatar" class="status-avatar-img">
-              <a v-if="propertyExists(account, 'url', 'nickname')" :href="account.url" target="_blank" class="account">
-                <span class="status-account-name">{{ account.nickname }}</span>
-              </a>
-              <span v-else>
-                <span v-if="propertyExists(account, 'nickname')" class="status-account-name">
-                  {{ account.nickname }}
+  <el-card v-if="!status.deleted" class="status-card" @click.native="handleRouteChange()">
+    <div slot="header">
+      <div class="status-header">
+        <div class="status-account-container">
+          <div class="status-account">
+            <el-checkbox v-if="showCheckbox" class="status-checkbox" @change="handleStatusSelection(account)"/>
+            <router-link v-if="propertyExists(account, 'id')" :to="{ name: 'UsersShow', params: { id: account.id }}" @click.native.stop>
+              <div class="status-card-header">
+                <img v-if="propertyExists(account, 'avatar')" :src="account.avatar" class="status-avatar-img">
+                <span v-if="propertyExists(account, 'nickname')" class="status-account-name">{{ account.nickname }}</span>
+                <span v-else>
+                  <span v-if="propertyExists(account, 'nickname')" class="status-account-name">
+                    {{ account.nickname }}
+                  </span>
+                  <span v-else class="status-account-name deactivated">({{ $t('users.invalidNickname') }})</span>
                 </span>
-                <span v-else class="status-account-name deactivated">({{ $t('users.invalidNickname') }})</span>
-              </span>
-            </div>
+              </div>
+            </router-link>
           </div>
-          <div class="status-actions">
+        </div>
+        <div class="status-actions">
+          <div class="status-tags">
             <el-tag v-if="status.sensitive" type="warning" size="large">{{ $t('reports.sensitive') }}</el-tag>
             <el-tag size="large">{{ capitalizeFirstLetter(status.visibility) }}</el-tag>
-            <el-dropdown trigger="click">
-              <el-button plain size="small" icon="el-icon-edit" class="status-actions-button">
-                {{ $t('reports.changeScope') }}<i class="el-icon-arrow-down el-icon--right"/>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item
-                  v-if="!status.sensitive"
-                  @click.native="changeStatus(status.id, true, status.visibility)">
-                  {{ $t('reports.addSensitive') }}
-                </el-dropdown-item>
-                <el-dropdown-item
-                  v-if="status.sensitive"
-                  @click.native="changeStatus(status.id, false, status.visibility)">
-                  {{ $t('reports.removeSensitive') }}
-                </el-dropdown-item>
-                <el-dropdown-item
-                  v-if="status.visibility !== 'public'"
-                  @click.native="changeStatus(status.id, status.sensitive, 'public')">
-                  {{ $t('reports.public') }}
-                </el-dropdown-item>
-                <el-dropdown-item
-                  v-if="status.visibility !== 'private'"
-                  @click.native="changeStatus(status.id, status.sensitive, 'private')">
-                  {{ $t('reports.private') }}
-                </el-dropdown-item>
-                <el-dropdown-item
-                  v-if="status.visibility !== 'unlisted'"
-                  @click.native="changeStatus(status.id, status.sensitive, 'unlisted')">
-                  {{ $t('reports.unlisted') }}
-                </el-dropdown-item>
-                <el-dropdown-item
-                  @click.native="deleteStatus(status.id)">
-                  {{ $t('reports.deleteStatus') }}
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
           </div>
+          <el-dropdown trigger="click" @click.native.stop>
+            <el-button plain size="small" icon="el-icon-edit" class="status-actions-button">
+              {{ $t('reports.changeScope') }}<i class="el-icon-arrow-down el-icon--right"/>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                v-if="!status.sensitive"
+                @click.native="changeStatus(status.id, true, status.visibility)">
+                {{ $t('reports.addSensitive') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="status.sensitive"
+                @click.native="changeStatus(status.id, false, status.visibility)">
+                {{ $t('reports.removeSensitive') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="status.visibility !== 'public'"
+                @click.native="changeStatus(status.id, status.sensitive, 'public')">
+                {{ $t('reports.public') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="status.visibility !== 'private'"
+                @click.native="changeStatus(status.id, status.sensitive, 'private')">
+                {{ $t('reports.private') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="status.visibility !== 'unlisted'"
+                @click.native="changeStatus(status.id, status.sensitive, 'unlisted')">
+                {{ $t('reports.unlisted') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                @click.native="deleteStatus(status.id)">
+                {{ $t('reports.deleteStatus') }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </div>
-      <div class="status-body">
-        <div v-if="status.spoiler_text">
-          <strong>{{ status.spoiler_text }}</strong>
-          <el-button v-if="!showHiddenStatus" size="mini" class="show-more-button" @click="showHiddenStatus = true">Show more</el-button>
-          <el-button v-if="showHiddenStatus" size="mini" class="show-more-button" @click="showHiddenStatus = false">Show less</el-button>
-          <div v-if="showHiddenStatus">
-            <span class="status-content" v-html="status.content"/>
-            <div v-if="status.poll" class="poll">
-              <ul>
-                <li v-for="(option, index) in status.poll.options" :key="index">
-                  {{ option.title }}
-                  <el-progress :percentage="optionPercent(status.poll, option)" />
-                </li>
-              </ul>
-            </div>
-            <div v-for="(attachment, index) in status.media_attachments" :key="index" class="image">
-              <img :src="attachment.preview_url">
-            </div>
-          </div>
-        </div>
-        <div v-if="!status.spoiler_text">
+    </div>
+    <div class="status-body">
+      <div v-if="status.spoiler_text">
+        <strong>{{ status.spoiler_text }}</strong>
+        <el-button v-if="!showHiddenStatus" size="mini" class="show-more-button" @click="showHiddenStatus = true">Show more</el-button>
+        <el-button v-if="showHiddenStatus" size="mini" class="show-more-button" @click="showHiddenStatus = false">Show less</el-button>
+        <div v-if="showHiddenStatus">
           <span class="status-content" v-html="status.content"/>
           <div v-if="status.poll" class="poll">
             <ul>
@@ -94,30 +82,52 @@
             <img :src="attachment.preview_url">
           </div>
         </div>
-        <a :href="status.url" target="_blank" class="account">
-          {{ parseTimestamp(status.created_at) }}
+      </div>
+      <div v-if="!status.spoiler_text">
+        <span class="status-content" v-html="status.content"/>
+        <div v-if="status.poll" class="poll">
+          <ul>
+            <li v-for="(option, index) in status.poll.options" :key="index">
+              {{ option.title }}
+              <el-progress :percentage="optionPercent(status.poll, option)" />
+            </li>
+          </ul>
+        </div>
+        <div v-for="(attachment, index) in status.media_attachments" :key="index" class="image">
+          <img :src="attachment.preview_url">
+        </div>
+      </div>
+      <div class="status-footer">
+        <span class="status-created-at">{{ parseTimestamp(status.created_at) }}</span>
+        <a v-if="status.url" :href="status.url" target="_blank" class="account" @click.stop>
+          Open status in instance
+          <i class="el-icon-top-right"/>
         </a>
       </div>
-    </el-card>
-    <el-card v-else class="status-card">
-      <div slot="header">
-        <div class="status-header">
-          <div class="status-account-container">
-            <div class="status-account">
-              <h4 class="status-deleted">{{ $t('reports.statusDeleted') }}</h4>
-            </div>
+    </div>
+  </el-card>
+  <el-card v-else class="status-card">
+    <div slot="header">
+      <div class="status-header">
+        <div class="status-account-container">
+          <div class="status-account">
+            <h4 class="status-deleted">{{ $t('reports.statusDeleted') }}</h4>
           </div>
         </div>
       </div>
-      <div class="status-body">
-        <span v-if="status.content" class="status-content" v-html="status.content"/>
-        <span v-else class="status-without-content">no content</span>
-      </div>
-      <a v-if="status.created_at" :href="status.url" target="_blank" class="account">
-        {{ parseTimestamp(status.created_at) }}
+    </div>
+    <div class="status-body">
+      <span v-if="status.content" class="status-content" v-html="status.content"/>
+      <span v-else class="status-without-content">no content</span>
+    </div>
+    <div class="status-footer">
+      <span v-if="status.created_at" class="status-created-at">{{ parseTimestamp(status.created_at) }}</span>
+      <a v-if="status.url" :href="status.url" target="_blank" class="account" @click.stop>
+        Open status in instance
+        <i class="el-icon-top-right"/>
       </a>
-    </el-card>
-  </div>
+    </div>
+  </el-card>
 </template>
 
 <script>
@@ -208,6 +218,9 @@ export default {
     handleStatusSelection(account) {
       this.$emit('status-selection', account)
     },
+    handleRouteChange() {
+      this.$router.push({ name: 'StatusShow', params: { id: this.status.id }})
+    },
     optionPercent(poll, pollOption) {
       const allVotes = poll.options.reduce((acc, option) => (acc + option.votes_count), 0)
       if (allVotes === 0) {
@@ -231,10 +244,14 @@ export default {
 <style rel='stylesheet/scss' lang='scss'>
 .status-card {
   margin-bottom: 10px;
+  cursor: pointer;
   .account {
-    text-decoration: underline;
     line-height: 26px;
     font-size: 13px;
+    color: #606266;
+  }
+  .account:hover {
+    text-decoration: underline;
   }
   .deactivated {
     color: gray;
@@ -271,6 +288,10 @@ export default {
     display: flex;
     flex-direction: column;
   }
+  .status-card-header {
+    display: flex;
+    align-items: center;
+  }
   .status-checkbox {
     margin-right: 7px;
   }
@@ -278,13 +299,26 @@ export default {
     font-size: 15px;
     line-height: 26px;
   }
+  .status-created-at {
+    font-size: 13px;
+    color: #606266;
+  }
   .status-deleted {
     font-style: italic;
     margin-top: 3px;
   }
+  .status-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   .status-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+  }
+  .status-tags {
+    display: inline;
   }
   .status-without-content {
     font-style: italic;
@@ -303,7 +337,7 @@ export default {
       padding: 10px 17px;
     }
     .el-tag {
-      margin: 3px 4px 3px 0;
+      margin: 3px 0;
     }
     .status-account-container {
       margin-bottom: 5px;
@@ -312,12 +346,20 @@ export default {
       margin: 3px 0 3px;
     }
     .status-actions {
+      width: 100%;
       display: flex;
       flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .status-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-top: 10px;
     }
     .status-header {
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
     }
   }
 }

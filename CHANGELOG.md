@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+### Added
+
+- Create `/statuses/:id` route that shows single status
+
 ### Changed
 
 - Statuses count changes when an instance is selected and shows the amount of statuses from an originating instance
@@ -18,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Send `true` and `false` as booleans if they are values of single selects on the Settings page
+- Fix sorting users on Users page if there is an acount with missing nickname or ID
 
 ## [2.0.3] - 2020-04-29
 

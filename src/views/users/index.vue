@@ -87,19 +87,9 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog
-      v-loading="loading"
-      :visible.sync="resetPasswordDialogOpen"
-      :title="$t('users.passwordResetTokenCreated')"
-      custom-class="password-reset-token-dialog"
-      @close="closeResetPasswordDialog">
-      <div>
-        <p class="password-reset-token">Password reset token was generated: {{ passwordResetToken }}</p>
-        <p>You can also use this link to reset password:
-          <a :href="passwordResetLink" target="_blank" class="reset-password-link">{{ passwordResetLink }}</a>
-        </p>
-      </div>
-    </el-dialog>
+    <reset-password-dialog
+      :reset-password-dialog-open="resetPasswordDialogOpen"
+      @close-reset-token-dialog="closeResetPasswordDialog"/>
     <div v-if="!loading" class="pagination">
       <el-pagination
         :total="usersCount"
@@ -121,6 +111,7 @@ import MultipleUsersMenu from './components/MultipleUsersMenu'
 import NewAccountDialog from './components/NewAccountDialog'
 import ModerationDropdown from './components/ModerationDropdown'
 import RebootButton from '@/components/RebootButton'
+import ResetPasswordDialog from './components/ResetPasswordDialog'
 
 export default {
   name: 'Users',
@@ -129,6 +120,7 @@ export default {
     ModerationDropdown,
     MultipleUsersMenu,
     RebootButton,
+    ResetPasswordDialog,
     UsersFilter
   },
   data() {
@@ -148,12 +140,6 @@ export default {
     },
     pageSize() {
       return this.$store.state.users.pageSize
-    },
-    passwordResetLink() {
-      return this.$store.state.users.passwordResetToken.link
-    },
-    passwordResetToken() {
-      return this.$store.state.users.passwordResetToken.token
     },
     currentPage() {
       return this.$store.state.users.currentPage
@@ -265,11 +251,6 @@ export default {
 .create-account > .el-icon-plus {
   margin-right: 5px;
 }
-.users-header-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
 .password-reset-token {
   margin: 0 0 14px 0;
 }
@@ -278,6 +259,11 @@ export default {
 }
 .reset-password-link {
   text-decoration: underline;
+}
+.users-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .users-container {
   h1 {

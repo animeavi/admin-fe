@@ -21,7 +21,7 @@ const $route = {
 jest.mock('@/api/nodeInfo')
 jest.mock('@/api/users')
 
-describe('Search and filter users', () => {
+describe('User profile', () => {
   let store
 
   beforeEach(() => {

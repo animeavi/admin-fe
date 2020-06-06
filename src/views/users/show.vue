@@ -30,19 +30,9 @@
         :page="'userPage'"
         @open-reset-token-dialog="openResetPasswordDialog"/>
     </div>
-    <el-dialog
-      v-loading="loading"
-      :visible.sync="resetPasswordDialogOpen"
-      :title="$t('users.passwordResetTokenCreated')"
-      custom-class="password-reset-token-dialog"
-      @close="closeResetPasswordDialog">
-      <div>
-        <p class="password-reset-token">Password reset token was generated: {{ passwordResetToken }}</p>
-        <p>You can also use this link to reset password:
-          <a :href="passwordResetLink" target="_blank" class="reset-password-link">{{ passwordResetLink }}</a>
-        </p>
-      </div>
-    </el-dialog>
+    <reset-password-dialog
+      :reset-password-dialog-open="resetPasswordDialogOpen"
+      @close-reset-token-dialog="closeResetPasswordDialog"/>
     <div class="user-profile-container">
       <el-card class="user-profile-card">
         <div class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition el-table--medium">
@@ -77,14 +67,14 @@
                 </td>
               </tr>
               <tr class="el-table__row">
-                <td>{{ $t('userProfile.localUppercase') }}</td>
+                <td>{{ $t('userProfile.accountType') }}</td>
                 <td>
                   <el-tag v-if="user.local" type="info">{{ $t('userProfile.local') }}</el-tag>
                   <el-tag v-if="!user.local" type="info">{{ $t('userProfile.external') }}</el-tag>
                 </td>
               </tr>
               <tr class="el-table__row">
-                <td>{{ $t('userProfile.activeUppercase') }}</td>
+                <td>{{ $t('userProfile.status') }}</td>
                 <td>
                   <el-tag v-if="!user.deactivated" type="success">{{ $t('userProfile.active') }}</el-tag>
                   <el-tag v-if="user.deactivated" type="danger">{{ $t('userProfile.deactivated') }}</el-tag>
@@ -123,10 +113,11 @@ import Status from '@/components/Status'
 import ModerationDropdown from './components/ModerationDropdown'
 import SecuritySettingsModal from './components/SecuritySettingsModal'
 import RebootButton from '@/components/RebootButton'
+import ResetPasswordDialog from './components/ResetPasswordDialog'
 
 export default {
   name: 'UsersShow',
-  components: { ModerationDropdown, RebootButton, Status, SecuritySettingsModal },
+  components: { ModerationDropdown, RebootButton, ResetPasswordDialog, Status, SecuritySettingsModal },
   data() {
     return {
       showPrivate: false,
@@ -146,12 +137,6 @@ export default {
     },
     loading() {
       return this.$store.state.users.loading
-    },
-    passwordResetLink() {
-      return this.$store.state.users.passwordResetToken.link
-    },
-    passwordResetToken() {
-      return this.$store.state.users.passwordResetToken.token
     },
     statuses() {
       return this.$store.state.userProfile.statuses
@@ -179,6 +164,17 @@ export default {
       this.resetPasswordDialogOpen = false
       this.$store.dispatch('RemovePasswordToken')
     },
+    humanizeTag(tag) {
+      const mapTags = {
+        'force_nsfw': 'Force NSFW',
+        'strip_media': 'Strip Media',
+        'force_unlisted': 'Force Unlisted',
+        'sandbox': 'Sandbox',
+        'disable_remote_subscription': 'Disable remote subscription',
+        'disable_any_subscription': 'Disable any subscription'
+      }
+      return mapTags[tag]
+    },
     onTogglePrivate() {
       this.$store.dispatch('FetchUserProfile', { userId: this.$route.params.id, godmode: this.showPrivate })
     },
@@ -192,7 +188,7 @@ export default {
 }
 </script>
 
-<style rel='stylesheet/scss' lang='scss' scoped>
+<style rel='stylesheet/scss' lang='scss'>
 header {
   align-items: center;
   display: flex;
@@ -241,6 +237,12 @@ table {
   margin-left: 28px;
   color: #606266;
 }
+.password-reset-token {
+  margin: 0 0 14px 0;
+}
+.password-reset-token-dialog {
+  width: 50%
+}
 .poll ul {
   list-style-type: none;
   padding: 0;
@@ -257,6 +259,9 @@ table {
 }
 .recent-statuses-header {
   margin-top: 10px;
+}
+.reset-password-link {
+  text-decoration: underline;
 }
 .security-setting-button {
   margin-top: 20px;
@@ -307,15 +312,28 @@ table {
   .avatar-name-container {
     margin-bottom: 10px;
   }
+  .el-timeline-item__wrapper {
+    padding-left: 18px;
+  }
+  .password-reset-token-dialog {
+    width: 85%
+  }
   .recent-statuses {
     margin: 20px 10px 15px 10px;
   }
   .recent-statuses-container {
     width: 100%;
-    margin: 0 10px;
+    margin: 0;
   }
   .show-private-statuses {
     margin: 0 10px 20px 10px;
+  }
+  .status-container {
+    margin: 0 10px;
+  }
+  .statuses {
+    padding-right: 10px;
+    margin-left: 8px;
   }
   .user-page-header {
     padding: 0;

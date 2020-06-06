@@ -6,7 +6,11 @@ export let users = [
 
 const userProfile = { avatar: 'avatar.jpg', nickname: 'allis', id: '2', tags: [], roles: { admin: true, moderator: false }, local: true, external: false }
 
-const userStatuses = []
+const userStatuses = [
+  { account: { id: '9n1bySks25olxWrku0', display_name: 'dolin' }, content: 'pizza makes everything better', id: '9vJOO3iFPyjNaEhJ5s', created_at: '2020-05-22T17:34:34.000Z', visibility: 'public' },
+  { account: { id: '9n1bySks25olxWrku0', display_name: 'dolin' }, content: 'pizza time', id: '9vJPD5XKOdzQ0bvGLY', created_at: '2020-05-22T17:34:34.000Z', visibility: 'public' },
+  { account: { id: '9n1bySks25olxWrku0', display_name: 'dolin' }, content: 'what is yout favorite pizza?', id: '9jop82OBXeFPYulVjM', created_at: '2020-05-22T17:34:34.000Z', visibility: 'public' }
+]
 
 const filterUsers = (str) => {
   const filters = str.split(',').filter(item => item.length > 0)
