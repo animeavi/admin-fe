@@ -6,12 +6,15 @@
           <div class="status-account-container">
             <div class="status-account">
               <el-checkbox v-if="showCheckbox" class="status-checkbox" @change="handleStatusSelection(account)"/>
-              <img v-if="isValid(account)" :src="account.avatar" class="status-avatar-img">
-              <a v-if="isValid(account)" :href="account.url" target="_blank" class="account">
-                <h3 class="status-account-name">{{ account.nickname }}</h3>
+              <img v-if="propertyExists(account, 'avatar')" :src="account.avatar" class="status-avatar-img">
+              <a v-if="propertyExists(account, 'url', 'nickname')" :href="account.url" target="_blank" class="account">
+                <span class="status-account-name">{{ account.nickname }}</span>
               </a>
-              <span v-else class="deactivated">
-                <h3 class="status-account-name">({{ $t('users.invalidNickname') }})</h3>
+              <span v-else>
+                <span v-if="propertyExists(account, 'nickname')" class="status-account-name">
+                  {{ account.nickname }}
+                </span>
+                <span v-else class="status-account-name deactivated">({{ $t('users.invalidNickname') }})</span>
               </span>
             </div>
           </div>
@@ -202,8 +205,8 @@ export default {
         })
       })
     },
-    isValid(account) {
-      return account.nickname && account.id
+    handleStatusSelection(account) {
+      this.$emit('status-selection', account)
     },
     optionPercent(poll, pollOption) {
       const allVotes = poll.options.reduce((acc, option) => (acc + option.votes_count), 0)
@@ -215,8 +218,11 @@ export default {
     parseTimestamp(timestamp) {
       return moment(timestamp).format('YYYY-MM-DD HH:mm')
     },
-    handleStatusSelection(account) {
-      this.$emit('status-selection', account)
+    propertyExists(account, property, _secondProperty) {
+      if (_secondProperty) {
+        return account[property] && account[_secondProperty]
+      }
+      return account[property]
     }
   }
 }
@@ -232,7 +238,7 @@ export default {
   }
   .deactivated {
     color: gray;
-    line-height: 32px;
+    line-height: 28px;
     vertical-align: middle;
   }
   .image {
@@ -257,7 +263,9 @@ export default {
   .status-account-name {
     display: inline-block;
     margin: 0;
-    height: 22px;
+    height: 28px;
+    font-size: 15px;
+    font-weight: 500;
   }
   .status-body {
     display: flex;

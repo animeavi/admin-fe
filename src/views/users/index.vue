@@ -76,11 +76,14 @@
       <el-table-column :label="$t('users.actions')" fixed="right">
         <template slot-scope="scope">
           <moderation-dropdown
-            v-if="isValid(scope.row)"
+            v-if="propertyExists(scope.row, 'nickname')"
             :user="scope.row"
             :page="'users'"
             @open-reset-token-dialog="openResetPasswordDialog"/>
-          <span v-else class="invalid-user">{{ $t('users.invalidUser') }}</span>
+          <el-button v-else type="text" disabled>
+            {{ $t('users.moderation') }}
+            <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -217,11 +220,11 @@ export default {
     handleSelectionChange(value) {
       this.$data.selectedUsers = value
     },
-    isValid(user) {
-      return user.nickname && user.id
-    },
     openResetPasswordDialog() {
       this.resetPasswordDialogOpen = true
+    },
+    propertyExists(account, property) {
+      return account[property]
     },
     showDeactivatedButton(id) {
       return this.$store.state.user.id !== id
@@ -262,7 +265,7 @@ export default {
 .create-account > .el-icon-plus {
   margin-right: 5px;
 }
-.invalid-user {
+.invalid-account {
   color: gray;
 }
 .users-header-container {

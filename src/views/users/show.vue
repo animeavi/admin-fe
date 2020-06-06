@@ -2,13 +2,13 @@
   <main v-if="!userProfileLoading">
     <header v-if="isDesktop || isTablet" class="user-page-header">
       <div class="avatar-name-container">
-        <el-avatar :src="user.avatar" size="large" />
-        <h1 v-if="isValid(user)">{{ user.nickname }}</h1>
+        <el-avatar v-if="propertyExists(user, 'avatar')" :src="user.avatar" size="large" />
+        <h1 v-if="propertyExists(user, 'nickname')">{{ user.nickname }}</h1>
         <h1 v-else class="invalid">({{ $t('users.invalidNickname') }})</h1>
       </div>
       <div class="left-header-container">
         <moderation-dropdown
-          v-if="isValid(user)"
+          v-if="propertyExists(user, 'nickname')"
           :user="user"
           :page="'userPage'"
           @open-reset-token-dialog="openResetPasswordDialog"/>
@@ -18,14 +18,14 @@
     <div v-if="isMobile" class="user-page-header-container">
       <header class="user-page-header">
         <div class="avatar-name-container">
-          <el-avatar :src="user.avatar" size="large" />
-          <h1 v-if="isValid(user)">{{ user.nickname }}</h1>
+          <el-avatar v-if="propertyExists(user, 'avatar')" :src="user.avatar" size="large" />
+          <h1 v-if="propertyExists(user, 'nickname')">{{ user.nickname }}</h1>
           <h1 v-else class="invalid">({{ $t('users.invalidNickname') }})</h1>
         </div>
         <reboot-button/>
       </header>
       <moderation-dropdown
-        v-if="isValid(user)"
+        v-if="propertyExists(user, 'nickname')"
         :user="user"
         :page="'userPage'"
         @open-reset-token-dialog="openResetPasswordDialog"/>
@@ -46,17 +46,11 @@
     <div class="user-profile-container">
       <el-card class="user-profile-card">
         <div class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition el-table--medium">
-          <el-tag v-if="!isValid(user)" type="info" class="invalid-user-tag">
-            {{ $t('users.invalidUser') }}
+          <el-tag v-if="!propertyExists(user, 'nickname')" type="info" class="invalid-user-tag">
+            {{ $t('users.invalidAccount') }}
           </el-tag>
           <table class="user-profile-table">
             <tbody>
-              <tr class="el-table__row">
-                <td>{{ $t('userProfile.nickname') }}</td>
-                <td>
-                  {{ user.nickname }}
-                </td>
-              </tr>
               <tr class="el-table__row">
                 <td class="name-col">ID</td>
                 <td class="value-col">
@@ -66,8 +60,8 @@
               <tr class="el-table__row">
                 <td>{{ $t('userProfile.tags') }}</td>
                 <td>
-                  <el-tag v-for="tag in user.tags" :key="tag" class="user-profile-tag">{{ tag }}</el-tag>
-                  <span v-if="user.tags.length === 0">—</span>
+                  <span v-if="user.tags.length === 0 || !propertyExists(user, 'tags')">—</span>
+                  <el-tag v-for="tag in user.tags" v-else :key="tag" class="user-profile-tag">{{ tag }}</el-tag>
                 </td>
               </tr>
               <tr class="el-table__row">
@@ -79,7 +73,7 @@
                   <el-tag v-if="user.roles.moderator" class="user-profile-tag">
                     {{ $t('users.moderator') }}
                   </el-tag>
-                  <span v-if="!user.roles.moderator && !user.roles.admin">—</span>
+                  <span v-if="!propertyExists(user, 'roles') || (!user.roles.moderator && !user.roles.admin)">—</span>
                 </td>
               </tr>
               <tr class="el-table__row">
@@ -99,11 +93,11 @@
             </tbody>
           </table>
         </div>
-        <el-button v-if="isValid(user)" icon="el-icon-lock" class="security-setting-button" @click="securitySettingsModalVisible = true">
+        <el-button v-if="propertyExists(user, 'nickname')" icon="el-icon-lock" class="security-setting-button" @click="securitySettingsModalVisible = true">
           {{ $t('userProfile.securitySettings.securitySettings') }}
         </el-button>
         <SecuritySettingsModal
-          v-if="isValid(user)"
+          v-if="propertyExists(user, 'nickname')"
           :user="user"
           :visible="securitySettingsModalVisible"
           @close="securitySettingsModalVisible = false" />
@@ -185,14 +179,14 @@ export default {
       this.resetPasswordDialogOpen = false
       this.$store.dispatch('RemovePasswordToken')
     },
-    isValid(user) {
-      return user.nickname && user.id
-    },
     onTogglePrivate() {
       this.$store.dispatch('FetchUserProfile', { userId: this.$route.params.id, godmode: this.showPrivate })
     },
     openResetPasswordDialog() {
       this.resetPasswordDialogOpen = true
+    },
+    propertyExists(account, property) {
+      return account[property]
     }
   }
 }
