@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add a dialog window with a confirmation when a remove button is clicked on the Settings page
 - Disable tab on the Settings page if there are no settings on this tab that can be changed in Admin FE
 - Settings that can't be altered in Admin FE are removed: HTTP Signatures settings, Federation publisher modules and Oban Repo
+- When rendering user's profile, statuses, reports and notes check if required properties exist
+- Remove ability to moderate users that don't have valid nickname
 
 ### Fixed
 
