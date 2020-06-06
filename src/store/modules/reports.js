@@ -61,9 +61,8 @@ const reports = {
       const optimisticNote = {
         user: {
           avatar: rootState.user.avatar,
-          display_name: rootState.user.name,
-          url: `${rootState.user.authHost}/${rootState.user.name}`,
-          acct: rootState.user.name
+          nickname: rootState.user.name,
+          id: rootState.user.id
         },
         content: content,
         created_at: new Date().getTime()

@@ -37,6 +37,7 @@
       :data="users"
       row-key="id"
       style="width: 100%"
+      @row-click="handleRowClick($event)"
       @selection-change="handleSelectionChange">
       <el-table-column
         v-if="isDesktop"
@@ -47,7 +48,7 @@
       <el-table-column :min-width="width" :label="$t('users.id')" prop="id" />
       <el-table-column :label="$t('users.name')" prop="nickname">
         <template slot-scope="scope">
-          <router-link :to="{ name: 'UsersShow', params: { id: scope.row.id }}">{{ scope.row.nickname }}</router-link>
+          {{ scope.row.nickname }}
           <el-tag v-if="isDesktop" type="info" size="mini">
             <span>{{ scope.row.local ? $t('users.local') : $t('users.external') }}</span>
           </el-tag>
@@ -75,9 +76,14 @@
       <el-table-column :label="$t('users.actions')" fixed="right">
         <template slot-scope="scope">
           <moderation-dropdown
+            v-if="propertyExists(scope.row, 'nickname')"
             :user="scope.row"
             :page="'users'"
             @open-reset-token-dialog="openResetPasswordDialog"/>
+          <el-button v-else type="text" disabled>
+            {{ $t('users.moderation') }}
+            <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -132,12 +138,6 @@ export default {
     normalizedUsersCount() {
       return numeral(this.$store.state.users.totalUsersCount).format('0a')
     },
-    users() {
-      return this.$store.state.users.fetchedUsers
-    },
-    usersCount() {
-      return this.$store.state.users.totalUsersCount
-    },
     pageSize() {
       return this.$store.state.users.pageSize
     },
@@ -149,6 +149,12 @@ export default {
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
+    },
+    users() {
+      return this.$store.state.users.fetchedUsers
+    },
+    usersCount() {
+      return this.$store.state.users.totalUsersCount
     },
     width() {
       return this.isMobile ? 55 : false
@@ -162,6 +168,9 @@ export default {
   mounted: function() {
     this.$store.dispatch('NeedReboot')
     this.$store.dispatch('FetchUsers', { page: 1 })
+  },
+  destroyed() {
+    this.$store.dispatch('ClearUsersState')
   },
   methods: {
     activationIcon(status) {
@@ -189,11 +198,19 @@ export default {
         this.$store.dispatch('SearchUsers', { query: searchQuery, page })
       }
     },
+    handleRowClick(row) {
+      if (row.id) {
+        this.$router.push({ name: 'UsersShow', params: { id: row.id }})
+      }
+    },
     handleSelectionChange(value) {
       this.$data.selectedUsers = value
     },
     openResetPasswordDialog() {
       this.resetPasswordDialogOpen = true
+    },
+    propertyExists(account, property) {
+      return account[property]
     },
     showDeactivatedButton(id) {
       return this.$store.state.user.id !== id
@@ -252,6 +269,9 @@ export default {
   h1 {
     margin: 10px 0 0 15px;
     height: 40px;
+  }
+  .el-table__row:hover {
+    cursor: pointer;
   }
   .pagination {
     margin: 25px 0;

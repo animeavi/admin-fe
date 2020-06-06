@@ -73,7 +73,7 @@ describe('Statuses', () => {
     await flushPromises()
 
     expect(wrapper.vm.selectedUsers.length).toEqual(1)
-    expect(wrapper.vm.selectedUsers[0].display_name).toBe('sky')
+    expect(wrapper.vm.selectedUsers[0].nickname).toBe('sky')
     done()
   })
 

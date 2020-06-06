@@ -5,16 +5,18 @@
         <div class="status-account-container">
           <div class="status-account">
             <el-checkbox v-if="showCheckbox" class="status-checkbox" @change="handleStatusSelection(account)"/>
-            <router-link v-if="!account.deactivated && account.id" :to="{ name: 'UsersShow', params: { id: account.id }}" @click.native.stop>
+            <router-link v-if="propertyExists(account, 'id')" :to="{ name: 'UsersShow', params: { id: account.id }}" @click.native.stop>
               <div class="status-card-header">
-                <img :src="account.avatar" class="status-avatar-img">
-                <h3 class="status-account-name">{{ account.display_name }}</h3>
+                <img v-if="propertyExists(account, 'avatar')" :src="account.avatar" class="status-avatar-img">
+                <span v-if="propertyExists(account, 'nickname')" class="status-account-name">{{ account.nickname }}</span>
+                <span v-else>
+                  <span v-if="propertyExists(account, 'nickname')" class="status-account-name">
+                    {{ account.nickname }}
+                  </span>
+                  <span v-else class="status-account-name deactivated">({{ $t('users.invalidNickname') }})</span>
+                </span>
               </div>
             </router-link>
-            <span v-else>
-              <h3 class="status-account-name">{{ account.display_name }}</h3>
-              <h3 class="status-account-name deactivated"> (deactivated)</h3>
-            </span>
           </div>
         </div>
         <div class="status-actions">
@@ -228,6 +230,12 @@ export default {
     },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('YYYY-MM-DD HH:mm')
+    },
+    propertyExists(account, property, _secondProperty) {
+      if (_secondProperty) {
+        return account[property] && account[_secondProperty]
+      }
+      return account[property]
     }
   }
 }
@@ -244,6 +252,11 @@ export default {
   }
   .account:hover {
     text-decoration: underline;
+  }
+  .deactivated {
+    color: gray;
+    line-height: 28px;
+    vertical-align: middle;
   }
   .image {
     width: 20%;
@@ -267,7 +280,8 @@ export default {
   .status-account-name {
     display: inline-block;
     margin: 0;
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 500;
   }
   .status-body {
     display: flex;

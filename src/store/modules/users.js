@@ -123,6 +123,10 @@ const users = {
 
       dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId, statusId: _statusId })
     },
+    ClearUsersState({ commit }) {
+      commit('SET_SEARCH_QUERY', '')
+      commit('SET_USERS_FILTERS', { local: false, external: false, active: false, deactivated: false })
+    },
     async ClearFilters({ commit, dispatch, state }) {
       commit('CLEAR_USERS_FILTERS')
       dispatch('SearchUsers', { query: state.searchQuery, page: 1 })

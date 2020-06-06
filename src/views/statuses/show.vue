@@ -2,13 +2,14 @@
   <div v-if="!loading" class="status-show-container">
     <header v-if="isDesktop || isTablet" class="user-page-header">
       <div class="avatar-name-container">
-        <router-link :to="{ name: 'UsersShow', params: { id: user.id }}">
+        <router-link v-if="propertyExists(user, 'id')" :to="{ name: 'UsersShow', params: { id: user.id }}">
           <div class="avatar-name-header">
-            <el-avatar v-if="accountExists(user, 'avatar')" :src="user.avatar" size="large" />
-            <h1 v-if="accountExists(user, 'display_name')">{{ user.display_name }}</h1>
+            <el-avatar v-if="propertyExists(user, 'avatar')" :src="user.avatar" size="large" />
+            <h1 v-if="propertyExists(user, 'nickname')">{{ user.nickname }}</h1>
+            <h1 v-else class="invalid">({{ $t('users.invalidNickname') }})</h1>
           </div>
         </router-link>
-        <a v-if="accountExists(user, 'url')" :href="user.url" target="_blank" class="account">
+        <a v-if="propertyExists(user, 'url')" :href="user.url" target="_blank" class="account">
           <i class="el-icon-top-right" title="Open user in instance"/>
         </a>
       </div>
@@ -24,8 +25,8 @@
     <div v-if="isMobile" class="status-page-header-container">
       <header class="user-page-header">
         <div class="avatar-name-container">
-          <el-avatar v-if="accountExists(user, 'avatar')" :src="user.avatar" size="large" />
-          <h1 v-if="accountExists(user, 'display_name')">{{ user.display_name }}</h1>
+          <el-avatar v-if="propertyExists(user, 'avatar')" :src="user.avatar" size="large" />
+          <h1 v-if="propertyExists(user, 'nickname')">{{ user.nickname }}</h1>
         </div>
         <reboot-button/>
       </header>
@@ -41,7 +42,10 @@
       <status :status="status" :account="user" :show-checkbox="false" :godmode="showPrivate"/>
     </div>
     <div class="recent-statuses-container-show">
-      <h2 class="recent-statuses">{{ $t('userProfile.recentStatuses') }} by {{ user.display_name }}</h2>
+      <h2 v-if="propertyExists(user, 'nickname')" class="recent-statuses">
+        {{ $t('userProfile.recentStatuses') }} by {{ user.nickname }}
+      </h2>
+      <h2 v-else class="recent-statuses">{{ $t('userProfile.recentStatuses') }}</h2>
       <el-checkbox v-model="showPrivate" class="show-private-statuses" @change="onTogglePrivate">
         {{ $t('statuses.showPrivateStatuses') }}
       </el-checkbox>
@@ -102,9 +106,6 @@ export default {
     this.$store.dispatch('FetchStatus', this.$route.params.id)
   },
   methods: {
-    accountExists(account, key) {
-      return account[key]
-    },
     closeResetPasswordDialog() {
       this.resetPasswordDialogOpen = false
       this.$store.dispatch('RemovePasswordToken')
@@ -114,6 +115,9 @@ export default {
     },
     openResetPasswordDialog() {
       this.resetPasswordDialogOpen = true
+    },
+    propertyExists(account, property) {
+      return account[property]
     }
   }
 }
@@ -133,6 +137,9 @@ export default {
   display: flex;
   height: 40px;
   align-items: center;
+}
+.invalid {
+  color: gray;
 }
 .no-statuses {
   margin-left: 28px;
@@ -176,6 +183,7 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 22px 15px 22px 20px;
+  padding: 0;
   align-items: center;
   h1 {
     display: inline;

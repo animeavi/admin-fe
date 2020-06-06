@@ -11,7 +11,7 @@ export async function fetchStatus(id, authHost, token) {
     account: {
       id: '9n1bySks25olxWrku0',
       avatar: 'http://localhost:4000/images/avi.png',
-      display_name: 'dolin',
+      nickname: 'dolin',
       tags: ['strip_media', 'sandbox', 'disable_any_subscription', 'force_nsfw'],
       url: 'http://localhost:4000/users/dolin'
     },
@@ -36,7 +36,7 @@ export async function fetchStatusesByInstance({ instance, authHost, token, pageS
       ? [{
         'account': {
           'avatar': 'http://localhost:4000/images/avi.png',
-          'display_name': 'sky',
+          'nickname': 'sky',
           'url': 'http://localhost:4000/users/sky'
         },
         'content': 'A nice young couple contacted us from Brazil to decorate their newly acquired apartment.',
@@ -52,7 +52,7 @@ export async function fetchStatusesByInstance({ instance, authHost, token, pageS
       {
         'account': {
           'avatar': 'http://localhost:4000/images/avi.png',
-          'display_name': 'sky',
+          'nickname': 'sky',
           'url': 'http://localhost:4000/users/sky'
         },
         'content': 'A nice young couple contacted us from Brazil to decorate their newly acquired apartment.',
@@ -65,7 +65,7 @@ export async function fetchStatusesByInstance({ instance, authHost, token, pageS
       {
         'account': {
           'avatar': 'http://localhost:4000/images/avi.png',
-          'display_name': 'sky',
+          'nickname': 'sky',
           'url': 'http://localhost:4000/users/sky'
         },
         'content': 'the happiest man ever',
