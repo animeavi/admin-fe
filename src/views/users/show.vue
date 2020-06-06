@@ -209,8 +209,8 @@ table {
   align-items: center;
 }
 .invalid {
-    color: gray;
-  }
+  color: gray;
+}
 .el-table--border::after, .el-table--group::after, .el-table::before {
   background-color: transparent;
 }

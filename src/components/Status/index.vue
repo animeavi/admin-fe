@@ -280,7 +280,6 @@ export default {
   .status-account-name {
     display: inline-block;
     margin: 0;
-    height: 28px;
     font-size: 15px;
     font-weight: 500;
   }
