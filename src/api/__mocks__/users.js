@@ -4,7 +4,7 @@ export let users = [
   { active: false, deactivated: true, id: 'abc', nickname: 'john', local: true, external: false, roles: { admin: false, moderator: false }, tags: ['strip_media'] }
 ]
 
-const userProfile = { avatar: 'avatar.jpg', display_name: 'Allis', nickname: 'allis', id: '2', tags: [], roles: { admin: true, moderator: false }, local: true, external: false }
+const userProfile = { avatar: 'avatar.jpg', nickname: 'allis', id: '2', tags: [], roles: { admin: true, moderator: false }, local: true, external: false }
 
 const userStatuses = []
 
