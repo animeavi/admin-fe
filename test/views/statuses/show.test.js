@@ -45,7 +45,7 @@ describe('Status show page', () => {
 
     expect(wrapper.find('.status-container').isVisible()).toBe(true)
     expect(store.state.status.fetchedStatus.id).toBe('9vJOO3iFPyjNaEhJ5s')
-    expect(store.state.status.fetchedStatus.account.display_name).toBe('dolin')
+    expect(store.state.status.fetchedStatus.account.nickname).toBe('dolin')
     expect(store.state.userProfile.statuses.length).toEqual(3)
     done()
   })
@@ -81,7 +81,7 @@ describe('Status show page', () => {
     await flushPromises()
 
     expect(wrapper.find('.status-card').exists()).toBe(true)
-    expect(wrapper.find('router-link-stub h3').text()).toBe('dolin')
+    expect(wrapper.find('router-link-stub span.status-account-name').text()).toBe('dolin')
     expect(wrapper.find('span.el-tag').text()).not.toBe('Sensitive')
     expect(wrapper.find('span.el-tag').text()).toBe('Public')
     expect(wrapper.find('button.status-actions-button').exists()).toBe(true)

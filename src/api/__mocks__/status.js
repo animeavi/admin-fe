@@ -11,7 +11,7 @@ export async function fetchStatus(id, authHost, token) {
     account: {
       id: '9n1bySks25olxWrku0',
       avatar: 'http://localhost:4000/images/avi.png',
-      display_name: 'dolin',
+      nickname: 'dolin',
       tags: ['strip_media', 'sandbox', 'disable_any_subscription', 'force_nsfw'],
       url: 'http://localhost:4000/users/dolin'
     },
