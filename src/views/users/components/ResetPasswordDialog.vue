@@ -6,8 +6,8 @@
     custom-class="password-reset-token-dialog"
     @close="closeResetPasswordDialog">
     <div>
-      <p class="password-reset-token">Password reset token was generated: {{ passwordResetToken }}</p>
-      <p>You can also use this link to reset password:
+      <p class="password-reset-token">{{ $t('users.passwordResetTokenGenerated') }} {{ passwordResetToken }}</p>
+      <p>{{ $t('users.linkToResetPassword') }}
         <a :href="passwordResetLink" target="_blank" class="reset-password-link">{{ passwordResetLink }}</a>
       </p>
     </div>

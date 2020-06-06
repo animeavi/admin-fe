@@ -240,7 +240,9 @@ export default {
     confirmAccounts: 'Confirm accounts',
     resendConfirmation: 'Resend confirmation email',
     invalidAccount: 'This account has invalid nickname and can\'t be modified',
-    invalidNickname: 'invalid nickname'
+    invalidNickname: 'invalid nickname',
+    passwordResetTokenGenerated: 'Password reset token was generated:',
+    linkToResetPassword: 'You can also use this link to reset password:'
   },
   statuses: {
     statuses: 'Statuses',

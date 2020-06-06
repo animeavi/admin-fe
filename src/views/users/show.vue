@@ -51,7 +51,7 @@
                 <td>{{ $t('userProfile.tags') }}</td>
                 <td>
                   <span v-if="user.tags.length === 0 || !propertyExists(user, 'tags')">—</span>
-                  <el-tag v-for="tag in user.tags" v-else :key="tag" class="user-profile-tag">{{ tag }}</el-tag>
+                  <el-tag v-for="tag in user.tags" v-else :key="tag" class="user-profile-tag">{{ humanizeTag(tag) }}</el-tag>
                 </td>
               </tr>
               <tr class="el-table__row">
@@ -286,7 +286,8 @@ table {
 .user-page-header {
   display: flex;
   justify-content: space-between;
-  padding: 0 15px 0 20px;
+  margin: 22px 15px 22px 20px;
+  padding: 0;
   align-items: center;
   h1 {
     display: inline
