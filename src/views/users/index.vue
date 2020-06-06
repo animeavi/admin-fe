@@ -265,9 +265,6 @@ export default {
 .create-account > .el-icon-plus {
   margin-right: 5px;
 }
-.invalid-account {
-  color: gray;
-}
 .users-header-container {
   display: flex;
   align-items: center;
