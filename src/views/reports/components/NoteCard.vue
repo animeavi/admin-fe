@@ -2,22 +2,14 @@
   <el-card class="note-card">
     <div slot="header">
       <div class="note-header">
-        <div class="note-actor-container">
-          <div class="note-actor">
-            <img v-if="isValid(note.user)" :src="note.user.avatar" class="note-avatar-img">
-            <h3 v-if="isValid(note.user)" class="note-actor-name">{{ note.user.nickname }}</h3>
-          </div>
+        <div class="note-actor">
+          <img v-if="propertyExists(note.user, 'avatar')" :src="note.user.avatar" class="note-avatar-img">
+          <span v-if="propertyExists(note.user, 'nickname')" class="note-actor-name">{{ note.user.nickname }}</span>
         </div>
         <div>
-          <el-popconfirm
-            title="Are you sure to delete this?"
-            confirm-button-text="Yes"
-            cancel-button-text="No"
-            @onConfirm="handleNoteDeletion(note.id, report.id)">
-            <el-button slot="reference" size="mini">
-              {{ $t('reports.deleteNote') }}
-            </el-button>
-          </el-popconfirm>
+          <el-button size="mini" @click.native="handleNoteDeletion(note.id, report.id)">
+            {{ $t('reports.deleteNote') }}
+          </el-button>
         </div>
       </div>
     </div>
@@ -44,14 +36,29 @@ export default {
     }
   },
   methods: {
-    isValid(account) {
-      return account.nickname && account.id
+    handleNoteDeletion(noteID, reportID) {
+      this.$confirm('Are you sure you want to delete this note?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('DeleteReportNote', { noteID, reportID })
+        this.$message({
+          type: 'success',
+          message: 'Delete completed'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Delete canceled'
+        })
+      })
     },
     parseTimestamp(timestamp) {
       return moment(timestamp).format('YYYY-MM-DD HH:mm')
     },
-    handleNoteDeletion(noteID, reportID) {
-      this.$store.dispatch('DeleteReportNote', { noteID, reportID })
+    propertyExists(account, property) {
+      return account[property]
     }
   }
 }
@@ -76,7 +83,7 @@ export default {
   }
   .note-actor-name {
     margin: 0;
-    height: 22px;
+    height: 28px;
   }
   .note-avatar-img {
     width: 15px;
@@ -96,6 +103,10 @@ export default {
   .note-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    height: 28px;
+    font-size: 15px;
+    font-weight: 500;
   }
 
   @media only screen and (max-width:480px) {
@@ -105,14 +116,15 @@ export default {
     .note-header {
       display: flex;
       flex-direction: column;
-      height: 80px;
+      height: 65px;
     }
-    .note-actor-container {
+    .note-actor {
       margin-bottom: 5px;
     }
     .note-header {
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
     }
   }
 </style>

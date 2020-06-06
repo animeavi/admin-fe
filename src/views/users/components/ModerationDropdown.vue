@@ -1,10 +1,10 @@
 <template>
   <el-dropdown :hide-on-click="false" size="small" trigger="click" @click.native.stop>
     <div>
-      <span v-if="page === 'users'" class="el-dropdown-link">
+      <el-button v-if="page === 'users'" type="text" class="el-dropdown-link">
         {{ $t('users.moderation') }}
         <i v-if="isDesktop" class="el-icon-arrow-down el-icon--right"/>
-      </span>
+      </el-button>
       <el-button v-if="page === 'userPage'" class="moderate-user-button">
         <span class="moderate-user-button-container">
           <span>
