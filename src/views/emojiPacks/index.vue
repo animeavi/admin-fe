@@ -7,7 +7,7 @@
     <div class="emoji-header-container">
       <div class="emoji-packs-header-button-container">
         <el-button type="primary" class="reload-emoji-button" @click="reloadEmoji">{{ $t('emoji.reloadEmoji') }}</el-button>
-        <el-tooltip :content="$t('emoji.importEmojiTooltip')" effects="dark" placement="bottom" class="import-pack-button">
+        <el-tooltip :content="$t('emoji.importEmojiTooltip')" effects="dark" placement="bottom" popper-class="import-pack-button">
           <el-button type="primary" @click="importFromFS">
             {{ $t('emoji.importPacks') }}
           </el-button>
@@ -32,7 +32,7 @@
       </el-form-item>
       <el-form-item v-if="Object.keys(localPacks).length > 0" :label="$t('emoji.packs')">
         <el-collapse v-for="(pack, name) in localPacks" :key="name" v-model="activeLocalPack">
-          <local-emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="true" />
+          <local-emoji-pack :name="name" :pack="sortPack(pack)" :host="$store.getters.authHost" :is-local="true" />
         </el-collapse>
       </el-form-item>
       <el-divider class="divider"/>
@@ -52,7 +52,7 @@
       </el-form-item>
       <el-form-item v-if="Object.keys(remotePacks).length > 0" :label="$t('emoji.packs')">
         <el-collapse v-for="(pack, name) in remotePacks" :key="name" v-model="activeRemotePack" @change="setActiveCollapseItems">
-          <remote-emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="false" />
+          <remote-emoji-pack :name="name" :pack="sortPack(pack)" :host="$store.getters.authHost" :is-local="false" />
         </el-collapse>
       </el-form-item>
     </el-form>
@@ -128,6 +128,11 @@ export default {
           this.$store.dispatch('ReloadEmoji')
         })
     },
+    sortPack(pack) {
+      const orderedFiles = Object.keys(pack.files).sort((a, b) => a.localeCompare(b))
+        .map(key => [key, pack.files[key]])
+      return { ...pack, files: orderedFiles }
+    },
     refreshLocalPacks() {
       try {
         this.$store.dispatch('SetLocalEmojiPacks')
@@ -191,6 +196,8 @@ export default {
 }
 .import-pack-button {
   margin-left: 10px;
+  width: 30%;
+  max-width: 700px;
 }
 h1 {
   margin: 0;
@@ -254,6 +261,9 @@ h1 {
       margin: 7px 0 0 0;
       width: fit-content;
     }
+  }
+  .import-pack-button {
+    width: 90%;
   }
   .reload-emoji-button {
     width: fit-content;
