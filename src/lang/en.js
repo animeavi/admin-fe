@@ -254,7 +254,8 @@ export default {
     direct: 'Direct',
     private: 'Private',
     public: 'Public',
-    unlisted: 'Unlisted'
+    unlisted: 'Unlisted',
+    openStatusInInstance: 'Open status in instance'
   },
   userProfile: {
     tags: 'Tags',
@@ -270,6 +271,7 @@ export default {
     status: 'Status',
     deactivated: 'Deactivated',
     noStatuses: 'No statuses to show',
+    openAccountInInstance: 'Open account in instance',
     securitySettings: {
       email: 'Email',
       password: 'Password',

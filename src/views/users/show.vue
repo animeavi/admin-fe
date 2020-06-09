@@ -6,7 +6,7 @@
         <h1 v-if="propertyExists(user, 'nickname')">{{ user.nickname }}</h1>
         <h1 v-else class="invalid">({{ $t('users.invalidNickname') }})</h1>
         <a v-if="propertyExists(user, 'url')" :href="user.url" target="_blank">
-          <i class="el-icon-top-right" title="Open user in instance"/>
+          <i :title="$t('userProfile.openAccountInInstance')" class="el-icon-top-right"/>
         </a>
       </div>
       <div class="left-header-container">

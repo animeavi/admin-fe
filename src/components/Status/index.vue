@@ -104,7 +104,7 @@
       <div class="status-footer">
         <span class="status-created-at">{{ parseTimestamp(status.created_at) }}</span>
         <a v-if="status.url" :href="status.url" target="_blank" class="account" @click.stop>
-          Open status in instance
+          {{ $t('statuses.openStatusInInstance') }}
           <i class="el-icon-top-right"/>
         </a>
       </div>
