@@ -5,7 +5,11 @@
         <div class="status-account-container">
           <div class="status-account">
             <el-checkbox v-if="showCheckbox" class="status-checkbox" @change="handleStatusSelection(account)"/>
-            <router-link v-if="propertyExists(account, 'id')" :to="{ name: 'UsersShow', params: { id: account.id }}" @click.native.stop>
+            <router-link
+              v-if="propertyExists(account, 'id')"
+              :to="{ name: 'UsersShow', params: { id: account.id }}"
+              class="router-link"
+              @click.native.stop>
               <div class="status-card-header">
                 <img v-if="propertyExists(account, 'avatar')" :src="account.avatar" class="status-avatar-img">
                 <span v-if="propertyExists(account, 'nickname')" class="status-account-name">{{ account.nickname }}</span>
@@ -263,6 +267,9 @@ export default {
     img {
       width: 100%;
     }
+  }
+  .router-link {
+    text-decoration: none;
   }
   .show-more-button {
     margin-left: 5px;

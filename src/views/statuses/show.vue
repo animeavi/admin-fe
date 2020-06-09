@@ -2,7 +2,10 @@
   <div v-if="!loading" class="status-show-container">
     <header v-if="isDesktop || isTablet" class="user-page-header">
       <div class="avatar-name-container">
-        <router-link v-if="propertyExists(user, 'id')" :to="{ name: 'UsersShow', params: { id: user.id }}">
+        <router-link
+          v-if="propertyExists(user, 'id')"
+          :to="{ name: 'UsersShow', params: { id: user.id }}"
+          class="router-link">
           <div class="avatar-name-header">
             <el-avatar v-if="propertyExists(user, 'avatar')" :src="user.avatar" size="large" />
             <h1 v-if="propertyExists(user, 'nickname')">{{ user.nickname }}</h1>
@@ -172,6 +175,9 @@ export default {
 }
 .reset-password-link {
   text-decoration: underline;
+}
+.router-link {
+  text-decoration: none;
 }
 .status-container {
   margin: 0 15px 0 20px;
