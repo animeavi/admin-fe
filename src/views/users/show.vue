@@ -5,6 +5,9 @@
         <el-avatar v-if="propertyExists(user, 'avatar')" :src="user.avatar" size="large" />
         <h1 v-if="propertyExists(user, 'nickname')">{{ user.nickname }}</h1>
         <h1 v-else class="invalid">({{ $t('users.invalidNickname') }})</h1>
+        <a v-if="propertyExists(user, 'url')" :href="user.url" target="_blank">
+          <i class="el-icon-top-right" title="Open user in instance"/>
+        </a>
       </div>
       <div class="left-header-container">
         <moderation-dropdown
@@ -207,6 +210,11 @@ table {
 .avatar-name-container {
   display: flex;
   align-items: center;
+  .el-icon-top-right {
+    font-size: 2em;
+    line-height: 36px;
+    color: #606266;
+  }
 }
 .invalid {
   color: gray;
