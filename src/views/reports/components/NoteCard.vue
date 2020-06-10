@@ -2,15 +2,23 @@
   <el-card class="note-card">
     <div slot="header">
       <div class="note-header">
-        <div class="note-actor">
-          <img v-if="propertyExists(note.user, 'avatar')" :src="note.user.avatar" class="note-avatar-img">
-          <span v-if="propertyExists(note.user, 'nickname')" class="note-actor-name">{{ note.user.nickname }}</span>
-        </div>
-        <div>
-          <el-button size="mini" @click.native="handleNoteDeletion(note.id, report.id)">
-            {{ $t('reports.deleteNote') }}
-          </el-button>
-        </div>
+        <router-link
+          v-if="propertyExists(note.user, 'id')"
+          :to="{ name: 'UsersShow', params: { id: note.user.id }}"
+          class="router-link">
+          <div class="note-actor">
+            <img
+              v-if="propertyExists(note.user, 'avatar')"
+              :src="note.user.avatar"
+              alt="avatar"
+              class="note-avatar-img">
+            <span v-if="propertyExists(note.user, 'nickname')" class="note-actor-name">{{ note.user.nickname }}</span>
+            <span v-else class="note-actor-name deactivated">({{ $t('users.invalidNickname') }})</span>
+          </div>
+        </router-link>
+        <el-button size="mini" @click.native="handleNoteDeletion(note.id, report.id)">
+          {{ $t('reports.deleteNote') }}
+        </el-button>
       </div>
     </div>
     <div class="note-body">
@@ -68,6 +76,9 @@ export default {
   a {
     text-decoration: underline;
   }
+  .deactivated {
+    color: gray;
+  }
   .el-icon-arrow-right {
     margin-right: 6px;
   }
@@ -107,6 +118,9 @@ export default {
     height: 28px;
     font-size: 15px;
     font-weight: 500;
+  }
+  .router-link {
+    text-decoration: none;
   }
 
   @media only screen and (max-width:480px) {
