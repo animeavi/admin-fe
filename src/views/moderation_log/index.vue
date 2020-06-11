@@ -43,7 +43,7 @@
         v-for="(logEntry, index) in log"
         :key="index"
         :timestamp="normalizeTimestamp(logEntry.time)">
-        {{ logEntry.message }}
+        <log-entry-message :actor="logEntry.data.actor" :data="logEntry.data" :message="logEntry.message"/>
       </el-timeline-item>
     </el-timeline>
     <div class="pagination">
@@ -64,9 +64,10 @@ import moment from 'moment'
 import _ from 'lodash'
 import debounce from 'lodash.debounce'
 import RebootButton from '@/components/RebootButton'
+import LogEntryMessage from './LogEntryMessage'
 
 export default {
-  components: { RebootButton },
+  components: { RebootButton, LogEntryMessage },
   data() {
     return {
       dateRange: '',
