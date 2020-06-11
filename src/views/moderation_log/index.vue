@@ -43,7 +43,8 @@
         v-for="(logEntry, index) in log"
         :key="index"
         :timestamp="normalizeTimestamp(logEntry.time)">
-        <log-entry-message :actor="logEntry.data.actor" :data="logEntry.data" :message="logEntry.message"/>
+        <log-entry-message v-if="propertyExists(logEntry.data.actor, 'nickname')" :actor="logEntry.data.actor" :message="logEntry.message"/>
+        <span v-else>{{ logEntry.message }}</span>
       </el-timeline-item>
     </el-timeline>
     <div class="pagination">
@@ -115,9 +116,6 @@ export default {
     this.$store.dispatch('FetchAdmins')
   },
   methods: {
-    normalizeTimestamp(timestamp) {
-      return moment(timestamp * 1000).format('YYYY-MM-DD HH:mm')
-    },
     fetchLogWithFilters() {
       const filters = _.omitBy({
         start_date: this.dateRange ? this.dateRange[0].toISOString() : null,
@@ -128,6 +126,12 @@ export default {
       }, val => val === '' || val === null)
 
       this.$store.dispatch('FetchModerationLog', filters)
+    },
+    normalizeTimestamp(timestamp) {
+      return moment(timestamp * 1000).format('YYYY-MM-DD HH:mm')
+    },
+    propertyExists(account, property) {
+      return account[property]
     }
   }
 }

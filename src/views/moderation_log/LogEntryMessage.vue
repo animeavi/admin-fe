@@ -4,7 +4,7 @@
       v-if="propertyExists(actor, 'id')"
       :to="{ name: 'UsersShow', params: { id: actor.id }}"
       class="router-link">
-      <span v-if="propertyExists(actor, 'nickname')">
+      <span v-if="propertyExists(actor, 'nickname')" style="font-weight: 600">
         @{{ actor.nickname }}
       </span>
     </router-link>
@@ -24,15 +24,11 @@ export default {
     message: {
       type: String,
       required: true
-    },
-    data: {
-      type: Object,
-      required: true
     }
   },
   computed: {
     logEntryMessage() {
-      return this.message
+      return this.message.split(this.actor.nickname)[1]
     }
   },
   methods: {
