@@ -27,23 +27,28 @@
               <moderate-user-dropdown v-if="propertyExists(report.account, 'nickname')" :account="report.account"/>
             </div>
           </div>
-          <div>
-            <el-divider class="divider"/>
+          <el-divider class="divider"/>
+          <div class="report-account-container">
             <span class="report-row-key">{{ $t('reports.account') }}:</span>
-            <img
-              v-if="propertyExists(report.account, 'avatar')"
-              :src="report.account.avatar"
-              alt="avatar"
-              class="avatar-img">
-            <a v-if="propertyExists(report.account, 'url', 'nickname')" :href="report.account.url" target="_blank" class="account">
-              <span class="report-account-name">{{ report.account.nickname }}</span>
-            </a>
-            <span v-else>
-              <span v-if="propertyExists(report.account, 'nickname')" class="report-account-name">
-                {{ report.account.nickname }}
-              </span>
+            <div class="report-account">
+              <router-link
+                v-if="propertyExists(report.account, 'id')"
+                :to="{ name: 'UsersShow', params: { id: report.account.id }}"
+                class="router-link">
+                <img
+                  v-if="propertyExists(report.account, 'avatar')"
+                  :src="report.account.avatar"
+                  alt="avatar"
+                  class="avatar-img">
+                <span v-if="propertyExists(report.account, 'nickname')" class="report-account-name">{{ report.account.nickname }}</span>
+                <span v-else class="report-account-name deactivated">({{ $t('users.invalidNickname') }})</span>
+              </router-link>
               <span v-else class="report-account-name deactivated">({{ $t('users.invalidNickname') }})</span>
-            </span>
+              <a v-if="propertyExists(report.account, 'url')" :href="report.account.url" target="_blank" class="account">
+                {{ $t('userProfile.openAccountInInstance') }}
+                <i class="el-icon-top-right"/>
+              </a>
+            </div>
           </div>
           <div v-if="report.content && report.content.length > 0">
             <el-divider class="divider"/>
@@ -51,25 +56,30 @@
               <span>{{ report.content }}</span>
             </span>
           </div>
-          <div :style="showStatuses(report.statuses) ? '' : 'margin-bottom:15px'">
-            <el-divider class="divider"/>
+          <el-divider class="divider"/>
+          <div :style="showStatuses(report.statuses) ? '' : 'margin-bottom:15px'" class="report-account-container">
             <span class="report-row-key">{{ $t('reports.actor') }}:</span>
-            <img
-              v-if="propertyExists(report.actor, 'avatar')"
-              :src="report.actor.avatar"
-              alt="avatar"
-              class="avatar-img">
-            <a v-if="propertyExists(report.actor, 'url', 'nickname')" :href="report.actor.url" target="_blank" class="account">
-              <span class="report-account-name">{{ report.actor.nickname }}</span>
-            </a>
-            <span v-else>
-              <span v-if="propertyExists(report.actor, 'nickname')" class="report-account-name">
-                {{ report.actor.nickname }}
-              </span>
+            <div class="report-account">
+              <router-link
+                v-if="propertyExists(report.actor, 'id')"
+                :to="{ name: 'UsersShow', params: { id: report.actor.id }}"
+                class="router-link">
+                <img
+                  v-if="propertyExists(report.actor, 'avatar')"
+                  :src="report.actor.avatar"
+                  alt="avatar"
+                  class="avatar-img">
+                <span v-if="propertyExists(report.actor, 'nickname')" class="report-account-name">{{ report.actor.nickname }}</span>
+                <span v-else class="report-account-name deactivated">({{ $t('users.invalidNickname') }})</span>
+              </router-link>
               <span v-else class="report-account-name deactivated">({{ $t('users.invalidNickname') }})</span>
-            </span>
+              <a v-if="propertyExists(report.actor, 'url')" :href="report.actor.url" target="_blank" class="account">
+                {{ $t('userProfile.openAccountInInstance') }}
+                <i class="el-icon-top-right"/>
+              </a>
+            </div>
           </div>
-          <div v-if="showStatuses(report.statuses)" class="statuses">
+          <div v-if="showStatuses(report.statuses)" class="reported-statuses">
             <el-collapse>
               <el-collapse-item :title="getStatusesTitle(report.statuses)">
                 <div v-for="status in report.statuses" :key="status.id">
@@ -192,14 +202,22 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
+  h4 {
+    margin: 0;
+    height: 17px;
+  }
   .account {
+    line-height: 26px;
+    font-size: 13px;
+    color: #606266;
+  }
+  .account:hover {
     text-decoration: underline;
   }
   .avatar-img {
     vertical-align: bottom;
     width: 15px;
     height: 15px;
-    margin-left: 5px;
   }
   .divider {
     margin: 15px 0;
@@ -231,18 +249,6 @@ export default {
     padding: 10px 5px 10px 10px;
     cursor: pointer;
   }
-  h4 {
-    margin: 0;
-    height: 17px;
-  }
-  .report {
-    .report-header-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      height: 40px;
-    }
-  }
   .id {
     color: gray;
     margin-top: 6px;
@@ -269,6 +275,24 @@ export default {
     font-style: italic;
     color: gray;
   }
+  .report {
+    .report-header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      height: 40px;
+    }
+  }
+  .report-account {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-grow: 2;
+  }
+  .report-account-container {
+    display: flex;
+    align-items: baseline;
+  }
   .report-account-name {
     font-size: 15px;
     font-weight: 500;
@@ -276,9 +300,7 @@ export default {
   .report-row-key {
     font-size: 14px;
     font-weight: 500;
-  }
-  .report-row-key {
-    font-size: 14px;
+    padding-right: 5px;
   }
   .report-title {
     margin: 0;
@@ -298,7 +320,10 @@ export default {
     margin: 30px 45px 45px 19px;
     padding: 0px;
   }
-  .statuses {
+  .router-link {
+    text-decoration: none;
+  }
+  .reported-statuses {
     margin-top: 15px;
   }
   .submit-button {

@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Create `/statuses/:id` route that shows single status
+- Add link to the user's account in Pleroma on the user's profile page
+- On Reports page add links to reported account and the author of the report 
+- In Notes add link to the note author's profile page 
+- In Moderation log add link to the actor's profile page
 
 ### Changed
 
