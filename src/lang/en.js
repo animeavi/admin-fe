@@ -73,6 +73,12 @@ export default {
     mediaProxyCache: 'MediaProxy Cache',
     'emoji-packs': 'Emoji packs'
   },
+  errLog: {
+    error401: 'Oops! 401 Error',
+    unauth: 'Unauthorized',
+    back: 'Back',
+    login: 'Login'
+  },
   navbar: {
     logOut: 'Log Out',
     dashboard: 'Dashboard',
