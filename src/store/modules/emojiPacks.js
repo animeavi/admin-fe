@@ -4,6 +4,7 @@ import {
   deleteEmojiFile,
   deletePack,
   downloadFrom,
+  fetchPack,
   importFromFS,
   listPacks,
   listRemotePacks,
@@ -29,6 +30,9 @@ const packs = {
     },
     SET_LOCAL_PACKS: (state, packs) => {
       state.localPacks = packs
+    },
+    SET_PACK_FILES: (state, { name, files }) => {
+      state.localPacks = { ...state.localPacks, [name]: { ...state.localPacks[name], files }}
     },
     SET_REMOTE_INSTANCE: (state, name) => {
       state.remoteInstance = name
@@ -99,6 +103,10 @@ const packs = {
         })
       }
     },
+    async FetchPack({ getters, commit }, name) {
+      const { data } = await fetchPack(name, getters.authHost, getters.token)
+      commit('SET_PACK_FILES', { name, files: data.files })
+    },
     async ImportFromFS({ getters }) {
       const result = await importFromFS(getters.authHost, getters.token)
 
@@ -136,12 +144,17 @@ const packs = {
         commit('UPDATE_LOCAL_PACK_PACK', { name: packName, pack: result.data })
       }
     },
-    SetActiveCollapseItems({ commit, state }, activeItems) {
+    SetActiveCollapseItems({ commit }, activeItems) {
       commit('SET_ACTIVE_COLLAPSE_ITEMS', activeItems)
     },
     async SetLocalEmojiPacks({ commit, getters }) {
       const { data } = await listPacks(getters.authHost)
-      commit('SET_LOCAL_PACKS', data)
+      const packs = Object.keys(data).reduce((acc, packName) => {
+        const { files, ...pack } = data[packName]
+        acc[packName] = pack
+        return acc
+      }, {})
+      commit('SET_LOCAL_PACKS', packs)
     },
     async SetRemoteEmojiPacks({ commit, getters }, { remoteInstance }) {
       const { data } = await listRemotePacks(getters.authHost, getters.token, remoteInstance)

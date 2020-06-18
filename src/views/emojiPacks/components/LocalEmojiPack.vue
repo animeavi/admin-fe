@@ -38,19 +38,22 @@
         </el-link>
       </div>
     </div>
-    <el-collapse v-model="showPackContent" class="contents-collapse">
+    <el-collapse v-model="showPackContent" class="contents-collapse" @change="handleChange($event, name)">
       <el-collapse-item v-if="isLocal" :title=" $t('emoji.addNewEmoji')" name="addEmoji" class="no-background">
         <new-emoji-uploader :pack-name="name"/>
       </el-collapse-item>
-      <el-collapse-item v-if="pack.files.length > 0" :title=" $t('emoji.manageEmoji')" name="manageEmoji" class="no-background">
-        <single-emoji-editor
-          v-for="[shortcode, file] in pack.files"
-          :key="shortcode"
-          :host="host"
-          :pack-name="name"
-          :shortcode="shortcode"
-          :file="file"
-          :is-local="isLocal" />
+      <el-collapse-item :title=" $t('emoji.manageEmoji')" name="manageEmoji" class="no-background">
+        <div v-if="pack.files && sortedFiles.length > 0">
+          <single-emoji-editor
+            v-for="[shortcode, file] in sortedFiles"
+            :key="shortcode"
+            :host="host"
+            :pack-name="name"
+            :shortcode="shortcode"
+            :file="file"
+            :is-local="isLocal" />
+        </div>
+        <span v-else class="expl">{{ $t('emoji.emptyPack') }}</span>
       </el-collapse-item>
     </el-collapse>
   </el-collapse-item>
@@ -100,6 +103,10 @@ export default {
       } else {
         return '155px'
       }
+    },
+    sortedFiles() {
+      return Object.keys(this.pack.files).sort((a, b) => a.localeCompare(b))
+        .map(key => [key, this.pack.files[key]])
     },
     share: {
       get() { return this.pack.pack['share-files'] },
@@ -169,6 +176,11 @@ export default {
           .then(() => this.$store.dispatch('ReloadEmoji'))
           .then(() => this.$store.dispatch('SetLocalEmojiPacks'))
       }).catch(() => {})
+    },
+    handleChange(openTabs, name) {
+      if (openTabs.includes('manageEmoji')) {
+        this.$store.dispatch('FetchPack', name)
+      }
     },
     savePackMetadata() {
       this.$store.dispatch('SavePackMetadata', { packName: this.name })

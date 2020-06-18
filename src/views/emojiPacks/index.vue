@@ -31,8 +31,8 @@
         </div>
       </el-form-item>
       <el-form-item v-if="Object.keys(localPacks).length > 0" :label="$t('emoji.packs')">
-        <el-collapse v-for="(pack, name) in localPacks" :key="name" v-model="activeLocalPack">
-          <local-emoji-pack :name="name" :pack="sortPack(pack)" :host="$store.getters.authHost" :is-local="true" />
+        <el-collapse v-for="(pack, name) in localPacks" :key="name" v-model="activeLocalPack" @change="setActiveCollapseItems">
+          <local-emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="true" />
         </el-collapse>
       </el-form-item>
       <el-divider class="divider"/>
@@ -127,11 +127,6 @@ export default {
           this.$store.dispatch('SetLocalEmojiPacks')
           this.$store.dispatch('ReloadEmoji')
         })
-    },
-    sortPack(pack) {
-      const orderedFiles = Object.keys(pack.files).sort((a, b) => a.localeCompare(b))
-        .map(key => [key, pack.files[key]])
-      return { ...pack, files: orderedFiles }
     },
     refreshLocalPacks() {
       try {
