@@ -17,7 +17,7 @@ import { Message } from 'element-ui'
 
 import Vue from 'vue'
 
-const packs = {
+const emojiPacks = {
   state: {
     activeCollapseItems: [],
     localPacks: {},
@@ -186,4 +186,4 @@ const packs = {
   }
 }
 
-export default packs
+export default emojiPacks
