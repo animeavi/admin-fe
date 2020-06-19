@@ -6,56 +6,62 @@
     </div>
     <div class="emoji-header-container">
       <div class="emoji-packs-header-button-container">
-        <el-button type="primary" class="reload-emoji-button" @click="reloadEmoji">{{ $t('emoji.reloadEmoji') }}</el-button>
+        <el-button class="reload-emoji-button" @click="reloadEmoji">{{ $t('emoji.reloadEmoji') }}</el-button>
         <el-tooltip :content="$t('emoji.importEmojiTooltip')" effects="dark" placement="bottom" popper-class="import-pack-button">
-          <el-button type="primary" @click="importFromFS">
+          <el-button @click="importFromFS">
             {{ $t('emoji.importPacks') }}
           </el-button>
         </el-tooltip>
       </div>
     </div>
-    <el-divider class="divider"/>
-    <el-form :label-width="labelWidth" class="emoji-packs-form">
-      <el-form-item :label="$t('emoji.localPacks')">
-        <el-button type="primary" @click="refreshLocalPacks">{{ $t('emoji.refreshLocalPacks') }}</el-button>
-      </el-form-item>
-      <el-form-item :label="$t('emoji.createLocalPack')">
-        <div class="create-pack">
-          <el-input v-model="newPackName" :placeholder="$t('users.name')" />
-          <el-button
-            :disabled="newPackName.trim() === ''"
-            class="create-pack-button"
-            @click="createLocalPack">
-            {{ $t('users.create') }}
-          </el-button>
-        </div>
-      </el-form-item>
-      <el-form-item v-if="Object.keys(localPacks).length > 0" :label="$t('emoji.packs')">
-        <el-collapse v-for="(pack, name) in localPacks" :key="name" v-model="activeLocalPack" @change="setActiveCollapseItems">
-          <local-emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="true" />
-        </el-collapse>
-      </el-form-item>
-      <el-divider class="divider"/>
-      <el-form-item :label="$t('emoji.remotePacks')">
-        <div class="create-pack">
-          <el-input
-            v-model="remoteInstanceAddress"
-            :placeholder="$t('emoji.remoteInstanceAddress')" />
-          <el-button
-            v-loading.fullscreen.lock="fullscreenLoading"
-            :disabled="remoteInstanceAddress.trim() === ''"
-            class="create-pack-button"
-            @click="refreshRemotePacks">
-            {{ $t('emoji.refreshRemote') }}
-          </el-button>
-        </div>
-      </el-form-item>
-      <el-form-item v-if="Object.keys(remotePacks).length > 0" :label="$t('emoji.packs')">
-        <el-collapse v-for="(pack, name) in remotePacks" :key="name" v-model="activeRemotePack" @change="setActiveCollapseItems">
-          <remote-emoji-pack :name="name" :pack="sortPack(pack)" :host="$store.getters.authHost" :is-local="false" />
-        </el-collapse>
-      </el-form-item>
-    </el-form>
+    <el-tabs v-model="activeTab" type="card" class="emoji-packs-tabs">
+      <el-tab-pane :label="$t('emoji.localPacks')" name="local">
+        <el-form :label-width="labelWidth" class="emoji-packs-form">
+          <el-form-item :label="$t('emoji.localPacks')">
+            <el-button type="primary" @click="refreshLocalPacks">{{ $t('emoji.refreshLocalPacks') }}</el-button>
+          </el-form-item>
+          <el-form-item :label="$t('emoji.createLocalPack')">
+            <div class="create-pack">
+              <el-input v-model="newPackName" :placeholder="$t('users.name')" />
+              <el-button
+                :disabled="newPackName.trim() === ''"
+                class="create-pack-button"
+                @click="createLocalPack">
+                {{ $t('users.create') }}
+              </el-button>
+            </div>
+          </el-form-item>
+          <el-form-item v-if="Object.keys(localPacks).length > 0" :label="$t('emoji.packs')">
+            <el-collapse v-for="(pack, name) in localPacks" :key="name" v-model="activeLocalPack" @change="setActiveCollapseItems">
+              <local-emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="true" />
+            </el-collapse>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
+      <el-tab-pane :label="$t('emoji.remotePacks')" name="remote">
+        <el-form :label-width="labelWidth" class="emoji-packs-form">
+          <el-form-item :label="$t('emoji.remotePacks')">
+            <div class="create-pack">
+              <el-input
+                v-model="remoteInstanceAddress"
+                :placeholder="$t('emoji.remoteInstanceAddress')" />
+              <el-button
+                v-loading.fullscreen.lock="fullscreenLoading"
+                :disabled="remoteInstanceAddress.trim() === ''"
+                class="create-pack-button"
+                @click="refreshRemotePacks">
+                {{ $t('emoji.refreshRemote') }}
+              </el-button>
+            </div>
+          </el-form-item>
+          <el-form-item v-if="Object.keys(remotePacks).length > 0" :label="$t('emoji.packs')">
+            <el-collapse v-for="(pack, name) in remotePacks" :key="name" v-model="activeRemotePack" @change="setActiveCollapseItems">
+              <remote-emoji-pack :name="name" :pack="sortPack(pack)" :host="$store.getters.authHost" :is-local="false" />
+            </el-collapse>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -69,6 +75,7 @@ export default {
   components: { LocalEmojiPack, RebootButton, RemoteEmojiPack },
   data() {
     return {
+      activeTab: 'local',
       newPackName: '',
       activeLocalPack: [],
       activeRemotePack: [],
@@ -164,6 +171,13 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
+.create-pack {
+  display: flex;
+  justify-content: space-between
+}
+.create-pack-button {
+  margin-left: 10px;
+}
 .emoji-header-container {
   display: flex;
   align-items: center;
@@ -173,13 +187,6 @@ export default {
 .emoji-packs-header-button-container {
   display: flex;
 }
-.create-pack {
-  display: flex;
-  justify-content: space-between
-}
-.create-pack-button {
-  margin-left: 10px;
-}
 .emoji-packs-form {
   margin: 0 30px;
 }
@@ -188,6 +195,9 @@ export default {
   align-items: center;
   justify-content: space-between;
   margin: 10px 15px 15px 15px;
+}
+.emoji-packs-tabs {
+  margin: 0 15px 15px 15px;
 }
 .import-pack-button {
   margin-left: 10px;
