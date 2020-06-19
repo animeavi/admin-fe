@@ -92,6 +92,9 @@ export default {
     }
   },
   computed: {
+    currentPage() {
+      return this.$store.state.emojiPacks.currentPage
+    },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
     },
@@ -179,7 +182,7 @@ export default {
         'DownloadFrom',
         { instanceAddress: this.remoteInstanceAddress, packName: this.name, as: this.downloadSharedAs }
       ).then(() => this.$store.dispatch('ReloadEmoji'))
-        .then(() => this.$store.dispatch('SetLocalEmojiPacks'))
+        .then(() => this.$store.dispatch('FetchLocalEmojiPacks', this.currentPage))
     }
   }
 }

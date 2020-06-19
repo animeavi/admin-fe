@@ -40,6 +40,9 @@ const emojiPacks = {
     SET_PACK_FILES: (state, { name, files }) => {
       state.localPacks = { ...state.localPacks, [name]: { ...state.localPacks[name], files }}
     },
+    SET_PAGE: (state, page) => {
+      state.currentPage = page
+    },
     SET_REMOTE_INSTANCE: (state, name) => {
       state.remoteInstance = name
     },
@@ -119,6 +122,7 @@ const emojiPacks = {
       }, {})
       commit('SET_LOCAL_PACKS', updatedPacks)
       commit('SET_LOCAL_PACKS_COUNT', count)
+      commit('SET_PAGE', page)
     },
     async FetchSinglePack({ getters, commit }, name) {
       const { data } = await fetchPack(name, getters.authHost, getters.token)

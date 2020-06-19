@@ -143,7 +143,7 @@ export default {
         .then(() => {
           this.newPackName = ''
 
-          this.$store.dispatch('FetchLocalEmojiPacks')
+          this.$store.dispatch('FetchLocalEmojiPacks', this.currentPage)
           this.$store.dispatch('ReloadEmoji')
         })
     },
@@ -153,13 +153,13 @@ export default {
     importFromFS() {
       this.$store.dispatch('ImportFromFS')
         .then(() => {
-          this.$store.dispatch('FetchLocalEmojiPacks')
+          this.$store.dispatch('FetchLocalEmojiPacks', this.currentPage)
           this.$store.dispatch('ReloadEmoji')
         })
     },
     refreshLocalPacks() {
       try {
-        this.$store.dispatch('FetchLocalEmojiPacks', 1)
+        this.$store.dispatch('FetchLocalEmojiPacks', this.currentPage)
       } catch (e) {
         return
       }

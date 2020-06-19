@@ -89,6 +89,9 @@ export default {
     }
   },
   computed: {
+    currentPage() {
+      return this.$store.state.emojiPacks.currentPage
+    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
@@ -174,12 +177,12 @@ export default {
       }).then(() => {
         this.$store.dispatch('DeletePack', { name: this.name })
           .then(() => this.$store.dispatch('ReloadEmoji'))
-          .then(() => this.$store.dispatch('SetLocalEmojiPacks'))
+          .then(() => this.$store.dispatch('FetchLocalEmojiPacks', this.currentPage))
       }).catch(() => {})
     },
     handleChange(openTabs, name) {
       if (openTabs.includes('manageEmoji')) {
-        this.$store.dispatch('FetchPack', name)
+        this.$store.dispatch('FetchSinglePack', name)
       }
     },
     savePackMetadata() {
