@@ -20,7 +20,10 @@ import Vue from 'vue'
 const emojiPacks = {
   state: {
     activeCollapseItems: [],
+    currentPage: 1,
     localPacks: {},
+    localPacksCount: 0,
+    pageSize: 20,
     remoteInstance: '',
     remotePacks: {}
   },
@@ -30,6 +33,9 @@ const emojiPacks = {
     },
     SET_LOCAL_PACKS: (state, packs) => {
       state.localPacks = packs
+    },
+    SET_LOCAL_PACKS_COUNT: (state, count) => {
+      state.localPacksCount = count
     },
     SET_PACK_FILES: (state, { name, files }) => {
       state.localPacks = { ...state.localPacks, [name]: { ...state.localPacks[name], files }}
@@ -103,7 +109,18 @@ const emojiPacks = {
         })
       }
     },
-    async FetchPack({ getters, commit }, name) {
+    async FetchLocalEmojiPacks({ commit, getters, state }, page) {
+      const { data } = await listPacks(page, state.pageSize, getters.authHost, getters.token)
+      const { packs, count } = data
+      const updatedPacks = Object.keys(packs).reduce((acc, packName) => {
+        const { files, ...pack } = packs[packName]
+        acc[packName] = pack
+        return acc
+      }, {})
+      commit('SET_LOCAL_PACKS', updatedPacks)
+      commit('SET_LOCAL_PACKS_COUNT', count)
+    },
+    async FetchSinglePack({ getters, commit }, name) {
       const { data } = await fetchPack(name, getters.authHost, getters.token)
       commit('SET_PACK_FILES', { name, files: data.files })
     },
@@ -146,15 +163,6 @@ const emojiPacks = {
     },
     SetActiveCollapseItems({ commit }, activeItems) {
       commit('SET_ACTIVE_COLLAPSE_ITEMS', activeItems)
-    },
-    async SetLocalEmojiPacks({ commit, getters }) {
-      const { data } = await listPacks(getters.authHost)
-      const packs = Object.keys(data).reduce((acc, packName) => {
-        const { files, ...pack } = data[packName]
-        acc[packName] = pack
-        return acc
-      }, {})
-      commit('SET_LOCAL_PACKS', packs)
     },
     async SetRemoteEmojiPacks({ commit, getters }, { remoteInstance }) {
       const { data } = await listRemotePacks(getters.authHost, getters.token, remoteInstance)

@@ -18,7 +18,7 @@
       <el-tab-pane :label="$t('emoji.localPacks')" name="local">
         <el-form :label-width="labelWidth" class="emoji-packs-form">
           <el-form-item :label="$t('emoji.localPacks')">
-            <el-button type="primary" @click="refreshLocalPacks">{{ $t('emoji.refreshLocalPacks') }}</el-button>
+            <el-button @click="refreshLocalPacks">{{ $t('emoji.refreshLocalPacks') }}</el-button>
           </el-form-item>
           <el-form-item :label="$t('emoji.createLocalPack')">
             <div class="create-pack">
@@ -37,6 +37,16 @@
             </el-collapse>
           </el-form-item>
         </el-form>
+        <div class="pagination">
+          <el-pagination
+            :total="localPacksCount"
+            :current-page="currentPage"
+            :page-size="pageSize"
+            hide-on-single-page
+            layout="prev, pager, next"
+            @current-change="handlePageChange"
+          />
+        </div>
       </el-tab-pane>
       <el-tab-pane :label="$t('emoji.remotePacks')" name="remote">
         <el-form :label-width="labelWidth" class="emoji-packs-form">
@@ -83,6 +93,9 @@ export default {
     }
   },
   computed: {
+    currentPage() {
+      return this.$store.state.emojiPacks.currentPage
+    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
@@ -95,11 +108,17 @@ export default {
       } else if (this.isTablet) {
         return '180px'
       } else {
-        return '240px'
+        return '200px'
       }
     },
     localPacks() {
       return this.$store.state.emojiPacks.localPacks
+    },
+    localPacksCount() {
+      return this.$store.state.emojiPacks.localPacksCount
+    },
+    pageSize() {
+      return this.$store.state.emojiPacks.pageSize
     },
     remoteInstanceAddress: {
       get() {
@@ -124,20 +143,23 @@ export default {
         .then(() => {
           this.newPackName = ''
 
-          this.$store.dispatch('SetLocalEmojiPacks')
+          this.$store.dispatch('FetchLocalEmojiPacks')
           this.$store.dispatch('ReloadEmoji')
         })
+    },
+    handlePageChange(page) {
+      this.$store.dispatch('FetchLocalEmojiPacks', page)
     },
     importFromFS() {
       this.$store.dispatch('ImportFromFS')
         .then(() => {
-          this.$store.dispatch('SetLocalEmojiPacks')
+          this.$store.dispatch('FetchLocalEmojiPacks')
           this.$store.dispatch('ReloadEmoji')
         })
     },
     refreshLocalPacks() {
       try {
-        this.$store.dispatch('SetLocalEmojiPacks')
+        this.$store.dispatch('FetchLocalEmojiPacks', 1)
       } catch (e) {
         return
       }
@@ -188,7 +210,7 @@ export default {
   display: flex;
 }
 .emoji-packs-form {
-  margin: 0 30px;
+  margin-top: 15px;
 }
 .emoji-packs-header {
   display: flex;
@@ -212,6 +234,10 @@ h1 {
   height: 0;
   border: 1px solid #eee;
   margin-bottom: 22px;
+}
+.pagination {
+  margin: 25px 0;
+  text-align: center;
 }
 .reboot-button {
   padding: 10px;

@@ -86,11 +86,12 @@ export async function importFromFS(host, token) {
   })
 }
 
-export async function listPacks(host) {
+export async function listPacks(page, pageSize, host, token) {
   return await request({
     baseURL: baseName(host),
-    url: `/api/pleroma/emoji/packs/`,
-    method: 'get'
+    url: `/api/pleroma/emoji/packs?page=${page}&page_size=${pageSize}`,
+    method: 'get',
+    headers: authHeaders(token)
   })
 }
 
