@@ -68,10 +68,10 @@ export async function downloadFrom(host, instance, packName, as, token) {
   })
 }
 
-export async function fetchPack(packName, host, token) {
+export async function fetchPack(packName, page, pageSize, host, token) {
   return await request({
     baseURL: baseName(host),
-    url: `/api/pleroma/emoji/packs/${packName}`,
+    url: `/api/pleroma/emoji/packs/${packName}&page=${page}&page_size=${pageSize}`,
     method: 'get',
     headers: authHeaders(token)
   })

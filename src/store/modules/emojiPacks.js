@@ -31,6 +31,12 @@ const emojiPacks = {
     SET_ACTIVE_COLLAPSE_ITEMS: (state, items) => {
       state.activeCollapseItems = items
     },
+    SET_FILES_COUNT: (state, count) => {
+      state.localPacksCount = count
+    },
+    SET_FILES_PAGE: (state, page) => {
+      state.currentPage = page
+    },
     SET_LOCAL_PACKS: (state, packs) => {
       state.localPacks = packs
     },
@@ -124,9 +130,12 @@ const emojiPacks = {
       commit('SET_LOCAL_PACKS_COUNT', count)
       commit('SET_PAGE', page)
     },
-    async FetchSinglePack({ getters, commit }, name) {
-      const { data } = await fetchPack(name, getters.authHost, getters.token)
-      commit('SET_PACK_FILES', { name, files: data.files })
+    async FetchSinglePack({ getters, commit, state }, { name, page }) {
+      const { data } = await fetchPack(name, page, state.pageSize, getters.authHost, getters.token)
+      const { files, files_count } = data
+      commit('SET_PACK_FILES', { name, files })
+      commit('SET_FILES_COUNT', files_count)
+      commit('SET_FILES_PAGE', page)
     },
     async ImportFromFS({ getters }) {
       const result = await importFromFS(getters.authHost, getters.token)
