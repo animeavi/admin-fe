@@ -20,10 +20,13 @@ import Vue from 'vue'
 const emojiPacks = {
   state: {
     activeCollapseItems: [],
+    currentFilesPage: 1,
     currentPage: 1,
+    filesPageSize: 30,
+    localPackFilesCount: 0,
     localPacks: {},
     localPacksCount: 0,
-    pageSize: 20,
+    pageSize: 50,
     remoteInstance: '',
     remotePacks: {}
   },
@@ -32,10 +35,10 @@ const emojiPacks = {
       state.activeCollapseItems = items
     },
     SET_FILES_COUNT: (state, count) => {
-      state.localPacksCount = count
+      state.localPackFilesCount = count
     },
     SET_FILES_PAGE: (state, page) => {
-      state.currentPage = page
+      state.currentFilesPage = page
     },
     SET_LOCAL_PACKS: (state, packs) => {
       state.localPacks = packs
@@ -131,7 +134,7 @@ const emojiPacks = {
       commit('SET_PAGE', page)
     },
     async FetchSinglePack({ getters, commit, state }, { name, page }) {
-      const { data } = await fetchPack(name, page, state.pageSize, getters.authHost, getters.token)
+      const { data } = await fetchPack(name, page, state.filesPageSize, getters.authHost, getters.token)
       const { files, files_count } = data
       commit('SET_PACK_FILES', { name, files })
       commit('SET_FILES_COUNT', files_count)

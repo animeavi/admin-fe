@@ -54,6 +54,16 @@
             :is-local="isLocal" />
         </div>
         <span v-else class="expl">{{ $t('emoji.emptyPack') }}</span>
+        <div class="files-pagination">
+          <el-pagination
+            :total="localPackFilesCount"
+            :current-page="currentFilesPage"
+            :page-size="pageSize"
+            hide-on-single-page
+            layout="prev, pager, next"
+            @current-change="handleFilesPageChange"
+          />
+        </div>
       </el-collapse-item>
     </el-collapse>
   </el-collapse-item>
@@ -89,6 +99,9 @@ export default {
     }
   },
   computed: {
+    currentFilesPage() {
+      return this.$store.state.emojiPacks.currentFilesPage
+    },
     currentPage() {
       return this.$store.state.emojiPacks.currentPage
     },
@@ -106,6 +119,12 @@ export default {
       } else {
         return '155px'
       }
+    },
+    localPackFilesCount() {
+      return this.$store.state.emojiPacks.localPackFilesCount
+    },
+    pageSize() {
+      return this.$store.state.emojiPacks.filesPageSize
     },
     sortedFiles() {
       return Object.keys(this.pack.files).sort((a, b) => a.localeCompare(b))
@@ -182,8 +201,11 @@ export default {
     },
     handleChange(openTabs, name) {
       if (openTabs.includes('manageEmoji')) {
-        this.$store.dispatch('FetchSinglePack', name)
+        this.$store.dispatch('FetchSinglePack', { name, page: 1 })
       }
+    },
+    handleFilesPageChange(page) {
+      this.$store.dispatch('FetchSinglePack', { name: this.name, page })
     },
     savePackMetadata() {
       this.$store.dispatch('SavePackMetadata', { packName: this.name })
@@ -231,6 +253,10 @@ export default {
   .el-form-item {
     margin-bottom: 10px;
   }
+}
+.files-pagination {
+  margin: 25px 0;
+  text-align: center;
 }
 .has-background .el-collapse-item__header {
   background: #f6f6f6;
