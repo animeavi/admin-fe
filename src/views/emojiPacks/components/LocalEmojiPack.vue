@@ -188,6 +188,9 @@ export default {
     }
   },
   methods: {
+    collapse() {
+      this.showPackContent = []
+    },
     deletePack() {
       this.$confirm('This will delete the pack, are you sure?', 'Warning', {
         confirmButtonText: 'Yes, delete the pack',
