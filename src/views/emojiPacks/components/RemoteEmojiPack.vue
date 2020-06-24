@@ -34,15 +34,18 @@
         </el-form-item>
       </el-form>
       <el-collapse v-model="showPackContent" class="contents-collapse">
-        <el-collapse-item v-if="pack.files.length > 0" :title=" $t('emoji.manageEmoji')" name="manageEmoji" class="no-background">
-          <single-emoji-editor
-            v-for="[shortcode, file] in pack.files"
-            :key="shortcode"
-            :host="host"
-            :pack-name="name"
-            :shortcode="shortcode"
-            :file="file"
-            :is-local="isLocal" />
+        <el-collapse-item :title=" $t('emoji.manageEmoji')" name="manageEmoji" class="no-background">
+          <div v-if="pack.files && Object.keys(pack.files).length > 0">
+            <single-emoji-editor
+              v-for="(file, shortcode) in pack.files"
+              :key="shortcode"
+              :host="host"
+              :pack-name="name"
+              :shortcode="shortcode"
+              :file="file"
+              :is-local="isLocal" />
+          </div>
+          <span v-else class="expl">{{ $t('emoji.emptyPack') }}</span>
         </el-collapse-item>
         <el-collapse-item :title=" $t('emoji.downloadPack')" name="downloadPack" class="no-background">
           <p>
