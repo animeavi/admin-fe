@@ -114,7 +114,7 @@ export default {
       }
     },
     loadRemotePack() {
-      return this.$store.state.emojiPacks.activeCollapseItems.includes(this.name)
+      return this.$store.state.emojiPacks.activeTab === this.name
     },
     remoteInstanceAddress() {
       return this.$store.state.emojiPacks.remoteInstance

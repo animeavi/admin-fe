@@ -32,7 +32,7 @@
             </div>
           </el-form-item>
           <el-form-item v-if="Object.keys(localPacks).length > 0" :label="$t('emoji.packs')">
-            <el-collapse v-for="(pack, name) in localPacks" :key="name" v-model="activeLocalPack" accordion @change="setActiveCollapseItems">
+            <el-collapse v-for="(pack, name) in localPacks" :key="name" v-model="activeLocalPack" accordion @change="setActiveTab">
               <local-emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="true" />
             </el-collapse>
           </el-form-item>
@@ -65,8 +65,8 @@
             </div>
           </el-form-item>
           <el-form-item v-if="Object.keys(remotePacks).length > 0" :label="$t('emoji.packs')">
-            <el-collapse v-for="(pack, name) in remotePacks" :key="name" v-model="activeRemotePack" @change="setActiveCollapseItems">
-              <remote-emoji-pack :name="name" :pack="sortPack(pack)" :host="$store.getters.authHost" :is-local="false" />
+            <el-collapse v-for="(pack, name) in remotePacks" :key="name" v-model="activeRemotePack" accordion @change="setActiveTab">
+              <remote-emoji-pack :name="name" :pack="pack" :host="$store.getters.authHost" :is-local="false" />
             </el-collapse>
           </el-form-item>
         </el-form>
@@ -184,9 +184,8 @@ export default {
         message: i18n.t('emoji.reloaded')
       })
     },
-    setActiveCollapseItems(activeItems) {
-      const items = Array.isArray(activeItems) ? activeItems : [activeItems]
-      this.$store.dispatch('SetActiveCollapseItems', items)
+    setActiveTab(activeTab) {
+      this.$store.dispatch('SetActiveTab', activeTab)
     }
   }
 }

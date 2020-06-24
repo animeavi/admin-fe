@@ -19,7 +19,7 @@ import Vue from 'vue'
 
 const emojiPacks = {
   state: {
-    activeCollapseItems: [],
+    activeTab: '',
     currentFilesPage: 1,
     currentPage: 1,
     filesPageSize: 30,
@@ -31,8 +31,8 @@ const emojiPacks = {
     remotePacks: {}
   },
   mutations: {
-    SET_ACTIVE_COLLAPSE_ITEMS: (state, items) => {
-      state.activeCollapseItems = items
+    SET_ACTIVE_TAB: (state, tab) => {
+      state.activeTab = tab
     },
     SET_FILES_COUNT: (state, count) => {
       state.localPackFilesCount = count
@@ -177,8 +177,8 @@ const emojiPacks = {
         commit('UPDATE_LOCAL_PACK_PACK', { name: packName, pack: result.data })
       }
     },
-    SetActiveCollapseItems({ commit }, activeItems) {
-      commit('SET_ACTIVE_COLLAPSE_ITEMS', activeItems)
+    SetActiveTab({ commit }, activeTab) {
+      commit('SET_ACTIVE_TAB', activeTab)
     },
     async SetRemoteEmojiPacks({ commit, getters }, { remoteInstance }) {
       const { data } = await listRemotePacks(getters.authHost, getters.token, remoteInstance)
