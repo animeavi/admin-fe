@@ -43,9 +43,9 @@
         <new-emoji-uploader :pack-name="name"/>
       </el-collapse-item>
       <el-collapse-item :title=" $t('emoji.manageEmoji')" name="manageEmoji" class="no-background">
-        <div v-if="pack.files && sortedFiles.length > 0">
+        <div v-if="pack.files && Object.keys(pack.files).length > 0">
           <single-emoji-editor
-            v-for="[shortcode, file] in sortedFiles"
+            v-for="(file, shortcode) in pack.files"
             :key="shortcode"
             :host="host"
             :pack-name="name"
@@ -125,10 +125,6 @@ export default {
     },
     pageSize() {
       return this.$store.state.emojiPacks.filesPageSize
-    },
-    sortedFiles() {
-      return Object.keys(this.pack.files).sort((a, b) => a.localeCompare(b))
-        .map(key => [key, this.pack.files[key]])
     },
     share: {
       get() { return this.pack.pack['share-files'] },
