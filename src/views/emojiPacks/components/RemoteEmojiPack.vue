@@ -24,7 +24,7 @@
         </el-form-item>
         <el-form-item>
           <el-link
-            v-if="pack.pack['can-download']"
+            v-if="pack.pack['can-download'] && pack.pack['fallback-src']"
             :href="pack.pack['fallback-src']"
             :underline="false"
             type="primary"

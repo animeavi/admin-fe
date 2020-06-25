@@ -52,17 +52,15 @@ export async function deletePack(host, token, packName) {
   })
 }
 
-export async function downloadFrom(host, instance, packName, as, token) {
-  if (as.trim() === '') {
-    as = null
-  }
-
+export async function downloadFrom(instanceAddress, packName, as, host, token) {
   return await request({
     baseURL: baseName(host),
     url: '/api/pleroma/emoji/packs/download',
     method: 'post',
     headers: authHeaders(token),
-    data: { url: baseName(instance), name: packName, as },
+    data: as.trim() === ''
+      ? { url: baseName(instanceAddress), name: packName }
+      : { url: baseName(instanceAddress), name: packName, as },
     timeout: 0
   })
 }

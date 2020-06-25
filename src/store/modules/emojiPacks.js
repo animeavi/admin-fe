@@ -116,7 +116,7 @@ const emojiPacks = {
       await deletePack(getters.authHost, getters.token, name)
     },
     async DownloadFrom({ getters }, { instanceAddress, packName, as }) {
-      const result = await downloadFrom(getters.authHost, instanceAddress, packName, as, getters.token)
+      const result = await downloadFrom(instanceAddress, packName, as, getters.authHost, getters.token)
 
       if (result.data === 'ok') {
         Message({
