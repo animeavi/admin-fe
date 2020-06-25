@@ -89,10 +89,12 @@ const emojiPacks = {
 
       commit('UPDATE_LOCAL_PACK_FILES', { name: packName, files: result.data })
     },
-    async DeleteEmojiFile({ commit, getters }, { packName, shortcode }) {
-      let result
+    async DeleteEmojiFile({ commit, dispatch, getters, state }, { packName, shortcode }) {
+      const { [shortcode]: value, ...updatedPackFiles } = state.localPacks[packName].files
+      commit('UPDATE_LOCAL_PACK_FILES', { name: packName, files: updatedPackFiles })
+
       try {
-        result = await deleteEmojiFile(packName, shortcode, getters.authHost, getters.token)
+        await deleteEmojiFile(packName, shortcode, getters.authHost, getters.token)
       } catch (_e) {
         return
       }
@@ -102,7 +104,7 @@ const emojiPacks = {
         duration: 5 * 1000
       })
 
-      commit('UPDATE_LOCAL_PACK_FILES', { name: packName, files: result.data })
+      dispatch('FetchSinglePack', { name: packName, page: state.currentFilesPage })
     },
     async CreatePack({ getters }, { name }) {
       await createPack(getters.authHost, getters.token, name)
@@ -189,10 +191,19 @@ const emojiPacks = {
     SetRemoteInstance({ commit }, instance) {
       commit('SET_REMOTE_INSTANCE', instance)
     },
-    async UpdateEmojiFile({ commit, getters }, { packName, shortcode, newShortcode, newFilename, force }) {
-      let result
+    async UpdateEmojiFile({ commit, dispatch, getters, state }, { packName, shortcode, newShortcode, newFilename, force }) {
+      const updatedPackFiles = Object.keys(state.localPacks[packName].files).reduce((acc, el) => {
+        if (el === shortcode) {
+          acc[newShortcode] = newFilename
+        } else {
+          acc[el] = state.localPacks[packName].files[el]
+        }
+        return acc
+      }, {})
+      commit('UPDATE_LOCAL_PACK_FILES', { name: packName, files: updatedPackFiles })
+
       try {
-        result = await updateEmojiFile(packName, shortcode, newShortcode, newFilename, force, getters.authHost, getters.token)
+        await updateEmojiFile(packName, shortcode, newShortcode, newFilename, force, getters.authHost, getters.token)
       } catch (_e) {
         return
       }
@@ -202,7 +213,7 @@ const emojiPacks = {
         duration: 5 * 1000
       })
 
-      commit('UPDATE_LOCAL_PACK_FILES', { name: packName, files: result.data })
+      dispatch('FetchSinglePack', { name: packName, page: state.currentFilesPage })
     },
     async UpdateLocalPackVal({ commit }, args) {
       commit('UPDATE_LOCAL_PACK_VAL', args)
