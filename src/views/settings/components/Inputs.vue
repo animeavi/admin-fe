@@ -327,8 +327,7 @@ export default {
         type.includes('module') ||
         (type.includes('list') && type.includes('string')) ||
         (type.includes('list') && type.includes('atom')) ||
-        (type.includes('regex') && type.includes('string')) ||
-        this.setting.key === ':args'
+        (type.includes('regex') && type.includes('string'))
       )
     },
     renderSingleSelect(type) {

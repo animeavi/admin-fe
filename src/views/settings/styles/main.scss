@@ -17,22 +17,11 @@
   .delete-setting-button {
     margin-left: 5px;
   }
-  .description > p {
-    font-size: 14px;
-    color: #606266;
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
-    font-weight: 700;
-    line-height: 20px;
-    margin: 0 0 14px 0;
-    code {
-      display: inline;
-      padding: 2px 3px;
-      font-size: 14px;
-    }
-  }
   .description-container {
     overflow-wrap: break-word;
-    margin-bottom: 0;
+    .el-form-item__content {
+      line-height: 20px;
+    }
   }
   .divider {
     margin: 0 0 18px 0;
@@ -186,6 +175,9 @@
     width: 30%;
     margin-right: 8px
   }
+  .no-top-margin {
+    margin-top: 0;
+  }
   .pattern-input {
     width: 20%;
     margin-right: 8px
@@ -266,6 +258,14 @@
   .setting-input {
     display: flex;
     margin-bottom: 10px;
+  }
+  .setting-label {
+    font-size: 14px;
+    color: #606266;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
+    font-weight: 700;
+    line-height: 20px;
+    margin: 0 0 14px 0;
   }
   .settings-container {
     max-width: 1824px;
@@ -499,10 +499,6 @@
     }
     .scale-input {
       width: 45%;
-    }
-    .setting-label {
-      display: flex;
-      justify-content: space-between;
     }
     .settings-header {
       width: fit-content;

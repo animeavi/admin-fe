@@ -16,6 +16,8 @@
       :value="data[setting.key]"
       :data-search="setting.key || setting.group"
       multiple
+      filterable
+      allow-create
       class="input"
       @change="updateSetting($event, settingGroup.group, settingGroup.key, setting.key, setting.type)">
       <el-option value="strip" label="strip"/>
