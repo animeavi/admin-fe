@@ -103,8 +103,11 @@ const emojiPacks = {
         type: 'success',
         duration: 5 * 1000
       })
-
-      dispatch('FetchSinglePack', { name: packName, page: state.currentFilesPage })
+      if (Object.keys(updatedPackFiles).length === 0 && state.currentFilesPage > 1) {
+        dispatch('FetchSinglePack', { name: packName, page: state.currentFilesPage - 1 })
+      } else {
+        dispatch('FetchSinglePack', { name: packName, page: state.currentFilesPage })
+      }
     },
     async CreatePack({ getters }, { name }) {
       await createPack(getters.authHost, getters.token, name)

@@ -37,10 +37,9 @@ export async function createPack(host, token, packName) {
 export async function deleteEmojiFile(packName, shortcode, host, token) {
   return await request({
     baseURL: baseName(host),
-    url: `/api/pleroma/emoji/packs/${packName}/files`,
+    url: `/api/pleroma/emoji/packs/${packName}/files?shortcode=${shortcode}`,
     method: 'delete',
-    headers: authHeaders(token),
-    data: { shortcode }
+    headers: authHeaders(token)
   })
 }
 

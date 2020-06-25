@@ -195,7 +195,14 @@ export default {
       }).then(() => {
         this.$store.dispatch('DeletePack', { name: this.name })
           .then(() => this.$store.dispatch('ReloadEmoji'))
-          .then(() => this.$store.dispatch('FetchLocalEmojiPacks', this.currentPage))
+          .then(() => {
+            const { [this.name]: value, ...updatedPacks } = this.$store.state.emojiPacks.localPacks
+            if (Object.keys(updatedPacks).length === 0 && this.currentPage > 1) {
+              this.$store.dispatch('FetchLocalEmojiPacks', this.currentPage - 1)
+            } else {
+              this.$store.dispatch('FetchLocalEmojiPacks', this.currentPage)
+            }
+          })
       }).catch(() => {})
     },
     handleChange(openTabs, name) {
