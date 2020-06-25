@@ -475,6 +475,7 @@ export default {
     specifyShortcode: 'Specify a custom shortcode',
     specifyFilename: 'Specify a custom filename',
     copy: 'Copy',
-    copyToLocalPack: 'Copy to local pack'
+    copyToLocalPack: 'Copy to local pack',
+    emptyPack: 'This emoji pack is empty'
   }
 }

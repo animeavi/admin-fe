@@ -95,7 +95,7 @@
         :total="usersCount"
         :current-page="currentPage"
         :page-size="pageSize"
-        background
+        hide-on-single-page
         layout="prev, pager, next"
         @current-change="handlePageChange"
       />
