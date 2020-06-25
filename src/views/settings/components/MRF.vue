@@ -34,6 +34,10 @@
       <setting :setting-group="mrfObjectAge" :data="mrfObjectAgeData"/>
     </el-form>
     <el-divider v-if="mrfObjectAge" class="divider thick-line"/>
+    <el-form ref="mrfActivityExpiration" :model="mrfActivityExpirationData" :label-position="labelPosition" :label-width="labelWidth">
+      <setting :setting-group="mrfActivityExpiration" :data="mrfActivityExpirationData"/>
+    </el-form>
+    <el-divider v-if="mrfActivityExpiration" class="divider thick-line"/>
     <el-form ref="modules" :model="modulesData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="modules" :data="modulesData"/>
     </el-form>
@@ -85,6 +89,12 @@ export default {
     },
     modulesData() {
       return _.get(this.settings.settings, [':pleroma', ':modules']) || {}
+    },
+    mrfActivityExpiration() {
+      return this.settings.description.find(setting => setting.key === ':mrf_activity_expiration')
+    },
+    mrfActivityExpirationData() {
+      return _.get(this.settings.settings, [':pleroma', ':mrf_activity_expiration']) || {}
     },
     mrfSimple() {
       return this.settings.description.find(setting => setting.key === ':mrf_simple')

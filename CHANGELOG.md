@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - In Notes add link to the note author's profile page 
 - In Moderation log add link to the actor's profile page
 - Support pagination of local emoji packs and files
+- Adds MRF Activity Expiration setting
 
 ### Changed
 
@@ -23,6 +24,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Settings that can't be altered in Admin FE are removed: HTTP Signatures settings, Federation publisher modules and Oban Repo
 - When rendering user's profile, statuses, reports and notes check if required properties exist
 - Remove ability to moderate users that don't have valid nickname
+- Displays both labels and description in the header of group of settiings
+- Ability to add custom values in Pleroma.Upload.Filter.Mogrify setting
 
 ### Fixed
 
