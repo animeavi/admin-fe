@@ -10,10 +10,6 @@
       <setting :setting-group="corsPlug" :data="corsPlugData"/>
     </el-form>
     <el-divider v-if="corsPlug" class="divider thick-line"/>
-    <el-form ref="httpSignatures" :model="httpSignaturesData" :label-position="labelPosition" :label-width="labelWidth">
-      <setting :setting-group="httpSignatures" :data="httpSignaturesData"/>
-    </el-form>
-    <el-divider v-if="httpSignatures" class="divider thick-line"/>
     <el-form ref="httpSecurityData" :model="httpSecurityData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="httpSecurity" :data="httpSecurityData"/>
     </el-form>

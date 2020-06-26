@@ -228,6 +228,9 @@ export default {
         return this.data.value ? this.data.value[this.setting.key] : []
       } else if (this.setting.type === 'atom') {
         return this.data[this.setting.key] && this.data[this.setting.key][0] === ':' ? this.data[this.setting.key].substr(1) : this.data[this.setting.key]
+      } else if (Array.isArray(this.setting.type) &&
+          this.setting.type.find(el => Array.isArray(el) && el.includes('list'))) {
+        return typeof this.data[this.setting.key] === 'string' ? [this.data[this.setting.key]] : this.data[this.setting.key]
       } else {
         return this.data[this.setting.key]
       }
