@@ -177,6 +177,9 @@
   }
   .no-top-margin {
     margin-top: 0;
+    p {
+      margin-right: 30px;
+    }
   }
   .pattern-input {
     width: 20%;
