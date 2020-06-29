@@ -4,9 +4,6 @@
       <setting :setting-group="upload" :data="uploadData"/>
     </el-form>
     <el-form v-if="showUploadersLocal" ref="uploadersLocal" :model="uploadersLocalData" :label-position="labelPosition" :label-width="labelWidth">
-      <el-form-item v-if="uploadersLocal" class="grouped-settings-header">
-        <span class="label-font label-with-margin">Pleroma.Uploaders.Local</span>
-      </el-form-item>
       <setting :setting-group="uploadersLocal" :data="uploadersLocalData"/>
       <el-divider v-if="uploadersLocal" class="divider thick-line"/>
     </el-form>

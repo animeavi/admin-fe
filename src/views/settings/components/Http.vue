@@ -4,9 +4,6 @@
       <setting :setting-group="http" :data="httpData"/>
     </el-form>
     <el-form ref="corsPlugData" :model="corsPlugData" :label-position="labelPosition" :label-width="labelWidth">
-      <el-form-item v-if="corsPlug" data-search=":cors_plug" class="grouped-settings-header">
-        <span class="label-font label-with-margin">{{ $t('settings.corsPlug') }}</span>
-      </el-form-item>
       <setting :setting-group="corsPlug" :data="corsPlugData"/>
     </el-form>
     <el-divider v-if="corsPlug" class="divider thick-line"/>
