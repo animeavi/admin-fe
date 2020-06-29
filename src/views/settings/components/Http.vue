@@ -1,17 +1,17 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="httpData" :model="httpData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="httpData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="http" :data="httpData"/>
     </el-form>
-    <el-form ref="corsPlugData" :model="corsPlugData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="corsPlugData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="corsPlug" :data="corsPlugData"/>
     </el-form>
     <el-divider v-if="corsPlug" class="divider thick-line"/>
-    <el-form ref="httpSecurityData" :model="httpSecurityData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="httpSecurityData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="httpSecurity" :data="httpSecurityData"/>
     </el-form>
     <el-divider v-if="httpSecurity" class="divider thick-line"/>
-    <el-form ref="webCacheTtl" :model="webCacheTtlData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="webCacheTtlData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="webCacheTtl" :data="webCacheTtlData"/>
     </el-form>
     <div class="submit-button-container">

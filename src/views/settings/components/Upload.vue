@@ -1,21 +1,21 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="uploadData" :model="uploadData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="uploadData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="upload" :data="uploadData"/>
     </el-form>
-    <el-form v-if="showUploadersLocal" ref="uploadersLocal" :model="uploadersLocalData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form v-if="showUploadersLocal" :model="uploadersLocalData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uploadersLocal" :data="uploadersLocalData"/>
       <el-divider v-if="uploadersLocal" class="divider thick-line"/>
     </el-form>
-    <el-form v-if="showUploadersS3" ref="uploadersS3" :model="uploadersS3Data" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form v-if="showUploadersS3" :model="uploadersS3Data" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uploadersS3" :data="uploadersS3Data"/>
       <el-divider v-if="uploadersS3" class="divider thick-line"/>
     </el-form>
-    <el-form ref="uploadFilterMogrify" :model="uploadFilterMogrifyData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="uploadFilterMogrifyData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uploadFilterMogrify" :data="uploadFilterMogrifyData"/>
     </el-form>
     <el-divider v-if="uploadFilterMogrify" class="divider thick-line"/>
-    <el-form ref="uploadAnonymizeFilename" :model="uploadAnonymizeFilenameData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="uploadAnonymizeFilenameData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uploadAnonymizeFilename" :data="uploadAnonymizeFilenameData"/>
     </el-form>
     <div class="submit-button-container">

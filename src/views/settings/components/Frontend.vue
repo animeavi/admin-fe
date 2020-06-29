@@ -1,25 +1,25 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="frontendData" :model="frontendData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="frontendData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="frontend" :data="frontendData"/>
     </el-form>
-    <el-form ref="staticFeData" :model="staticFeData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="staticFeData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="staticFe" :data="staticFeData"/>
     </el-form>
     <el-divider v-if="staticFe" class="divider thick-line"/>
-    <el-form ref="assetsData" :model="assetsData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="assetsData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="assets" :data="assetsData"/>
     </el-form>
     <el-divider v-if="assets" class="divider thick-line"/>
-    <el-form ref="emojiData" :model="emojiData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="emojiData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="emoji" :data="emojiData"/>
     </el-form>
     <el-divider v-if="emoji" class="divider thick-line"/>
-    <el-form ref="chatData" :model="chatData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="chatData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="chat" :data="chatData"/>
     </el-form>
     <el-divider v-if="chat" class="divider thick-line"/>
-    <el-form ref="markupData" :model="markupData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="markupData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="markup" :data="markupData"/>
     </el-form>
     <div class="submit-button-container">
