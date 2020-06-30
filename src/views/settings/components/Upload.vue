@@ -3,6 +3,7 @@
     <el-form :model="uploadData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="upload" :data="uploadData"/>
     </el-form>
+    <el-divider v-if="upload" class="divider thick-line"/>
     <el-form v-if="showUploadersLocal" :model="uploadersLocalData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uploadersLocal" :data="uploadersLocalData"/>
       <el-divider v-if="uploadersLocal" class="divider thick-line"/>

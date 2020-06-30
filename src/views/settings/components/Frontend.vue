@@ -3,6 +3,7 @@
     <el-form :model="frontendData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="frontend" :data="frontendData"/>
     </el-form>
+    <el-divider v-if="frontend" class="divider thick-line"/>
     <el-form :model="staticFeData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="staticFe" :data="staticFeData"/>
     </el-form>

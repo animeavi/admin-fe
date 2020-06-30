@@ -3,9 +3,11 @@
     <el-form :model="obanQueuesData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="obanQueues" :data="obanQueuesData"/>
     </el-form>
+    <el-divider v-if="obanQueues" class="divider thick-line"/>
     <el-form :model="workersData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="workers" :data="workersData"/>
     </el-form>
+    <el-divider v-if="workers" class="divider thick-line"/>
     <el-form :model="activityExpirationData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="activityExpiration" :data="activityExpirationData"/>
     </el-form>

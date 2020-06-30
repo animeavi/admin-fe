@@ -27,6 +27,7 @@
     <el-form :model="feedData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="feed" :data="feedData"/>
     </el-form>
+    <el-divider v-if="uriSchemes" class="divider thick-line"/>
     <el-form :model="streamerData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="streamer" :data="streamerData"/>
     </el-form>

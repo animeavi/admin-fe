@@ -11,9 +11,11 @@
     <el-form :model="emailNotificationsData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="emailNotifications" :data="emailNotificationsData"/>
     </el-form>
+    <el-divider v-if="emailNotifications" class="divider thick-line"/>
     <el-form :model="userEmailData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="userEmail" :data="userEmailData"/>
     </el-form>
+    <el-divider v-if="userEmail" class="divider thick-line"/>
     <el-form :model="newUsersDigestEmailData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="newUsersDigestEmail" :data="newUsersDigestEmailData"/>
     </el-form>

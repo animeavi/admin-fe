@@ -3,6 +3,7 @@
     <el-form :model="httpData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="http" :data="httpData"/>
     </el-form>
+    <el-divider v-if="http" class="divider thick-line"/>
     <el-form :model="corsPlugData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="corsPlug" :data="corsPlugData"/>
     </el-form>
