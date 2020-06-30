@@ -218,7 +218,7 @@
     width: 100%;
   }
   .rate-limit-content {
-    width: 100%;
+    width: 70%;
   }
   .rate-limit-label {
     float: right;
@@ -228,8 +228,8 @@
     color: #606266;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei";
     font-weight: 700;
-    height: 36px;
-    width: 100%;
+    height: fit-content;
+    width: 30%;
     margin-right: 10px;
   }
   .reboot-button {
@@ -408,6 +408,9 @@
         font-size: 14px;
       }
     }
+    .description-container {
+      margin: 0 15px 22px 15px;
+    }
     .divider {
       margin: 0 0 10px 0;
     }
@@ -491,8 +494,14 @@
         flex-direction: column;
       }
     }
+    .rate-limit-content {
+      width: 100%;
+    }
     .rate-limit-label {
       float: left;
+    }
+    .rate-limit-label-container {
+      width: 100%;
     }
     .reboot-button {
       margin: 0 15px 0 0;
@@ -649,8 +658,11 @@
       align-items: center;
       margin: 15px 30px 15px 15px;
     }
+    .rate-limit-content {
+      width: 65%;
+    }
     .rate-limit-label-container {
-      width: 250px;
+      width: 35%;
     }
     .settings-delete-button {
       float: right;
