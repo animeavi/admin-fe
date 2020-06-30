@@ -61,7 +61,7 @@
                 :nested="true"/>
             </div>
           </div>
-          <el-divider class="divider"/>
+          <el-divider v-if="notLastInGroup(setting.key)" class="divider"/>
         </div>
       </div>
     </div>
@@ -125,10 +125,13 @@ export default {
         key === ':replace'
     },
     divideSetting(key) {
-      return [':sslopts', ':tlsopts', ':adapter', ':poll_limits', ':queues', ':styling', ':proxy_opts'].includes(key)
+      return [':sslopts', ':tlsopts', ':adapter', ':poll_limits', ':queues', ':styling', ':invalidation', ':multi_factor_authentication'].includes(key)
     },
     getFormattedDescription(desc) {
       return marked(desc)
+    },
+    notLastInGroup(key) {
+      return this.settingGroup.children.slice(-1)[0].key !== key
     },
     async removeSetting(key) {
       this.$confirm(
