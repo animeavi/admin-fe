@@ -201,6 +201,7 @@ export default {
     disableAnySubscription: 'Disallow following user at all',
     disableAnySubscriptionForMultiple: 'Disallow following users at all',
     requirePasswordReset: 'Require password reset on next login',
+    disableMfa: 'Disable multi-factor authentication',
     selectUsers: 'Select users to apply actions to multiple users',
     moderateUser: 'Moderate user',
     moderateUsers: 'Moderate multiple users',
