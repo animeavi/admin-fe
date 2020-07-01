@@ -14,7 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - In Notes add link to the note author's profile page 
 - In Moderation log add link to the actor's profile page
 - Support pagination of local emoji packs and files
-- Adds MRF Activity Expiration setting
+- Add MRF Activity Expiration setting
+- Add ability to disable multi-factor authentication for a user
 
 ### Changed
 
