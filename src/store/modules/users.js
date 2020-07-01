@@ -7,6 +7,7 @@ import {
   deactivateUsers,
   deleteRight,
   deleteUsers,
+  disableMfa,
   fetchUsers,
   getPasswordResetToken,
   searchUsers,
@@ -149,6 +150,14 @@ const users = {
       const callApiFn = async() => await deactivateUsers(nicknames, getters.authHost, getters.token)
 
       dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId })
+    },
+    async DisableMfa({ dispatch, getters }, nickname) {
+      try {
+        await disableMfa(nickname, getters.authHost, getters.token)
+      } catch (_e) {
+        return
+      }
+      dispatch('SuccessMessage')
     },
     async ConfirmUsersEmail({ dispatch, getters }, { users, _userId, _statusId }) {
       const updatedUsers = users.map(user => {
