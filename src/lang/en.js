@@ -65,8 +65,11 @@ export default {
     externalLink: 'External Link',
     users: 'Users',
     reports: 'Reports',
+    invites: 'Invites',
+    statuses: 'Statuses',
     settings: 'Settings',
     moderationLog: 'Moderation Log',
+    mediaProxyCache: 'MediaProxy Cache',
     'emoji-packs': 'Emoji packs'
   },
   navbar: {
