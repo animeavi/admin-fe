@@ -1,6 +1,6 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="autoLinker" :model="autoLinkerData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="autoLinkerData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="autoLinker" :data="autoLinkerData"/>
     </el-form>
     <div class="submit-button-container">

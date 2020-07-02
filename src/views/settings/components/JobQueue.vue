@@ -1,12 +1,14 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="obanQueuesData" :model="obanQueuesData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="obanQueuesData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="obanQueues" :data="obanQueuesData"/>
     </el-form>
-    <el-form ref="workersData" :model="workersData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-divider v-if="obanQueues" class="divider thick-line"/>
+    <el-form :model="workersData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="workers" :data="workersData"/>
     </el-form>
-    <el-form ref="activityExpiration" :model="activityExpirationData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-divider v-if="workers" class="divider thick-line"/>
+    <el-form :model="activityExpirationData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="activityExpiration" :data="activityExpirationData"/>
     </el-form>
     <div class="submit-button-container">

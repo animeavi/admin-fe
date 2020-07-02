@@ -1,9 +1,10 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form ref="mimeTypes" :model="mimeTypesData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :model="mimeTypesData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="mimeTypes" :data="mimeTypesData"/>
     </el-form>
-    <el-form ref="remoteIp" :model="remoteIpData" :label-position="labelPosition" :label-width="labelWidth">
+    <el-divider v-if="mimeTypes" class="divider thick-line"/>
+    <el-form :model="remoteIpData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="remoteIp" :data="remoteIpData"/>
     </el-form>
     <div class="submit-button-container">
