@@ -98,6 +98,11 @@
         @click.native="requirePasswordReset(user)">
         {{ $t('users.requirePasswordReset') }}
       </el-dropdown-item>
+      <el-dropdown-item
+        v-if="user.local"
+        @click.native="disableMfa(user.nickname)">
+        {{ $t('users.disableMfa') }}
+      </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -127,6 +132,9 @@ export default {
     }
   },
   methods: {
+    disableMfa(nickname) {
+      this.$store.dispatch('DisableMfa', nickname)
+    },
     getPasswordResetToken(nickname) {
       this.$emit('open-reset-token-dialog')
       this.$store.dispatch('GetPasswordResetToken', nickname)

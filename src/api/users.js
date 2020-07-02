@@ -62,6 +62,16 @@ export async function deleteUsers(nicknames, authHost, token) {
   })
 }
 
+export async function disableMfa(nickname, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/users/disable_mfa`,
+    method: 'put',
+    headers: authHeaders(token),
+    data: { nickname }
+  })
+}
+
 export async function fetchUser(id, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
