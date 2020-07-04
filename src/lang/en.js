@@ -92,6 +92,13 @@ export default {
     pleromaFELoginFailed: 'Failed to login via PleromaFE, please login with username/password',
     pleromaFELoginSucceed: 'Logged in via PleromaFE'
   },
+  mediaProxyCache: {
+    mediaProxyCache: 'MediaProxy Cache',
+    ban: 'Ban',
+    url: 'URL',
+    evict: 'Evict',
+    evictedMessage: 'This URL was evicted'
+  },
   documentation: {
     documentation: 'Documentation',
     github: 'Github Repository'
