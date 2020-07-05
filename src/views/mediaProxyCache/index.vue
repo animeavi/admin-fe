@@ -13,6 +13,28 @@
       <el-checkbox v-model="ban">{{ $t('mediaProxyCache.ban') }}</el-checkbox>
       <el-button class="evict-button" @click="evictURL">{{ $t('mediaProxyCache.evict') }}</el-button>
     </div>
+    <el-table
+      v-loading="loading"
+      :data="bannedUrls"
+      class="banned-urls-table"
+      @selection-change="handleSelectionChange">>
+      <el-table-column
+        type="selection"
+        align="center"
+        width="55"/>
+      <el-table-column
+        :label="$t('mediaProxyCache.url')"
+        :min-width="isDesktop ? 320 : 120"
+        prop="url"/>
+      <el-table-column
+        :label="$t('mediaProxyCache.actions')">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="removeUrl(scope.row.url)">{{ $t('mediaProxyCache.remove') }}</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -25,7 +47,19 @@ export default {
   data() {
     return {
       url: '',
-      ban: false
+      ban: false,
+      selectedUrls: []
+    }
+  },
+  computed: {
+    bannedUrls() {
+      return this.$store.state.mediaProxyCache.bannedUrls
+    },
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
+    },
+    loading() {
+      return this.$store.state.mediaProxyCache.loading
     }
   },
   mounted() {
@@ -37,6 +71,13 @@ export default {
     evictURL() {
       const urls = typeof this.url === 'string' ? [this.url] : this.url
       this.$store.dispatch('PurgeUrls', { urls, ban: this.ban })
+    },
+    handleSelectionChange(value) {
+      this.$data.selectedUrls = value
+    },
+    removeUrl(url) {
+      const urls = typeof this.url === 'string' ? [this.url] : this.url
+      this.$store.dispatch('RemoveBannedUrls', urls)
     }
   }
 }
@@ -45,6 +86,9 @@ export default {
 <style rel='stylesheet/scss' lang='scss' scoped>
 h1 {
   margin: 0;
+}
+.banned-urls-table {
+  margin: 15px;
 }
 .evict-button {
   margin-left: 5px;

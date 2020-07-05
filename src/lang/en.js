@@ -97,7 +97,9 @@ export default {
     ban: 'Ban',
     url: 'URL',
     evict: 'Evict',
-    evictedMessage: 'This URL was evicted'
+    evictedMessage: 'This URL was evicted',
+    actions: 'Actions',
+    remove: 'Remove from Cachex'
   },
   documentation: {
     documentation: 'Documentation',

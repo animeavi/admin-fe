@@ -11,7 +11,7 @@ const mediaProxyCache = {
   },
   mutations: {
     SET_BANNED_URLS: (state, urls) => {
-      state.bannedUrls = urls
+      state.bannedUrls = urls.map(el => { return { url: el } })
     },
     SET_BANNED_URLS_COUNT: (state, count) => {
       state.bannedUrlsCount = count
