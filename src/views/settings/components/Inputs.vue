@@ -87,7 +87,7 @@
         <el-input
           v-if="setting.type === 'atom'"
           :value="inputValue"
-          :placeholder="setting.suggestions[0] ? setting.suggestions[0].substr(1) : ''"
+          :placeholder="setting.suggestions && setting.suggestions[0] ? setting.suggestions[0].substr(1) : ''"
           :data-search="setting.key || setting.group"
           class="input"
           @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
