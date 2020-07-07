@@ -4,17 +4,20 @@
       <h1>{{ $t('mediaProxyCache.mediaProxyCache') }}</h1>
       <reboot-button/>
     </div>
-    <p class="media-proxy-cache-header">Evict object from the MediaProxy cache</p>
+    <p class="media-proxy-cache-header">{{ $t('mediaProxyCache.evictObjectsHeader') }}</p>
     <div class="url-input-container">
       <el-input
         :placeholder="$t('mediaProxyCache.url')"
-        v-model="url"
+        v-model="urls"
+        type="textarea"
+        autosize
         clearable
         class="url-input"/>
       <el-checkbox v-model="ban">{{ $t('mediaProxyCache.ban') }}</el-checkbox>
       <el-button class="evict-button" @click="evictURL">{{ $t('mediaProxyCache.evict') }}</el-button>
     </div>
-    <p class="media-proxy-cache-header">List of all banned MediaProxy URLs</p>
+    <span class="expl url-input-expl">{{ $t('mediaProxyCache.multipleInput') }}</span>
+    <p class="media-proxy-cache-header">{{ $t('mediaProxyCache.listBannedUrlsHeader') }}</p>
     <el-table
       v-loading="loading"
       :data="bannedUrls"
@@ -48,7 +51,7 @@ export default {
   components: { RebootButton },
   data() {
     return {
-      url: '',
+      urls: '',
       ban: false,
       selectedUrls: []
     }
@@ -71,7 +74,7 @@ export default {
   },
   methods: {
     evictURL() {
-      const urls = typeof this.url === 'string' ? [this.url] : this.url
+      const urls = this.urls.split(',').map(url => url.trim()).filter(el => el.length > 0)
       this.$store.dispatch('PurgeUrls', { urls, ban: this.ban })
       this.url = ''
     },
@@ -89,6 +92,15 @@ export default {
 <style rel='stylesheet/scss' lang='scss' scoped>
 h1 {
   margin: 0;
+}
+.expl {
+  color: #666666;
+  font-size: 13px;
+  line-height: 22px;
+  margin: 5px 0 0 0;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .banned-urls-table {
   margin-top: 15px;
@@ -114,7 +126,10 @@ h1 {
 .url-input-container {
   display: flex;
   align-items: baseline;
-  margin: 15px 15px;
+  margin: 15px 15px 5px 15px;
+}
+.url-input-expl {
+  margin-left: 15px;
 }
 
 @media only screen and (max-width:480px) {
