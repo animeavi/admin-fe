@@ -32,13 +32,16 @@ const mediaProxyCache = {
       commit('SET_PAGE', page)
       commit('SET_LOADING', false)
     },
-    async PurgeUrls({ commit, getters }, { urls, ban }) {
+    async PurgeUrls({ dispatch, getters, state }, { urls, ban }) {
       await purgeUrls(urls, ban, getters.authHost, getters.token)
       Message({
         message: i18n.t('mediaProxyCache.evictedMessage'),
         type: 'success',
         duration: 5 * 1000
       })
+      if (ban) {
+        dispatch('ListBannedUrls', state.currentPage)
+      }
     },
     async RemoveBannedUrls({ commit, getters }, urls) {
       await removeBannedUrls(urls, getters.authHost, getters.token)

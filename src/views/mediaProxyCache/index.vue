@@ -73,6 +73,7 @@ export default {
     evictURL() {
       const urls = typeof this.url === 'string' ? [this.url] : this.url
       this.$store.dispatch('PurgeUrls', { urls, ban: this.ban })
+      this.url = ''
     },
     handleSelectionChange(value) {
       this.$data.selectedUrls = value
