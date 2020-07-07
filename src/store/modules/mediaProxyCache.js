@@ -43,8 +43,9 @@ const mediaProxyCache = {
         dispatch('ListBannedUrls', state.currentPage)
       }
     },
-    async RemoveBannedUrls({ commit, getters }, urls) {
+    async RemoveBannedUrls({ dispatch, getters, state }, urls) {
       await removeBannedUrls(urls, getters.authHost, getters.token)
+      dispatch('ListBannedUrls', state.currentPage)
     }
   }
 }

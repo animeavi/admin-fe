@@ -102,7 +102,8 @@ export default {
     remove: 'Remove from Cachex',
     evictObjectsHeader: 'Evict object from the MediaProxy cache',
     listBannedUrlsHeader: 'List of all banned MediaProxy URLs',
-    multipleInput: 'You can enter a single URL or several comma separated links'
+    multipleInput: 'You can enter a single URL or several comma separated links',
+    removeSelected: 'Remove Selected'
   },
   documentation: {
     documentation: 'Documentation',

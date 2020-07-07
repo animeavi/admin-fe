@@ -28,14 +28,20 @@
         align="center"
         width="55"/>
       <el-table-column
-        :label="$t('mediaProxyCache.url')"
         :min-width="isDesktop ? 320 : 120"
         prop="url"/>
-      <el-table-column
-        :label="$t('mediaProxyCache.actions')">
+      <el-table-column>
+        <template slot="header">
+          <el-button
+            :disabled="removeSelectedDisabled"
+            size="mini"
+            class="remove-url-button"
+            @click="removeSelected()">{{ $t('mediaProxyCache.removeSelected') }}</el-button>
+        </template>
         <template slot-scope="scope">
           <el-button
             size="mini"
+            class="remove-url-button"
             @click="removeUrl(scope.row.url)">{{ $t('mediaProxyCache.remove') }}</el-button>
         </template>
       </el-table-column>
@@ -65,6 +71,9 @@ export default {
     },
     loading() {
       return this.$store.state.mediaProxyCache.loading
+    },
+    removeSelectedDisabled() {
+      return this.selectedUrls.length === 0
     }
   },
   mounted() {
@@ -76,14 +85,18 @@ export default {
     evictURL() {
       const urls = this.urls.split(',').map(url => url.trim()).filter(el => el.length > 0)
       this.$store.dispatch('PurgeUrls', { urls, ban: this.ban })
-      this.url = ''
+      this.urls = ''
     },
     handleSelectionChange(value) {
       this.$data.selectedUrls = value
     },
-    removeUrl(url) {
-      const urls = typeof this.url === 'string' ? [this.url] : this.url
+    removeSelected() {
+      const urls = this.selectedUrls.map(el => el.url)
       this.$store.dispatch('RemoveBannedUrls', urls)
+      this.selectedUrls = []
+    },
+    removeUrl(url) {
+      this.$store.dispatch('RemoveBannedUrls', [this.url])
     }
   }
 }
@@ -119,6 +132,9 @@ h1 {
   align-items: center;
   justify-content: space-between;
   margin: 10px 15px;
+}
+.remove-url-button {
+  width: 150px;
 }
 .url-input {
   margin-right: 15px;
