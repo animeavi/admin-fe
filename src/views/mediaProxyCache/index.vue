@@ -4,6 +4,7 @@
       <h1>{{ $t('mediaProxyCache.mediaProxyCache') }}</h1>
       <reboot-button/>
     </div>
+    <p class="media-proxy-cache-header">Evict object from the MediaProxy cache</p>
     <div class="url-input-container">
       <el-input
         :placeholder="$t('mediaProxyCache.url')"
@@ -13,6 +14,7 @@
       <el-checkbox v-model="ban">{{ $t('mediaProxyCache.ban') }}</el-checkbox>
       <el-button class="evict-button" @click="evictURL">{{ $t('mediaProxyCache.evict') }}</el-button>
     </div>
+    <p class="media-proxy-cache-header">List of all banned MediaProxy URLs</p>
     <el-table
       v-loading="loading"
       :data="bannedUrls"
@@ -88,10 +90,16 @@ h1 {
   margin: 0;
 }
 .banned-urls-table {
-  margin: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 .evict-button {
-  margin-left: 5px;
+  margin-left: 15px;
+}
+.media-proxy-cache-header {
+  margin-left: 15px;
+  margin-top: 22px;
+  font-weight: 500;
 }
 .media-proxy-cache-header-container {
   display: flex;
@@ -100,10 +108,11 @@ h1 {
   margin: 10px 15px;
 }
 .url-input {
-  width: 350px;
   margin-right: 15px;
 }
 .url-input-container {
+  display: flex;
+  align-items: baseline;
   margin: 15px 15px;
 }
 
