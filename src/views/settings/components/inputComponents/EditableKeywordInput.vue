@@ -16,6 +16,14 @@
       </div>
       <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
     </div>
+    <div v-if="editableKeywordWithString" :data-search="setting.key || setting.group">
+      <div v-for="element in data" :key="getId(element)" class="setting-input">
+        <el-input :value="getKey(element)" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', element)"/> :
+        <el-input :value="getValue(element)" placeholder="value" class="value-input" @input="parseEditableKeyword($event, 'value', element)"/>
+        <el-button :size="isDesktop ? 'medium' : 'mini'" class="icon-minus-button" icon="el-icon-minus" circle @click="deleteEditableKeywordRow(element)"/>
+      </div>
+      <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
+    </div>
     <div v-else :data-search="setting.key || setting.group">
       <div v-for="element in data" :key="getId(element)" class="setting-input">
         <el-input :value="getKey(element)" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', element)"/> :
@@ -53,6 +61,9 @@ export default {
   computed: {
     editableKeywordWithInteger() {
       return Array.isArray(this.setting.type) && this.setting.type.includes('keyword') && this.setting.type.includes('integer')
+    },
+    editableKeywordWithString() {
+      return Array.isArray(this.setting.type) && this.setting.type.includes('keyword') && this.setting.type.includes('string')
     },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'

@@ -283,6 +283,7 @@ export default {
       return key === ':replace' ||
         type === 'map' ||
         (Array.isArray(type) && type.includes('keyword') && type.includes('integer')) ||
+        (Array.isArray(type) && type.includes('keyword') && type.includes('string')) ||
         (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
     },
     getFormattedDescription(desc) {
