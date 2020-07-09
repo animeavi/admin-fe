@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { processNested } from '@/store/modules/normalizers'
+
 export default {
   name: 'EditableKeywordInput',
   props: {
@@ -44,6 +46,13 @@ export default {
       default: function() {
         return {}
       }
+    },
+    parents: {
+      type: Array,
+      default: function() {
+        return []
+      },
+      required: false
     },
     setting: {
       type: Object,
@@ -67,6 +76,12 @@ export default {
     },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
+    },
+    settings() {
+      return this.$store.state.settings.settings
+    },
+    updatedSettings() {
+      return this.$store.state.settings.updatedSettings
     }
   },
   methods: {
@@ -107,9 +122,20 @@ export default {
       this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
     },
     updateSetting(value, group, key, input, type) {
-      const updatedSettings = this.wrapUpdatedSettings(value, input, type)
-      this.$store.dispatch('UpdateSettings', { group, key, input, value: updatedSettings, type })
-      this.$store.dispatch('UpdateState', { group, key, input, value })
+      const wrappedSettings = this.wrapUpdatedSettings(value, input, type)
+
+      if (this.parents.length > 0) {
+        const { valueForState,
+          valueForUpdatedSettings,
+          setting } = processNested(value, wrappedSettings, group, key, this.parents.reverse(), this.settings, this.updatedSettings)
+        this.$store.dispatch('UpdateSettings',
+          { group, key, input: setting.key, value: valueForUpdatedSettings, type: setting.type })
+        this.$store.dispatch('UpdateState',
+          { group, key, input: setting.key, value: valueForState })
+      } else {
+        this.$store.dispatch('UpdateSettings', { group, key, input, value: wrappedSettings, type })
+        this.$store.dispatch('UpdateState', { group, key, input, value })
+      }
     },
     wrapUpdatedSettings(value, input, type) {
       return type === 'map'
