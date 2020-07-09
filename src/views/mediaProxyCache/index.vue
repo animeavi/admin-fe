@@ -96,7 +96,7 @@ export default {
       this.selectedUrls = []
     },
     removeUrl(url) {
-      this.$store.dispatch('RemoveBannedUrls', [this.url])
+      this.$store.dispatch('RemoveBannedUrls', [url])
     }
   }
 }
