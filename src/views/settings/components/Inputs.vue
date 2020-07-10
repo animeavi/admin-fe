@@ -283,8 +283,7 @@ export default {
   },
   methods: {
     editableKeyword(key, type) {
-      return key === ':replace' ||
-        type === 'map' ||
+      return type === 'map' ||
         (Array.isArray(type) && type.includes('keyword') && type.includes('integer')) ||
         (Array.isArray(type) && type.includes('keyword') && type.includes('string')) ||
         (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
@@ -334,7 +333,7 @@ export default {
         type.includes('module') ||
         (type.includes('list') && type.includes('string')) ||
         (type.includes('list') && type.includes('atom')) ||
-        (type.includes('regex') && type.includes('string'))
+        (!type.includes('keyword') && type.includes('regex') && type.includes('string'))
       )
     },
     renderSingleSelect(type) {
