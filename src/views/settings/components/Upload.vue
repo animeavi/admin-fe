@@ -8,6 +8,10 @@
       <setting :setting-group="uploadersLocal" :data="uploadersLocalData"/>
       <el-divider v-if="uploadersLocal" class="divider thick-line"/>
     </el-form>
+    <el-form v-if="showUploadersS3" :model="s3Data" :label-position="labelPosition" :label-width="labelWidth">
+      <setting :setting-group="s3" :data="s3Data"/>
+      <el-divider v-if="s3" class="divider thick-line"/>
+    </el-form>
     <el-form v-if="showUploadersS3" :model="uploadersS3Data" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uploadersS3" :data="uploadersS3Data"/>
       <el-divider v-if="uploadersS3" class="divider thick-line"/>
@@ -61,6 +65,12 @@ export default {
     },
     loading() {
       return this.settings.loading
+    },
+    s3() {
+      return this.settings.description.find(setting => setting.key === ':s3')
+    },
+    s3Data() {
+      return _.get(this.settings.settings, [':ex_aws', ':s3']) || {}
     },
     showUploadersS3() {
       const uploader = _.get(this.settings.settings, [':pleroma', 'Pleroma.Upload', ':uploader'])
