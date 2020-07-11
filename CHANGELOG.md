@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add ability to disable multi-factor authentication for a user
 - Add ability to manually evict and ban URLs from the Pleroma MediaProxy cache
 - Add Invalidation settings on MediaProxy tab
+- Ability to configure S3 settings on Upload tab
 
 ### Changed
 
