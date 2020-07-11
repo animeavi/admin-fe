@@ -233,13 +233,13 @@ export const wrapUpdatedSettings = (group, settings, currentState) => {
 const wrapValues = (settings, currentState) => {
   return Object.keys(settings).map(setting => {
     const [type, value] = settings[setting]
-    if (
-      type === 'keyword' ||
-      type.includes('keyword') ||
-      (type.includes('tuple') && type.includes('list')) ||
-      setting === ':replace' ||
-      (type.includes('map') && type.includes('string')) ||
-      type.includes('map') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1
+    if (type === 'keyword' ||
+      (Array.isArray(type) && (
+        type.includes('keyword') ||
+        (type.includes('tuple') && type.includes('list')) ||
+        (type.includes('map') && type.includes('string')) ||
+        type.includes('map') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1
+      ))
     ) {
       return { 'tuple': [setting, wrapValues(value, currentState)] }
     } else if (type === 'atom' && value.length > 0) {

@@ -73,7 +73,8 @@ export default {
       return this.setting.type.includes('keyword') && this.setting.type.includes('integer')
     },
     editableKeywordWithSelect() {
-      return this.setting.type.includes('map') && this.setting.type.findIndex(el => el.includes('list') && el.includes('string')) !== -1
+      return (this.setting.type.includes('map') && this.setting.type.findIndex(el => el.includes('list') && el.includes('string')) !== -1) ||
+        (this.setting.type.includes('keyword') && this.setting.type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
     },
     editableKeywordWithString() {
       return this.setting.key !== ':crontab' && (
