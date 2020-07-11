@@ -95,7 +95,6 @@
         </el-input>
         <!-- special inputs -->
         <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :data="data" :setting-group="settingGroup" :setting="setting"/>
-        <crontab-input v-if="setting.key === ':crontab'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
         <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="keywordData" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
         <icons-input v-if="setting.key === ':icons'" :data="iconsData" :setting-group="settingGroup" :setting="setting"/>
         <mascots-input v-if="setting.key === ':mascots'" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
@@ -122,7 +121,6 @@
 import i18n from '@/lang'
 import {
   AutoLinkerInput,
-  CrontabInput,
   EditableKeywordInput,
   IconsInput,
   MascotsInput,
@@ -140,7 +138,6 @@ export default {
   name: 'Inputs',
   components: {
     AutoLinkerInput,
-    CrontabInput,
     EditableKeywordInput,
     IconsInput,
     MascotsInput,

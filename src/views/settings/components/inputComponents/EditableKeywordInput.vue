@@ -1,6 +1,15 @@
 <template>
   <div class="editable-keyword-container">
-    <div v-if="editableKeywordWithInteger" :data-search="setting.key || setting.group">
+    <div v-if="setting.key === ':crontab'" :data-search="setting.key" class="crontab">
+      <el-form-item v-for="worker in data" :key="getId(worker)" :label="getCrontabWorkerLabel(worker)" class="crontab-container">
+        <el-input
+          :value="getValue(worker)"
+          :placeholder="getSuggestion(worker) || null"
+          class="input setting-input"
+          @input="updateCrontab($event, 'value', worker)"/>
+      </el-form-item>
+    </div>
+    <div v-else-if="editableKeywordWithInteger" :data-search="setting.key || setting.group">
       <div v-for="element in data" :key="getId(element)" class="setting-input">
         <el-input :value="getKey(element)" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', element)"/> :
         <el-input-number :value="getValue(element)" :min="0" size="large" class="value-input" @change="parseEditableKeyword($event, 'value', element)"/>
@@ -64,7 +73,7 @@ export default {
       return Array.isArray(this.setting.type) && this.setting.type.includes('keyword') && this.setting.type.includes('integer')
     },
     editableKeywordWithString() {
-      return Array.isArray(this.setting.type) && (
+      return Array.isArray(this.setting.type) && this.setting.key !== ':crontab' && (
         (this.setting.type.includes('keyword') && this.setting.type.includes('string')) ||
         (this.setting.type.includes('tuple') && this.setting.type.includes('list'))
       )
@@ -98,12 +107,19 @@ export default {
     generateID() {
       return `f${(~~(Math.random() * 1e8)).toString(16)}`
     },
+    getCrontabWorkerLabel(worker) {
+      const workerKey = this.getKey(worker)
+      return workerKey.includes('Pleroma.Workers.Cron.') ? workerKey.replace('Pleroma.Workers.Cron.', '') : workerKey
+    },
     getKey(element) {
       return Object.keys(element)[0]
     },
     getId(element) {
       const { id } = Object.values(element)[0]
       return id
+    },
+    getSuggestion(worker) {
+      return this.setting.suggestions.find(suggestion => suggestion[1] === this.getKey(worker))[0]
     },
     getValue(element) {
       const { value } = Object.values(element)[0]
@@ -121,6 +137,25 @@ export default {
       })
 
       this.updateSetting(updatedValue, this.settingGroup.group, this.settingGroup.key, this.setting.key, this.setting.type)
+    },
+    updateCrontab(value, inputType, worker) {
+      const updatedId = this.getId(worker)
+      const updatedValue = this.data.map((worker, index) => {
+        if (Object.values(worker)[0].id === updatedId) {
+          return { [Object.keys(worker)[0]]: { ...Object.values(this.data[index])[0], value }}
+        }
+        return worker
+      })
+      const updatedValueWithType = updatedValue.reduce((acc, worker) => {
+        return { ...acc, [Object.keys(worker)[0]]: ['reversed_tuple', Object.values(worker)[0].value] }
+      }, {})
+
+      this.$store.dispatch('UpdateSettings',
+        { group: this.settingGroup.group, key: this.settingGroup.key, input: this.setting.key, value: updatedValueWithType, type: this.setting.type }
+      )
+      this.$store.dispatch('UpdateState',
+        { group: this.settingGroup.group, key: this.settingGroup.key, input: this.setting.key, value: updatedValue }
+      )
     },
     updateSetting(value, group, key, input, type) {
       const wrappedSettings = this.wrapUpdatedSettings(value, input, type)
