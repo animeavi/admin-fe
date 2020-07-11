@@ -64,7 +64,10 @@ export default {
       return Array.isArray(this.setting.type) && this.setting.type.includes('keyword') && this.setting.type.includes('integer')
     },
     editableKeywordWithString() {
-      return Array.isArray(this.setting.type) && this.setting.type.includes('keyword') && this.setting.type.includes('string')
+      return Array.isArray(this.setting.type) && (
+        (this.setting.type.includes('keyword') && this.setting.type.includes('string')) ||
+        (this.setting.type.includes('tuple') && this.setting.type.includes('list'))
+      )
     },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'

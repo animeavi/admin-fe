@@ -254,7 +254,8 @@ export default {
       }
     },
     keywordData() {
-      if (this.settingParent.length > 0) {
+      if (this.settingParent.length > 0 ||
+        (Array.isArray(this.setting.type) && this.setting.type.includes('tuple') && this.setting.type.includes('list'))) {
         return Array.isArray(this.data[this.setting.key]) ? this.data[this.setting.key] : []
       }
       return Array.isArray(this.data) ? this.data : []
@@ -286,6 +287,7 @@ export default {
       return type === 'map' ||
         (Array.isArray(type) && type.includes('keyword') && type.includes('integer')) ||
         (Array.isArray(type) && type.includes('keyword') && type.includes('string')) ||
+        (Array.isArray(type) && type.includes('tuple') && type.includes('list')) ||
         (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
     },
     getFormattedDescription(desc) {
