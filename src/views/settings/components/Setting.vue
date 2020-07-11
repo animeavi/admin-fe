@@ -121,7 +121,8 @@ export default {
     compound({ type, key, children }) {
       return type === 'keyword' ||
         type === 'map' ||
-        type.includes('keyword')
+        type.includes('keyword') ||
+        type.includes('map')
     },
     divideSetting(key) {
       return [':sslopts', ':tlsopts', ':adapter', ':poll_limits', ':queues', ':styling', ':invalidation', ':multi_factor_authentication'].includes(key)

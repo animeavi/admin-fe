@@ -25,7 +25,7 @@
       </div>
       <el-button :size="isDesktop ? 'medium' : 'mini'" icon="el-icon-plus" circle @click="addRowToEditableKeyword"/>
     </div>
-    <div v-else :data-search="setting.key || setting.group">
+    <div v-else-if="editableKeywordWithSelect" :data-search="setting.key || setting.group">
       <div v-for="element in data" :key="getId(element)" class="setting-input">
         <el-input :value="getKey(element)" placeholder="key" class="name-input" @input="parseEditableKeyword($event, 'key', element)"/> :
         <el-select :value="getValue(element)" multiple filterable allow-create class="value-input" @change="parseEditableKeyword($event, 'value', element)"/>
@@ -70,12 +70,16 @@ export default {
   },
   computed: {
     editableKeywordWithInteger() {
-      return Array.isArray(this.setting.type) && this.setting.type.includes('keyword') && this.setting.type.includes('integer')
+      return this.setting.type.includes('keyword') && this.setting.type.includes('integer')
+    },
+    editableKeywordWithSelect() {
+      return this.setting.type.includes('map') && this.setting.type.findIndex(el => el.includes('list') && el.includes('string')) !== -1
     },
     editableKeywordWithString() {
-      return Array.isArray(this.setting.type) && this.setting.key !== ':crontab' && (
+      return this.setting.key !== ':crontab' && (
         (this.setting.type.includes('keyword') && this.setting.type.includes('string')) ||
-        (this.setting.type.includes('tuple') && this.setting.type.includes('list'))
+        (this.setting.type.includes('tuple') && this.setting.type.includes('list')) ||
+        (this.setting.type.includes('map') && this.setting.type.includes('string'))
       )
     },
     isDesktop() {

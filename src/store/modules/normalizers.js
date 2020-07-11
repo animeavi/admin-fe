@@ -93,7 +93,7 @@ export const parseTuples = (tuples, key) => {
         return [...acc, { [mascot.tuple[0]]: { ...mascot.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
       }, [])
     } else if (Array.isArray(item.tuple[1]) &&
-      (item.tuple[0] === ':groups' || item.tuple[0] === ':replace' || item.tuple[0] === ':retries' || item.tuple[0] === ':headers' || item.tuple[0] === ':params' || item.tuple[0] === ':crontab')) {
+      (item.tuple[0] === ':groups' || item.tuple[0] === ':replace' || item.tuple[0] === ':retries' || item.tuple[0] === ':headers' || item.tuple[0] === ':params' || item.tuple[0] === ':crontab' || item.tuple[0] === ':match_actor')) {
       if (item.tuple[0] === ':crontab') {
         accum[item.tuple[0]] = item.tuple[1].reduce((acc, group) => {
           return [...acc, { [group.tuple[1]]: { value: group.tuple[0], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
@@ -103,10 +103,6 @@ export const parseTuples = (tuples, key) => {
           return [...acc, { [group.tuple[0]]: { value: group.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
         }, [])
       }
-    } else if (item.tuple[0] === ':match_actor') {
-      accum[item.tuple[0]] = Object.keys(item.tuple[1]).reduce((acc, regex) => {
-        return [...acc, { [regex]: { value: item.tuple[1][regex], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
-      }, [])
     } else if (item.tuple[0] === ':icons') {
       accum[item.tuple[0]] = item.tuple[1].map(icon => {
         return Object.keys(icon).map(name => {
@@ -240,8 +236,10 @@ const wrapValues = (settings, currentState) => {
     if (
       type === 'keyword' ||
       type.includes('keyword') ||
-      type.includes('tuple') && type.includes('list') ||
-      setting === ':replace'
+      (type.includes('tuple') && type.includes('list')) ||
+      setting === ':replace' ||
+      (type.includes('map') && type.includes('string')) ||
+      type.includes('map') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1
     ) {
       return { 'tuple': [setting, wrapValues(value, currentState)] }
     } else if (type === 'atom' && value.length > 0) {
@@ -254,15 +252,10 @@ const wrapValues = (settings, currentState) => {
       return { 'tuple': [value, setting] }
     } else if (type === 'map') {
       const mapValue = Object.keys(value).reduce((acc, key) => {
-        acc[key] = setting === ':match_actor' ? value[key] : value[key][1]
+        acc[key] = value[key][1]
         return acc
       }, {})
-      const mapCurrentState = setting === ':match_actor'
-        ? currentState[setting].reduce((acc, element) => {
-          return { ...acc, ...{ [Object.keys(element)[0]]: Object.values(element)[0].value }}
-        }, {})
-        : currentState[setting]
-      return { 'tuple': [setting, { ...mapCurrentState, ...mapValue }] }
+      return { 'tuple': [setting, { ...currentState[setting], ...mapValue }] }
     } else if (setting === ':ip') {
       const ip = value.split('.').map(s => parseInt(s, 10))
       return { 'tuple': [setting, { 'tuple': ip }] }

@@ -281,11 +281,14 @@ export default {
   },
   methods: {
     editableKeyword(key, type) {
-      return type === 'map' ||
-        (Array.isArray(type) && type.includes('keyword') && type.includes('integer')) ||
-        (Array.isArray(type) && type.includes('keyword') && type.includes('string')) ||
-        (Array.isArray(type) && type.includes('tuple') && type.includes('list')) ||
-        (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
+      return Array.isArray(type) && (
+        (type.includes('map') && type.includes('string')) ||
+        (type.includes('map') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1) ||
+        (type.includes('keyword') && type.includes('integer')) ||
+        (type.includes('keyword') && type.includes('string')) ||
+        (type.includes('tuple') && type.includes('list')) ||
+        (type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
+      )
     },
     getFormattedDescription(desc) {
       return marked(desc)
