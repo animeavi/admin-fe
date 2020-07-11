@@ -209,7 +209,7 @@ export default {
         this.$store.state.settings.db[group][key].includes(this.setting.key)
     },
     iconsData() {
-      return Array.isArray(this.data[':icons']) ? this.data[':icons'] : []
+      return Array.isArray(this.data) ? this.data : []
     },
     inputValue() {
       if ([':esshd', ':cors_plug', ':quack', ':tesla', ':swoosh'].includes(this.settingGroup.group) &&
