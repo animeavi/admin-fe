@@ -31,6 +31,10 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     }
+  },
+  mounted() {
+    this.$store.dispatch('SetReportsFilter', 'open')
+    this.$store.dispatch('FetchReports', 1)
   }
 }
 </script>
