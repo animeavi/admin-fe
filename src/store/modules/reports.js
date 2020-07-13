@@ -52,7 +52,7 @@ const reports = {
       commit('SET_PAGE', page)
       commit('SET_LOADING', false)
     },
-    SetFilter({ commit }, filter) {
+    SetReportsFilter({ commit }, filter) {
       commit('SET_REPORTS_FILTER', filter)
     },
     CreateReportNote({ commit, getters, state, rootState }, { content, reportID }) {
