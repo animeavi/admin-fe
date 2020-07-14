@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add MRF Activity Expiration setting
 - Add ability to disable multi-factor authentication for a user
 - Ability to configure S3 settings on Upload tab
+- Show number of open reports in Sidebar Menu
 
 ### Changed
 
