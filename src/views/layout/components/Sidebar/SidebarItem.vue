@@ -85,7 +85,7 @@ export default {
       return this.basePath === '/invites' ? this.$store.state.app.invitesEnabled : true
     },
     normalizedReportsCount() {
-      return numeral(this.$store.state.reports.totalReportsCount).format('0a')
+      return numeral(this.$store.state.reports.openReportsCount).format('0a')
     }
   },
   methods: {

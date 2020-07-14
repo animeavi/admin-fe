@@ -33,8 +33,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('SetReportsFilter', 'open')
-    this.$store.dispatch('FetchReports', 1)
+    this.$store.dispatch('FetchOpenReportsCount')
   }
 }
 </script>
