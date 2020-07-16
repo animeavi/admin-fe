@@ -391,7 +391,10 @@ export default {
     instanceReboot: 'Reboot Instance',
     restartApp: 'You must restart the instance to apply settings',
     restartSuccess: 'Instance rebooted successfully!',
-    removeSettingConfirmation: 'Are you sure you want to remove this setting\'s value from the database?'
+    removeSettingConfirmation: 'Are you sure you want to remove this setting\'s value from the database?',
+    changeImage: 'Change image',
+    uploadImage: 'Upload image',
+    remove: 'Remove'
   },
   invites: {
     inviteTokens: 'Invite tokens',

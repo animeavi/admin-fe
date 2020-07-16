@@ -40,6 +40,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Link settings that enable registrations and invites
+- Ability to upload logo, background, default user avatar, instance thumbnail, and NSFW hiding images
 
 ### Changed
 
