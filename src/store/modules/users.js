@@ -193,9 +193,10 @@ const users = {
       } catch (_e) {
         return
       }
-      const deletedUsersIds = users.map(deletedUser => deletedUser.id)
-      const updatedUsers = state.fetchedUsers.filter(user => !deletedUsersIds.includes(user.id))
-      commit('SET_USERS', updatedUsers)
+      const updatedUsers = users.map(user => {
+        return { ...user, deactivated: true }
+      })
+      commit('SWAP_USERS', updatedUsers)
 
       if (_userId) {
         dispatch('FetchUserProfile', { userId: _userId, godmode: false })
