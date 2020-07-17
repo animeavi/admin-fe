@@ -143,7 +143,20 @@ export default {
       this.$store.dispatch('ResendConfirmationEmail', [user])
     },
     handleDeletion(user) {
-      this.$store.dispatch('DeleteUsers', { users: [user], _userId: user.id })
+      this.$confirm(
+        this.$t('users.deleteUsersConfirmation'),
+        {
+          confirmButtonText: 'Delete',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then(() => {
+        this.$store.dispatch('DeleteUsers', { users: [user], _userId: user.id })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Delete canceled'
+        })
+      })
     },
     handleEmailConfirmation(user) {
       this.$store.dispatch('ConfirmUsersEmail', { users: [user], _userId: user.id, _statusId: this.statusId })

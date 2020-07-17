@@ -212,6 +212,7 @@ export default {
     revokeRightConfirmation: 'Are you sure you want to revoke {right} rights from all selected users?',
     activateMultipleUsersConfirmation: 'Are you sure you want to activate accounts of all selected users?',
     deactivateMultipleUsersConfirmation: 'Are you sure you want to deactivate accounts of all selected users?',
+    deleteUsersConfirmation: 'Are you sure you want to delete this account? This action cannot be undone.',
     deleteMultipleUsersConfirmation: 'Are you sure you want to delete accounts of all selected users?',
     addTagForMultipleUsersConfirmation: 'Are you sure you want to apply tag to all selected users?',
     removeTagFromMultipleUsersConfirmation: 'Are you sure you want to remove tag from all selected users?',
