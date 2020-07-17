@@ -197,7 +197,9 @@ const users = {
       const updatedUsers = state.fetchedUsers.filter(user => !deletedUsersIds.includes(user.id))
       commit('SET_USERS', updatedUsers)
 
-      dispatch('FetchUserProfile', { userId: _userId, godmode: false })
+      if (_userId) {
+        dispatch('FetchUserProfile', { userId: _userId, godmode: false })
+      }
       dispatch('SuccessMessage')
     },
     async FetchUsers({ commit, dispatch, getters, state }, { page }) {
