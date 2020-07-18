@@ -198,6 +198,30 @@ describe('Parse tuples', () => {
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
 
+  it('parses crontab setting', () => {
+    const tuples = [{ tuple: [':crontab', [
+      { tuple: ['0 0 * * *', 'Pleroma.Workers.Cron.ClearOauthTokenWorker'] },
+      { tuple: ['0 * * * *', 'Pleroma.Workers.Cron.StatsWorker'] },
+      { tuple: ['* * * * *', 'Pleroma.Workers.Cron.PurgeExpiredActivitiesWorker']}
+    ]]}]
+    const expectedResult = { ':crontab': [
+      { 'Pleroma.Workers.Cron.ClearOauthTokenWorker': { value: '0 0 * * *'}},
+      { 'Pleroma.Workers.Cron.StatsWorker': { value: '0 * * * *'}},
+      { 'Pleroma.Workers.Cron.PurgeExpiredActivitiesWorker': { value: '* * * * *'}}
+    ]}
+
+    const parsed = parseTuples(tuples, 'Oban')
+
+    expect(typeof parsed).toBe('object')
+    expect(':crontab' in parsed).toBeTruthy()
+    const result = { ...parsed, ':crontab': parsed[':crontab'].map(el => {
+      const key = Object.keys(el)[0]
+      const { id, ...rest } = el[key]
+      return { [key]: rest }
+    })}
+    expect(_.isEqual(expectedResult, result)).toBeTruthy()
+  })
+
   it('parses match_actor setting in mrf_subchain group', () => {
     const tuples = [{ tuple: [":match_actor",
       { '~r/https:\/\/example.com/s': ["Elixir.Pleroma.Web.ActivityPub.MRF.DropPolicy"]}]}]
