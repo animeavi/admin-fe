@@ -130,7 +130,7 @@ describe('Wrap settings', () => {
     }]
 
     const settings2 = { ':emoji': { ':groups': [
-      ['keyword', 'string', ['list', 'string']],
+      ['keyword', ['list', 'string']],
       { ':custom': [['list'], ['/emoji/*.png', '/emoji/**/*.png']],
         ':another_group': ['list', ['/custom_emoji/*.png']]}
     ]}}
@@ -151,7 +151,7 @@ describe('Wrap settings', () => {
 
   it('wraps :replace setting', () => {
     const settings = { ':mrf_keyword': { ':replace': [
-      [['tuple', 'string', 'string'], ['tuple', 'regex', 'string']],
+      ['list', 'tuple'],
       { 'pattern': ['list', 'replacement'],
         '/\w+/': ['list', 'test_replacement']}
     ]}}
@@ -296,9 +296,9 @@ describe('Wrap settings', () => {
       }]}]
     }]
 
-    const settings3 = { ':mrf_subchain': { ':match_actor': ['map', {
-      '~r/https:\/\/example.com/s': ['Elixir.Pleroma.Web.ActivityPub.MRF.DropPolicy'],
-      '~r/https:\/\/test.com': ['Elixir.Pleroma.Web.ActivityPub.MRF.TestPolicy']
+    const settings3 = { ':mrf_subchain': { ':match_actor': [['map', ['list', 'string']], {
+      '~r/https:\/\/example.com/s': ['list', ['Elixir.Pleroma.Web.ActivityPub.MRF.DropPolicy']],
+      '~r/https:\/\/test.com': ['list', ['Elixir.Pleroma.Web.ActivityPub.MRF.TestPolicy']]
     }]}}
     const state3 = { ':pleroma': { ':mrf_subchain': { ':match_actor': [
       { '~r/https:\/\/example.com/s': ['Elixir.Pleroma.Web.ActivityPub.MRF.DropPolicy'] },
