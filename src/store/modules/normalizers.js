@@ -93,7 +93,7 @@ export const parseTuples = (tuples, key) => {
         return [...acc, { [mascot.tuple[0]]: { ...mascot.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
       }, [])
     } else if (Array.isArray(item.tuple[1]) &&
-      (item.tuple[0] === ':groups' || item.tuple[0] === ':replace' || item.tuple[0] === ':retries' || item.tuple[0] === ':headers' || item.tuple[0] === ':params' || item.tuple[0] === ':crontab' || item.tuple[0] === ':match_actor')) {
+      (item.tuple[0] === ':groups' || item.tuple[0] === ':replace' || item.tuple[0] === ':retries' || item.tuple[0] === ':headers' || item.tuple[0] === ':crontab')) {
       if (item.tuple[0] === ':crontab') {
         accum[item.tuple[0]] = item.tuple[1].reduce((acc, group) => {
           return [...acc, { [group.tuple[1]]: { value: group.tuple[0], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
@@ -123,7 +123,13 @@ export const parseTuples = (tuples, key) => {
     } else if (item.tuple[0] === ':ip') {
       accum[item.tuple[0]] = item.tuple[1].tuple.join('.')
     } else if (item.tuple[1] && typeof item.tuple[1] === 'object') {
-      accum[item.tuple[0]] = parseObject(item.tuple[1])
+      if (item.tuple[0] === ':params' || item.tuple[0] === ':match_actor') {
+        accum[item.tuple[0]] = Object.keys(item.tuple[1]).reduce((acc, key) => {
+          return [...acc, { [key]: { value: item.tuple[1][key], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
+        }, [])
+      } else {
+        accum[item.tuple[0]] = parseObject(item.tuple[1])
+      }
     } else {
       accum[item.tuple[0]] = item.tuple[1]
     }
@@ -236,9 +242,7 @@ const wrapValues = (settings, currentState) => {
     if (type === 'keyword' ||
       (Array.isArray(type) && (
         type.includes('keyword') ||
-        (type.includes('tuple') && type.includes('list')) ||
-        (type.includes('map') && type.includes('string')) ||
-        type.includes('map') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1
+        (type.includes('tuple') && type.includes('list'))
       ))
     ) {
       return { 'tuple': [setting, wrapValues(value, currentState)] }
@@ -256,6 +260,12 @@ const wrapValues = (settings, currentState) => {
         return acc
       }, {})
       return { 'tuple': [setting, { ...currentState[setting], ...mapValue }] }
+    } else if (type.includes('map')) {
+      const mapValue = Object.keys(value).reduce((acc, key) => {
+        acc[key] = value[key][1]
+        return acc
+      }, {})
+      return { 'tuple': [setting, mapValue] }
     } else if (setting === ':ip') {
       const ip = value.split('.').map(s => parseInt(s, 10))
       return { 'tuple': [setting, { 'tuple': ip }] }
