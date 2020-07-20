@@ -30,6 +30,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove ability to moderate users that don't have valid nickname
 - Displays both labels and description in the header of group of settiings
 - Ability to add custom values in Pleroma.Upload.Filter.Mogrify setting
+- Change types of the following settings: ':groups', ':replace', ':federated_timeline_removal', ':reject', ':match_actor'. Update functions that parses and wraps settings data according to this change.
+- Move rendering Crontab setting from a separate component to EditableKeyword component
 
 ### Fixed
 
