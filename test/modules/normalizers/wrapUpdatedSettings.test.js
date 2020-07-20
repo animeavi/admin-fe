@@ -296,17 +296,23 @@ describe('Wrap settings', () => {
       }]}]
     }]
 
-    const settings3 = { ':mrf_subchain': { ':match_actor': [['map', ['list', 'string']], {
+    expect(_.isEqual(result1, expectedResult1)).toBeTruthy()
+    expect(_.isEqual(result2, expectedResult2)).toBeTruthy()
+  })
+
+  it('wraps settings with type that includes map', () => {
+    const settings1 = { ':mrf_subchain': { ':match_actor': [['map', ['list', 'string']], {
       '~r/https:\/\/example.com/s': ['list', ['Elixir.Pleroma.Web.ActivityPub.MRF.DropPolicy']],
       '~r/https:\/\/test.com': ['list', ['Elixir.Pleroma.Web.ActivityPub.MRF.TestPolicy']]
     }]}}
-    const state3 = { ':pleroma': { ':mrf_subchain': { ':match_actor': [
-      { '~r/https:\/\/example.com/s': ['Elixir.Pleroma.Web.ActivityPub.MRF.DropPolicy'] },
-      { '~r/https:\/\/test.com': ['Elixir.Pleroma.Web.ActivityPub.MRF.TestPolicy'] }
+    const state1 = { ':pleroma': { ':mrf_subchain': { ':match_actor': [
+      { '~r/https:\/\/example.com/s': { value: ['Elixir.Pleroma.Web.ActivityPub.MRF.DropPolicy'], id: '1234' }},
+      { '~r/https:\/\/test.com': { value: ['Elixir.Pleroma.Web.ActivityPub.MRF.TestPolicy'], id: '5678' } }
     ]
     }}}
-    const result3 = wrapUpdatedSettings(':pleroma', settings3, state3)
-    const expectedResult3 = [{
+
+    const result1 = wrapUpdatedSettings(':pleroma', settings1, state1)
+    const expectedResult1 = [{
       group: ':pleroma',
       key: ':mrf_subchain',
       value: [{ tuple: [':match_actor', {
@@ -315,9 +321,24 @@ describe('Wrap settings', () => {
       }]}]
     }]
 
+    const settings2 = { 'Pleroma.Web.MediaProxy.Invalidation.Http': { 
+      ':options': ['keyword', { ':params': [['map', 'string'], { aaa: ['list', 'bbb'], xxx: ['list', 'zzz'] }]}]
+    }}
+    const state2 = { ':pleroma': { 'Pleroma.Web.MediaProxy.Invalidation.Http': { 
+      ':options': { ':params': [{ aaa: { value: 'bbb', id: '1' }, xxx: { value: 'zzz', id: '2' }}] }
+    }}}
+
+    const result2 = wrapUpdatedSettings(':pleroma', settings2, state2)
+    const expectedResult2 = [{
+      group: ':pleroma',
+      key: 'Pleroma.Web.MediaProxy.Invalidation.Http',
+      value: [{ tuple: [':options', [
+        { tuple: [':params', { aaa: 'bbb', xxx: 'zzz' }]}
+      ]]}]
+    }]
+
     expect(_.isEqual(result1, expectedResult1)).toBeTruthy()
     expect(_.isEqual(result2, expectedResult2)).toBeTruthy()
-    expect(_.isEqual(result3, expectedResult3)).toBeTruthy()
   })
 
   it('wraps IP setting', () => {
@@ -351,10 +372,10 @@ describe('Wrap settings', () => {
 
   it('wraps regular settings', () => {
     const settings = { ':http_security': {
-      ':report_uri': ["string", "https://test.com"],
-      ':ct_max_age': ["integer", 150000],
-      ':sts': ["boolean", true],
-      ':methods': [["list", "string"], ["POST", "PUT", "PATCH"]]
+      ':report_uri': ['string', 'https://test.com'],
+      ':ct_max_age': ['integer', 150000],
+      ':sts': ['boolean', true],
+      ':methods': [['list', 'string'], ['POST', 'PUT', 'PATCH']]
     }}
     const state = { ':pleroma': { ':http_security': {}}}
     const result = wrapUpdatedSettings(':pleroma', settings, state)
@@ -362,10 +383,10 @@ describe('Wrap settings', () => {
       group: ':pleroma',
       key: ':http_security',
       value: [
-        { tuple: [":report_uri", "https://test.com"] },
-        { tuple: [":ct_max_age", 150000] },
-        { tuple: [":sts", true] },
-        { tuple: [":methods", ["POST", "PUT", "PATCH"]] }
+        { tuple: [':report_uri', 'https://test.com'] },
+        { tuple: [':ct_max_age', 150000] },
+        { tuple: [':sts', true] },
+        { tuple: [':methods', ['POST', 'PUT', 'PATCH']] }
       ]
     }]
 
