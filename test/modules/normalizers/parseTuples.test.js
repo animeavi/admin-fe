@@ -240,6 +240,26 @@ describe('Parse tuples', () => {
     expect(_.isEqual(expectedResult, result)).toBeTruthy()
   })
 
+  it('parses options setting in MediaProxy.Invalidation.Http group', () => {
+    const tuples = [{ tuple: [":options", [{ tuple: [":params", { xxx: "zzz", aaa: "bbb" }]}]]}]
+    const expectedResult = { ':options': { ':params': 
+      [ { xxx: { value: 'zzz' }}, { aaa: { value: 'bbb' }}]
+    }}
+
+    const parsed = parseTuples(tuples, 'Pleroma.Web.MediaProxy.Invalidation.Http')
+
+    expect(typeof parsed).toBe('object')
+    expect(':options' in parsed).toBeTruthy()
+    
+    const idRemoved = parsed[':options'][':params'].map(el => {
+      const key = Object.keys(el)[0]
+      const { id, ...rest } = el[key]
+      return { [key]: rest }
+    })
+    parsed[':options'][':params'] = idRemoved
+    expect(_.isEqual(expectedResult, parsed)).toBeTruthy()
+  })
+
   it('parses proxy_url', () => {
     const proxyUrlNull = [{ tuple: [":proxy_url", null] }]
     const proxyUrlTuple = [{ tuple: [":proxy_url", { tuple: [":socks5", ":localhost", 3090] }]}]
