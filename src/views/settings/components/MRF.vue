@@ -1,10 +1,10 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
     <div v-for="setting in mrfSettings" :key="setting.key">
-      <el-form :model="getSettingData(setting)" :label-position="labelPosition" :label-width="labelWidth">
+      <el-form v-if="showMrfPolicy(setting.key)" :model="getSettingData(setting)" :label-position="labelPosition" :label-width="labelWidth">
         <setting :setting-group="setting" :data="getSettingData(setting)"/>
+        <el-divider v-if="setting" class="divider thick-line"/>
       </el-form>
-      <el-divider v-if="setting" class="divider thick-line"/>
     </div>
     <div class="submit-button-container">
       <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
@@ -70,6 +70,16 @@ export default {
         type: 'success',
         message: i18n.t('settings.success')
       })
+    },
+    showMrfPolicy(key) {
+      const selectedMrfPolicies = _.get(this.settings.settings, [':pleroma', ':mrf', ':policies'])
+      const mappedPolicies = this.mrfSettings.reduce((acc, { key, related_policy }) => {
+        if (key !== ':mrf') {
+          acc[key] = related_policy
+        }
+        return acc
+      }, {})
+      return !Object.keys(mappedPolicies).includes(key) || selectedMrfPolicies.includes(mappedPolicies[key])
     }
   }
 }
