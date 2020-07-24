@@ -276,7 +276,7 @@ export default {
         ':parsers',
         ':providers',
         ':method',
-        ':rewrite_policy',
+        ':policies',
         'Pleroma.Web.Auth.Authenticator'
       ].includes(this.setting.key) ||
         (this.settingGroup.key === 'Pleroma.Emails.Mailer' && this.setting.key === ':adapter')
