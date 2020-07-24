@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'AutoLinkerInput',
+  name: 'LinkFormatterInput',
   props: {
     data: {
       type: [Object, Array],
