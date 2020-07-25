@@ -28,7 +28,7 @@ const getCurrentValue = (type, value, path) => {
 }
 
 const getValueWithoutKey = (key, [type, value]) => {
-  if (type === 'atom' && value.length > 1) {
+  if (prependWithСolon(type, value)) {
     return `:${value}`
   } else if (key === ':backends') {
     const index = value.findIndex(el => el === ':ex_syslogger')
@@ -132,6 +132,11 @@ const parseProxyUrl = value => {
   return { socks5: false, host: null, port: null }
 }
 
+const prependWithСolon = (type, value) => {
+  return (type === 'atom' && value.length > 0) ||
+    (Array.isArray(type) && type.includes('atom') && typeof value === 'string')
+}
+
 export const processNested = (valueForState, valueForUpdatedSettings, group, parentKey, parents, settings, updatedSettings) => {
   const [{ key, type }, ...otherParents] = parents
   const path = [group, parentKey, ...parents.reverse().map(parent => parent.key).slice(0, -1)]
@@ -216,7 +221,7 @@ const wrapValues = (settings, currentState) => {
       setting === ':replace'
     ) {
       return { 'tuple': [setting, wrapValues(value, currentState)] }
-    } else if (type === 'atom' && value.length > 0) {
+    } else if (prependWithСolon(type, value)) {
       return { 'tuple': [setting, `:${value}`] }
     } else if (type.includes('tuple') && (type.includes('string') || type.includes('atom'))) {
       return typeof value === 'string'

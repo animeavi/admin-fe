@@ -105,7 +105,7 @@
         <crontab-input v-if="setting.key === ':crontab'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
         <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
         <icons-input v-if="setting.key === ':icons'" :data="iconsData" :setting-group="settingGroup" :setting="setting"/>
-        <link-formatter-input v-if="settingGroup.key === 'Pleroma.Formatter'" :data="data" :setting-group="settingGroup" :setting="setting"/>
+        <link-formatter-input v-if="booleanCombinedInput" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <mascots-input v-if="setting.key === ':mascots'" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
         <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
         <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
@@ -216,6 +216,9 @@ export default {
     }
   },
   computed: {
+    booleanCombinedInput() {
+      return Array.isArray(this.setting.type) && this.setting.type.includes('boolean')
+    },
     canBeDeleted() {
       const { group, key } = this.settingGroup
       return _.get(this.$store.state.settings.db, [group, key]) &&

@@ -1,12 +1,27 @@
 <template>
   <div>
-    <div v-if="setting.key === ':class' || setting.key === ':rel'" :data-search="setting.key || setting.group">
-      <el-switch :value="autoLinkerBooleanValue(setting.key)" @change="processTwoTypeValue($event, setting.key)"/>
-      <el-input v-if="autoLinkerBooleanValue(setting.key)" :value="autoLinkerStringValue(setting.key)" @input="processTwoTypeValue($event, setting.key)"/>
+    <div v-if="setting.type.includes('string')" :data-search="setting.key || setting.group">
+      <el-switch :value="autoLinkerBooleanValue" @change="processTwoTypeValue($event, setting.key)"/>
+      <el-input
+        v-if="autoLinkerBooleanValue"
+        :value="autoLinkerStringValue"
+        @input="processTwoTypeValue($event, setting.key)"/>
     </div>
-    <div v-if="setting.key === ':truncate'" :data-search="setting.key || setting.group">
-      <el-switch :value="autoLinkerBooleanValue(setting.key)" @change="processTwoTypeValue($event, setting.key)"/>
-      <el-input-number v-if="autoLinkerBooleanValue(setting.key)" :value="autoLinkerIntegerValue(setting.key)" @input="processTwoTypeValue($event, setting.key)"/>
+    <div v-if="setting.type.includes('integer')" :data-search="setting.key || setting.group">
+      <el-switch :value="autoLinkerBooleanValue" @change="processTwoTypeValue($event, setting.key)"/>
+      <el-input-number
+        v-if="autoLinkerBooleanValue"
+        :value="autoLinkerIntegerValue"
+        @input="processTwoTypeValue($event, setting.key)"/>
+    </div>
+    <div v-if="setting.type.includes('atom')" :data-search="setting.key || setting.group">
+      <el-switch :value="autoLinkerBooleanValue" @change="processTwoTypeValue($event, setting.key)"/>
+      <el-input
+        v-if="autoLinkerBooleanValue"
+        :value="autoLinkerAtomValue"
+        @input="processTwoTypeValue($event, setting.key)">
+        <template slot="prepend">:</template>
+      </el-input>
     </div>
   </div>
 </template>
@@ -34,19 +49,25 @@ export default {
       }
     }
   },
-  methods: {
-    autoLinkerBooleanValue(key) {
+  computed: {
+    autoLinkerAtomValue() {
+      return this.data[this.setting.key] &&
+        this.data[this.setting.key][0] === ':' ? this.data[this.setting.key].substr(1) : this.data[this.setting.key]
+    },
+    autoLinkerBooleanValue() {
       const value = this.data[this.setting.key]
       return typeof value === 'string' || typeof value === 'number'
     },
-    autoLinkerIntegerValue(key) {
+    autoLinkerIntegerValue() {
       const value = this.data[this.setting.key]
       return value || 0
     },
-    autoLinkerStringValue(key) {
+    autoLinkerStringValue() {
       const value = this.data[this.setting.key]
       return value || ''
-    },
+    }
+  },
+  methods: {
     processTwoTypeValue(value, input) {
       if (value === true) {
         const data = input === ':truncate' ? 0 : ''
