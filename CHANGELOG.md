@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Displays both labels and description in the header of group of settiings
 - Ability to add custom values in Pleroma.Upload.Filter.Mogrify setting
 - Show only those MRF settings that have been enabled in MRF Policies setting
+- Move Auto Linker settings to Link Formatter Tab as its configuration was moved to :pleroma, Pleroma.Formatter
 
 ### Fixed
 

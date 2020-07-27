@@ -9,28 +9,6 @@ export const getBooleanValue = value => {
   return value
 }
 
-export const checkPartialUpdate = (settings, updatedSettings, description) => {
-  return Object.keys(updatedSettings).reduce((acc, group) => {
-    acc[group] = Object.keys(updatedSettings[group]).reduce((acc, key) => {
-      if (!partialUpdate(group, key)) {
-        const updated = Object.keys(settings[group][key]).reduce((acc, settingName) => {
-          const setting = description
-            .find(element => element.group === group && element.key === key).children
-            .find(child => child.key === settingName)
-          const type = setting ? setting.type : ''
-          acc[settingName] = [type, settings[group][key][settingName]]
-          return acc
-        }, {})
-        acc[key] = updated
-        return acc
-      }
-      acc[key] = updatedSettings[group][key]
-      return acc
-    }, {})
-    return acc
-  }, {})
-}
-
 const getCurrentValue = (type, value, path) => {
   if (type === 'state') {
     return _.get(value, path)
@@ -50,7 +28,7 @@ const getCurrentValue = (type, value, path) => {
 }
 
 const getValueWithoutKey = (key, [type, value]) => {
-  if (type === 'atom' && value.length > 1) {
+  if (prependWithСolon(type, value)) {
     return `:${value}`
   } else if (key === ':backends') {
     const index = value.findIndex(el => el === ':ex_syslogger')
@@ -154,8 +132,9 @@ const parseProxyUrl = value => {
   return { socks5: false, host: null, port: null }
 }
 
-const partialUpdate = (group, key) => {
-  return !(group === ':auto_linker' && key === ':opts')
+const prependWithСolon = (type, value) => {
+  return (type === 'atom' && value.length > 0) ||
+    (Array.isArray(type) && type.includes('boolean') && type.includes('atom') && typeof value === 'string')
 }
 
 export const processNested = (valueForState, valueForUpdatedSettings, group, parentKey, parents, settings, updatedSettings) => {
@@ -242,7 +221,7 @@ const wrapValues = (settings, currentState) => {
       setting === ':replace'
     ) {
       return { 'tuple': [setting, wrapValues(value, currentState)] }
-    } else if (type === 'atom' && value.length > 0) {
+    } else if (prependWithСolon(type, value)) {
       return { 'tuple': [setting, `:${value}`] }
     } else if (type.includes('tuple') && (type.includes('string') || type.includes('atom'))) {
       return typeof value === 'string'
