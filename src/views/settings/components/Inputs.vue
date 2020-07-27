@@ -95,15 +95,14 @@
         <el-input
           v-if="setting.type === 'atom'"
           :value="inputValue"
-          :placeholder="setting.suggestions[0] ? setting.suggestions[0].substr(1) : ''"
+          :placeholder="setting.suggestions && setting.suggestions[0] ? setting.suggestions[0].substr(1) : ''"
           :data-search="setting.key || setting.group"
           class="input"
           @input="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)">
           <template slot="prepend">:</template>
         </el-input>
         <!-- special inputs -->
-        <crontab-input v-if="setting.key === ':crontab'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
-        <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
+        <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="keywordData" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
         <icons-input v-if="setting.key === ':icons'" :data="iconsData" :setting-group="settingGroup" :setting="setting"/>
         <link-formatter-input v-if="booleanCombinedInput" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <mascots-input v-if="setting.key === ':mascots'" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
@@ -129,7 +128,6 @@
 <script>
 import i18n from '@/lang'
 import {
-  CrontabInput,
   EditableKeywordInput,
   IconsInput,
   ImageUploadInput,
@@ -148,7 +146,6 @@ import marked from 'marked'
 export default {
   name: 'Inputs',
   components: {
-    CrontabInput,
     EditableKeywordInput,
     IconsInput,
     ImageUploadInput,
@@ -225,7 +222,7 @@ export default {
         this.$store.state.settings.db[group][key].includes(this.setting.key)
     },
     iconsData() {
-      return Array.isArray(this.data[':icons']) ? this.data[':icons'] : []
+      return Array.isArray(this.data) ? this.data : []
     },
     inputValue() {
       if ([':esshd', ':cors_plug', ':quack', ':tesla', ':swoosh'].includes(this.settingGroup.group) &&
@@ -267,6 +264,10 @@ export default {
       }
     },
     keywordData() {
+      if (this.settingParent.length > 0 ||
+        (Array.isArray(this.setting.type) && this.setting.type.includes('tuple') && this.setting.type.includes('list'))) {
+        return Array.isArray(this.data[this.setting.key]) ? this.data[this.setting.key] : []
+      }
       return Array.isArray(this.data) ? this.data : []
     },
     reducedSelects() {
@@ -296,10 +297,14 @@ export default {
   },
   methods: {
     editableKeyword(key, type) {
-      return key === ':replace' ||
-        type === 'map' ||
-        (Array.isArray(type) && type.includes('keyword') && type.includes('integer')) ||
-        (Array.isArray(type) && type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
+      return Array.isArray(type) && (
+        (type.includes('map') && type.includes('string')) ||
+        (type.includes('map') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1) ||
+        (type.includes('keyword') && type.includes('integer')) ||
+        (type.includes('keyword') && type.includes('string')) ||
+        (type.includes('tuple') && type.includes('list')) ||
+        (type.includes('keyword') && type.findIndex(el => el.includes('list') && el.includes('string')) !== -1)
+      )
     },
     getFormattedDescription(desc) {
       return marked(desc)
@@ -346,7 +351,7 @@ export default {
         type.includes('module') ||
         (type.includes('list') && type.includes('string')) ||
         (type.includes('list') && type.includes('atom')) ||
-        (type.includes('regex') && type.includes('string'))
+        (!type.includes('keyword') && type.includes('regex') && type.includes('string'))
       )
     },
     renderSingleSelect(type) {

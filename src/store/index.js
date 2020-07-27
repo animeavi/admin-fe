@@ -5,6 +5,7 @@ import emojiPacks from './modules/emojiPacks'
 import errorLog from './modules/errorLog'
 import getters from './getters'
 import invites from './modules/invites'
+import mediaProxyCache from './modules/mediaProxyCache'
 import moderationLog from './modules/moderationLog'
 import peers from './modules/peers'
 import permission from './modules/permission'
@@ -24,8 +25,9 @@ const store = new Vuex.Store({
     app,
     errorLog,
     emojiPacks,
-    moderationLog,
     invites,
+    mediaProxyCache,
+    moderationLog,
     peers,
     permission,
     relays,

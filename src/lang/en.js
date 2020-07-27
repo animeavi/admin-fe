@@ -65,8 +65,11 @@ export default {
     externalLink: 'External Link',
     users: 'Users',
     reports: 'Reports',
+    invites: 'Invites',
+    statuses: 'Statuses',
     settings: 'Settings',
     moderationLog: 'Moderation Log',
+    mediaProxyCache: 'MediaProxy Cache',
     'emoji-packs': 'Emoji packs'
   },
   navbar: {
@@ -88,6 +91,19 @@ export default {
     thirdparty: 'Or connect with',
     pleromaFELoginFailed: 'Failed to login via PleromaFE, please login with username/password',
     pleromaFELoginSucceed: 'Logged in via PleromaFE'
+  },
+  mediaProxyCache: {
+    mediaProxyCache: 'MediaProxy Cache',
+    ban: 'Ban',
+    url: 'URL',
+    evict: 'Evict',
+    evictedMessage: 'This URL was evicted',
+    actions: 'Actions',
+    remove: 'Remove from Cachex',
+    evictObjectsHeader: 'Evict object from the MediaProxy cache',
+    listBannedUrlsHeader: 'List of all banned MediaProxy URLs',
+    multipleInput: 'You can enter a single URL or several comma separated links',
+    removeSelected: 'Remove Selected'
   },
   documentation: {
     documentation: 'Documentation',

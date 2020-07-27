@@ -16,7 +16,7 @@ const settings = {
       path: 'index',
       component: () => import('@/views/settings/index'),
       name: 'Settings',
-      meta: { title: 'Settings', icon: 'settings', noCache: true }
+      meta: { title: 'settings', icon: 'settings', noCache: true }
     }
   ]
 }
@@ -30,7 +30,7 @@ const statuses = {
       path: 'index',
       component: () => import('@/views/statuses/index'),
       name: 'Statuses',
-      meta: { title: 'Statuses', icon: 'form', noCache: true }
+      meta: { title: 'statuses', icon: 'form', noCache: true }
     }
   ]
 }
@@ -44,7 +44,7 @@ const reports = {
       path: 'index',
       component: () => import('@/views/reports/index'),
       name: 'Reports',
-      meta: { title: 'Reports', icon: 'documentation', noCache: true }
+      meta: { title: 'reports', icon: 'documentation', noCache: true }
     }
   ]
 }
@@ -58,7 +58,7 @@ const invites = {
       path: 'index',
       component: () => import('@/views/invites/index'),
       name: 'Invites',
-      meta: { title: 'Invites', icon: 'guide', noCache: true }
+      meta: { title: 'invites', icon: 'guide', noCache: true }
     }
   ]
 }
@@ -72,7 +72,7 @@ const emojiPacks = {
       path: 'index',
       component: () => import('@/views/emojiPacks/index'),
       name: 'Emoji Packs',
-      meta: { title: 'Emoji Packs', icon: 'eye-open', noCache: true }
+      meta: { title: 'emoji-packs', icon: 'eye-open', noCache: true }
     }
   ]
 }
@@ -87,6 +87,20 @@ const moderationLog = {
       component: () => import('@/views/moderation_log/index'),
       name: 'Moderation Log',
       meta: { title: 'moderationLog', icon: 'list', noCache: true }
+    }
+  ]
+}
+
+const mediaProxyCacheDisabled = disabledFeatures.includes('media-proxy-cache')
+const mediaProxyCache = {
+  path: '/media_proxy_cache',
+  component: Layout,
+  children: [
+    {
+      path: 'index',
+      component: () => import('@/views/mediaProxyCache/index'),
+      name: 'MediaProxy Cache',
+      meta: { title: 'mediaProxyCache', icon: 'example', noCache: true }
     }
   ]
 }
@@ -159,6 +173,7 @@ export const asyncRouterMap = [
   ...(invitesDisabled ? [] : [invites]),
   ...(emojiPacksDisabled ? [] : [emojiPacks]),
   ...(moderationLogDisabled ? [] : [moderationLog]),
+  ...(mediaProxyCacheDisabled ? [] : [mediaProxyCache]),
   ...(settingsDisabled ? [] : [settings]),
   {
     path: '/users/:id',
