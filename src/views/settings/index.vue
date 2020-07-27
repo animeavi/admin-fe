@@ -222,9 +222,7 @@ export default {
     querySearch(queryString, cb) {
       const results = this.searchData.filter(searchObj => searchObj.search.find(el => el.includes(queryString.toLowerCase())))
         .map(searchObj => {
-          return searchObj.groupKey === ':opts'
-            ? { value: `${searchObj.label} in Auto Linker`, group: searchObj.groupKey, key: searchObj.key }
-            : { value: `${searchObj.label} in ${searchObj.groupLabel}`, group: searchObj.groupKey, key: searchObj.key }
+          return { value: `${searchObj.label} in ${searchObj.groupLabel}`, group: searchObj.groupKey, key: searchObj.key }
         })
       cb(results)
     },
