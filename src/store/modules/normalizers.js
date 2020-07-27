@@ -134,7 +134,7 @@ const parseProxyUrl = value => {
 
 const prependWithСolon = (type, value) => {
   return (type === 'atom' && value.length > 0) ||
-    (Array.isArray(type) && type.includes('atom') && typeof value === 'string')
+    (Array.isArray(type) && type.includes('boolean') && type.includes('atom') && typeof value === 'string')
 }
 
 export const processNested = (valueForState, valueForUpdatedSettings, group, parentKey, parents, settings, updatedSettings) => {
