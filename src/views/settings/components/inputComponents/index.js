@@ -1,6 +1,7 @@
-export { default as AutoLinkerInput } from './AutoLinkerInput'
 export { default as EditableKeywordInput } from './EditableKeywordInput'
 export { default as IconsInput } from './IconsInput'
+export { default as ImageUploadInput } from './ImageUploadInput'
+export { default as LinkFormatterInput } from './LinkFormatterInput'
 export { default as MascotsInput } from './MascotsInput'
 export { default as ProxyUrlInput } from './ProxyUrlInput'
 export { default as PruneInput } from './PruneInput'

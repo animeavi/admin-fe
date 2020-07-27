@@ -1,4 +1,3 @@
-
 export const tabs = description => {
   return {
     'activity-pub': {

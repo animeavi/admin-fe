@@ -33,8 +33,16 @@
         </el-tooltip>
       </span>
       <div class="input-row">
+        <image-upload-input
+          v-if="isImageUrl"
+          :data="data"
+          :setting-group="settingGroup"
+          :setting="setting"
+          :input-value="inputValue"
+          @change="update($event, settingGroup.group, settingGroup.key, settingParent, setting.key, setting.type, nested)"
+        />
         <el-input
-          v-if="setting.type === 'string' || (setting.type.includes('string') && setting.type.includes('atom'))"
+          v-else-if="setting.type === 'string' || (setting.type.includes('string') && setting.type.includes('atom'))"
           :value="inputValue"
           :placeholder="setting.suggestions ? setting.suggestions[0] : null"
           :data-search="setting.key || setting.group"
@@ -94,9 +102,9 @@
           <template slot="prepend">:</template>
         </el-input>
         <!-- special inputs -->
-        <auto-linker-input v-if="settingGroup.group === ':auto_linker'" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="keywordData" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
         <icons-input v-if="setting.key === ':icons'" :data="iconsData" :setting-group="settingGroup" :setting="setting"/>
+        <link-formatter-input v-if="booleanCombinedInput" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <mascots-input v-if="setting.key === ':mascots'" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
         <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
         <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
@@ -120,9 +128,10 @@
 <script>
 import i18n from '@/lang'
 import {
-  AutoLinkerInput,
   EditableKeywordInput,
   IconsInput,
+  ImageUploadInput,
+  LinkFormatterInput,
   MascotsInput,
   ProxyUrlInput,
   PruneInput,
@@ -137,9 +146,10 @@ import marked from 'marked'
 export default {
   name: 'Inputs',
   components: {
-    AutoLinkerInput,
     EditableKeywordInput,
     IconsInput,
+    ImageUploadInput,
+    LinkFormatterInput,
     MascotsInput,
     ProxyUrlInput,
     PruneInput,
@@ -203,6 +213,9 @@ export default {
     }
   },
   computed: {
+    booleanCombinedInput() {
+      return Array.isArray(this.setting.type) && this.setting.type.includes('boolean')
+    },
     canBeDeleted() {
       const { group, key } = this.settingGroup
       return _.get(this.$store.state.settings.db, [group, key]) &&
@@ -267,7 +280,7 @@ export default {
         ':parsers',
         ':providers',
         ':method',
-        ':rewrite_policy',
+        ':policies',
         'Pleroma.Web.Auth.Authenticator'
       ].includes(this.setting.key) ||
         (this.settingGroup.key === 'Pleroma.Emails.Mailer' && this.setting.key === ':adapter')
@@ -277,6 +290,9 @@ export default {
     },
     updatedSettings() {
       return this.$store.state.settings.updatedSettings
+    },
+    isImageUrl() {
+      return [':background', ':logo', ':nsfwCensorImage', ':default_user_avatar', ':instance_thumbnail'].includes(this.setting.key)
     }
   },
   methods: {

@@ -156,11 +156,13 @@ describe('Users actions', () => {
       stubs: ['router-link']
     })
     await flushPromises()
-    expect(store.state.users.fetchedUsers.length).toEqual(3)
+    expect(store.state.users.fetchedUsers[1].deactivated).toBe(false)
 
     wrapper.find(htmlElement(2, 2)).trigger('click')
+    store.dispatch('DeleteUsers', { users: [{ active: true, deactivated: false, id: '10', nickname: 'bob', local: false, external: true, roles: { admin: false, moderator: false }, tags: ['sandbox'] }] })
+
     await flushPromises()
-    expect(store.state.users.fetchedUsers.length).toEqual(2)
+    expect(store.state.users.fetchedUsers[1].deactivated).toBe(true)
     done()
   })
 

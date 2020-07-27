@@ -19,6 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add ability to manually evict and ban URLs from the Pleroma MediaProxy cache
 - Add Invalidation settings on MediaProxy tab
 - Ability to configure S3 settings on Upload tab
+- Show number of open reports in Sidebar Menu
+- Add confirmation message when deleting a user
 
 ### Changed
 
@@ -32,6 +34,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Ability to add custom values in Pleroma.Upload.Filter.Mogrify setting
 - Change types of the following settings: ':groups', ':replace', ':federated_timeline_removal', ':reject', ':match_actor'. Update functions that parses and wraps settings data according to this change.
 - Move rendering Crontab setting from a separate component to EditableKeyword component
+- Show only those MRF settings that have been enabled in MRF Policies setting
+- Move Auto Linker settings to Link Formatter Tab as its configuration was moved to :pleroma, Pleroma.Formatter
 
 ### Fixed
 
@@ -43,6 +47,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Link settings that enable registrations and invites
+- Ability to upload logo, background, default user avatar, instance thumbnail, and NSFW hiding images
 
 ### Changed
 

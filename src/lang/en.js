@@ -228,6 +228,7 @@ export default {
     revokeRightConfirmation: 'Are you sure you want to revoke {right} rights from all selected users?',
     activateMultipleUsersConfirmation: 'Are you sure you want to activate accounts of all selected users?',
     deactivateMultipleUsersConfirmation: 'Are you sure you want to deactivate accounts of all selected users?',
+    deleteUsersConfirmation: 'Are you sure you want to delete this account? This action cannot be undone.',
     deleteMultipleUsersConfirmation: 'Are you sure you want to delete accounts of all selected users?',
     addTagForMultipleUsersConfirmation: 'Are you sure you want to apply tag to all selected users?',
     removeTagFromMultipleUsersConfirmation: 'Are you sure you want to remove tag from all selected users?',
@@ -373,10 +374,10 @@ export default {
     instance: 'Instance',
     upload: 'Upload',
     mailer: 'Mailer',
+    linkFormatter: 'Link Formatter',
     logger: 'Logger',
     activityPub: 'ActivityPub',
     auth: 'Authentication',
-    autoLinker: 'Auto Linker',
     captcha: 'Captcha',
     frontend: 'Frontend',
     http: 'HTTP',
@@ -407,7 +408,10 @@ export default {
     instanceReboot: 'Reboot Instance',
     restartApp: 'You must restart the instance to apply settings',
     restartSuccess: 'Instance rebooted successfully!',
-    removeSettingConfirmation: 'Are you sure you want to remove this setting\'s value from the database?'
+    removeSettingConfirmation: 'Are you sure you want to remove this setting\'s value from the database?',
+    changeImage: 'Change image',
+    uploadImage: 'Upload image',
+    remove: 'Remove'
   },
   invites: {
     inviteTokens: 'Invite tokens',
