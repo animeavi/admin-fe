@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Move rendering Crontab setting from a separate component to EditableKeyword component
 - Show only those MRF settings that have been enabled in MRF Policies setting
 - Move Auto Linker settings to Link Formatter Tab as its configuration was moved to :pleroma, Pleroma.Formatter
+- Active and Local filters are applied by default on the Users tab
 
 ### Fixed
 

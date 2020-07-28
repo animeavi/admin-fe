@@ -329,16 +329,18 @@ export default {
       flex-direction: column;
       margin: 0 10px
     }
-    .el-tag {
-      width: 30px;
-      display: inline-block;
-      margin-bottom: 4px;
-      font-weight: bold;
-      &.el-tag--success {
-        padding-left: 8px;
-      }
-      &.el-tag--danger {
-        padding-left: 8px;
+    .el-table__row {
+      .el-tag {
+        width: 30px;
+        display: inline-block;
+        margin-bottom: 4px;
+        font-weight: bold;
+        &.el-tag--success {
+          padding-left: 8px;
+        }
+        &.el-tag--danger {
+          padding-left: 8px;
+        }
       }
     }
     .reboot-button {
