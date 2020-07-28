@@ -21,13 +21,17 @@
 export default {
   data() {
     return {
-      value: []
+      value: ['local', 'active']
     }
   },
   computed: {
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
     }
+  },
+  created() {
+    const currentFilters = this.$data.value.reduce((acc, filter) => ({ ...acc, [filter]: true }), {})
+    this.$store.dispatch('ToggleUsersFilter', currentFilters)
   },
   methods: {
     removeOppositeFilters() {
