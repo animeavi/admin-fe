@@ -8,10 +8,6 @@ export const tabs = description => {
       label: 'settings.auth',
       settings: [':auth', ':ldap', ':oauth2', 'Pleroma.Web.Auth.Authenticator']
     },
-    'auto-linker': {
-      label: 'settings.autoLinker',
-      settings: [':opts']
-    },
     'esshd': {
       label: 'settings.esshd',
       settings: [':esshd']
@@ -39,6 +35,10 @@ export const tabs = description => {
     'job-queue': {
       label: 'settings.jobQueue',
       settings: ['Pleroma.ActivityExpiration', 'Oban', ':workers']
+    },
+    'link-formatter': {
+      label: 'settings.linkFormatter',
+      settings: ['Pleroma.Formatter']
     },
     'logger': {
       label: 'settings.logger',
