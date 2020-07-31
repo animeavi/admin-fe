@@ -6,7 +6,7 @@ export const tabs = description => {
     },
     'authentication': {
       label: 'settings.auth',
-      settings: [':auth', ':ldap', ':oauth2', 'Pleroma.Web.Auth.Authenticator']
+      settings: [':auth', ':ldap', ':oauth2', 'Pleroma.Web.Auth.Authenticator', ':restrict_unauthenticated']
     },
     'esshd': {
       label: 'settings.esshd',
