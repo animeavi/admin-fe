@@ -34,7 +34,7 @@ export const tabs = description => {
     },
     'job-queue': {
       label: 'settings.jobQueue',
-      settings: ['Pleroma.ActivityExpiration', 'Oban', ':workers']
+      settings: ['Pleroma.ActivityExpiration', ':connections_pool', ':hackney_pools', 'Oban', ':pools', ':workers']
     },
     'link-formatter': {
       label: 'settings.linkFormatter',
