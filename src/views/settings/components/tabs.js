@@ -30,7 +30,7 @@ export const tabs = description => {
     },
     'instance': {
       label: 'settings.instance',
-      settings: [':admin_token', ':instance', ':manifest', 'Pleroma.User', 'Pleroma.ScheduledActivity', ':uri_schemes', ':feed', ':streamer']
+      settings: [':admin_token', ':instance', ':instances_favicons', ':welcome', ':manifest', 'Pleroma.User', 'Pleroma.ScheduledActivity', ':uri_schemes', ':feed', ':streamer']
     },
     'job-queue': {
       label: 'settings.jobQueue',
