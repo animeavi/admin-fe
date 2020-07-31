@@ -545,11 +545,15 @@
       line-height: 22px;
       margin-top: 7px;
       width: 100%;
+      pointer-events: none;
       span {
         width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: baseline;
+      }
+      button {
+        pointer-events: auto;
       }
     }
     .el-message {
