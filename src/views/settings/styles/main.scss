@@ -46,6 +46,10 @@
   .el-tabs__header {
     z-index: 2002;
   }
+  .email-address-input {
+    width: 50%;
+    margin-right: 10px;
+  }
   .esshd-list {
     margin: 0;
   }
@@ -175,6 +179,9 @@
     width: 30%;
     margin-right: 8px
   }
+  .nickname-input {
+    width: 50%;
+  }
   .no-top-margin {
     margin-top: 0;
     p {
@@ -253,6 +260,12 @@
     width: 80%;
     margin-left: 8px;
     margin-right: 10px
+  }
+  .sender-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
   }
   .scale-input {
     width: 47%;
