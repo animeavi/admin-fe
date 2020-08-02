@@ -169,12 +169,12 @@ export default {
     },
     humanizeTag(tag) {
       const mapTags = {
-        'force_nsfw': 'Force NSFW',
-        'strip_media': 'Strip Media',
-        'force_unlisted': 'Force Unlisted',
-        'sandbox': 'Sandbox',
-        'disable_remote_subscription': 'Disable remote subscription',
-        'disable_any_subscription': 'Disable any subscription'
+        'mrf_tag:media-force-nsfw': 'Force NSFW',
+        'mrf_tag:media-strip': 'Strip Media',
+        'mrf_tag:force-unlisted': 'Force Unlisted',
+        'mrf_tag:sandbox': 'Sandbox',
+        'mrf_tag:disable-remote-subscription': 'Disable remote subscription',
+        'mrf_tag:disable-any-subscription': 'Disable any subscription'
       }
       return mapTags[tag]
     },

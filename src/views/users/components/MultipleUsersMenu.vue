@@ -56,10 +56,10 @@
         <div class="tag-container">
           <span class="tag-text">{{ $t('users.forceNsfw') }}</span>
           <el-button-group class="tag-button-group">
-            <el-button size="mini" @click.native="addTagForMultipleUsers('force_nsfw')">
+            <el-button size="mini" @click.native="addTagForMultipleUsers('mrf_tag:media-force-nsfw')">
               {{ $t('users.apply') }}
             </el-button>
-            <el-button size="mini" @click.native="removeTagFromMultipleUsers('force_nsfw')">
+            <el-button size="mini" @click.native="removeTagFromMultipleUsers('mrf_tag:media-force-nsfw')">
               {{ $t('users.remove') }}
             </el-button>
           </el-button-group>
@@ -69,10 +69,10 @@
         <div class="tag-container">
           <span class="tag-text">{{ $t('users.stripMedia') }}</span>
           <el-button-group class="tag-button-group">
-            <el-button size="mini" @click.native="addTagForMultipleUsers('strip_media')">
+            <el-button size="mini" @click.native="addTagForMultipleUsers('mrf_tag:media-strip')">
               {{ $t('users.apply') }}
             </el-button>
-            <el-button size="mini" @click.native="removeTagFromMultipleUsers('strip_media')">
+            <el-button size="mini" @click.native="removeTagFromMultipleUsers('mrf_tag:media-strip')">
               {{ $t('users.remove') }}
             </el-button>
           </el-button-group>
@@ -82,10 +82,10 @@
         <div class="tag-container">
           <span class="tag-text">{{ $t('users.forceUnlisted') }}</span>
           <el-button-group class="tag-button-group">
-            <el-button size="mini" @click.native="addTagForMultipleUsers('force_unlisted')">
+            <el-button size="mini" @click.native="addTagForMultipleUsers('mrf_tag:force-unlisted')">
               {{ $t('users.apply') }}
             </el-button>
-            <el-button size="mini" @click.native="removeTagFromMultipleUsers('force_unlisted')">
+            <el-button size="mini" @click.native="removeTagFromMultipleUsers('mrf_tag:force-unlisted')">
               {{ $t('users.remove') }}
             </el-button>
           </el-button-group>
@@ -95,10 +95,10 @@
         <div class="tag-container">
           <span class="tag-text">{{ $t('users.sandbox') }}</span>
           <el-button-group class="tag-button-group">
-            <el-button size="mini" @click.native="addTagForMultipleUsers('sandbox')">
+            <el-button size="mini" @click.native="addTagForMultipleUsers('mrf_tag:sandbox')">
               {{ $t('users.apply') }}
             </el-button>
-            <el-button size="mini" @click.native="removeTagFromMultipleUsers('sandbox')">
+            <el-button size="mini" @click.native="removeTagFromMultipleUsers('mrf_tag:sandbox')">
               {{ $t('users.remove') }}
             </el-button>
           </el-button-group>
@@ -108,10 +108,10 @@
         <div class="tag-container">
           <span class="tag-text">{{ $t('users.disableRemoteSubscriptionForMultiple') }}</span>
           <el-button-group class="tag-button-group">
-            <el-button size="mini" @click.native="addTagForMultipleUsers('disable_remote_subscription')">
+            <el-button size="mini" @click.native="addTagForMultipleUsers('mrf_tag:disable-remote-subscription')">
               {{ $t('users.apply') }}
             </el-button>
-            <el-button size="mini" @click.native="removeTagFromMultipleUsers('disable_remote_subscription')">
+            <el-button size="mini" @click.native="removeTagFromMultipleUsers('mrf_tag:disable-remote-subscription')">
               {{ $t('users.remove') }}
             </el-button>
           </el-button-group>
@@ -121,10 +121,10 @@
         <div class="tag-container">
           <span class="tag-text">{{ $t('users.disableAnySubscriptionForMultiple') }}</span>
           <el-button-group class="tag-button-group">
-            <el-button size="mini" @click.native="addTagForMultipleUsers('disable_any_subscription')">
+            <el-button size="mini" @click.native="addTagForMultipleUsers('mrf_tag:disable-any-subscription')">
               {{ $t('users.apply') }}
             </el-button>
-            <el-button size="mini" @click.native="removeTagFromMultipleUsers('disable_any_subscription')">
+            <el-button size="mini" @click.native="removeTagFromMultipleUsers('mrf_tag:disable-any-subscription')">
               {{ $t('users.remove') }}
             </el-button>
           </el-button-group>
@@ -198,7 +198,7 @@ export default {
         },
         addTag: (tag) => () => {
           const filtered = this.selectedUsers.filter(user =>
-            tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
+            tag === 'mrf_tag:disable-remote-subscription' || tag === 'mrf_tag:disable-any-subscription'
               ? this.isLocalUser(user) && !user.tags.includes(tag)
               : user.nickname && !user.tags.includes(tag))
           const addTagFn = async(users) => await this.$store.dispatch('AddTag', { users, tag })
@@ -206,7 +206,7 @@ export default {
         },
         removeTag: (tag) => async() => {
           const filtered = this.selectedUsers.filter(user =>
-            tag === 'disable_remote_subscription' || tag === 'disable_any_subscription'
+            tag === 'mrf_tag:disable-remote-subscription' || tag === 'mrf_tag:disable-any-subscription'
               ? this.isLocalUser(user) && user.tags.includes(tag)
               : user.nickname && user.tags.includes(tag))
           const removeTagFn = async(users) => await this.$store.dispatch('RemoveTag', { users, tag })
