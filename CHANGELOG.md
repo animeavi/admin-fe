@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add ability to disable multi-factor authentication for a user
 - Add ability to manually evict and ban URLs from the Pleroma MediaProxy cache
 - Add Invalidation settings on MediaProxy tab
-- Ability to configure S3 settings on Upload tab
+- Ability to configure S3 settings on Upload tab, Pleroma.Web.ApiSpec.CastAndValidate and :modules settings on Other tab, Pools, Connections pools and Hackney pools settings on Job Queue tab, :restrict_unauthenticated settings on Authentication tab, :favicons and :welcome settings on Instance tab
 - Show number of open reports in Sidebar Menu
 - Add confirmation message when deleting a user
 
@@ -31,7 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - When rendering user's profile, statuses, reports and notes check if required properties exist
 - Remove ability to moderate users that don't have valid nickname
 - Displays both labels and description in the header of group of settiings
-- Ability to add custom values in Pleroma.Upload.Filter.Mogrify setting
+- Ability to add custom values in Pleroma.Upload.Filter.Mogrify setting in the following format: '{"implode", "1"}'
 - Change types of the following settings: ':groups', ':replace', ':federated_timeline_removal', ':reject', ':match_actor'. Update functions that parses and wraps settings data according to this change.
 - Move rendering Crontab setting from a separate component to EditableKeyword component
 - Show only those MRF settings that have been enabled in MRF Policies setting
