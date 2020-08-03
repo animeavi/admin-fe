@@ -89,8 +89,8 @@ export const parseTuples = (tuples, key) => {
       }, [])
     } else if (item.tuple[0] === ':prune') {
       accum[item.tuple[0]] = item.tuple[1] === ':disabled' ? [item.tuple[1]] : item.tuple[1].tuple
-    } else if (item.tuple[0] === ':proxy_url') {
-      accum[item.tuple[0]] = parseProxyUrl(item.tuple[1])
+    } else if (item.tuple[0] === ':proxy_url' || item.tuple[0] === ':sender') {
+      accum[item.tuple[0]] = parseStringOrTupleValue(item.tuple[0], item.tuple[1])
     } else if (item.tuple[0] === ':args') {
       accum[item.tuple[0]] = parseNonTuples(item.tuple[0], item.tuple[1])
     } else if (Array.isArray(item.tuple[1]) &&
@@ -122,18 +122,29 @@ const parseObject = object => {
   }, {})
 }
 
-const parseProxyUrl = value => {
-  if (value && !Array.isArray(value) &&
-    typeof value === 'object' &&
-    value.tuple.length === 3 &&
-    value.tuple[0] === ':socks5') {
-    const [, host, port] = value.tuple
-    return { socks5: true, host, port }
-  } else if (typeof value === 'string') {
-    const [host, port] = value.split(':')
-    return { socks5: false, host, port }
+const parseStringOrTupleValue = (key, value) => {
+  if (key === ':proxy_url') {
+    if (value && !Array.isArray(value) &&
+      typeof value === 'object' &&
+      value.tuple.length === 3 &&
+      value.tuple[0] === ':socks5') {
+      const [, host, port] = value.tuple
+      return { socks5: true, host, port }
+    } else if (typeof value === 'string') {
+      const [host, port] = value.split(':')
+      return { socks5: false, host, port }
+    }
+    return { socks5: false, host: null, port: null }
+  } else if (key === ':sender') {
+    if (typeof value === 'string') {
+      return { email: value }
+    } else if (value &&
+      typeof value === 'object' &&
+      value.tuple.length === 2) {
+      const [nickname, email] = value.tuple
+      return { nickname, email }
+    }
   }
-  return { socks5: false, host: null, port: null }
 }
 
 const prependWithСolon = (type, value) => {
