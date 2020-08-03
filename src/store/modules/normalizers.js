@@ -50,12 +50,7 @@ export const parseNonTuples = (key, value) => {
     return updated
   }
   if (key === ':args') {
-    if (typeof value === 'string') {
-      return [value]
-    }
-    const index = value.findIndex(el => typeof el === 'object' && el.tuple.includes('implode'))
-    const updated = value.map((el, i) => i === index ? 'implode' : el)
-    return updated
+    return typeof value === 'string' ? [value] : value
   }
   return value
 }
@@ -259,13 +254,6 @@ const wrapValues = (settings, currentState) => {
     } else if (setting === ':ip') {
       const ip = value.split('.').map(s => parseInt(s, 10))
       return { 'tuple': [setting, { 'tuple': ip }] }
-    } else if (setting === ':args') {
-      const index = value.findIndex(el => el === 'implode')
-      const updatedArray = value.slice()
-      if (index !== -1) {
-        updatedArray[index] = { 'tuple': ['implode', '1'] }
-      }
-      return { 'tuple': [setting, updatedArray] }
     } else {
       return { 'tuple': [setting, value] }
     }
