@@ -269,8 +269,6 @@ describe('Parse tuples', () => {
     const expectedSenderTuple = { ':sender': { email: 'test@email.com', nickname: 'test' }}
     const expectedSenderString = { ':sender': { email: 'test@email.com' }}
 
-    console.log(parseTuples(senderEmpty, ':welcome'))
-
     expect(_.isEqual(expectedSenderEmpty, parseTuples(senderEmpty, ':welcome'))).toBeTruthy()
     expect(_.isEqual(expectedSenderTuple, parseTuples(senderTuple, ':welcome'))).toBeTruthy()
     expect(_.isEqual(expectedSenderString, parseTuples(senderString, ':welcome'))).toBeTruthy()
@@ -291,8 +289,8 @@ describe('Parse tuples', () => {
   })
 
   it('parses args setting in Pleroma.Upload.Filter.Mogrify', () => {
-    const tuples = [{ tuple: [':args', ['strip', { tuple: ['implode', '1'] }]]}]
-    const expectedResult = { ':args': ['strip', 'implode'] }
+    const tuples = [{ tuple: [':args', ['strip', '{ "implode", "1" }']]}]
+    const expectedResult = { ':args': ['strip', '{ "implode", "1" }'] }
 
     const result = parseTuples(tuples, 'Pleroma.Upload.Filter.Mogrify')
     expect(_.isEqual(expectedResult, result)).toBeTruthy()

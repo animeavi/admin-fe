@@ -357,14 +357,14 @@ describe('Wrap settings', () => {
   it('wraps args setting in Pleroma.Upload.Filter.Mogrify group', () => {
     const settings = { 'Pleroma.Upload.Filter.Mogrify': { ':args': [
       ['string', ['list', 'string'], ['list', 'tuple']],
-      ['strip', 'implode']
+      ['strip', '{ "implode", "1"]}']
     ]}}
     const state = { ':pleroma': { 'Pleroma.Upload.Filter.Mogrify': {}}}
     const result = wrapUpdatedSettings(':pleroma', settings, state)
     const expectedResult = [{
       group: ':pleroma',
       key: 'Pleroma.Upload.Filter.Mogrify',
-      value: [{tuple: [':args', ['strip', {tuple: ['implode', '1']}]]}]
+      value: [{tuple: [':args', ['strip', '{ "implode", "1"]}']]}]
     }]
 
     expect(_.isEqual(result, expectedResult)).toBeTruthy()
