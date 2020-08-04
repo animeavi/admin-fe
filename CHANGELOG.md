@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add ability to disable multi-factor authentication for a user
 - Add ability to manually evict and ban URLs from the Pleroma MediaProxy cache
 - Add Invalidation settings on MediaProxy tab
-- Ability to configure S3 settings on Upload tab, Pleroma.Web.ApiSpec.CastAndValidate and :modules settings on Other tab, Pools, Connections pools and Hackney pools settings on Job Queue tab, :restrict_unauthenticated settings on Authentication tab, :favicons and :welcome settings on Instance tab
+- Ability to configure S3 settings on Upload tab, Pleroma.Web.ApiSpec.CastAndValidate and :modules settings on Other tab, Pools, Connections pools and Hackney pools settings on Job Queue tab, :restrict_unauthenticated settings on Authentication tab, :favicons and :welcome settings on Instance tab, :frontends settings on Frontend tab
 - Show number of open reports in Sidebar Menu
 - Add confirmation message when deleting a user
 

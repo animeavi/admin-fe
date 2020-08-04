@@ -18,7 +18,7 @@ export const tabs = description => {
     },
     'frontend': {
       label: 'settings.frontend',
-      settings: [':assets', ':chat', ':emoji', ':frontend_configurations', ':markup', ':static_fe']
+      settings: [':assets', ':chat', ':frontends', ':emoji', ':frontend_configurations', ':markup', ':static_fe']
     },
     'gopher': {
       label: 'settings.gopher',
