@@ -38,6 +38,17 @@
         {{ $t('users.deleteAccount') }}
       </el-dropdown-item>
       <el-dropdown-item
+        v-if="user.local && user.approval_pending"
+        divided
+        @click.native="handleAccountApproval(user)">
+        {{ $t('users.approveAccount') }}
+      </el-dropdown-item>
+      <el-dropdown-item
+        v-if="user.local && user.approval_pending"
+        @click.native="handleAccountRejection(user)">
+        {{ $t('users.rejectAccount') }}
+      </el-dropdown-item>
+      <el-dropdown-item
         v-if="user.local && user.confirmation_pending"
         divided
         @click.native="handleEmailConfirmation(user)">
@@ -143,6 +154,25 @@ export default {
       this.$store.dispatch('ResendConfirmationEmail', [user])
     },
     handleDeletion(user) {
+      this.$confirm(
+        this.$t('users.deleteUsersConfirmation'),
+        {
+          confirmButtonText: 'Delete',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then(() => {
+        this.$store.dispatch('DeleteUsers', { users: [user], _userId: user.id })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Delete canceled'
+        })
+      })
+    },
+    handleAccountApproval(user) {
+      this.$store.dispatch('ApproveUsersAccount', { users: [user], _userId: user.id, _statusId: this.statusId })
+    },
+    handleAccountRejection(user) {
       this.$confirm(
         this.$t('users.deleteUsersConfirmation'),
         {

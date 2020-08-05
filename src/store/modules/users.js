@@ -14,6 +14,7 @@ import {
   tagUser,
   untagUser,
   forcePasswordReset,
+  approveUserAccount,
   confirmUserEmail,
   resendConfirmationEmail
 } from '@/api/users'
@@ -30,6 +31,7 @@ const users = {
       local: false,
       external: false,
       active: false,
+      needApproval: false,
       deactivated: false
     },
     passwordResetToken: {
@@ -126,7 +128,7 @@ const users = {
     },
     ClearUsersState({ commit }) {
       commit('SET_SEARCH_QUERY', '')
-      commit('SET_USERS_FILTERS', { local: false, external: false, active: false, deactivated: false })
+      commit('SET_USERS_FILTERS', { local: false, external: false, active: false, needApproval: false, deactivated: false })
     },
     async ClearFilters({ commit, dispatch, state }) {
       commit('CLEAR_USERS_FILTERS')
@@ -158,6 +160,15 @@ const users = {
         return
       }
       dispatch('SuccessMessage')
+    },
+    async ApproveUsersAccount({ dispatch, getters }, { users, _userId, _statusId }) {
+      const updatedUsers = users.map(user => {
+        return { ...user, approval_pending: false }
+      })
+      const nicknames = users.map(user => user.nickname)
+      const callApiFn = async() => await approveUserAccount(nicknames, getters.authHost, getters.token)
+
+      dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId, statusId: _statusId })
     },
     async ConfirmUsersEmail({ dispatch, getters }, { users, _userId, _statusId }) {
       const updatedUsers = users.map(user => {
@@ -260,6 +271,7 @@ const users = {
         local: false,
         external: false,
         active: false,
+        needApproval: false,
         deactivated: false
       }
       const currentFilters = { ...defaultFilters, ...filters }

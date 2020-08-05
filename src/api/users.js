@@ -166,6 +166,16 @@ export async function fetchUserStatuses(id, authHost, godmode, token) {
   })
 }
 
+export async function approveUserAccount(nicknames, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: '/api/pleroma/admin/users/approve',
+    method: 'patch',
+    headers: authHeaders(token),
+    data: { nicknames }
+  })
+}
+
 export async function confirmUserEmail(nicknames, authHost, token) {
   return await request({
     baseURL: baseName(authHost),

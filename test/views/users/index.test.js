@@ -34,7 +34,7 @@ describe('Search and filter users', () => {
     })
 
     await flushPromises()
-    expect(wrapper.vm.usersCount).toEqual(3)
+    expect(wrapper.vm.usersCount).toEqual(4)
     done()
   })
 
@@ -51,7 +51,7 @@ describe('Search and filter users', () => {
     }
 
     await flushPromises()
-    expect(wrapper.vm.usersCount).toEqual(3)
+    expect(wrapper.vm.usersCount).toEqual(4)
     const input = wrapper.find('.search input.el-input__inner')
     input.element.value = 'bob'
     input.trigger('input')
@@ -61,7 +61,7 @@ describe('Search and filter users', () => {
     input.element.value = ''
     input.trigger('input')
     await flushPromises()
-    expect(wrapper.vm.usersCount).toEqual(3)
+    expect(wrapper.vm.usersCount).toEqual(4)
 
     done()
   })
@@ -304,7 +304,7 @@ describe('Creates new account', () => {
       stubs: ['router-link']
     })
     await flushPromises()
-    expect(wrapper.vm.usersCount).toEqual(3)
+    expect(wrapper.vm.usersCount).toEqual(4)
 
     const openDialogButton = wrapper.find('button.actions-button')
     openDialogButton.trigger('click')
@@ -326,7 +326,7 @@ describe('Creates new account', () => {
     createButton.trigger('click')
     await flushPromises()
 
-    expect(wrapper.vm.usersCount).toEqual(4)
+    expect(wrapper.vm.usersCount).toEqual(5)
     done()
   })
 
