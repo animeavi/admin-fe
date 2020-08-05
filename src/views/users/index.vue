@@ -71,7 +71,16 @@
               {{ isDesktop ? $t('users.unconfirmed') : getFirstLetter($t('users.unconfirmed')) }}
             </el-tag>
           </el-tooltip>
+          <el-tooltip :content="$t('users.unapprovedAccount')" effect="dark">
+            <el-tag v-if="scope.row.approval_pending" type="info">
+              {{ isDesktop ? $t('users.unapproved') : getFirstLetter($t('users.unapproved')) }}
+            </el-tag>
+          </el-tooltip>
+          <div v-if="pendingView && isDesktop" class="reason-text">
+            "{{ scope.row.registration_reason | truncate(100, '...') }}"
+          </div>
         </template>
+
       </el-table-column>
       <el-table-column :label="$t('users.actions')" fixed="right">
         <template slot-scope="scope">
@@ -123,6 +132,15 @@ export default {
     ResetPasswordDialog,
     UsersFilter
   },
+  filters: {
+    truncate: function(text, length, suffix) {
+      if (text.length > length) {
+        return text.substring(0, length) + suffix
+      } else {
+        return text
+      }
+    }
+  },
   data() {
     return {
       search: '',
@@ -155,6 +173,9 @@ export default {
     },
     usersCount() {
       return this.$store.state.users.totalUsersCount
+    },
+    pendingView() {
+      return this.$store.state.users.filters['needApproval']
     },
     width() {
       return this.isMobile ? 55 : false
@@ -297,6 +318,9 @@ export default {
   .user-count {
     color: gray;
     font-size: 28px;
+  }
+  .reason-text {
+    word-break: normal;
   }
 }
 

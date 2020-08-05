@@ -7,12 +7,13 @@
     class="select-field"
     @change="toggleFilters">
     <el-option-group :label="$t('usersFilter.byAccountType')">
-      <el-option value="local">{{ $t('usersFilter.local') }}</el-option>
-      <el-option value="external">{{ $t('usersFilter.external') }}</el-option>
+      <el-option value="local" label="Local">{{ $t('usersFilter.local') }}</el-option>
+      <el-option value="external" label="External">{{ $t('usersFilter.external') }}</el-option>
     </el-option-group>
     <el-option-group :label="$t('usersFilter.byStatus')">
-      <el-option value="active">{{ $t('usersFilter.active') }}</el-option>
-      <el-option value="deactivated">{{ $t('usersFilter.deactivated') }}</el-option>
+      <el-option value="active" label="Active">{{ $t('usersFilter.active') }}</el-option>
+      <el-option value="needApproval" label="Need Approval">{{ $t('usersFilter.pending') }}</el-option>
+      <el-option value="deactivated" label="Deactivated">{{ $t('usersFilter.deactivated') }}</el-option>
     </el-option-group>
   </el-select>
 </template>

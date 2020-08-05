@@ -28,6 +28,15 @@
       </el-dropdown-item>
       <el-dropdown-item
         divided
+        @click.native="approveAccountsForMultipleUsers">
+        {{ $t('users.approveAccounts') }}
+      </el-dropdown-item>
+      <el-dropdown-item
+        @click.native="rejectAccountsForMultipleUsers">
+        {{ $t('users.rejectAccounts') }}
+      </el-dropdown-item>
+      <el-dropdown-item
+        divided
         @click.native="confirmAccountsForMultipleUsers">
         {{ $t('users.confirmAccounts') }}
       </el-dropdown-item>
@@ -219,6 +228,12 @@ export default {
 
           applyAction(filtered, requirePasswordResetFn)
         },
+        approveAccounts: () => {
+          const filtered = this.selectedUsers.filter(user => this.isLocalUser(user) && user.approval_pending)
+          const approveAccountFn = async(users) => await this.$store.dispatch('ApproveUsersAccount', { users })
+
+          applyAction(filtered, approveAccountFn)
+        },
         confirmAccounts: () => {
           const filtered = this.selectedUsers.filter(user => this.isLocalUser(user) && user.confirmation_pending)
           const confirmAccountFn = async(users) => await this.$store.dispatch('ConfirmUsersEmail', { users })
@@ -298,6 +313,20 @@ export default {
       this.confirmMessage(
         this.$t('users.removeTagFromMultipleUsersConfirmation'),
         removeTag(tag)
+      )
+    },
+    approveAccountsForMultipleUsers() {
+      const { approveAccounts } = this.mappers()
+      this.confirmMessage(
+        this.$t('users.approveAccountsConfirmation'),
+        approveAccounts
+      )
+    },
+    rejectAccountsForMultipleUsers() {
+      const { remove } = this.mappers()
+      this.confirmMessage(
+        this.$t('users.deleteMultipleUsersConfirmation'),
+        remove
       )
     },
     confirmAccountsForMultipleUsers() {
