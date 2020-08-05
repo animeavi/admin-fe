@@ -249,22 +249,22 @@ describe('Apply users actions to multiple users', () => {
 
     wrapper.find(`.el-dropdown-menu__item:nth-child(11) button:nth-child(1)`).trigger('click')
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalled()
-    expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalledWith('force_nsfw')
+    expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalledWith('mrf_tag:media-force-nsfw')
 
     wrapper.find(`.el-dropdown-menu__item:nth-child(13) button:nth-child(1)`).trigger('click')
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalled()
-    expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalledWith('force_unlisted')
+    expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalledWith('mrf_tag:force-unlisted')
 
     wrapper.find(`.el-dropdown-menu__item:nth-child(15  ) button:nth-child(1)`).trigger('click')
     expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalled()
-    expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalledWith('disable_remote_subscription')
+    expect(wrapper.vm.addTagForMultipleUsers).toHaveBeenCalledWith('mrf_tag:disable-remote-subscription')
 
     const addTag = wrapper.vm.mappers().addTag
     const user1 = store.state.users.fetchedUsers[0]
     const user2 = store.state.users.fetchedUsers[1]
     expect(user1.tags.length).toBe(0)
     expect(user2.tags.length).toBe(1)
-    addTag('strip_media')()
+    addTag('mrf_tag:media-strip')()
 
     const updatedUser1 = store.state.users.fetchedUsers[0]
     const updatedUser2 = store.state.users.fetchedUsers[1]
@@ -289,22 +289,22 @@ describe('Apply users actions to multiple users', () => {
 
     wrapper.find(`.el-dropdown-menu__item:nth-child(12) button:nth-child(2)`).trigger('click')
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalled()
-    expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalledWith('strip_media')
+    expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalledWith('mrf_tag:media-strip')
 
     wrapper.find(`.el-dropdown-menu__item:nth-child(14) button:nth-child(2)`).trigger('click')
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalled()
-    expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalledWith('sandbox')
+    expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalledWith('mrf_tag:sandbox')
 
     wrapper.find(`.el-dropdown-menu__item:nth-child(16) button:nth-child(2)`).trigger('click')
     expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalled()
-    expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalledWith('disable_any_subscription')
+    expect(wrapper.vm.removeTagFromMultipleUsers).toHaveBeenCalledWith('mrf_tag:disable-any-subscription')
 
     const removeTag = wrapper.vm.mappers().removeTag
     const user1 = store.state.users.fetchedUsers[1]
     const user2 = store.state.users.fetchedUsers[2]
     expect(user1.tags.length).toBe(1)
     expect(user2.tags.length).toBe(1)
-    removeTag('strip_media')()
+    removeTag('mrf_tag:media-strip')()
 
     const updatedUser1 = store.state.users.fetchedUsers[1]
     const updatedUser2 = store.state.users.fetchedUsers[2]

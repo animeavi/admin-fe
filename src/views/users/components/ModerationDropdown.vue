@@ -50,42 +50,42 @@
       </el-dropdown-item>
       <el-dropdown-item
         :divided="showAdminAction(user)"
-        :class="{ 'active-tag': user.tags.includes('force_nsfw') }"
-        @click.native="toggleTag(user, 'force_nsfw')">
+        :class="{ 'active-tag': user.tags.includes('mrf_tag:media-force-nsfw') }"
+        @click.native="toggleTag(user, 'mrf_tag:media-force-nsfw')">
         {{ $t('users.forceNsfw') }}
-        <i v-if="user.tags.includes('force_nsfw')" class="el-icon-check"/>
+        <i v-if="user.tags.includes('mrf_tag:media-force-nsfw')" class="el-icon-check"/>
       </el-dropdown-item>
       <el-dropdown-item
-        :class="{ 'active-tag': user.tags.includes('strip_media') }"
-        @click.native="toggleTag(user, 'strip_media')">
+        :class="{ 'active-tag': user.tags.includes('mrf_tag:media-strip') }"
+        @click.native="toggleTag(user, 'mrf_tag:media-strip')">
         {{ $t('users.stripMedia') }}
-        <i v-if="user.tags.includes('strip_media')" class="el-icon-check"/>
+        <i v-if="user.tags.includes('mrf_tag:media-strip')" class="el-icon-check"/>
       </el-dropdown-item>
       <el-dropdown-item
-        :class="{ 'active-tag': user.tags.includes('force_unlisted') }"
-        @click.native="toggleTag(user, 'force_unlisted')">
+        :class="{ 'active-tag': user.tags.includes('mrf_tag:force-unlisted') }"
+        @click.native="toggleTag(user, 'mrf_tag:force-unlisted')">
         {{ $t('users.forceUnlisted') }}
-        <i v-if="user.tags.includes('force_unlisted')" class="el-icon-check"/>
+        <i v-if="user.tags.includes('mrf_tag:force-unlisted')" class="el-icon-check"/>
       </el-dropdown-item>
       <el-dropdown-item
-        :class="{ 'active-tag': user.tags.includes('sandbox') }"
-        @click.native="toggleTag(user, 'sandbox')">
+        :class="{ 'active-tag': user.tags.includes('mrf_tag:sandbox') }"
+        @click.native="toggleTag(user, 'mrf_tag:sandbox')">
         {{ $t('users.sandbox') }}
-        <i v-if="user.tags.includes('sandbox')" class="el-icon-check"/>
+        <i v-if="user.tags.includes('mrf_tag:sandbox')" class="el-icon-check"/>
       </el-dropdown-item>
       <el-dropdown-item
         v-if="user.local"
-        :class="{ 'active-tag': user.tags.includes('disable_remote_subscription') }"
-        @click.native="toggleTag(user, 'disable_remote_subscription')">
+        :class="{ 'active-tag': user.tags.includes('mrf_tag:disable-remote-subscription') }"
+        @click.native="toggleTag(user, 'mrf_tag:disable-remote-subscription')">
         {{ $t('users.disableRemoteSubscription') }}
-        <i v-if="user.tags.includes('disable_remote_subscription')" class="el-icon-check"/>
+        <i v-if="user.tags.includes('mrf_tag:disable-remote-subscription')" class="el-icon-check"/>
       </el-dropdown-item>
       <el-dropdown-item
         v-if="user.local"
-        :class="{ 'active-tag': user.tags.includes('disable_any_subscription') }"
-        @click.native="toggleTag(user, 'disable_any_subscription')">
+        :class="{ 'active-tag': user.tags.includes('mrf_tag:disable-any-subscription') }"
+        @click.native="toggleTag(user, 'mrf_tag:disable-any-subscription')">
         {{ $t('users.disableAnySubscription') }}
-        <i v-if="user.tags.includes('disable_any_subscription')" class="el-icon-check"/>
+        <i v-if="user.tags.includes('mrf_tag:disable-any-subscription')" class="el-icon-check"/>
       </el-dropdown-item>
       <el-dropdown-item
         v-if="user.local"

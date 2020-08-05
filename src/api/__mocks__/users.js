@@ -1,7 +1,7 @@
 export let users = [
   { active: true, deactivated: false, id: '2', nickname: 'allis', local: true, external: false, roles: { admin: true, moderator: false }, tags: [] },
-  { active: true, deactivated: false, id: '10', nickname: 'bob', local: false, external: true, roles: { admin: false, moderator: false }, tags: ['sandbox'] },
-  { active: false, deactivated: true, id: 'abc', nickname: 'john', local: true, external: false, roles: { admin: false, moderator: false }, tags: ['strip_media'] }
+  { active: true, deactivated: false, id: '10', nickname: 'bob', local: false, external: true, roles: { admin: false, moderator: false }, tags: ['mrf_tag:sandbox'] },
+  { active: false, deactivated: true, id: 'abc', nickname: 'john', local: true, external: false, roles: { admin: false, moderator: false }, tags: ['mrf_tag:media-strip'] }
 ]
 
 const userProfile = { avatar: 'avatar.jpg', nickname: 'allis', id: '2', tags: [], roles: { admin: true, moderator: false }, local: true, external: false }
