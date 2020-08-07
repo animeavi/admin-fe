@@ -42,6 +42,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Send `true` and `false` as booleans if they are values of single selects on the Settings page
 - Fix sorting users on Users page if there is an acount with missing nickname or ID
+- Add new type of settings: `['string', 'image']`. Render Image upload Input depending on the type of setting, not its key
 
 ## [2.0.3] - 2020-04-29
 
