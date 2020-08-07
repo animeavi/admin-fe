@@ -295,7 +295,7 @@ export default {
       return this.$store.state.settings.updatedSettings
     },
     isImageUrl() {
-      return [':background', ':logo', ':nsfwCensorImage', ':default_user_avatar', ':instance_thumbnail'].includes(this.setting.key)
+      return Array.isArray(this.setting.type) && this.setting.type.includes('image')
     }
   },
   methods: {
