@@ -175,7 +175,7 @@ export default {
       return this.$store.state.users.totalUsersCount
     },
     pendingView() {
-      return this.$store.state.users.filters['needApproval']
+      return this.$store.state.users.filters['need_approval']
     },
     width() {
       return this.isMobile ? 55 : false

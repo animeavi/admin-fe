@@ -12,7 +12,7 @@
     </el-option-group>
     <el-option-group :label="$t('usersFilter.byStatus')">
       <el-option value="active" label="Active">{{ $t('usersFilter.active') }}</el-option>
-      <el-option value="needApproval" label="Need Approval">{{ $t('usersFilter.pending') }}</el-option>
+      <el-option value="need_approval" label="Need Approval">{{ $t('usersFilter.pending') }}</el-option>
       <el-option value="deactivated" label="Deactivated">{{ $t('usersFilter.deactivated') }}</el-option>
     </el-option-group>
   </el-select>

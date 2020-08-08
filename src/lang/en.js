@@ -323,7 +323,7 @@ export default {
     external: 'External',
     byStatus: 'By status',
     active: 'Active',
-    pending: 'Pending',
+    pending: 'Pending Approval',
     deactivated: 'Deactivated'
   },
   reports: {
