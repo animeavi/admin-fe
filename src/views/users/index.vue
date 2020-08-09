@@ -56,10 +56,20 @@
       </el-table-column>
       <el-table-column :min-width="width" :label="$t('users.status')">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.deactivated ? 'danger' : 'success'">
-            <span v-if="isDesktop">{{ scope.row.deactivated ? $t('users.deactivated') : $t('users.active') }}</span>
-            <i v-else :class="activationIcon(scope.row.deactivated)"/>
+          <el-tag v-if="!scope.row.deactivated & !scope.row.approval_pending" type="success">
+            <span v-if="isDesktop">{{ $t('users.active') }}</span>
+            <i v-else class="el-icon-circle-check"/>
           </el-tag>
+          <el-tag v-if="scope.row.deactivated & !scope.row.approval_pending" type="danger">
+            <span v-if="isDesktop">{{ $t('users.deactivated') }}</span>
+            <i v-else class="el-icon-circle-close"/>
+          </el-tag>
+          <el-tooltip :content="$t('users.unapprovedAccount')" effect="dark">
+            <el-tag v-if="scope.row.approval_pending" type="info">
+              <span v-if="isDesktop">{{ $t('users.unapproved') }}</span>
+              <i v-else class="el-icon-warning-outline"/>
+            </el-tag>
+          </el-tooltip>
           <el-tag v-if="scope.row.roles.admin">
             <span>{{ isDesktop ? $t('users.admin') : getFirstLetter($t('users.admin')) }}</span>
           </el-tag>
@@ -69,11 +79,6 @@
           <el-tooltip :content="$t('users.unconfirmedEmail')" effect="dark">
             <el-tag v-if="scope.row.confirmation_pending" type="info">
               {{ isDesktop ? $t('users.unconfirmed') : getFirstLetter($t('users.unconfirmed')) }}
-            </el-tag>
-          </el-tooltip>
-          <el-tooltip :content="$t('users.unapprovedAccount')" effect="dark">
-            <el-tag v-if="scope.row.approval_pending" type="info">
-              {{ isDesktop ? $t('users.unapproved') : getFirstLetter($t('users.unapproved')) }}
             </el-tag>
           </el-tooltip>
         </template>
@@ -199,9 +204,6 @@ export default {
     this.$store.dispatch('ClearUsersState')
   },
   methods: {
-    activationIcon(status) {
-      return status ? 'el-icon-error' : 'el-icon-success'
-    },
     clearSelection() {
       this.$refs.usersTable.clearSelection()
     },
@@ -366,16 +368,12 @@ export default {
     }
     .el-table__row {
       .el-tag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 30px;
-        display: inline-block;
         margin-bottom: 4px;
         font-weight: bold;
-        &.el-tag--success {
-          padding-left: 8px;
-        }
-        &.el-tag--danger {
-          padding-left: 8px;
-        }
       }
     }
     .reboot-button {
