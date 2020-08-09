@@ -155,7 +155,7 @@ export default {
     },
     handleDeletion(user) {
       this.$confirm(
-        this.$t('users.deleteUsersConfirmation'),
+        this.$t('users.deleteUserConfirmation'),
         {
           confirmButtonText: 'Delete',
           cancelButtonText: 'Cancel',
@@ -174,9 +174,9 @@ export default {
     },
     handleAccountRejection(user) {
       this.$confirm(
-        this.$t('users.deleteUsersConfirmation'),
+        this.$t('users.rejectAccountConfirmation'),
         {
-          confirmButtonText: 'Delete',
+          confirmButtonText: 'Reject',
           cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
@@ -184,7 +184,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: 'Delete canceled'
+          message: 'Reject canceled'
         })
       })
     },
