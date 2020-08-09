@@ -268,7 +268,8 @@ export default {
     invalidAccount: 'This account has invalid nickname and can\'t be modified',
     invalidNickname: 'invalid nickname',
     passwordResetTokenGenerated: 'Password reset token was generated:',
-    linkToResetPassword: 'You can also use this link to reset password:'
+    linkToResetPassword: 'You can also use this link to reset password:',
+    registrationReason: 'Registration Reason'
   },
   statuses: {
     statuses: 'Statuses',
