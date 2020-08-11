@@ -325,7 +325,7 @@ export default {
     rejectAccountsForMultipleUsers() {
       const { remove } = this.mappers()
       this.confirmMessage(
-        this.$t('users.deleteMultipleUsersConfirmation'),
+        this.$t('users.rejectAccountsConfirmation'),
         remove
       )
     },

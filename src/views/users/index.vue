@@ -56,10 +56,20 @@
       </el-table-column>
       <el-table-column :min-width="width" :label="$t('users.status')">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.deactivated ? 'danger' : 'success'">
-            <span v-if="isDesktop">{{ scope.row.deactivated ? $t('users.deactivated') : $t('users.active') }}</span>
-            <i v-else :class="activationIcon(scope.row.deactivated)"/>
+          <el-tag v-if="!scope.row.deactivated & !scope.row.approval_pending" type="success">
+            <span v-if="isDesktop">{{ $t('users.active') }}</span>
+            <i v-else class="el-icon-circle-check"/>
           </el-tag>
+          <el-tag v-if="scope.row.deactivated & !scope.row.approval_pending" type="danger">
+            <span v-if="isDesktop">{{ $t('users.deactivated') }}</span>
+            <i v-else class="el-icon-circle-close"/>
+          </el-tag>
+          <el-tooltip :content="$t('users.unapprovedAccount')" effect="dark">
+            <el-tag v-if="scope.row.approval_pending" type="info">
+              <span v-if="isDesktop">{{ $t('users.unapproved') }}</span>
+              <i v-else class="el-icon-warning-outline"/>
+            </el-tag>
+          </el-tooltip>
           <el-tag v-if="scope.row.roles.admin">
             <span>{{ isDesktop ? $t('users.admin') : getFirstLetter($t('users.admin')) }}</span>
           </el-tag>
@@ -71,16 +81,20 @@
               {{ isDesktop ? $t('users.unconfirmed') : getFirstLetter($t('users.unconfirmed')) }}
             </el-tag>
           </el-tooltip>
-          <el-tooltip :content="$t('users.unapprovedAccount')" effect="dark">
-            <el-tag v-if="scope.row.approval_pending" type="info">
-              {{ isDesktop ? $t('users.unapproved') : getFirstLetter($t('users.unapproved')) }}
-            </el-tag>
-          </el-tooltip>
-          <div v-if="pendingView && isDesktop" class="reason-text">
-            "{{ scope.row.registration_reason | truncate(100, '...') }}"
-          </div>
         </template>
-
+      </el-table-column>
+      <el-table-column v-if="pendingView && isDesktop" :label="$t('users.registrationReason')">
+        <template slot-scope="scope">
+          <el-tooltip
+            v-if="regReason(scope.row.registration_reason)"
+            :content="scope.row.registration_reason"
+            popper-class="reason-tooltip"
+            effect="dark">
+            <span>
+              "{{ scope.row.registration_reason | truncate(100, '...') }}"
+            </span>
+          </el-tooltip>
+        </template>
       </el-table-column>
       <el-table-column :label="$t('users.actions')" fixed="right">
         <template slot-scope="scope">
@@ -134,11 +148,7 @@ export default {
   },
   filters: {
     truncate: function(text, length, suffix) {
-      if (text.length > length) {
-        return text.substring(0, length) + suffix
-      } else {
-        return text
-      }
+      return text.length < length ? text : text.substring(0, length) + suffix
     }
   },
   data() {
@@ -175,7 +185,7 @@ export default {
       return this.$store.state.users.totalUsersCount
     },
     pendingView() {
-      return this.$store.state.users.filters['needApproval']
+      return this.$store.state.users.filters['need_approval']
     },
     width() {
       return this.isMobile ? 55 : false
@@ -194,9 +204,6 @@ export default {
     this.$store.dispatch('ClearUsersState')
   },
   methods: {
-    activationIcon(status) {
-      return status ? 'el-icon-error' : 'el-icon-success'
-    },
     clearSelection() {
       this.$refs.usersTable.clearSelection()
     },
@@ -232,6 +239,9 @@ export default {
     },
     propertyExists(account, property) {
       return account[property]
+    },
+    regReason(reason) {
+      return reason && reason.length > 0
     },
     showDeactivatedButton(id) {
       return this.$store.state.user.id !== id
@@ -278,6 +288,9 @@ export default {
 .password-reset-token-dialog {
   width: 50%
 }
+.reason-tooltip {
+  max-width: 450px;
+}
 .reset-password-link {
   text-decoration: underline;
 }
@@ -290,6 +303,9 @@ export default {
   h1 {
     margin: 10px 0 0 15px;
     height: 40px;
+  }
+  .cell {
+    word-break: break-word;
   }
   .el-table__row:hover {
     cursor: pointer;
@@ -318,9 +334,6 @@ export default {
   .user-count {
     color: gray;
     font-size: 28px;
-  }
-  .reason-text {
-    word-break: normal;
   }
 }
 
@@ -355,16 +368,12 @@ export default {
     }
     .el-table__row {
       .el-tag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 30px;
-        display: inline-block;
         margin-bottom: 4px;
         font-weight: bold;
-        &.el-tag--success {
-          padding-left: 8px;
-        }
-        &.el-tag--danger {
-          padding-left: 8px;
-        }
       }
     }
     .reboot-button {
