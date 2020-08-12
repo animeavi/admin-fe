@@ -46,6 +46,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <div v-if="!loading" class="pagination">
+      <el-pagination
+        :total="urlsCount"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        hide-on-single-page
+        layout="prev, pager, next"
+        @current-change="handlePageChange"
+      />
+    </div>
   </div>
 </template>
 
@@ -66,26 +76,38 @@ export default {
     bannedUrls() {
       return this.$store.state.mediaProxyCache.bannedUrls
     },
+    currentPage() {
+      return this.$store.state.mediaProxyCache.currentPage
+    },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
     },
     loading() {
       return this.$store.state.mediaProxyCache.loading
     },
+    pageSize() {
+      return this.$store.state.mediaProxyCache.pageSize
+    },
     removeSelectedDisabled() {
       return this.selectedUrls.length === 0
+    },
+    urlsCount() {
+      return this.$store.state.mediaProxyCache.totalUrlsCount
     }
   },
   mounted() {
     this.$store.dispatch('GetNodeInfo')
     this.$store.dispatch('NeedReboot')
-    this.$store.dispatch('ListBannedUrls', 1)
+    this.$store.dispatch('ListBannedUrls', { page: 1 })
   },
   methods: {
     evictURL() {
       const urls = this.urls.split(',').map(url => url.trim()).filter(el => el.length > 0)
       this.$store.dispatch('PurgeUrls', { urls, ban: this.ban })
       this.urls = ''
+    },
+    handlePageChange(page) {
+      this.$store.dispatch('ListBannedUrls', { page })
     },
     handleSelectionChange(value) {
       this.$data.selectedUrls = value
@@ -132,6 +154,10 @@ h1 {
   align-items: center;
   justify-content: space-between;
   margin: 10px 15px;
+}
+.pagination {
+  margin: 25px 0;
+  text-align: center;
 }
 .remove-url-button {
   width: 150px;

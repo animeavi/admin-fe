@@ -5,16 +5,17 @@ import i18n from '@/lang'
 const mediaProxyCache = {
   state: {
     bannedUrls: [],
-    bannedUrlsCount: 0,
     currentPage: 1,
-    loading: false
+    loading: false,
+    pageSize: 50,
+    totalUrlsCount: 0
   },
   mutations: {
     SET_BANNED_URLS: (state, urls) => {
       state.bannedUrls = urls.map(el => { return { url: el } })
     },
-    SET_BANNED_URLS_COUNT: (state, count) => {
-      state.bannedUrlsCount = count
+    SET_TOTAL_URLS_COUNT: (state, count) => {
+      state.totalUrlsCount = count
     },
     SET_LOADING: (state, status) => {
       state.loading = status
@@ -24,11 +25,11 @@ const mediaProxyCache = {
     }
   },
   actions: {
-    async ListBannedUrls({ commit, getters }, page) {
+    async ListBannedUrls({ commit, getters, state }, { page }) {
       commit('SET_LOADING', true)
-      const response = await listBannedUrls(page, getters.authHost, getters.token)
+      const response = await listBannedUrls(page, state.pageSize, getters.authHost, getters.token)
       commit('SET_BANNED_URLS', response.data.urls)
-      // commit('SET_BANNED_URLS_COUNT', count)
+      commit('SET_TOTAL_URLS_COUNT', response.data.count)
       commit('SET_PAGE', page)
       commit('SET_LOADING', false)
     },
@@ -40,12 +41,12 @@ const mediaProxyCache = {
         duration: 5 * 1000
       })
       if (ban) {
-        dispatch('ListBannedUrls', state.currentPage)
+        dispatch('ListBannedUrls', { page: state.currentPage })
       }
     },
     async RemoveBannedUrls({ dispatch, getters, state }, urls) {
       await removeBannedUrls(urls, getters.authHost, getters.token)
-      dispatch('ListBannedUrls', state.currentPage)
+      dispatch('ListBannedUrls', { page: state.currentPage })
     }
   }
 }
