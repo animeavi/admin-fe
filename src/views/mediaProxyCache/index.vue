@@ -27,9 +27,16 @@
         type="selection"
         align="center"
         width="55"/>
-      <el-table-column
-        :min-width="isDesktop ? 320 : 120"
-        prop="url"/>
+      <el-table-column :min-width="isDesktop ? 320 : 120" prop="url">
+        <template slot="header">
+          <el-input
+            :placeholder="$t('users.search')"
+            v-model="search"
+            size="mini"
+            prefix-icon="el-icon-search"
+            @input="handleDebounceSearchInput"/>
+        </template>
+      </el-table-column>
       <el-table-column>
         <template slot="header">
           <el-button
@@ -60,6 +67,7 @@
 </template>
 
 <script>
+import debounce from 'lodash.debounce'
 import RebootButton from '@/components/RebootButton'
 
 export default {
@@ -69,6 +77,7 @@ export default {
     return {
       urls: '',
       ban: false,
+      search: '',
       selectedUrls: []
     }
   },
@@ -94,6 +103,10 @@ export default {
     urlsCount() {
       return this.$store.state.mediaProxyCache.totalUrlsCount
     }
+  },
+  created() {
+    this.handleDebounceSearchInput = debounce((query) => {
+    }, 500)
   },
   mounted() {
     this.$store.dispatch('GetNodeInfo')
