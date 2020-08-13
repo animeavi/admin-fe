@@ -8,6 +8,10 @@
       <setting :setting-group="adminToken" :data="adminTokenData"/>
     </el-form>
     <el-divider v-if="adminToken" class="divider thick-line"/>
+    <el-form :model="welcomeData" :label-position="labelPosition" :label-width="labelWidth">
+      <setting :setting-group="welcome" :data="welcomeData"/>
+    </el-form>
+    <el-divider v-if="welcome" class="divider thick-line"/>
     <el-form :model="scheduledActivityData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="scheduledActivity" :data="scheduledActivityData"/>
     </el-form>
@@ -20,6 +24,10 @@
       <setting :setting-group="pleromaUser" :data="pleromaUserData"/>
     </el-form>
     <el-divider v-if="pleromaUser" class="divider thick-line"/>
+    <el-form :model="faviconsData" :label-position="labelPosition" :label-width="labelWidth">
+      <setting :setting-group="favicons" :data="faviconsData"/>
+    </el-form>
+    <el-divider v-if="favicons" class="divider thick-line"/>
     <el-form :model="uriSchemesData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="uriSchemes" :data="uriSchemesData"/>
     </el-form>
@@ -27,7 +35,7 @@
     <el-form :model="feedData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="feed" :data="feedData"/>
     </el-form>
-    <el-divider v-if="uriSchemes" class="divider thick-line"/>
+    <el-divider v-if="feed" class="divider thick-line"/>
     <el-form :model="streamerData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="streamer" :data="streamerData"/>
     </el-form>
@@ -57,6 +65,12 @@ export default {
     },
     adminTokenData() {
       return _.get(this.settings.settings, [':pleroma', ':admin_token']) || {}
+    },
+    favicons() {
+      return this.settings.description.find(setting => setting.key === ':instances_favicons')
+    },
+    faviconsData() {
+      return _.get(this.settings.settings, [':pleroma', ':instances_favicons']) || {}
     },
     feed() {
       return this.settings.description.find(setting => setting.key === ':feed')
@@ -123,6 +137,12 @@ export default {
     },
     uriSchemesData() {
       return _.get(this.settings.settings, [':pleroma', ':uri_schemes']) || {}
+    },
+    welcome() {
+      return this.settings.description.find(setting => setting.key === ':welcome')
+    },
+    welcomeData() {
+      return _.get(this.settings.settings, [':pleroma', ':welcome']) || {}
     }
   },
   methods: {

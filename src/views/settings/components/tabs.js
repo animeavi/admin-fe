@@ -6,11 +6,7 @@ export const tabs = description => {
     },
     'authentication': {
       label: 'settings.auth',
-      settings: [':auth', ':ldap', ':oauth2', 'Pleroma.Web.Auth.Authenticator']
-    },
-    'auto-linker': {
-      label: 'settings.autoLinker',
-      settings: [':opts']
+      settings: [':auth', ':ldap', ':oauth2', 'Pleroma.Web.Auth.Authenticator', ':restrict_unauthenticated']
     },
     'esshd': {
       label: 'settings.esshd',
@@ -22,7 +18,7 @@ export const tabs = description => {
     },
     'frontend': {
       label: 'settings.frontend',
-      settings: [':assets', ':chat', ':emoji', ':frontend_configurations', ':markup', ':static_fe']
+      settings: [':assets', ':chat', ':frontends', ':emoji', ':frontend_configurations', ':markup', ':static_fe']
     },
     'gopher': {
       label: 'settings.gopher',
@@ -34,11 +30,15 @@ export const tabs = description => {
     },
     'instance': {
       label: 'settings.instance',
-      settings: [':admin_token', ':instance', ':manifest', 'Pleroma.User', 'Pleroma.ScheduledActivity', ':uri_schemes', ':feed', ':streamer']
+      settings: [':admin_token', ':instance', ':instances_favicons', ':welcome', ':manifest', 'Pleroma.User', 'Pleroma.ScheduledActivity', ':uri_schemes', ':feed', ':streamer']
     },
     'job-queue': {
       label: 'settings.jobQueue',
-      settings: ['Pleroma.ActivityExpiration', 'Oban', ':workers']
+      settings: ['Pleroma.ActivityExpiration', ':connections_pool', ':hackney_pools', 'Oban', ':pools', ':workers']
+    },
+    'link-formatter': {
+      label: 'settings.linkFormatter',
+      settings: ['Pleroma.Formatter']
     },
     'logger': {
       label: 'settings.logger',
@@ -78,7 +78,7 @@ export const tabs = description => {
     },
     'other': {
       label: 'settings.other',
-      settings: [':mime', 'Pleroma.Plugs.RemoteIp']
+      settings: [':mime', 'Pleroma.Plugs.RemoteIp', ':modules', 'Pleroma.Web.ApiSpec.CastAndValidate']
     }
   }
 }
