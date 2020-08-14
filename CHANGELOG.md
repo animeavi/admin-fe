@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Ability to configure S3 settings on Upload tab, Pleroma.Web.ApiSpec.CastAndValidate and :modules settings on Other tab, Pools, Connections pools and Hackney pools settings on Job Queue tab, :restrict_unauthenticated settings on Authentication tab, :favicons and :welcome settings on Instance tab, :frontends settings on Frontend tab
 - Show number of open reports in Sidebar Menu
 - Add confirmation message when deleting a user
+- Add new MediaProxy Cache with ability to evict and ban objects from the MediaProxy cache
 
 ### Changed
 
@@ -43,6 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Send `true` and `false` as booleans if they are values of single selects on the Settings page
 - Fix sorting users on Users page if there is an acount with missing nickname or ID
 - Add new type of settings: `['string', 'image']`. Render Image upload Input depending on the type of setting, not its key
+- Fix display `Pending` tag and filter by Pending Approval status
 
 ## [2.0.3] - 2020-04-29
 

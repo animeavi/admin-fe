@@ -49,7 +49,7 @@
         <div slot="header" class="clearfix">
           <span>{{ $t('invites.tokenCreated') }}</span>
         </div>
-        <el-form label-width="80px" class="new-token-card">
+        <el-form label-width="85px" class="new-token-card">
           <el-form-item :label="$t('invites.inviteLink')">
             <el-link :href="inviteLink" :underline="false" target="_blank">
               {{ inviteLink }}
@@ -186,7 +186,7 @@ export default {
       'authHost'
     ]),
     getLabelWidth() {
-      return this.isDesktop ? '100px' : '80px'
+      return this.isDesktop ? '100px' : '85px'
     },
     inviteLink() {
       return `${baseName(this.authHost)}/registration/${this.newToken.token}`

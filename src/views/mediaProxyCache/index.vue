@@ -27,9 +27,16 @@
         type="selection"
         align="center"
         width="55"/>
-      <el-table-column
-        :min-width="isDesktop ? 320 : 120"
-        prop="url"/>
+      <el-table-column :min-width="isDesktop ? 320 : 120" prop="url">
+        <template slot="header" slot-scope="scope">
+          <el-input
+            :placeholder="$t('users.search')"
+            v-model="search"
+            size="mini"
+            prefix-icon="el-icon-search"
+            @input="handleDebounceSearchInput"/>
+        </template>
+      </el-table-column>
       <el-table-column>
         <template slot="header">
           <el-button
@@ -46,10 +53,21 @@
         </template>
       </el-table-column>
     </el-table>
+    <div v-if="!loading" class="pagination">
+      <el-pagination
+        :total="urlsCount"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        hide-on-single-page
+        layout="prev, pager, next"
+        @current-change="handlePageChange"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import debounce from 'lodash.debounce'
 import RebootButton from '@/components/RebootButton'
 
 export default {
@@ -59,6 +77,7 @@ export default {
     return {
       urls: '',
       ban: false,
+      search: '',
       selectedUrls: []
     }
   },
@@ -66,26 +85,43 @@ export default {
     bannedUrls() {
       return this.$store.state.mediaProxyCache.bannedUrls
     },
+    currentPage() {
+      return this.$store.state.mediaProxyCache.currentPage
+    },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
     },
     loading() {
       return this.$store.state.mediaProxyCache.loading
     },
+    pageSize() {
+      return this.$store.state.mediaProxyCache.pageSize
+    },
     removeSelectedDisabled() {
       return this.selectedUrls.length === 0
+    },
+    urlsCount() {
+      return this.$store.state.mediaProxyCache.totalUrlsCount
     }
+  },
+  created() {
+    this.handleDebounceSearchInput = debounce((query) => {
+      this.$store.dispatch('SearchUrls', { query, page: 1 })
+    }, 500)
   },
   mounted() {
     this.$store.dispatch('GetNodeInfo')
     this.$store.dispatch('NeedReboot')
-    this.$store.dispatch('ListBannedUrls', 1)
+    this.$store.dispatch('ListBannedUrls', { page: 1 })
   },
   methods: {
     evictURL() {
       const urls = this.urls.split(',').map(url => url.trim()).filter(el => el.length > 0)
       this.$store.dispatch('PurgeUrls', { urls, ban: this.ban })
       this.urls = ''
+    },
+    handlePageChange(page) {
+      this.$store.dispatch('ListBannedUrls', { page })
     },
     handleSelectionChange(value) {
       this.$data.selectedUrls = value
@@ -132,6 +168,10 @@ h1 {
   align-items: center;
   justify-content: space-between;
   margin: 10px 15px;
+}
+.pagination {
+  margin: 25px 0;
+  text-align: center;
 }
 .remove-url-button {
   width: 150px;
