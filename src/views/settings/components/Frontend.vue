@@ -8,6 +8,10 @@
       <setting :setting-group="staticFe" :data="staticFeData"/>
     </el-form>
     <el-divider v-if="staticFe" class="divider thick-line"/>
+    <el-form :model="frontendsData" :label-position="labelPosition" :label-width="labelWidth">
+      <setting :setting-group="frontends" :data="frontendsData"/>
+    </el-form>
+    <el-divider v-if="frontends" class="divider thick-line"/>
     <el-form :model="assetsData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="assets" :data="assetsData"/>
     </el-form>
@@ -65,6 +69,12 @@ export default {
     },
     frontendData() {
       return _.get(this.settings.settings, [':pleroma', ':frontend_configurations']) || {}
+    },
+    frontends() {
+      return this.settings.description.find(setting => setting.key === ':frontends')
+    },
+    frontendsData() {
+      return _.get(this.settings.settings, [':pleroma', ':frontends']) || {}
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'

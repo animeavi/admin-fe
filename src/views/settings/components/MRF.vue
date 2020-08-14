@@ -49,9 +49,6 @@ export default {
     loading() {
       return this.settings.loading
     },
-    modules() {
-      return this.settings.description.find(setting => setting.key === ':modules')
-    },
     mrfSettings() {
       return this.settings.description.filter(el => el.tab === 'mrf')
     }

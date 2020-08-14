@@ -112,6 +112,7 @@
         <reg-invites-input v-if="[':registrations_open', ':invites_enabled'].includes(setting.key)" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <select-input-with-reduced-labels v-if="reducedSelects" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <specific-multiple-select v-if="setting.key === ':backends' || setting.key === ':args'" :data="data" :setting-group="settingGroup" :setting="setting"/>
+        <sender-input v-if="senderInput(setting)" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
         <!-------------------->
         <el-tooltip v-if="canBeDeleted && isTablet" :content="$t('settings.removeFromDB')" placement="bottom-end" class="delete-setting-button-container">
           <el-button icon="el-icon-delete" circle size="mini" class="delete-setting-button" @click="removeSetting"/>
@@ -138,6 +139,7 @@ import {
   RateLimitInput,
   RegInvitesInput,
   SelectInputWithReducedLabels,
+  SenderInput,
   SpecificMultipleSelect } from './inputComponents'
 import { getBooleanValue, processNested } from '@/store/modules/normalizers'
 import _ from 'lodash'
@@ -156,6 +158,7 @@ export default {
     RateLimitInput,
     RegInvitesInput,
     SelectInputWithReducedLabels,
+    SenderInput,
     SpecificMultipleSelect
   },
   props: {
@@ -292,7 +295,7 @@ export default {
       return this.$store.state.settings.updatedSettings
     },
     isImageUrl() {
-      return [':background', ':logo', ':nsfwCensorImage', ':default_user_avatar', ':instance_thumbnail'].includes(this.setting.key)
+      return Array.isArray(this.setting.type) && this.setting.type.includes('image')
     }
   },
   methods: {
@@ -356,6 +359,9 @@ export default {
     },
     renderSingleSelect(type) {
       return !this.reducedSelects && (type === 'module' || (type.includes('atom') && type.includes('dropdown')))
+    },
+    senderInput({ key, type }) {
+      return Array.isArray(type) && type.includes('string') && type.includes('tuple') && key === ':sender'
     },
     update(value, group, key, parents, input, type, nested) {
       const updatedValue = this.renderSingleSelect(type) ? getBooleanValue(value) : value
