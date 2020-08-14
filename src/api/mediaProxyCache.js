@@ -31,4 +31,13 @@ export async function removeBannedUrls(urls, authHost, token) {
   })
 }
 
+export async function searchBannedUrls(query, page, pageSize, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/media_proxy_caches?query=${query}&page=${page}&page_size=${pageSize}`,
+    method: 'get',
+    headers: authHeaders(token)
+  })
+}
+
 const authHeaders = (token) => token ? { 'Authorization': `Bearer ${getToken()}` } : {}

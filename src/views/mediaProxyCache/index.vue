@@ -28,7 +28,7 @@
         align="center"
         width="55"/>
       <el-table-column :min-width="isDesktop ? 320 : 120" prop="url">
-        <template slot="header">
+        <template slot="header" slot-scope="scope">
           <el-input
             :placeholder="$t('users.search')"
             v-model="search"
@@ -106,6 +106,7 @@ export default {
   },
   created() {
     this.handleDebounceSearchInput = debounce((query) => {
+      this.$store.dispatch('SearchUrls', { query, page: 1 })
     }, 500)
   },
   mounted() {

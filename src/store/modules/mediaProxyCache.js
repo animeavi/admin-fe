@@ -1,4 +1,4 @@
-import { listBannedUrls, purgeUrls, removeBannedUrls } from '@/api/mediaProxyCache'
+import { listBannedUrls, purgeUrls, removeBannedUrls, searchBannedUrls } from '@/api/mediaProxyCache'
 import { Message } from 'element-ui'
 import i18n from '@/lang'
 
@@ -47,6 +47,21 @@ const mediaProxyCache = {
     async RemoveBannedUrls({ dispatch, getters, state }, urls) {
       await removeBannedUrls(urls, getters.authHost, getters.token)
       dispatch('ListBannedUrls', { page: state.currentPage })
+    },
+    async SearchUrls({ commit, dispatch, getters, state }, { query, page }) {
+      if (query.length === 0) {
+        commit('SET_SEARCH_QUERY', query)
+        dispatch('ListBannedUrls', { page })
+      } else {
+        commit('SET_LOADING', true)
+        commit('SET_SEARCH_QUERY', query)
+
+        const response = await searchBannedUrls(query, page, state.pageSize, getters.authHost, getters.token)
+        commit('SET_BANNED_URLS', response.data.urls)
+        commit('SET_TOTAL_URLS_COUNT', response.data.count)
+        commit('SET_PAGE', page)
+        commit('SET_LOADING', false)
+      }
     }
   }
 }
