@@ -27,7 +27,7 @@ export async function deleteRelay(relay, authHost, token) {
     url: '/api/pleroma/admin/relay',
     method: 'delete',
     headers: authHeaders(token),
-    data: { relay_url: `https://${relay}/actor` }
+    data: { relay_url: `https://${relay}` }
   })
 }
 
