@@ -2,7 +2,7 @@
   <div v-if="!loading" class="relays-container">
     <div class="follow-relay-container">
       <el-input v-model="newRelay" :placeholder="$t('settings.followRelay')" class="follow-relay" @keyup.enter.native="followRelay"/>
-      <el-button type="primary" @click.native="followRelay">{{ $t('settings.follow') }}</el-button>
+      <el-button @click.native="followRelay">{{ $t('settings.follow') }}</el-button>
     </div>
     <el-table :data="relays">
       <el-table-column
@@ -23,7 +23,7 @@
             type="text"
             size="small"
             @click.native="deleteRelay(scope.row.actor)">
-            {{ $t('table.delete') }}
+            {{ $t('table.unfollow') }}
           </el-button>
         </template>
       </el-table-column>

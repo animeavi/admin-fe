@@ -16,7 +16,7 @@ const relays = {
       state.fetchedRelays = [...state.fetchedRelays, { actor: relay }]
     },
     DELETE_RELAY: (state, relay) => {
-      state.fetchedRelays = state.fetchedRelays.filter(fetchedRelay => fetchedRelay !== relay)
+      state.fetchedRelays = state.fetchedRelays.filter(fetchedRelay => fetchedRelay.actor !== relay)
     }
   },
   actions: {
