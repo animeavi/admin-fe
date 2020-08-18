@@ -10,14 +10,14 @@
         prop="actor"/>
       <el-table-column
         :label="$t('settings.followedBack')"
+        :width="getLabelWidth"
         prop="followed_back"
-        width="120"
         align="center">
         <template slot-scope="scope">
           <i :class="scope.row.followed_back ? 'el-icon-check' : 'el-icon-minus'"/>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" fixed="right" width="120" align="center">
+      <el-table-column :label="$t('table.actions')" :width="getLabelWidth" fixed="right" align="center">
         <template slot-scope="scope">
           <el-button
             type="text"
@@ -40,11 +40,17 @@ export default {
     }
   },
   computed: {
-    relays() {
-      return this.$store.state.relays.fetchedRelays
+    getLabelWidth() {
+      return this.isDesktop ? '130px' : '85px'
+    },
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
     },
     loading() {
       return this.$store.state.relays.loading
+    },
+    relays() {
+      return this.$store.state.relays.fetchedRelays
     }
   },
   mounted() {
