@@ -53,6 +53,7 @@ export default {
   methods: {
     followRelay() {
       this.$store.dispatch('AddRelay', this.newRelay)
+      this.newRelay = ''
     },
     deleteRelay(relay) {
       this.$store.dispatch('DeleteRelay', relay)
