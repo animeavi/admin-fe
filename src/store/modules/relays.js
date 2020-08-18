@@ -23,9 +23,8 @@ const relays = {
     async FetchRelays({ commit, getters }) {
       commit('SET_LOADING', true)
 
-      const response = await fetchRelays(getters.authHost, getters.token)
-
-      commit('SET_RELAYS', response.data.relays)
+      const { data } = await fetchRelays(getters.authHost, getters.token)
+      commit('SET_RELAYS', data.relays)
       commit('SET_LOADING', false)
     },
     async AddRelay({ commit, dispatch, getters }, relay) {
