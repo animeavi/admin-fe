@@ -17,7 +17,16 @@
     </div>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item
+        class="actor-type-dropdown"
+        @click.native="getPasswordResetToken(user.nickname)">
+        <el-select v-model="actorType" placeholder="Actor Type" class="actor-type-select">
+          <el-option label="Bot" value="bot"/>
+          <el-option label="Person" value="person"/>
+        </el-select>
+      </el-dropdown-item>
+      <el-dropdown-item
         v-if="showAdminAction(user)"
+        divided
         @click.native="toggleUserRight(user, 'admin')">
         {{ user.roles.admin ? $t('users.revokeAdmin') : $t('users.grantAdmin') }}
       </el-dropdown-item>
@@ -137,6 +146,11 @@ export default {
       default: ''
     }
   },
+  data() {
+    return {
+      actorType: ''
+    }
+  },
   computed: {
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
@@ -225,6 +239,39 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
+  .el-dropdown-menu--small  .el-dropdown-menu__item.el-dropdown-menu__item--divided.actor-type-dropdown:before {
+    margin: 0 0;
+    height: 0;
+  }
+  .el-dropdown-menu--small .actor-type-dropdown {
+    padding: 0;
+  }
+  .actor-type-select {
+    width: 100%;
+    input {
+      border-color: transparent;
+      color: #606266;
+    }
+    .el-input__inner:hover {
+      border-color: transparent;
+      background-color: #ecf5ff;
+    }
+    .el-input.is-focus {
+      border-color: transparent;
+    }
+    .el-input__suffix-inner {
+      pointer-events: none;
+    }
+    .el-select .el-input__inner:focus {
+      border-color: transparent;
+    }
+    .el-input.is-active .el-input__inner, .el-input__inner:focus {
+      border-color: transparent;
+    }
+  }
+  .actor-type-select .el-input.is-focus .el-input__inner {
+      border-color: transparent;
+    }
   .moderate-user-button {
     text-align: left;
     width: 350px;
