@@ -17,11 +17,10 @@
     </div>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item
-        class="actor-type-dropdown"
-        @click.native="getPasswordResetToken(user.nickname)">
+        class="actor-type-dropdown">
         <el-select v-model="actorType" placeholder="Actor Type" class="actor-type-select">
-          <el-option label="Bot" value="bot"/>
-          <el-option label="Person" value="person"/>
+          <el-option value="Service"/>
+          <el-option value="Person"/>
         </el-select>
       </el-dropdown-item>
       <el-dropdown-item
@@ -146,12 +145,15 @@ export default {
       default: ''
     }
   },
-  data() {
-    return {
-      actorType: ''
-    }
-  },
   computed: {
+    actorType: {
+      get() {
+        return this.user.actor_type
+      },
+      set(type) {
+        this.$store.dispatch('UpdateActorType', { user: this.user, type })
+      }
+    },
     isDesktop() {
       return this.$store.state.app.device === 'desktop'
     }
