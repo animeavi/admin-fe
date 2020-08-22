@@ -281,10 +281,9 @@ const users = {
     },
     async UpdateActorType({ dispatch, getters }, { user, type, _userId, _statusId }) {
       const updatedUsers = [{ ...user, actor_type: type }]
-      const nickname = [user.nickname]
       const credentials = { actor_type: type }
 
-      const callApiFn = async() => await updateUserCredentials(nickname, credentials, getters.authHost, getters.token)
+      const callApiFn = async() => await updateUserCredentials(user.nickname, credentials, getters.authHost, getters.token)
 
       dispatch('ApplyChanges', { updatedUsers, callApiFn, userId: _userId, statusId: _statusId })
     }

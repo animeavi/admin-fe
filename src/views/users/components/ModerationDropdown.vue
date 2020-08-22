@@ -18,9 +18,9 @@
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item
         class="actor-type-dropdown">
-        <el-select v-model="actorType" placeholder="Actor Type" class="actor-type-select">
-          <el-option value="Service"/>
-          <el-option value="Person"/>
+        <el-select v-model="actorType" :placeholder="$t('userProfile.actorType')" class="actor-type-select">
+          <el-option :label="$t('users.service')" value="Service"/>
+          <el-option :label="$t('users.person')" value="Person"/>
         </el-select>
       </el-dropdown-item>
       <el-dropdown-item
@@ -151,7 +151,12 @@ export default {
         return this.user.actor_type
       },
       set(type) {
-        this.$store.dispatch('UpdateActorType', { user: this.user, type })
+        this.$store.dispatch('UpdateActorType', {
+          user: this.user,
+          type,
+          _userId: this.user.id,
+          _statusId: this.statusId
+        })
       }
     },
     isDesktop() {
