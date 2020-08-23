@@ -353,7 +353,26 @@ describe('Creates new account', () => {
 
     expect(wrapper.vm.validatePassword(validatePasswordRule, '', identity)).toBeInstanceOf(Error)
     expect(wrapper.vm.validatePassword(validatePasswordRule, '1234', identity)).toBeUndefined()
+  })
 
+  it('updates actor type', async (done) => {
+    const wrapper = mount(Users, {
+      store,
+      localVue,
+      sync: false,
+      stubs: ['router-link']
+    })
+    await flushPromises()
 
+    const user = store.state.users.fetchedUsers[0]
+    expect(user.actor_type).toBe('Person')
+
+    const findWrapper = (trChild, liChild1, liChild2) =>
+    `.el-table__fixed-body-wrapper table tr:nth-child(${trChild}) ul.el-dropdown-menu > li:nth-child(${liChild1}) ul li:nth-child(${liChild2})`
+    wrapper.find(findWrapper(1, 1, 1)).trigger('click')
+
+    const updatedUser = store.state.users.fetchedUsers[0]
+    expect(updatedUser.actor_type).toBe('Service')
+    done()
   })
 })
