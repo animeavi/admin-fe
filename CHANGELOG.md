@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Allow managing user's actor_type field via Admin API
+- Add Pleroma.Web.Preload settings on Frontend tab
 
 ### Fixed
 
