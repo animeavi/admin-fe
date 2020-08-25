@@ -4,18 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
-
-### Added
-
-- Allow managing user's actor_type field via Admin API
-- Add Pleroma.Web.Preload settings on Frontend tab
-
-### Fixed
-
-- Fix following and unfollowing relays from Admin-FE, update mobile UI
-
-## [2.1] - 2020-08-14
+## [2.1] - 2020-08-26
 
 ### Added
 
@@ -28,10 +17,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add MRF Activity Expiration setting
 - Add ability to disable multi-factor authentication for a user
 - Add ability to configure Invalidation settings on MediaProxy tab
-- Ability to configure `S3` settings on Upload tab, `Pleroma.Web.ApiSpec.CastAndValidate` and `:modules` settings on Other tab, `:pools`, `:connections_pool` and `:hackney_pools` settings on Job Queue tab, `:restrict_unauthenticated` settings on Authentication tab, `:favicons` and `:welcome` settings on Instance tab, `:frontends` settings on Frontend tab
+- Ability to configure `S3` settings on Upload tab, `Pleroma.Web.ApiSpec.CastAndValidate` and `:modules` settings on Other tab, `:pools`, `:connections_pool` and `:hackney_pools` settings on Job Queue tab, `:restrict_unauthenticated` settings on Authentication tab, `:favicons` and `:welcome` settings on Instance tab, `:frontends` and `Pleroma.Web.Preload` settings on Frontend tab
 - Show number of open reports in Sidebar Menu
 - Add confirmation message when deleting a user
 - Add new MediaProxy Cache Tab with ability to manually evict and ban objects from the Pleroma MediaProxy cache
+- Allow managing user's actor_type field via Admin API
 
 ### Changed
 
@@ -55,6 +45,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix sorting users on Users page if there is an acount with missing nickname or ID
 - Add new type of settings: `['string', 'image']`. Render Image upload Input depending on the type of setting, not its key
 - Fix displaying `Pending` tag and filtering by Pending Approval status
+- Fix following and unfollowing relays from Admin-FE, update mobile UI
 
 ## [2.0.3] - 2020-04-29
 
