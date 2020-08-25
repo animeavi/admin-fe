@@ -189,7 +189,7 @@ const emojiPacks = {
       const { data } = await listRemotePacks(getters.authHost, getters.token, remoteInstance)
 
       commit('SET_REMOTE_INSTANCE', remoteInstance)
-      commit('SET_REMOTE_PACKS', data)
+      commit('SET_REMOTE_PACKS', data.packs)
     },
     SetRemoteInstance({ commit }, instance) {
       commit('SET_REMOTE_INSTANCE', instance)
