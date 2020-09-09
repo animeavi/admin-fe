@@ -22,6 +22,15 @@ export async function addRight(nicknames, right, authHost, token) {
   })
 }
 
+export async function fetchUserChats(id, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/users/${id}/chats`,
+    method: 'get',
+    headers: authHeaders(token)
+  })
+}
+
 export async function approveUserAccount(nicknames, authHost, token) {
   return await request({
     baseURL: baseName(authHost),

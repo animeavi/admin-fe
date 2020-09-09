@@ -309,6 +309,7 @@ export default {
     actorType: 'Actor Type',
     nickname: 'Nickname',
     recentStatuses: 'Recent Statuses',
+    chats: 'Chats',
     roles: 'Roles',
     active: 'Active',
     status: 'Status',
@@ -316,6 +317,7 @@ export default {
     deactivated: 'Deactivated',
     pending: 'Pending',
     noStatuses: 'No statuses to show',
+    noChats: 'No chats to show',
     openAccountInInstance: 'Open account in instance',
     securitySettings: {
       email: 'Email',
