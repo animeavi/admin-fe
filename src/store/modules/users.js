@@ -31,6 +31,7 @@ const users = {
     totalUsersCount: 0,
     currentPage: 1,
     pageSize: 50,
+    actorTypeFilters: [],
     filters: {
       local: false,
       external: false,
@@ -46,6 +47,9 @@ const users = {
     tags: []
   },
   mutations: {
+    SET_ACTOR_TYPE_FILTERS: (state, actorTypeFilters) => {
+      state.actorTypeFilters = actorTypeFilters
+    },
     SET_USERS: (state, users) => {
       state.fetchedUsers = users
     },
@@ -248,7 +252,7 @@ const users = {
     async FetchUsers({ commit, dispatch, getters, state }, { page }) {
       commit('SET_LOADING', true)
       const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
-      const response = await fetchUsers(filters, getters.authHost, getters.token, page)
+      const response = await fetchUsers(filters, state.actorTypeFilters, getters.authHost, getters.token, page)
       await dispatch('GetNodeInfo')
       loadUsers(commit, page, response.data)
     },
@@ -299,7 +303,7 @@ const users = {
         commit('SET_SEARCH_QUERY', query)
 
         const filters = Object.keys(state.filters).filter(filter => state.filters[filter]).join()
-        const response = await searchUsers(query, filters, getters.authHost, getters.token, page)
+        const response = await searchUsers(query, filters, state.actorTypeFilters, getters.authHost, getters.token, page)
 
         loadUsers(commit, page, response.data)
       }
@@ -309,6 +313,10 @@ const users = {
         message: i18n.t('users.completed'),
         duration: 5 * 1000
       })
+    },
+    async ToggleActorTypeFilter({ commit, dispatch, state }, actorTypeFilters) {
+      commit('SET_ACTOR_TYPE_FILTERS', actorTypeFilters)
+      dispatch('SearchUsers', { query: state.searchQuery, page: 1 })
     },
     async ToggleUsersFilter({ commit, dispatch, state }, filters) {
       const defaultFilters = {
