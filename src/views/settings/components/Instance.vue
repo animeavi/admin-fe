@@ -181,7 +181,10 @@ export default {
     async onSubmit() {
       try {
         await this.$store.dispatch('SubmitChanges')
-        await this.$store.dispatch('UpdateInstanceDocs', { name: 'instance-panel', content: this.editorContent })
+        await this.$store.dispatch('UpdateInstanceDocs', {
+          name: 'instance-panel',
+          content: this.editorContent.length > 0 ? this.editorContent : this.instancePanelContent
+        })
       } catch (e) {
         return
       }

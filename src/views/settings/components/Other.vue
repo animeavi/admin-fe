@@ -114,12 +114,15 @@ export default {
   },
   methods: {
     handleEditorUpdate(content) {
-      this.editorContent = content
+      this.termsOfServices = content
     },
     async onSubmit() {
       try {
         await this.$store.dispatch('SubmitChanges')
-        await this.$store.dispatch('UpdateInstanceDocs', { name: 'terms-of-service', content: this.editorContent })
+        await this.$store.dispatch('UpdateInstanceDocs', {
+          name: 'terms-of-service',
+          content: this.termsOfServices.length > 0 ? this.termsOfServices : this.termsOfServicesContent
+        })
       } catch (e) {
         return
       }
