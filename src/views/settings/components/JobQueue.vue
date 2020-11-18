@@ -43,10 +43,10 @@ export default {
       'settings'
     ]),
     activityExpiration() {
-      return this.settings.description.find(setting => setting.key === 'Pleroma.ActivityExpiration')
+      return this.settings.description.find(setting => setting.key === 'Pleroma.Workers.PurgeExpiredActivity')
     },
     activityExpirationData() {
-      return _.get(this.settings.settings, [':pleroma', 'Pleroma.ActivityExpiration']) || {}
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Workers.PurgeExpiredActivity']) || {}
     },
     connectionsPools() {
       return this.settings.description.find(setting => setting.key === ':connections_pool')
