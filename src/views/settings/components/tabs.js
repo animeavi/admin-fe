@@ -34,7 +34,7 @@ export const tabs = description => {
     },
     'job-queue': {
       label: 'settings.jobQueue',
-      settings: ['Pleroma.ActivityExpiration', ':connections_pool', ':hackney_pools', 'Oban', ':pools', ':workers']
+      settings: ['Pleroma.Workers.PurgeExpiredActivity', ':connections_pool', ':hackney_pools', 'Oban', ':pools', ':workers']
     },
     'link-formatter': {
       label: 'settings.linkFormatter',
@@ -50,7 +50,7 @@ export const tabs = description => {
     },
     'media-proxy': {
       label: 'settings.mediaProxy',
-      settings: [':media_proxy', 'Pleroma.Web.MediaProxy.Invalidation.Http', 'Pleroma.Web.MediaProxy.Invalidation.Script']
+      settings: [':media_proxy', ':media_preview_proxy', 'Pleroma.Web.MediaProxy.Invalidation.Http', 'Pleroma.Web.MediaProxy.Invalidation.Script']
     },
     'metadata': {
       label: 'settings.metadata',
@@ -78,7 +78,7 @@ export const tabs = description => {
     },
     'other': {
       label: 'settings.other',
-      settings: [':mime', 'Pleroma.Plugs.RemoteIp', ':modules', 'Pleroma.Web.ApiSpec.CastAndValidate']
+      settings: [':mime', 'Pleroma.Web.Plugs.RemoteIp', ':modules', 'Pleroma.Web.ApiSpec.CastAndValidate']
     }
   }
 }

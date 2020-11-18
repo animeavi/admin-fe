@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [2.2] - 2020-11-18
+
+### Added
+
+- Ability to configure Media Preview Proxy settings on MediaProxy tab
+
+### Fixed
+
+- Update keys for PurgeExpiredActivity and RemoteIp settings
+- Fix wrapping `:icons` setting and parsing tuples in settings with key `:headers`
+
 ## [2.1] - 2020-08-26
 
 ### Added

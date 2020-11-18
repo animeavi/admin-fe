@@ -77,10 +77,10 @@ export default {
       return _.get(this.settings.settings, [':pleroma', ':modules']) || {}
     },
     remoteIp() {
-      return this.settings.description.find(setting => setting.key === 'Pleroma.Plugs.RemoteIp')
+      return this.settings.description.find(setting => setting.key === 'Pleroma.Web.Plugs.RemoteIp')
     },
     remoteIpData() {
-      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Plugs.RemoteIp']) || {}
+      return _.get(this.settings.settings, [':pleroma', 'Pleroma.Web.Plugs.RemoteIp']) || {}
     }
   },
   methods: {
