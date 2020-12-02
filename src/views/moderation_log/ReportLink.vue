@@ -1,8 +1,8 @@
 <template>
   <router-link
-    :to="{ name: 'UsersShow', params: { id: actor }}"
+    :to="{ name: 'ReportsShow', params: { id }}"
     class="router-link">
-    <span style="font-weight: 600">@{{ actor }}</span>
+    <span style="font-weight: 600">#{{ id }}</span>
   </router-link>
 </template>
 
@@ -11,7 +11,7 @@
 export default {
   name: 'UserLink',
   props: {
-    actor: {
+    id: {
       type: String,
       required: true
     }

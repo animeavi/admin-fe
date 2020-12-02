@@ -1,22 +1,15 @@
 <template>
   <span>
     <component :is="processedHtml"/>
-    <!-- <span v-if="subject.type === 'report' && propertyExists(subject, 'id')">
-      {{ logEntryMessageWithoutId[0] }}
-      <router-link
-        :to="{ name: 'ReportsShow', params: { id: subject.id }}"
-        class="router-link">
-        <span style="font-weight: 600">#{{ subject.id }}</span>
-      </router-link>
-      {{ logEntryMessageWithoutId[1] }}
-    </span> -->
   </span>
 </template>
 
 <script>
+import ReportLink from './ReportLink'
 import UserLink from './UserLink'
 import Vue from 'vue'
 Vue.component('user-link', UserLink)
+Vue.component('report-link', ReportLink)
 
 export default {
   name: 'LogEntryMessage',
@@ -38,14 +31,20 @@ export default {
     }
   },
   computed: {
-    // logEntryMessageWithoutId() {
-    //   return this.logEntryMessage.split(`#${this.subject.id}`)
-    // },
     processedHtml() {
       const html = [...this.message.matchAll(/\@(?<nickname>([\w-]+))/g)].map(res => res.groups.nickname)
         .reduce((acc, nickname) => {
           return acc.replace(`@${nickname}`, `<user-link actor="${nickname}"/>`)
         }, this.message)
+      if (this.subject.type === 'report' && this.subject.id) {
+        const updatedHtml = [...html.matchAll(/\#(?<reportId>([\w]+))/g)].map(res => res.groups.reportId)
+          .reduce((acc, id) => {
+            return acc.replace(`#${id}`, `<report-link id="${id}"/>`)
+          }, html)
+        return {
+          template: '<div>' + updatedHtml + '</div>'
+        }
+      }
       return {
         template: '<div>' + html + '</div>'
       }
