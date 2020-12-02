@@ -1,14 +1,7 @@
 <template>
   <span>
-    <router-link
-      v-if="propertyExists(actor, 'id')"
-      :to="{ name: 'UsersShow', params: { id: actor.id }}"
-      class="router-link">
-      <span v-if="propertyExists(actor, 'nickname')" style="font-weight: 600">
-        @{{ actor.nickname }}
-      </span>
-    </router-link>
-    <span v-if="subject.type === 'report' && propertyExists(subject, 'id')">
+    <component :is="processedHtml"/>
+    <!-- <span v-if="subject.type === 'report' && propertyExists(subject, 'id')">
       {{ logEntryMessageWithoutId[0] }}
       <router-link
         :to="{ name: 'ReportsShow', params: { id: subject.id }}"
@@ -16,12 +9,14 @@
         <span style="font-weight: 600">#{{ subject.id }}</span>
       </router-link>
       {{ logEntryMessageWithoutId[1] }}
-    </span>
-    <span v-else>{{ logEntryMessage }}</span>
+    </span> -->
   </span>
 </template>
 
 <script>
+import UserLink from './UserLink'
+import Vue from 'vue'
+Vue.component('user-link', UserLink)
 
 export default {
   name: 'LogEntryMessage',
@@ -43,16 +38,29 @@ export default {
     }
   },
   computed: {
-    logEntryMessage() {
-      return this.actor.nickname ? this.message.split(this.actor.nickname)[1] : this.message
-    },
-    logEntryMessageWithoutId() {
-      return this.logEntryMessage.split(`#${this.subject.id}`)
-    }
-  },
-  methods: {
-    propertyExists(account, property) {
-      return account[property]
+    // logEntryMessage() {
+    //   if (!this.actor.nickname) {
+    //     return this.message
+    //   } else {
+    //     return this.message.split(this.actor.nickname).length > 2
+    //       ? this.message.split(this.actor.nickname)[1].concat(this.actor.nickname)
+    //       : this.message.split(this.actor.nickname)[1]
+    //   }
+    // },
+    // logEntryMessageWithoutId() {
+    //   return this.logEntryMessage.split(`#${this.subject.id}`)
+    // },
+    processedHtml() {
+      const html = this.message.replace(/\@[\S]+/g, `<user-link :actor="actor"/>`)
+      return {
+        template: '<div>' + html + '</div>',
+        props: {
+          actor: {
+            type: null,
+            default: () => { return this.actor }
+          }
+        }
+      }
     }
   }
 }
