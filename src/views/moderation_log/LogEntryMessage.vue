@@ -38,28 +38,16 @@ export default {
     }
   },
   computed: {
-    // logEntryMessage() {
-    //   if (!this.actor.nickname) {
-    //     return this.message
-    //   } else {
-    //     return this.message.split(this.actor.nickname).length > 2
-    //       ? this.message.split(this.actor.nickname)[1].concat(this.actor.nickname)
-    //       : this.message.split(this.actor.nickname)[1]
-    //   }
-    // },
     // logEntryMessageWithoutId() {
     //   return this.logEntryMessage.split(`#${this.subject.id}`)
     // },
     processedHtml() {
-      const html = this.message.replace(/\@[\S]+/g, `<user-link :actor="actor"/>`)
+      const html = [...this.message.matchAll(/\@(?<nickname>([\w-]+))/g)].map(res => res.groups.nickname)
+        .reduce((acc, nickname) => {
+          return acc.replace(`@${nickname}`, `<user-link actor="${nickname}"/>`)
+        }, this.message)
       return {
-        template: '<div>' + html + '</div>',
-        props: {
-          actor: {
-            type: null,
-            default: () => { return this.actor }
-          }
-        }
+        template: '<div>' + html + '</div>'
       }
     }
   }
