@@ -47,7 +47,7 @@ export default {
   components: { ModerateUserDropdown, RebootButton, ReportContent },
   computed: {
     loading() {
-      return this.$store.state.reports.loading
+      return this.$store.state.reports.loadingSingleReport
     },
     report() {
       return this.$store.state.reports.singleReport
