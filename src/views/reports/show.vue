@@ -162,7 +162,7 @@ export default {
     font-size: 14px;
   }
 }
-@media only screen and (max-width:480px) {
+@media only screen and (max-width:801px) {
   .report-show-page-container {
     .id {
       margin: 7px 15px 15px 15px;
@@ -187,11 +187,13 @@ export default {
         margin: 0 5px 0 9px;
       }
     }
-    .report-tag {
-      height: 32px;
-      line-height: 32px;
-      font-size: 14px;
-    }
+  }
+}
+@media only screen and (max-width:480px) {
+  .report-tag {
+    height: 32px;
+    line-height: 32px;
+    font-size: 14px;
   }
 }
 </style>
