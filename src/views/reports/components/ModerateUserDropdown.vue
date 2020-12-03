@@ -1,6 +1,6 @@
 <template>
   <el-dropdown :hide-on-click="false" trigger="click">
-    <el-button :disabled="!account.id" :size="renderedFrom === 'showPage' ? 'medium' : 'small'" plain icon="el-icon-files">
+    <el-button :disabled="!account.id" :size="renderedFrom === 'showPage' && !isMobile ? 'medium' : 'small'" plain icon="el-icon-files">
       {{ $t('reports.moderateUser') }}
       <i class="el-icon-arrow-down el-icon--right"/>
     </el-button>
@@ -87,6 +87,9 @@ export default {
     }
   },
   computed: {
+    isMobile() {
+      return this.$store.state.app.device === 'mobile'
+    },
     tagPolicyEnabled() {
       return this.$store.state.users.mrfPolicies.includes('Pleroma.Web.ActivityPub.MRF.TagPolicy')
     },
