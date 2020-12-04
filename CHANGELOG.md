@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add Report show page and link Moderation log references to the respective reports
 - Add Unconfimed filter for Users table
 - Filter users by actor type: Person, Bot or Application
-- Add ability to configure Media Preview Proxy, User Backup and Websocket based federation settings
+- Add ability to configure Media Preview Proxy, User Backup, Websocket based federation and Pleroma.Web.Endpoint.MetricsExporter settings
 - Mobile and Tablet UI for Single Report show page
 ### Changed
 
