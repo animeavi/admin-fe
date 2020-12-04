@@ -2,6 +2,10 @@
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
     <editor-input v-model="termsOfServicesContent" :name="'terms-of-service'" @input="handleEditorUpdate"/>
     <el-divider class="divider thick-line"/>
+    <el-form :model="prometheusMetricsData" :label-position="labelPosition" :label-width="labelWidth">
+      <setting :setting-group="prometheusMetrics" :data="prometheusMetricsData"/>
+    </el-form>
+    <el-divider v-if="prometheusMetrics" class="divider thick-line"/>
     <el-form :model="backupData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="backup" :data="backupData"/>
     </el-form>
@@ -93,6 +97,12 @@ export default {
     },
     modulesData() {
       return _.get(this.settings.settings, [':pleroma', ':modules']) || {}
+    },
+    prometheusMetrics() {
+      return this.settings.description.find(setting => setting.key === 'Pleroma.Web.Endpoint.MetricsExporter')
+    },
+    prometheusMetricsData() {
+      return _.get(this.settings.settings, [':prometheus', 'Pleroma.Web.Endpoint.MetricsExporter']) || {}
     },
     remoteIp() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Web.Plugs.RemoteIp')
