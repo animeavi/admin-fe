@@ -179,4 +179,15 @@ export default {
   .router-link {
     text-decoration: none;
   }
+  @media only screen and (max-width:480px) {
+    .divider {
+      margin: 10px 0;
+    }
+    .el-card__body {
+      padding: 13px;
+    }
+    .report-account {
+      flex-direction: column;
+    }
+  }
 </style>

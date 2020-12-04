@@ -14,12 +14,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add Unconfimed filter for Users table
 - Filter users by actor type: Person, Bot or Application
 - Add ability to configure Media Preview Proxy, User Backup and Websocket based federation settings
-
+- Mobile and Tablet UI for Single Report show page
 ### Changed
 
 - Hide Tag actions on Users tab if MRF TagPolicy is disabled. Add ability to enable TagPolicy from Moderation menu
 - Move `:restrict_unauthenticated` settings from Authentication tab to Instance tab
 - Replace regular inputs with textareas for setting welcome messages in the Settings section
+- Update rendering Moderation Log Messages so that all usernames are links to the pages of the corresponding users in Admin-FE
 
 ### Fixed
 

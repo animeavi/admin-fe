@@ -12,6 +12,7 @@ const reports = {
     currentPage: 1,
     fetchedReports: [],
     loading: true,
+    loadingSingleReport: true,
     openReportsCount: 0,
     pageSize: 50,
     singleReport: {},
@@ -42,6 +43,9 @@ const reports = {
     },
     SET_SINGLE_REPORT: (state, report) => {
       state.singleReport = report
+    },
+    SET_SINGLE_REPORT_LOADING: (state, status) => {
+      state.loadingSingleReport = status
     }
   },
   actions: {
@@ -162,11 +166,11 @@ const reports = {
       commit('SET_LOADING', false)
     },
     async FetchSingleReport({ commit, getters }, id) {
-      commit('SET_LOADING', true)
+      commit('SET_SINGLE_REPORT_LOADING', true)
       const { data } = await fetchSingleReport(id, getters.authHost, getters.token)
 
       commit('SET_SINGLE_REPORT', data)
-      commit('SET_LOADING', false)
+      commit('SET_SINGLE_REPORT_LOADING', false)
     },
     async FetchOpenReportsCount({ commit, getters, state }) {
       commit('SET_LOADING', true)
