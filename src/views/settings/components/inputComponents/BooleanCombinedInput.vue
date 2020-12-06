@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: 'LinkFormatterInput',
+  name: 'BooleanCombinedInput',
   props: {
     data: {
       type: [Object, Array],

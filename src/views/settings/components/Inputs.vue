@@ -113,7 +113,7 @@
         <!-- special inputs -->
         <editable-keyword-input v-if="editableKeyword(setting.key, setting.type)" :data="keywordData" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
         <icons-input v-if="setting.key === ':icons'" :data="iconsData" :setting-group="settingGroup" :setting="setting"/>
-        <link-formatter-input v-if="booleanCombinedInput" :data="data" :setting-group="settingGroup" :setting="setting"/>
+        <boolean-combined-input v-if="booleanCombinedInput" :data="data" :setting-group="settingGroup" :setting="setting"/>
         <mascots-input v-if="setting.key === ':mascots'" :data="keywordData" :setting-group="settingGroup" :setting="setting"/>
         <proxy-url-input v-if="setting.key === ':proxy_url'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting" :parents="settingParent"/>
         <prune-input v-if="setting.key === ':prune'" :data="data[setting.key]" :setting-group="settingGroup" :setting="setting"/>
@@ -141,7 +141,7 @@ import {
   EditableKeywordInput,
   IconsInput,
   ImageUploadInput,
-  LinkFormatterInput,
+  BooleanCombinedInput,
   MascotsInput,
   ProxyUrlInput,
   PruneInput,
@@ -160,7 +160,7 @@ export default {
     EditableKeywordInput,
     IconsInput,
     ImageUploadInput,
-    LinkFormatterInput,
+    BooleanCombinedInput,
     MascotsInput,
     ProxyUrlInput,
     PruneInput,
