@@ -57,10 +57,18 @@ export const parseNonTuples = (key, value) => {
 // REFACTOR
 export const parseTuples = (tuples, key) => {
   return tuples.reduce((accum, item) => {
-    if (key === ':rate_limit') {
-      accum[item.tuple[0]] = Array.isArray(item.tuple[1])
-        ? item.tuple[1].map(el => el.tuple)
-        : item.tuple[1].tuple
+    if (key === ':rate_limit' ||
+      (key === 'Pleroma.Web.Endpoint.MetricsExporter' && item.tuple[0] === ':auth')) {
+      const getValue = () => {
+        if (typeof item.tuple[1] === 'boolean') {
+          return item.tuple[1]
+        } else if (Array.isArray(item.tuple[1])) {
+          return item.tuple[1].map(el => el.tuple)
+        } else {
+          return item.tuple[1].tuple
+        }
+      }
+      accum[item.tuple[0]] = getValue()
     } else if (item.tuple[0] === ':mascots') {
       accum[item.tuple[0]] = item.tuple[1].reduce((acc, mascot) => {
         return [...acc, { [mascot.tuple[0]]: { ...mascot.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
@@ -237,8 +245,9 @@ const wrapValues = (settings, currentState) => {
       return { 'tuple': [setting, wrapValues(value, currentState)] }
     } else if (prependWithСolon(type, value)) {
       return { 'tuple': [setting, `:${value}`] }
-    } else if (type.includes('tuple') && (type.includes('string') || type.includes('atom'))) {
-      return typeof value === 'string'
+    } else if (type.includes('tuple') &&
+      (type.includes('string') || type.includes('atom') || type.includes('boolean'))) {
+      return typeof value === 'string' || typeof value === 'boolean'
         ? { 'tuple': [setting, value] }
         : { 'tuple': [setting, { 'tuple': value }] }
     } else if (type === 'reversed_tuple') {
