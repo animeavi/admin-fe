@@ -363,6 +363,7 @@ export default {
     },
     renderMultipleSelect(type) {
       return !this.reducedSelects && Array.isArray(type) && this.setting.key !== ':backends' && this.setting.key !== ':args' && (
+        this.setting.key === ':ip_whitelist' ||
         type.includes('module') ||
         (type.includes('list') && type.includes('string')) ||
         (type.includes('list') && type.includes('atom')) ||

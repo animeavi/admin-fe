@@ -100,6 +100,8 @@ export const parseTuples = (tuples, key) => {
       accum[item.tuple[0]] = parseStringOrTupleValue(item.tuple[0], item.tuple[1])
     } else if (item.tuple[0] === ':args') {
       accum[item.tuple[0]] = parseNonTuples(item.tuple[0], item.tuple[1])
+    } else if (item.tuple[0] === ':ip_whitelist') {
+      accum[item.tuple[0]] = item.tuple[1].map(ip => typeof ip === 'string' ? ip : ip.tuple.join('.'))
     } else if (Array.isArray(item.tuple[1]) &&
       (typeof item.tuple[1][0] === 'object' && !Array.isArray(item.tuple[1][0])) && item.tuple[1][0]['tuple']) {
       accum[item.tuple[0]] = parseTuples(item.tuple[1], item.tuple[0])
