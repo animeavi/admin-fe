@@ -30,6 +30,7 @@
           v-for="(item, index) in tupleValue"
           :value="item"
           :key="index"
+          :placeholder="getPlaceholder[index]"
           class="tuple-input"
           @input="processTupleTwoTypeValue($event, setting.key, index)"/>
       </div>
@@ -68,6 +69,9 @@ export default {
     booleanValue() {
       const value = this.data[this.setting.key]
       return typeof value !== 'boolean'
+    },
+    getPlaceholder() {
+      return { 0: ':basic', 1: 'username', 2: 'password' }
     },
     integerValue() {
       const value = this.data[this.setting.key]
