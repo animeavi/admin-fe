@@ -11,13 +11,9 @@
     <el-form :model="httpSecurityData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="httpSecurity" :data="httpSecurityData"/>
     </el-form>
-    <el-divider v-if="httpSecurity" class="divider thick-line"/>
+    <el-divider v-if="webCacheTtl" class="divider thick-line"/>
     <el-form :model="webCacheTtlData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="webCacheTtl" :data="webCacheTtlData"/>
-    </el-form>
-    <el-divider v-if="fedSockets" class="divider thick-line"/>
-    <el-form :model="fedSocketsData" :label-position="labelPosition" :label-width="labelWidth">
-      <setting :setting-group="fedSockets" :data="fedSocketsData"/>
     </el-form>
     <div class="submit-button-container">
       <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
@@ -43,12 +39,6 @@ export default {
     },
     corsPlugData() {
       return _.get(this.settings.settings, [':cors_plug']) || {}
-    },
-    fedSockets() {
-      return this.settings.description.find(setting => setting.key === ':fed_sockets')
-    },
-    fedSocketsData() {
-      return _.get(this.settings.settings, [':pleroma', ':fed_sockets']) || {}
     },
     http() {
       return this.settings.description.find(setting => setting.key === ':http')

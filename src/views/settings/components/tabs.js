@@ -26,7 +26,7 @@ export const tabs = description => {
     },
     'http': {
       label: 'settings.http',
-      settings: [':cors_plug', ':http', ':fed_sockets', ':http_security', ':web_cache_ttl']
+      settings: [':cors_plug', ':http', ':http_security', ':web_cache_ttl']
     },
     'instance': {
       label: 'settings.instance',
@@ -78,7 +78,7 @@ export const tabs = description => {
     },
     'other': {
       label: 'settings.other',
-      settings: [':mime', 'Pleroma.User.Backup', 'Pleroma.Web.Plugs.RemoteIp', ':modules', 'Pleroma.Web.ApiSpec.CastAndValidate', ':terms_of_services']
+      settings: [':mime', 'Pleroma.User.Backup', 'Pleroma.Web.Plugs.RemoteIp', 'Pleroma.Web.Endpoint.MetricsExporter', ':modules', 'Pleroma.Web.ApiSpec.CastAndValidate', ':terms_of_services']
     }
   }
 }
