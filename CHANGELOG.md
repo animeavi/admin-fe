@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Allow using underscores and hyphens in new account's usernames
 - Fix wrapping `:icons` setting and parsing tuples in settings with key `:headers`
 - Update keys for Pleroma.Web.Plugs.RemoteIp and PurgeExpiredActivity settings
+- Update switching between local and remote emoji packs panels: the panel with the pack's metadata will be closed when another panel is opened
 
 ## [2.2] - 2020-11-18
 
