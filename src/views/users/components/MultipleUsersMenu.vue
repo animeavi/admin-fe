@@ -244,13 +244,13 @@ export default {
           applyAction(filtered, approveAccountFn)
         },
         confirmAccounts: () => {
-          const filtered = this.selectedUsers.filter(user => this.isLocalUser(user) && user.confirmation_pending)
+          const filtered = this.selectedUsers.filter(user => this.isLocalUser(user) && !user.is_confirmed)
           const confirmAccountFn = async(users) => await this.$store.dispatch('ConfirmUsersEmail', { users })
 
           applyAction(filtered, confirmAccountFn)
         },
         resendConfirmation: () => {
-          const filtered = this.selectedUsers.filter(user => this.isLocalUser(user) && user.confirmation_pending)
+          const filtered = this.selectedUsers.filter(user => this.isLocalUser(user) && !user.is_confirmed)
           const resendConfirmationFn = async(users) => await this.$store.dispatch('ResendConfirmationEmail', users)
 
           applyAction(filtered, resendConfirmationFn)

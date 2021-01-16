@@ -149,7 +149,7 @@ const users = {
     },
     async ConfirmUsersEmail({ dispatch, getters }, { users, _userId, _statusId }) {
       const updatedUsers = users.map(user => {
-        return { ...user, confirmation_pending: false }
+        return { ...user, is_confirmed: true }
       })
       const nicknames = users.map(user => user.nickname)
       const callApiFn = async() => await confirmUserEmail(nicknames, getters.authHost, getters.token)
