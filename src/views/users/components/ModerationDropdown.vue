@@ -57,13 +57,13 @@
         {{ $t('users.rejectAccount') }}
       </el-dropdown-item>
       <el-dropdown-item
-        v-if="user.local && user.confirmation_pending"
+        v-if="user.local && !user.is_confirmed"
         divided
         @click.native="handleEmailConfirmation(user)">
         {{ $t('users.confirmAccount') }}
       </el-dropdown-item>
       <el-dropdown-item
-        v-if="user.local && user.confirmation_pending"
+        v-if="user.local && !user.is_confirmed"
         @click.native="handleConfirmationResend(user)">
         {{ $t('users.resendConfirmation') }}
       </el-dropdown-item>

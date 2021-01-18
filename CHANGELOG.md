@@ -15,8 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Filter users by actor type: Person, Bot or Application
 - Add ability to configure Media Preview Proxy, User Backup, Websocket based federation and Pleroma.Web.Endpoint.MetricsExporter settings
 - Mobile and Tablet UI for Single Report show page
+
 ### Changed
 
+- *Breaking*: AdminAPI changed User field `confirmation_pending` to `is_confirmed`
 - Hide Tag actions on Users tab if MRF TagPolicy is disabled. Add ability to enable TagPolicy from Moderation menu
 - Move `:restrict_unauthenticated` settings from Authentication tab to Instance tab
 - Replace regular inputs with textareas for setting welcome messages in the Settings section

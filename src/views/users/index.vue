@@ -77,7 +77,7 @@
             <span>{{ isDesktop ? $t('users.moderator') : getFirstLetter($t('users.moderator')) }}</span>
           </el-tag>
           <el-tooltip :content="$t('users.unconfirmedEmail')" effect="dark">
-            <el-tag v-if="scope.row.confirmation_pending" type="info">
+            <el-tag v-if="!scope.row.is_confirmed" type="info">
               {{ isDesktop ? $t('users.unconfirmed') : getFirstLetter($t('users.unconfirmed')) }}
             </el-tag>
           </el-tooltip>
