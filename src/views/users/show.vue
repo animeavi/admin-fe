@@ -89,8 +89,8 @@
                 <tr class="el-table__row">
                   <td>{{ $t('userProfile.status') }}</td>
                   <td>
-                    <el-tag v-if="user.approval_pending" type="info">{{ $t('userProfile.pending') }}</el-tag>
-                    <el-tag v-if="!user.deactivated & !user.approval_pending" type="success">{{ $t('userProfile.active') }}</el-tag>
+                    <el-tag v-if="!user.is_approved" type="info">{{ $t('userProfile.pending') }}</el-tag>
+                    <el-tag v-if="!user.deactivated & user.is_approved" type="success">{{ $t('userProfile.active') }}</el-tag>
                     <el-tag v-if="user.deactivated" type="danger">{{ $t('userProfile.deactivated') }}</el-tag>
                   </td>
                 </tr>

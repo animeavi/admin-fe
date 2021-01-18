@@ -238,7 +238,7 @@ export default {
           applyAction(filtered, requirePasswordResetFn)
         },
         approveAccounts: () => {
-          const filtered = this.selectedUsers.filter(user => this.isLocalUser(user) && user.approval_pending)
+          const filtered = this.selectedUsers.filter(user => this.isLocalUser(user) && !user.is_approved)
           const approveAccountFn = async(users) => await this.$store.dispatch('ApproveUsersAccount', { users })
 
           applyAction(filtered, approveAccountFn)

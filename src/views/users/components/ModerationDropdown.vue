@@ -46,13 +46,13 @@
         {{ $t('users.deleteAccount') }}
       </el-dropdown-item>
       <el-dropdown-item
-        v-if="user.local && user.approval_pending"
+        v-if="user.local && !user.is_approved"
         divided
         @click.native="handleAccountApproval(user)">
         {{ $t('users.approveAccount') }}
       </el-dropdown-item>
       <el-dropdown-item
-        v-if="user.local && user.approval_pending"
+        v-if="user.local && !user.is_approved"
         @click.native="handleAccountRejection(user)">
         {{ $t('users.rejectAccount') }}
       </el-dropdown-item>
