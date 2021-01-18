@@ -88,7 +88,7 @@ const users = {
   actions: {
     async ActivateUsers({ dispatch, getters }, { users, _userId }) {
       const updatedUsers = users.map(user => {
-        return { ...user, deactivated: false }
+        return { ...user, is_active: true }
       })
       const nicknames = users.map(user => user.nickname)
       const callApiFn = async() => await activateUsers(nicknames, getters.authHost, getters.token)
@@ -168,7 +168,7 @@ const users = {
     },
     async DeactivateUsers({ dispatch, getters }, { users, _userId }) {
       const updatedUsers = users.map(user => {
-        return { ...user, deactivated: true }
+        return { ...user, is_active: false }
       })
       const nicknames = users.map(user => user.nickname)
       const callApiFn = async() => await deactivateUsers(nicknames, getters.authHost, getters.token)
@@ -200,7 +200,7 @@ const users = {
         return
       }
       const updatedUsers = users.map(user => {
-        return { ...user, deactivated: true }
+        return { ...user, is_active: false }
       })
       commit('SWAP_USERS', updatedUsers)
 

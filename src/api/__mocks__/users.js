@@ -1,12 +1,12 @@
 import userChats from './chat'
 
 export let users = [
-  { active: true, is_confirmed: true, is_approved: true, deactivated: false, id: '2', nickname: 'allis', local: true, external: false, roles: { admin: true, moderator: false }, tags: [], actor_type: 'Person' },
-  { active: true, is_confirmed: true, is_approved: true, deactivated: false, id: '10', nickname: 'bob', local: true, external: false, roles: { admin: false, moderator: false }, tags: ['mrf_tag:sandbox'], actor_type: 'Person' },
-  { active: true, is_confirmed: true, is_approved: false, deactivated: false, id: '567', nickname: 'ded', local: false, external: true, roles: { admin: false, moderator: false }, tags: [], actor_type: 'Person' },
-  { active: false, is_confirmed: true, is_approved: true, deactivated: true, id: 'abc', nickname: 'john', local: true, external: false, roles: { admin: false, moderator: false }, tags: ['mrf_tag:media-strip'], actor_type: 'Person' },
-  { active: true, is_confirmed: true, is_approved: false, deactivated: false, id: '100', nickname: 'sally', local: true, external: false, roles: { admin: false, moderator: false }, tags: [], actor_type: 'Service' },
-  { active: true, is_confirmed: true, is_approved: false, deactivated: false, id: '123', nickname: 'bot', local: true, external: false, roles: { admin: false, moderator: false }, tags: [], actor_type: 'Application' }
+  { active: true, is_confirmed: true, is_approved: true, is_active: true, id: '2', nickname: 'allis', local: true, external: false, roles: { admin: true, moderator: false }, tags: [], actor_type: 'Person' },
+  { active: true, is_confirmed: true, is_approved: true, is_active: true, id: '10', nickname: 'bob', local: true, external: false, roles: { admin: false, moderator: false }, tags: ['mrf_tag:sandbox'], actor_type: 'Person' },
+  { active: true, is_confirmed: true, is_approved: false, is_active: true, id: '567', nickname: 'ded', local: false, external: true, roles: { admin: false, moderator: false }, tags: [], actor_type: 'Person' },
+  { active: false, is_confirmed: true, is_approved: true, is_active: false, id: 'abc', nickname: 'john', local: true, external: false, roles: { admin: false, moderator: false }, tags: ['mrf_tag:media-strip'], actor_type: 'Person' },
+  { active: true, is_confirmed: true, is_approved: false, is_active: true, id: '100', nickname: 'sally', local: true, external: false, roles: { admin: false, moderator: false }, tags: [], actor_type: 'Service' },
+  { active: true, is_confirmed: true, is_approved: false, is_active: true, id: '123', nickname: 'bot', local: true, external: false, roles: { admin: false, moderator: false }, tags: [], actor_type: 'Application' }
 ]
 
 const userProfile = { avatar: 'avatar.jpg', nickname: 'allis', id: '2', tags: [], roles: { admin: true, moderator: false }, local: true, external: false }
@@ -82,7 +82,7 @@ export async function searchUsers(query, filters, actorTypeFilters, authHost, to
 export async function activateUsers(nicknames, authHost, token) {
   const response = nicknames.map(nickname => {
     const currentUser = users.find(user => user.nickname === nickname)
-    return { ...currentUser, deactivated: false }
+    return { ...currentUser, is_active: true }
   })
   return Promise.resolve({ data: response })
 }
@@ -96,7 +96,7 @@ export async function addRight(nicknames, right, authHost, token) {
 export async function deactivateUsers(nicknames, authHost, token) {
   const response = nicknames.map(nickname => {
     const currentUser = users.find(user => user.nickname === nickname)
-    return { ...currentUser, deactivated: true }
+    return { ...currentUser, is_active: false }
   })
   return Promise.resolve({ data: response })
 }
@@ -130,7 +130,7 @@ export async function untagUser(nickname, tag, authHost, token) {
 }
 
 export async function createNewAccount(nickname, email, password, authHost, token) {
-  const newUser = { active: true, deactivated: false, id: '15', nickname, local: true, external: false, roles: { admin: false, moderator: false }, tags: [] }
+  const newUser = { active: true, is_active: true, id: '15', nickname, local: true, external: false, roles: { admin: false, moderator: false }, tags: [] }
   users = [...users, newUser]
   return Promise.resolve()
 }
