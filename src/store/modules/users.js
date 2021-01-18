@@ -132,7 +132,7 @@ const users = {
     },
     async ApproveUsersAccount({ dispatch, getters }, { users, _userId, _statusId }) {
       const updatedUsers = users.map(user => {
-        return { ...user, approval_pending: false }
+        return { ...user, is_approved: true }
       })
       const nicknames = users.map(user => user.nickname)
       const callApiFn = async() => await approveUserAccount(nicknames, getters.authHost, getters.token)
