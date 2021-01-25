@@ -19,6 +19,7 @@ const settings = {
     loading: true,
     searchData: {},
     settings: {},
+    tabs: [],
     termsOfServices: '',
     updatedSettings: {}
   },
@@ -66,6 +67,9 @@ const settings = {
       state.settings = newSettings
       state.db = newDbSettings
     },
+    SET_TABS: (state, tabs) => {
+      state.tabs = tabs
+    },
     SET_TERMS_OF_SERVICES: (state, data) => {
       state.termsOfServices = data
     },
@@ -98,11 +102,37 @@ const settings = {
       commit('SET_LOADING', true)
       try {
         const response = await fetchSettings(getters.authHost, getters.token)
+        const realResponse = { ...response,
+          tabs: [
+            { label: 'ActivityPub', value: 'activityPub' },
+            { label: 'Authentication', value: 'auth' },
+            { label: 'Captcha', value: 'captcha' },
+            { label: 'BBS / SSH access', value: 'esshd' },
+            { label: 'Emoji', value: 'emoji' },
+            { label: 'Frontend', value: 'frontend' },
+            { label: 'Gopher', value: 'gopher' },
+            { label: 'HTTP', value: 'http' },
+            { label: 'Instance', value: 'instance' },
+            { label: 'Job queue', value: 'jobQueue' },
+            { label: 'Link Formatter', value: 'linkFormatter' },
+            { label: 'Logger', value: 'logger' },
+            { label: 'Mailer', value: 'mailer' },
+            { label: 'Media Proxy', value: 'mediaProxy' },
+            { label: 'Metadata', value: 'metadata' },
+            { label: 'MRF', value: 'mrf' },
+            { label: 'Rate limiters', value: 'rateLimiters' },
+            { label: 'Relays', value: 'relays' },
+            { label: 'Web push encryption', value: 'webPush' },
+            { label: 'Upload', value: 'upload' },
+            { label: 'Other', value: 'other' }
+          ]
+        }
         const description = await fetchDescription(getters.authHost, getters.token)
         commit('SET_DESCRIPTION', description.data)
         const searchObject = formSearchObject(description.data)
         commit('SET_SEARCH', searchObject)
-        commit('SET_SETTINGS', response.data.configs)
+        commit('SET_SETTINGS', realResponse.data.configs)
+        commit('SET_TABS', realResponse.tabs)
       } catch (_e) {
         commit('TOGGLE_TABS', true)
         commit('SET_ACTIVE_TAB', 'relays')
