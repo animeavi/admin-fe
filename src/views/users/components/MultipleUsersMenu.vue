@@ -197,13 +197,13 @@ export default {
           applyAction(filtered, deleteRightFn)
         },
         activate: () => {
-          const filtered = this.selectedUsers.filter(user => user.nickname && user.deactivated && this.$store.state.user.id !== user.id)
+          const filtered = this.selectedUsers.filter(user => user.nickname && !user.is_active && this.$store.state.user.id !== user.id)
           const activateUsersFn = async(users) => await this.$store.dispatch('ActivateUsers', { users })
 
           applyAction(filtered, activateUsersFn)
         },
         deactivate: () => {
-          const filtered = this.selectedUsers.filter(user => user.nickname && !user.deactivated && this.$store.state.user.id !== user.id)
+          const filtered = this.selectedUsers.filter(user => user.nickname && user.is_active && this.$store.state.user.id !== user.id)
           const deactivateUsersFn = async(users) => await this.$store.dispatch('DeactivateUsers', { users })
 
           applyAction(filtered, deactivateUsersFn)

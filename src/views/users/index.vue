@@ -56,11 +56,11 @@
       </el-table-column>
       <el-table-column :min-width="width" :label="$t('users.status')">
         <template slot-scope="scope">
-          <el-tag v-if="!scope.row.deactivated && scope.row.is_approved" type="success">
+          <el-tag v-if="scope.row.is_active && scope.row.is_approved" type="success">
             <span v-if="isDesktop">{{ $t('users.active') }}</span>
             <i v-else class="el-icon-circle-check"/>
           </el-tag>
-          <el-tag v-if="scope.row.deactivated && scope.row.is_approved" type="danger">
+          <el-tag v-if="!scope.row.is_active && scope.row.is_approved" type="danger">
             <span v-if="isDesktop">{{ $t('users.deactivated') }}</span>
             <i v-else class="el-icon-circle-close"/>
           </el-tag>
