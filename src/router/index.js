@@ -11,14 +11,9 @@ const settingsDisabled = disabledFeatures.includes('settings')
 const settings = {
   path: '/settings',
   component: Layout,
-  children: [
-    {
-      path: 'index',
-      component: () => import('@/views/settings/index'),
-      name: 'Settings',
-      meta: { title: 'settings', icon: 'settings', noCache: true }
-    }
-  ]
+  name: 'Settings',
+  hasSubmenu: true,
+  meta: { title: 'settings', icon: 'settings', noCache: true }
 }
 
 const statusesDisabled = disabledFeatures.includes('statuses')
@@ -145,7 +140,8 @@ export const constantRouterMap = [
   {
     path: '',
     component: Layout,
-    redirect: '/users/index'
+    redirect: '/users/index',
+    hidden: true
   }
 ]
 
