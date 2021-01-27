@@ -8,14 +8,25 @@ import Layout from '@/views/layout/Layout'
 
 const disabledFeatures = process.env.DISABLED_FEATURES || []
 const settingsDisabled = disabledFeatures.includes('settings')
+const settingsChildren = () => {
+  const items = localStorage.getItem('settingsTabs') || []
+  return JSON.parse(items).map(({ label, value }) => {
+    return {
+      path: value,
+      component: () => import(`@/views/settings/components/${label}`),
+      name: label,
+      meta: { title: label }
+    }
+  })
+}
 const settings = {
   path: '/settings',
   component: Layout,
   name: 'Settings',
   hasSubmenu: true,
-  meta: { title: 'settings', icon: 'settings', noCache: true }
+  meta: { title: 'settings', icon: 'settings', noCache: true },
+  children: settingsChildren()
 }
-
 const statusesDisabled = disabledFeatures.includes('statuses')
 const statuses = {
   path: '/statuses',
