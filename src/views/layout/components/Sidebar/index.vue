@@ -18,13 +18,14 @@
 import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
-// import router from '@/router'
+import router from '@/router'
 
 export default {
   components: { SidebarItem },
   computed: {
     ...mapGetters([
       'permission_routers',
+      'roles',
       'sidebar',
       'tabs'
     ]),
@@ -41,20 +42,22 @@ export default {
   methods: {
     async handleOpen($event) {
       if ($event === '/settings') {
-        let items = localStorage.getItem('settingsTabs')
-        if (!items) {
+        if (!localStorage.getItem('settingsTabs')) {
           await this.$store.dispatch('FetchSettings')
-          items = this.tabs
-          localStorage.setItem('settingsTabs', JSON.stringify(items))
+          const menuItems = this.tabs
+          localStorage.setItem('settingsTabs', JSON.stringify(menuItems))
+
+          menuItems.forEach(({ label, value }) => {
+            router.addRoute('Settings', {
+              path: value,
+              component: () => import(`@/views/settings/components/${label}`),
+              name: label,
+              meta: { title: label }
+            })
+          })
+          const routes = router.getRoutes().filter(item => !item.hidden)
+          this.$store.dispatch('GenerateRoutes', { roles: this.roles, routes })
         }
-        JSON.parse(items).forEach(item => {
-          // router.addRoute('Settings', [{
-          //   path: item.value,
-          //   component: {
-          //     template: '<span>Ioio</span>'
-          //   }
-          // }])
-        })
       }
     }
   }

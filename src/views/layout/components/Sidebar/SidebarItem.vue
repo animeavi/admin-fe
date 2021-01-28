@@ -91,7 +91,6 @@ export default {
   methods: {
     hasOneShowingChild(children, parent) {
       if (parent.hasSubmenu) {
-        console.log(children)
         return false
       }
 
