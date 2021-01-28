@@ -19,6 +19,7 @@ import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
 import router from '@/router'
+import { asyncRouterMap } from '@/router'
 
 export default {
   components: { SidebarItem },
@@ -40,6 +41,18 @@ export default {
     this.$store.dispatch('FetchOpenReportsCount')
   },
   methods: {
+    getMergedRoutes() {
+      const routes = router.getRoutes().filter(item => !item.hidden)
+      return routes.reduce((acc, element) => {
+        if (!element.parent || element.parent.path !== '/settings') {
+          return acc
+        } else {
+          const index = acc.findIndex(route => route.path === '/settings')
+          acc[index] = { ...acc[index], children: [...acc[index].children, element] }
+          return acc
+        }
+      }, [...asyncRouterMap])
+    },
     async handleOpen($event) {
       if ($event === '/settings') {
         if (!localStorage.getItem('settingsTabs')) {
@@ -55,8 +68,8 @@ export default {
               meta: { title: label }
             })
           })
-          const routes = router.getRoutes().filter(item => !item.hidden)
-          this.$store.dispatch('GenerateRoutes', { roles: this.roles, routes })
+          const routes = this.getMergedRoutes()
+          this.$store.dispatch('GenerateRoutes', { roles: this.roles, _routesWithSettings: routes })
         }
       }
     }
