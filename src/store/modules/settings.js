@@ -11,7 +11,6 @@ import _ from 'lodash'
 
 const settings = {
   state: {
-    activeTab: 'instance',
     configDisabled: true,
     db: {},
     description: [],
@@ -35,9 +34,6 @@ const settings = {
         const { [subkeys[0]]: value, ...updatedSettings } = state.updatedSettings[group][key]
         state.updatedSettings = updatedSettings
       }
-    },
-    SET_ACTIVE_TAB: (state, tab) => {
-      state.activeTab = tab
     },
     SET_DESCRIPTION: (state, data) => {
       state.description = data
