@@ -60,10 +60,10 @@ export default {
           const menuItems = this.tabs
           localStorage.setItem('settingsTabs', JSON.stringify(menuItems))
 
-          menuItems.forEach(({ label, value }) => {
+          menuItems.forEach(({ label, path }) => {
             router.addRoute('Settings', {
-              path: value,
-              component: () => import(`@/views/settings/components/${label}`),
+              path,
+              component: () => import(`@/views/settings`),
               name: label,
               meta: { title: label }
             })

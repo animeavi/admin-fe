@@ -10,10 +10,10 @@ const disabledFeatures = process.env.DISABLED_FEATURES || []
 const settingsDisabled = disabledFeatures.includes('settings')
 const settingsChildren = () => {
   return localStorage.getItem('settingsTabs')
-    ? JSON.parse(localStorage.getItem('settingsTabs')).map(({ label, value }) => {
+    ? JSON.parse(localStorage.getItem('settingsTabs')).map(({ label, path }) => {
       return {
-        path: value,
-        component: () => import(`@/views/settings/components/${label}`),
+        path,
+        component: () => import(`@/views/settings`),
         name: label,
         meta: { title: label }
       }
