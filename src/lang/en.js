@@ -420,6 +420,7 @@ export default {
     activityPub: 'ActivityPub',
     auth: 'Authentication',
     captcha: 'Captcha',
+    emoji: 'Emoji',
     frontend: 'Frontend',
     http: 'HTTP',
     mrf: 'MRF',

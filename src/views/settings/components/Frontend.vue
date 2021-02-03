@@ -16,10 +16,6 @@
       <setting :setting-group="assets" :data="assetsData"/>
     </el-form>
     <el-divider v-if="assets" class="divider thick-line"/>
-    <el-form :model="emojiData" :label-position="labelPosition" :label-width="labelWidth">
-      <setting :setting-group="emoji" :data="emojiData"/>
-    </el-form>
-    <el-divider v-if="emoji" class="divider thick-line"/>
     <el-form :model="chatData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="chat" :data="chatData"/>
     </el-form>
@@ -61,12 +57,6 @@ export default {
     },
     chatData() {
       return _.get(this.settings.settings, [':pleroma', ':chat']) || {}
-    },
-    emoji() {
-      return this.settings.description.find(setting => setting.key === ':emoji')
-    },
-    emojiData() {
-      return _.get(this.settings.settings, [':pleroma', ':emoji']) || {}
     },
     frontend() {
       return this.settings.description.find(setting => setting.key === ':frontend_configurations')

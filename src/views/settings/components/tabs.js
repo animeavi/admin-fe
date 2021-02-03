@@ -16,6 +16,10 @@ export const tabs = description => {
       label: 'settings.captcha',
       settings: ['Pleroma.Captcha', 'Pleroma.Captcha.Kocaptcha']
     },
+    'emoji': {
+      label: 'settings.emoji',
+      settings: [':emoji']
+    },
     'frontend': {
       label: 'settings.frontend',
       settings: [':assets', ':chat', ':frontends', ':emoji', ':frontend_configurations', ':markup', ':static_fe']
