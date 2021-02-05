@@ -17,6 +17,7 @@ const settings = {
     instancePanel: '',
     loading: true,
     searchData: {},
+    searchQuery: '',
     settings: {},
     tabs: [],
     termsOfServices: '',
@@ -43,6 +44,9 @@ const settings = {
     },
     SET_SEARCH: (state, searchObject) => {
       state.searchData = searchObject
+    },
+    SET_SEARCH_QUERY: (state, query) => {
+      state.searchQuery = query
     },
     SET_SETTINGS: (state, data) => {
       const newSettings = data.reduce((acc, { group, key, value }) => {
@@ -131,7 +135,6 @@ const settings = {
         commit('SET_TABS', realResponse.tabs)
       } catch (_e) {
         commit('TOGGLE_TABS', true)
-        commit('SET_ACTIVE_TAB', 'relays')
         commit('SET_LOADING', false)
         return
       }
@@ -150,8 +153,8 @@ const settings = {
       commit('TOGGLE_REBOOT', response.data.need_reboot)
       commit('REMOVE_SETTING_FROM_UPDATED', { group, key, subkeys: subkeys || [] })
     },
-    SetActiveTab({ commit }, tab) {
-      commit('SET_ACTIVE_TAB', tab)
+    SetSearchQuery({ commit }, query) {
+      commit('SET_SEARCH_QUERY', query)
     },
     async SubmitChanges({ getters, commit, state }) {
       const configs = Object.keys(state.updatedSettings).reduce((acc, group) => {

@@ -146,15 +146,12 @@ export default {
     this.$store.dispatch('FetchSettings')
   },
   methods: {
-    async handleSearchSelect(selectedValue) {
+    handleSearchSelect(selectedValue) {
+      this.$store.dispatch('SetSearchQuery', selectedValue.key)
       const tab = Object.keys(this.tabs).find(tab => {
         return this.tabs[tab].settings.includes(selectedValue.group === ':pleroma' ? selectedValue.key : selectedValue.group)
       })
-      await this.$store.dispatch('SetActiveTab', tab)
-      const selectedSetting = document.querySelector(`[data-search="${selectedValue.key}"]`)
-      if (selectedSetting) {
-        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
-      }
+      this.$router.push({ path: `/settings/${tab}` })
     },
     querySearch(queryString, cb) {
       const results = this.searchData.filter(searchObj => searchObj.search.find(el => el.includes(queryString.toLowerCase())))
