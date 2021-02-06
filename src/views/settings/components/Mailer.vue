@@ -82,6 +82,9 @@ export default {
     newUsersDigestEmailData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Emails.NewUsersDigestEmail']) || {}
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     swoosh() {
       return this.settings.description.find(setting => setting.group === ':swoosh')
     },
@@ -93,6 +96,15 @@ export default {
     },
     userEmailData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Emails.UserEmail']) || {}
+    }
+  },
+  mounted() {
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
     }
   },
   methods: {

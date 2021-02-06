@@ -179,6 +179,9 @@ export default {
     remotePacksCount() {
       return this.$store.state.emojiPacks.remotePacksCount
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     settingsLabelWidth() {
       if (this.isMobile) {
         return '120px'
@@ -193,6 +196,17 @@ export default {
     this.$store.dispatch('GetNodeInfo')
     this.$store.dispatch('NeedReboot')
     this.refreshLocalPacks()
+
+    if (this.searchQuery.length > 0) {
+      this.activeTab = 'settings'
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      console.log(selectedSetting)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+
+      this.$store.dispatch('SetSearchQuery', '')
+    }
   },
   methods: {
     closeLocalTabs() {

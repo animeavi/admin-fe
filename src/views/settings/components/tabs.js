@@ -22,7 +22,7 @@ export const tabs = description => {
     },
     'frontend': {
       label: 'settings.frontend',
-      settings: [':assets', ':chat', ':frontends', ':emoji', ':frontend_configurations', ':markup', ':static_fe']
+      settings: [':assets', ':chat', ':frontends', ':emoji', ':frontend_configurations', ':markup', ':static_fe', 'Pleroma.Web.Preload']
     },
     'gopher': {
       label: 'settings.gopher',

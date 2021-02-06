@@ -72,6 +72,9 @@ export default {
     s3Data() {
       return _.get(this.settings.settings, [':ex_aws', ':s3']) || {}
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     showUploadersS3() {
       const uploader = _.get(this.settings.settings, [':pleroma', 'Pleroma.Upload', ':uploader'])
       return uploader === 'Pleroma.Uploaders.S3'
@@ -109,6 +112,15 @@ export default {
     },
     uploadAnonymizeFilenameData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Upload.Filter.AnonymizeFilename']) || {}
+    }
+  },
+  mounted() {
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
     }
   },
   methods: {

@@ -76,11 +76,23 @@ export default {
     loading() {
       return this.settings.loading
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     webCacheTtl() {
       return this.settings.description.find(setting => setting.key === ':web_cache_ttl')
     },
     webCacheTtlData() {
       return _.get(this.settings.settings, [':pleroma', ':web_cache_ttl']) || {}
+    }
+  },
+  mounted() {
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
     }
   },
   methods: {

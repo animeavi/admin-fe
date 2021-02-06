@@ -56,11 +56,23 @@ export default {
     metadataData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Web.Metadata']) || {}
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     richMedia() {
       return this.settings.description.find(setting => setting.key === ':rich_media')
     },
     richMediaData() {
       return _.get(this.settings.settings, [':pleroma', ':rich_media']) || {}
+    }
+  },
+  mounted() {
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
     }
   },
   methods: {

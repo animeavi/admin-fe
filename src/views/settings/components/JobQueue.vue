@@ -96,11 +96,23 @@ export default {
     poolsData() {
       return _.get(this.settings.settings, [':pleroma', ':pools']) || {}
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     workers() {
       return this.settings.description.find(setting => setting.key === ':workers')
     },
     workersData() {
       return _.get(this.settings.settings, [':pleroma', ':workers']) || {}
+    }
+  },
+  mounted() {
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
     }
   },
   methods: {

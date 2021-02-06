@@ -106,11 +106,23 @@ export default {
     preloadData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Web.Preload']) || {}
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     staticFe() {
       return this.settings.description.find(setting => setting.key === ':static_fe')
     },
     staticFeData() {
       return _.get(this.settings.settings, [':pleroma', ':static_fe']) || {}
+    }
+  },
+  mounted() {
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
     }
   },
   methods: {

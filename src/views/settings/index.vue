@@ -151,7 +151,9 @@ export default {
       const tab = Object.keys(this.tabs).find(tab => {
         return this.tabs[tab].settings.includes(selectedValue.group === ':pleroma' ? selectedValue.key : selectedValue.group)
       })
-      this.$router.push({ path: `/settings/${tab}` })
+      if (tab) {
+        this.$router.push({ path: `/settings/${tab}` })
+      }
     },
     querySearch(queryString, cb) {
       const results = this.searchData.filter(searchObj => searchObj.search.find(el => el.includes(queryString.toLowerCase())))

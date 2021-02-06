@@ -76,11 +76,23 @@ export default {
     loggerData() {
       return _.get(this.settings.settings, [':logger', ':backends']) || {}
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     quack() {
       return this.settings.description.find(setting => setting.group === ':quack')
     },
     quackData() {
       return _.get(this.settings.settings, [':quack']) || {}
+    }
+  },
+  mounted() {
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
     }
   },
   methods: {

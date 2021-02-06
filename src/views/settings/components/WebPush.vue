@@ -46,11 +46,23 @@ export default {
     loading() {
       return this.settings.loading
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     vapidDetails() {
       return this.settings.description.find(setting => setting.key === ':vapid_details')
     },
     vapidDetailsData() {
       return _.get(this.settings.settings, [':web_push_encryption', ':vapid_details']) || {}
+    }
+  },
+  mounted() {
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
     }
   },
   methods: {
