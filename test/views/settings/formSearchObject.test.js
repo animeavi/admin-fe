@@ -61,6 +61,13 @@ describe('Form search object', () => {
         key: ':terms_of_services',
         label: 'Terms of Services',
         search: ['Terms of Services', ':terms_of_services']
+      },
+      {
+        groupKey: 'relays',
+        groupLabel: 'Relays',
+        key: ':relays',
+        label: 'Relays',
+        search: ['Relays', ':relays']
       }
     ]
     expect(_.isEqual(formSearchObject(description), expected)).toBeTruthy()
@@ -109,6 +116,13 @@ describe('Form search object', () => {
         key: ':terms_of_services',
         label: 'Terms of Services',
         search: ['Terms of Services', ':terms_of_services']
+      },
+      {
+        groupKey: 'relays',
+        groupLabel: 'Relays',
+        key: ':relays',
+        label: 'Relays',
+        search: ['Relays', ':relays']
       }
     ]
     expect(_.isEqual(formSearchObject(description), expected)).toBeTruthy()
@@ -157,6 +171,13 @@ describe('Form search object', () => {
         key: ':terms_of_services',
         label: 'Terms of Services',
         search: ['Terms of Services', ':terms_of_services']
+      },
+      {
+        groupKey: 'relays',
+        groupLabel: 'Relays',
+        key: ':relays',
+        label: 'Relays',
+        search: ['Relays', ':relays']
       }
     ]
     expect(_.isEqual(formSearchObject(description), expected)).toBeTruthy()
@@ -173,27 +194,36 @@ describe('Form search object', () => {
           label: "Admin token" }
       ]
     }]
-    const expected = [{
-      label: "Admin token",
-      key: ":admin_token",
-      groupKey: ":pleroma",
-      groupLabel: "Pleroma",
-      search: [":admin_token", "admin token", "token"]
-    },
-    {
-      groupKey: ':instance_panel',
-      groupLabel: 'Instance Panel',
-      key: ':instance_panel',
-      label: 'Instance Panel',
-      search: ['Instance Panel', ':instance_panel']
-    },
-    {
-      groupKey: ':terms_of_services',
-      groupLabel: 'Terms of Services',
-      key: ':terms_of_services',
-      label: 'Terms of Services',
-      search: ['Terms of Services', ':terms_of_services']
-    }]
+    const expected = [
+      {
+        label: "Admin token",
+        key: ":admin_token",
+        groupKey: ":pleroma",
+        groupLabel: "Pleroma",
+        search: [":admin_token", "admin token", "token"]
+      },
+      {
+        groupKey: ':instance_panel',
+        groupLabel: 'Instance Panel',
+        key: ':instance_panel',
+        label: 'Instance Panel',
+        search: ['Instance Panel', ':instance_panel']
+      },
+      {
+        groupKey: ':terms_of_services',
+        groupLabel: 'Terms of Services',
+        key: ':terms_of_services',
+        label: 'Terms of Services',
+        search: ['Terms of Services', ':terms_of_services']
+      },
+      {
+        groupKey: 'relays',
+        groupLabel: 'Relays',
+        key: ':relays',
+        label: 'Relays',
+        search: ['Relays', ':relays']
+      }
+    ]
     expect(_.isEqual(formSearchObject(description), expected)).toBeTruthy()
   })
 
@@ -269,12 +299,20 @@ describe('Form search object', () => {
         key: ':instance_panel',
         label: 'Instance Panel',
         search: ['Instance Panel', ':instance_panel']
-      }, {
+      },
+      {
         groupKey: ':terms_of_services',
         groupLabel: 'Terms of Services',
         key: ':terms_of_services',
         label: 'Terms of Services',
         search: ['Terms of Services', ':terms_of_services']
+      },
+      {
+        groupKey: 'relays',
+        groupLabel: 'Relays',
+        key: ':relays',
+        label: 'Relays',
+        search: ['Relays', ':relays']
       }
     ]
     expect(_.isEqual(formSearchObject(description), expected)).toBeTruthy()
