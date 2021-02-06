@@ -7,6 +7,7 @@ import app from '@/store/modules/app'
 import settings from '@/store/modules/settings'
 import user from '@/store/modules/user'
 import getters from '@/store/getters'
+import _ from 'lodash'
 
 config.mocks["$t"] = () => {}
 
@@ -22,6 +23,8 @@ describe('Settings search', () => {
   let store
   let actions
   let appActions
+  let $route
+  let $router
 
   beforeEach(() => {
     appActions = { ...app.actions, NeedReboot: jest.fn() }
@@ -34,11 +37,17 @@ describe('Settings search', () => {
       },
       getters
     })
+    $route = { path: '/settings/path' }
+    $router = []
   })
 
   it('shows search input', async (done) => {
     const wrapper = mount(Settings, {
       store,
+      mocks: {
+        $route,
+        $router
+      },
       localVue
     })
 
@@ -50,19 +59,27 @@ describe('Settings search', () => {
   it('changes tab when search value was selected', async (done) => {
     const wrapper = mount(Settings, {
       store,
+      mocks: {
+        $route,
+        $router
+      },
       localVue
     })
     wrapper.vm.handleSearchSelect({ group: 'Pleroma.Upload', key: 'Pleroma.Upload' })
-    expect(store.state.settings.activeTab).toBe('upload')
+    expect(store.state.settings.searchQuery).toBe('Pleroma.Upload')
+    expect(_.isEqual($router[0], { path: `/settings/upload` })).toBeTruthy()
 
     wrapper.vm.handleSearchSelect({ group: ':swoosh', key: ':serve_mailbox' })
-    expect(store.state.settings.activeTab).toBe('mailer')
+    expect(store.state.settings.searchQuery).toBe(':serve_mailbox')
+    expect(_.isEqual($router[1], { path: `/settings/mailer` })).toBeTruthy()
 
     wrapper.vm.handleSearchSelect({ group: ':pleroma', key: ':admin_token' })
-    expect(store.state.settings.activeTab).toBe('instance')
+    expect(store.state.settings.searchQuery).toBe(':admin_token')
+    expect(_.isEqual($router[2], { path: `/settings/instance` })).toBeTruthy()
 
     wrapper.vm.handleSearchSelect({ group: ':media_proxy', key: ':ssl_options' })
-    expect(store.state.settings.activeTab).toBe('media-proxy')
+    expect(store.state.settings.searchQuery).toBe(':ssl_options')
+    expect(_.isEqual($router[3], { path: `/settings/media-proxy` })).toBeTruthy()
 
     done()
   })
