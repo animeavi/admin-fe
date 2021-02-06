@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading" class="relays-container">
+  <div v-if="!loading" class="relays-container" data-search="relays">
     <div class="follow-relay-container">
       <el-input v-model="newRelay" :placeholder="$t('settings.followRelay')" class="follow-relay" @keyup.enter.native="followRelay"/>
       <el-button @click.native="followRelay">{{ $t('settings.follow') }}</el-button>
@@ -51,10 +51,21 @@ export default {
     },
     relays() {
       return this.$store.state.relays.fetchedRelays
+    },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
     }
   },
   mounted() {
     this.$store.dispatch('FetchRelays')
+
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
+    }
   },
   methods: {
     followRelay() {

@@ -308,6 +308,12 @@ export const formSearchObject = description => {
     key: ':terms_of_services',
     label: 'Terms of Services',
     search: ['Terms of Services', ':terms_of_services']
+  }, {
+    groupKey: 'relays',
+    groupLabel: 'Relays',
+    key: ':relays',
+    label: 'Relays',
+    search: ['Relays', ':relays']
   }]
   return processedDescription.concat(searchDataForEditableDocs)
 }
