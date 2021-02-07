@@ -28,7 +28,7 @@ export const beforeEachRoute = (to, from, next) => {
         store.dispatch('GetUserInfo').then(res => {
           const roles = res.data.pleroma.is_admin ? ['admin'] : []
           store.dispatch('GenerateRoutes', { roles }).then(() => {
-            router.addRoutes(store.getters.addRouters)
+            store.getters.addRouters.forEach(route => router.addRoute(route))
             next({ ...to, replace: true })
           })
         }).catch((err) => {
