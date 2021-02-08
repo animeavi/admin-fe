@@ -30,7 +30,8 @@
     height: 2px;
   }
   .docs-search-container {
-    float: right;
+    display: flex;
+    justify-content: flex-end;
     margin-right: 30px;
   }
   .editable-keyword-container {
@@ -307,9 +308,6 @@
   .header-sidebar-closed {
     max-width: 1728px;
   }
-  .settings-header-container {
-    height: 87px;
-  }
   .settings-search-input {
     width: 350px;
     margin-left: 5px;
@@ -488,13 +486,6 @@
     .limit-input {
       width: 45%;
     }
-    .nav-container {
-      display: flex;
-      height: 36px;
-      justify-content: space-between;
-      align-items: center;
-      margin: 15px;
-    }
     .proxy-url-input {
       flex-direction: column;
       align-items: flex-start;
@@ -540,15 +531,9 @@
       display: inline-block;
       margin: 10px 15px 15px 15px;
     }
-    .docs-search-container {
-      float: right;
-    }
     .settings-search-input {
-      width: 100%;
-      margin-left: 0;
-    }
-    .settings-search-input-container {
-      margin: 0 15px 15px 15px;
+      margin: 0 15px 25px 15px;
+      width: stretch;
     }
     .socks5-checkbox-container {
       width: 100%;
@@ -638,7 +623,9 @@
       margin-right: 5px
     }
     .settings-header-container {
-      height: 45px;
+      display: flex;
+      justify-content: space-between;
+      margin-right: 15px;
     }
     .value-input {
       width: 60%;
@@ -677,13 +664,6 @@
       display: flex;
       justify-content: space-between;
     }
-    .nav-container {
-      display: flex;
-      height: 36px;
-      justify-content: space-between;
-      align-items: center;
-      margin: 15px 30px 15px 15px;
-    }
     .rate-limit-content {
       width: 65%;
     }
@@ -694,7 +674,14 @@
       float: right;
     }
     .settings-header-container {
-      height: 36px;
+      display: flex;
+      justify-content: space-between;
+      margin-right: 15px;
+    }
+    .settings-search-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 15px;
     }
     .settings-search-input {
       width: 250px;

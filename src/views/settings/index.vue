@@ -4,7 +4,7 @@
       <reboot-button/>
     </div>
     <div v-if="isDesktop">
-      <div :class="isSidebarOpen" class="settings-header-container">
+      <div :class="isSidebarOpen">
         <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
         <div class="docs-search-container">
           <el-link
@@ -34,8 +34,6 @@
     <div v-if="isMobile || isTablet">
       <div :class="isSidebarOpen" class="settings-header-container">
         <h1 class="settings-header">{{ $t('settings.settings') }}</h1>
-      </div>
-      <div class="nav-container">
         <el-link
           :underline="false"
           href="https://docs-develop.pleroma.social/backend/administration/CLI_tasks/config/"
@@ -48,7 +46,17 @@
           </el-button>
         </el-link>
       </div>
-      <!-- <div class="settings-search-input-container"/> -->
+      <div class="settings-search-container">
+        <el-autocomplete
+          v-model="searchQuery"
+          :fetch-suggestions="querySearch"
+          :trigger-on-focus="false"
+          clearable
+          placeholder="Search"
+          prefix-icon="el-icon-search"
+          class="settings-search-input"
+          @select="handleSearchSelect"/>
+      </div>
       <component :is="componentName"/>
     </div>
   </div>
