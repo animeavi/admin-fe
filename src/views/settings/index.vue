@@ -159,8 +159,16 @@ export default {
       const tab = Object.keys(this.tabs).find(tab => {
         return this.tabs[tab].settings.includes(selectedValue.group === ':pleroma' ? selectedValue.key : selectedValue.group)
       })
-      if (tab) {
+      if (this.$router.currentRoute.path === `/settings/${tab}`) {
+        this.scrollTo(selectedValue.key)
+      } else if (tab) {
         this.$router.push({ path: `/settings/${tab}` })
+      }
+    },
+    scrollTo(searchQuery) {
+      const selectedSetting = document.querySelector(`[data-search="${searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
       }
     },
     querySearch(queryString, cb) {
