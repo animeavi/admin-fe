@@ -32,7 +32,7 @@
             class="nest-menu" />
 
           <app-link v-else :to="resolvePath(child.path)" :key="child.name">
-            <el-menu-item :index="resolvePath(child.path)">
+            <el-menu-item :index="resolvePath(child.path)" class="submenu-item">
               <item
                 v-if="child.meta"
                 :count="showCount(item) ? normalizedReportsCount : null"
@@ -129,3 +129,9 @@ export default {
   }
 }
 </script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+.submenu-item {
+  padding-left: 54px !important;
+}
+</style>
