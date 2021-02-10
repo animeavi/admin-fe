@@ -1,9 +1,9 @@
 <template>
-  <span>
+  <div>
     <svg-icon :icon-class="icon"/>
     <span slot="title">{{ title }}</span>
     <el-badge :value="count" type="primary" class="count-badge" />
-  </span>
+  </div>
 </template>
 
 <script>
