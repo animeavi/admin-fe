@@ -22,6 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Replace regular inputs with textareas for setting welcome messages in the Settings section
 - Update rendering Moderation Log Messages so that all usernames are links to the pages of the corresponding users in Admin-FE
 - Remove Websocket based federation settings
+- Move Settings tab navigation from the tabbed menu to the main sidebar menu. A separate route is created for each tab.
+- Move Emoji packs configuration to the Emoji tab in the Settings section
 
 ### Fixed
 
