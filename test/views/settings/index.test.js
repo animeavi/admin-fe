@@ -38,7 +38,7 @@ describe('Settings search', () => {
       getters
     })
     $route = { path: '/settings/path' }
-    $router = []
+    $router = { push: jest.fn(), currentRoute: {} }
   })
 
   it('shows search input', async (done) => {
@@ -56,6 +56,7 @@ describe('Settings search', () => {
     expect(searchInput.exists()).toBe(true)
     done()
   })
+
   it('changes tab when search value was selected', async (done) => {
     const wrapper = mount(Settings, {
       store,
@@ -67,19 +68,19 @@ describe('Settings search', () => {
     })
     wrapper.vm.handleSearchSelect({ group: 'Pleroma.Upload', key: 'Pleroma.Upload' })
     expect(store.state.settings.searchQuery).toBe('Pleroma.Upload')
-    expect(_.isEqual($router[0], { path: `/settings/upload` })).toBeTruthy()
+    expect($router.push).toHaveBeenCalledWith({ path: '/settings/upload' })
 
     wrapper.vm.handleSearchSelect({ group: ':swoosh', key: ':serve_mailbox' })
     expect(store.state.settings.searchQuery).toBe(':serve_mailbox')
-    expect(_.isEqual($router[1], { path: `/settings/mailer` })).toBeTruthy()
+    expect($router.push).toHaveBeenCalledWith({ path: '/settings/mailer' })
 
     wrapper.vm.handleSearchSelect({ group: ':pleroma', key: ':admin_token' })
     expect(store.state.settings.searchQuery).toBe(':admin_token')
-    expect(_.isEqual($router[2], { path: `/settings/instance` })).toBeTruthy()
+    expect($router.push).toHaveBeenCalledWith({ path: '/settings/instance' })
 
     wrapper.vm.handleSearchSelect({ group: ':media_proxy', key: ':ssl_options' })
     expect(store.state.settings.searchQuery).toBe(':ssl_options')
-    expect(_.isEqual($router[3], { path: `/settings/media-proxy` })).toBeTruthy()
+    expect($router.push).toHaveBeenCalledWith({ path: '/settings/media-proxy' })
 
     done()
   })
