@@ -68,4 +68,23 @@ export async function removeSettings(configs, authHost, token) {
   })
 }
 
+export async function fetchFrontends(authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/frontends`,
+    method: 'get',
+    headers: authHeaders(token)
+  })
+}
+
+export async function installFrontend(name, ref, file, buildUrl, buildDir, authHost, token) {
+  return await request({
+    baseURL: baseName(authHost),
+    url: `/api/pleroma/admin/frontends/install`,
+    method: 'post',
+    headers: authHeaders(token),
+    data: { name, ref, file, build_url: buildUrl, build_dir: buildDir }
+  })
+}
+
 const authHeaders = (token) => token ? { 'Authorization': `Bearer ${getToken()}` } : {}

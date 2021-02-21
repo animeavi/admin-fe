@@ -123,6 +123,9 @@ export default {
       return _.get(this.settings.settings, [':pleroma', ':static_fe']) || {}
     }
   },
+  async mounted() {
+    await this.$store.dispatch('FetchFrontends')
+  },
   methods: {
     async onSubmit() {
       try {
