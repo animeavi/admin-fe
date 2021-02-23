@@ -411,6 +411,7 @@ export default {
     moderationLog: 'Moderation Log'
   },
   settings: {
+    submit: 'Submit',
     settings: 'Settings',
     instance: 'Instance',
     upload: 'Upload',
@@ -461,7 +462,15 @@ export default {
     install: 'Install',
     installed: 'Installed',
     name: 'Name',
-    git: 'Git'
+    git: 'Git',
+    installAnotherFrontend: 'Install another frontend',
+    addKeyValuePair: 'Add another `key - value` pair to this icon',
+    addIconConfig: 'Add another icon configuration',
+    setLimits: 'Set different limits for unauthenticated and authenticated users',
+    unauthenticatedUsers: 'Unauthenticated users',
+    authenticatedUsers: 'Authenticated users',
+    setLimitsForAll: 'Set limit for all users'
+
   },
   invites: {
     inviteTokens: 'Invite tokens',
