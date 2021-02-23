@@ -455,7 +455,13 @@ export default {
     uploadImage: 'Upload image',
     remove: 'Remove',
     instancePanel: 'Instance Panel Document',
-    termsOfServices: 'Terms of Service'
+    termsOfServices: 'Terms of Service',
+    availableFrontends: 'Available Frontends',
+    installFrontends: 'This is the list of available frontends. You can switch to one of the listed frontends or specify all the required options and install another frontend',
+    install: 'Install',
+    installed: 'Installed',
+    name: 'Name',
+    git: 'Git'
   },
   invites: {
     inviteTokens: 'Invite tokens',
@@ -540,6 +546,5 @@ export default {
     emptyPack: 'This emoji pack is empty',
     emojiWarning: 'Pack names cannot include any of the following characters: # / < > & +',
     image: 'Image'
-
   }
 }

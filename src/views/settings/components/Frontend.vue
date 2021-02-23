@@ -1,5 +1,44 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
+    <el-form :label-position="labelPosition" :label-width="labelWidth">
+      <el-form-item class="description-container">
+        <span class="setting-label">{{ $t('settings.availableFrontends') }}</span>
+        <span class="expl no-top-margin"><p>{{ $t('settings.installFrontends') }}</p></span>
+      </el-form-item>
+      <el-form-item>
+        <el-table
+          :data="availableFrontends"
+          class="frontends-table">
+          <el-table-column
+            :label="$t('settings.name')"
+            prop="name"
+            width="120"/>
+          <el-table-column
+            :label="$t('settings.git')"
+            prop="git"/>
+          <el-table-column
+            :label="$t('settings.installed')"
+            prop="installed">
+            <template slot-scope="scope">
+              <el-button
+                v-if="!scope.row.installed"
+                disabled
+                type="text"
+                size="small">
+                {{ $t('settings.installed') }}
+              </el-button>
+              <el-button
+                v-else
+                type="text"
+                size="small"
+                @click="installFrontend(scope.row)">
+                {{ $t('settings.install') }}
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-form-item>
+    </el-form>
     <el-form :model="frontendData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="frontend" :data="frontendData"/>
     </el-form>
@@ -55,6 +94,9 @@ export default {
     },
     assetsData() {
       return _.get(this.settings.settings, [':pleroma', ':assets']) || {}
+    },
+    availableFrontends() {
+      return this.settings.frontends
     },
     chat() {
       return this.settings.description.find(setting => setting.key === ':chat')
