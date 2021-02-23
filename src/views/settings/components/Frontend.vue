@@ -21,7 +21,7 @@
             prop="installed">
             <template slot-scope="scope">
               <el-button
-                v-if="!scope.row.installed"
+                v-if="scope.row.installed"
                 disabled
                 type="text"
                 size="small">
@@ -169,6 +169,9 @@ export default {
     await this.$store.dispatch('FetchFrontends')
   },
   methods: {
+    installFrontend({ name }) {
+      this.$store.dispatch('InstallFrontend', { name })
+    },
     async onSubmit() {
       try {
         await this.$store.dispatch('SubmitChanges')

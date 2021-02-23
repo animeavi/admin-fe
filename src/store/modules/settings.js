@@ -4,6 +4,7 @@ import {
   fetchFrontends,
   fetchSettings,
   getInstanceDocument,
+  installFrontend,
   removeSettings,
   updateInstanceDocument,
   updateSettings } from '@/api/settings'
@@ -120,6 +121,12 @@ const settings = {
       }
       commit('TOGGLE_TABS', false)
       commit('SET_LOADING', false)
+    },
+    async InstallFrontend({ commit, getters }, { name, _ref, _file, _buildUrl, _buildDir }) {
+      const { data } = _ref
+        ? await installFrontend({ name, ref: _ref, file: _file, build_url: _buildUrl, build_dir: _buildDir }, getters.authHost, getters.token)
+        : await installFrontend({ name }, getters.authHost, getters.token)
+      commit('SET_FRONTENDS', data)
     },
     async RemoveInstanceDocument({ dispatch, getters }, name) {
       await deleteInstanceDocument(name, getters.authHost, getters.token)
