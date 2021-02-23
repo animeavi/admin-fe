@@ -469,7 +469,11 @@ export default {
     setLimits: 'Set different limits for unauthenticated and authenticated users',
     unauthenticatedUsers: 'Unauthenticated users',
     authenticatedUsers: 'Authenticated users',
-    setLimitsForAll: 'Set limit for all users'
+    setLimitsForAll: 'Set limit for all users',
+    ref: 'Ref',
+    file: 'File',
+    buildUrl: 'Build URL',
+    buildDir: 'Build Directory'
 
   },
   invites: {

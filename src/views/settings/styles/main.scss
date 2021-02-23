@@ -75,6 +75,16 @@
   .form-container {
     margin-bottom: 80px;
   }
+  .frontend-container {
+    margin-right: 30px;
+  }
+  .frontend-form-input {
+    margin-top: 15px;
+  }
+  .frontends-button-container {
+    width: 100%;
+    margin-top: 15px;
+  }
   .frontends-table {
     width: 100%;
     margin-right: 30px;
@@ -129,6 +139,10 @@
     .el-select {
       width: 100%;
     }
+  }
+  .install-frontend-button {
+    margin-top: 15px;
+    float: right;
   }
   .keyword-container {
     width: 100%

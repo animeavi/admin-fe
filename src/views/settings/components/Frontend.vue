@@ -1,6 +1,6 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form :label-position="labelPosition" :label-width="labelWidth">
+    <el-form :label-position="labelPosition" :label-width="labelWidth" class="frontend-container">
       <el-form-item class="description-container">
         <span class="setting-label">{{ $t('settings.availableFrontends') }}</span>
         <span class="expl no-top-margin"><p>{{ $t('settings.installFrontends') }}</p></span>
@@ -37,8 +37,37 @@
             </template>
           </el-table-column>
         </el-table>
+        <div class="frontends-button-container">
+          <el-button
+            :size="isDesktop ? 'medium' : 'mini'"
+            :icon="frontendInputOpen ? 'el-icon-minus' : 'el-icon-plus'"
+            circle
+            @click="toggleFrontendInput"/>
+          <span class="icons-button-desc">{{ $t('settings.installAnotherFrontend') }}</span>
+        </div>
+        <el-form v-if="frontendInputOpen" :model="frontendFormData" label-width="120px">
+          <el-form-item :label="$t('settings.name')" class="frontend-form-input">
+            <el-input v-model="frontendFormData.name"/>
+          </el-form-item>
+          <el-form-item :label="$t('settings.ref')" class="frontend-form-input">
+            <el-input v-model="frontendFormData.ref"/>
+          </el-form-item>
+          <el-form-item :label="$t('settings.file')" class="frontend-form-input">
+            <el-input v-model="frontendFormData.file"/>
+          </el-form-item>
+          <el-form-item :label="$t('settings.buildUrl')" class="frontend-form-input">
+            <el-input v-model="frontendFormData.buildUrl"/>
+          </el-form-item>
+          <el-form-item :label="$t('settings.buildDir')" class="frontend-form-input">
+            <el-input v-model="frontendFormData.buildDir"/>
+          </el-form-item>
+          <el-form-item class="install-frontend-button">
+            <el-button type="primary" @click="installNewFrontend">{{ $t('settings.install') }}</el-button>
+          </el-form-item>
+        </el-form>
       </el-form-item>
     </el-form>
+    <el-divider v-if="frontend" class="divider thick-line"/>
     <el-form :model="frontendData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="frontend" :data="frontendData"/>
     </el-form>
@@ -71,7 +100,7 @@
       <setting :setting-group="preload" :data="preloadData"/>
     </el-form>
     <div class="submit-button-container">
-      <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
+      <el-button class="submit-button" type="primary" @click="onSubmit">{{ $t('settings.submit') }}</el-button>
     </div>
   </div>
 </template>
@@ -85,6 +114,18 @@ import _ from 'lodash'
 export default {
   name: 'Frontend',
   components: { Setting },
+  data() {
+    return {
+      frontendInputOpen: false,
+      frontendFormData: {
+        name: '',
+        ref: '',
+        file: '',
+        buildUrl: '',
+        buildDir: ''
+      }
+    }
+  },
   computed: {
     ...mapGetters([
       'settings'
@@ -121,6 +162,9 @@ export default {
     },
     frontendsData() {
       return _.get(this.settings.settings, [':pleroma', ':frontends']) || {}
+    },
+    isDesktop() {
+      return this.$store.state.app.device === 'desktop'
     },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
@@ -172,6 +216,9 @@ export default {
     installFrontend({ name }) {
       this.$store.dispatch('InstallFrontend', { name })
     },
+    installNewFrontend() {
+
+    },
     async onSubmit() {
       try {
         await this.$store.dispatch('SubmitChanges')
@@ -182,6 +229,9 @@ export default {
         type: 'success',
         message: i18n.t('settings.success')
       })
+    },
+    toggleFrontendInput() {
+      this.frontendInputOpen = !this.frontendInputOpen
     }
   }
 }
