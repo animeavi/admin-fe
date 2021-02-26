@@ -10,6 +10,8 @@ import {
   updateSettings } from '@/api/settings'
 import { formSearchObject, parseNonTuples, parseTuples, valueHasTuples, wrapUpdatedSettings } from './normalizers'
 import _ from 'lodash'
+import { Message } from 'element-ui'
+import i18n from '@/lang'
 
 const settings = {
   state: {
@@ -122,11 +124,18 @@ const settings = {
       commit('TOGGLE_TABS', false)
       commit('SET_LOADING', false)
     },
-    async InstallFrontend({ commit, getters }, { name, _ref, _file, _buildUrl, _buildDir }) {
-      const { data } = _ref
-        ? await installFrontend({ name, ref: _ref, file: _file, build_url: _buildUrl, build_dir: _buildDir }, getters.authHost, getters.token)
-        : await installFrontend({ name }, getters.authHost, getters.token)
-      commit('SET_FRONTENDS', data)
+    async InstallFrontend({ commit, getters }, { name, ref, file, buildUrl, buildDir }) {
+      try {
+        const { data } = await installFrontend({ name, ref, file, build_url: buildUrl, build_dir: buildDir }, getters.authHost, getters.token)
+        commit('SET_FRONTENDS', data)
+      } catch (_e) {
+        return
+      }
+      Message({
+        message: i18n.t('settings.frontendSuccess'),
+        type: 'success',
+        duration: 5 * 1000
+      })
     },
     async RemoveInstanceDocument({ dispatch, getters }, name) {
       await deleteInstanceDocument(name, getters.authHost, getters.token)

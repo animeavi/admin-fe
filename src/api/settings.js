@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 import { getToken } from '@/utils/auth'
 import { baseName } from './utils'
+import _ from 'lodash'
 
 export async function deleteInstanceDocument(name, authHost, token) {
   return await request({
@@ -78,12 +79,13 @@ export async function fetchFrontends(authHost, token) {
 }
 
 export async function installFrontend(data, authHost, token) {
+  const filteredData = _.pickBy(data)
   return await request({
     baseURL: baseName(authHost),
     url: `/api/pleroma/admin/frontends/install`,
     method: 'post',
     headers: authHeaders(token),
-    data
+    data: filteredData
   })
 }
 

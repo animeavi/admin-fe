@@ -473,8 +473,9 @@ export default {
     ref: 'Ref',
     file: 'File',
     buildUrl: 'Build URL',
-    buildDir: 'Build Directory'
-
+    buildDir: 'Build Directory',
+    frontendSuccess: 'Frontend installed successfully!',
+    frontendStartedInstallation: 'Installation started'
   },
   invites: {
     inviteTokens: 'Invite tokens',

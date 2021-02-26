@@ -45,8 +45,8 @@
             @click="toggleFrontendInput"/>
           <span class="icons-button-desc">{{ $t('settings.installAnotherFrontend') }}</span>
         </div>
-        <el-form v-if="frontendInputOpen" :model="frontendFormData" label-width="120px">
-          <el-form-item :label="$t('settings.name')" class="frontend-form-input">
+        <el-form v-if="frontendInputOpen" ref="frontendFormData" :rules="rules" :model="frontendFormData" label-width="130px">
+          <el-form-item :label="$t('settings.name')" class="frontend-form-input" prop="name">
             <el-input v-model="frontendFormData.name"/>
           </el-form-item>
           <el-form-item :label="$t('settings.ref')" class="frontend-form-input">
@@ -123,6 +123,9 @@ export default {
         file: '',
         buildUrl: '',
         buildDir: ''
+      },
+      rules: {
+        name: { required: true, message: 'Please input Name', trigger: 'blur' }
       }
     }
   },
@@ -214,10 +217,39 @@ export default {
   },
   methods: {
     installFrontend({ name }) {
-      this.$store.dispatch('InstallFrontend', { name })
+      try {
+        this.$store.dispatch('InstallFrontend', { name })
+        this.$message({
+          type: 'success',
+          message: i18n.t('settings.frontendStartedInstallation')
+        })
+      } catch (e) {
+        return
+      }
     },
     installNewFrontend() {
-
+      try {
+        this.$refs['frontendFormData'].validate((valid) => {
+          if (valid) {
+            this.$store.dispatch('InstallFrontend', this.frontendFormData)
+            this.frontendFormData = {
+              name: '',
+              ref: '',
+              file: '',
+              buildUrl: '',
+              buildDir: ''
+            }
+            this.$message({
+              type: 'success',
+              message: i18n.t('settings.frontendStartedInstallation')
+            })
+          } else {
+            return false
+          }
+        })
+      } catch (e) {
+        return
+      }
     },
     async onSubmit() {
       try {
