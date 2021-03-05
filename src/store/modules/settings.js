@@ -101,38 +101,14 @@ const settings = {
     async FetchSettings({ commit, getters }) {
       commit('SET_LOADING', true)
       try {
-        const response = await fetchSettings(getters.authHost, getters.token)
-        const realResponse = { ...response,
-          tabs: [
-            { label: 'ActivityPub', path: 'activity-pub' },
-            { label: 'Authentication', path: 'authentication' },
-            { label: 'Captcha', path: 'captcha' },
-            { label: 'BBS / SSH access', path: 'esshd' },
-            { label: 'Emoji', path: 'emoji' },
-            { label: 'Frontend', path: 'frontend' },
-            { label: 'Gopher', path: 'gopher' },
-            { label: 'HTTP', path: 'http' },
-            { label: 'Instance', path: 'instance' },
-            { label: 'Job queue', path: 'job-queue' },
-            { label: 'Link Formatter', path: 'link-formatter' },
-            { label: 'Logger', path: 'logger' },
-            { label: 'Mailer', path: 'mailer' },
-            { label: 'Media Proxy', path: 'media-proxy' },
-            { label: 'Metadata', path: 'metadata' },
-            { label: 'MRF', path: 'mrf' },
-            { label: 'Rate limiters', path: 'rate-limiters' },
-            { label: 'Relays', path: 'relays' },
-            { label: 'Web push encryption', path: 'web-push' },
-            { label: 'Upload', path: 'upload' },
-            { label: 'Other', path: 'other' }
-          ]
-        }
-        const description = await fetchDescription(getters.authHost, getters.token)
-        commit('SET_DESCRIPTION', description.data)
-        const searchObject = formSearchObject(description.data)
+        const settings = await fetchSettings(getters.authHost, getters.token)
+        commit('SET_SETTINGS', settings.data.configs)
+
+        const { data } = await fetchDescription(getters.authHost, getters.token)
+        commit('SET_DESCRIPTION', data.descriptions)
+        const searchObject = formSearchObject(data.descriptions)
         commit('SET_SEARCH', searchObject)
-        commit('SET_SETTINGS', realResponse.data.configs)
-        commit('SET_TABS', realResponse.tabs)
+        commit('SET_TABS', data.tabs)
       } catch (_e) {
         commit('TOGGLE_TABS', true)
         commit('SET_LOADING', false)
