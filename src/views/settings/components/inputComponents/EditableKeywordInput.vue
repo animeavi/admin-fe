@@ -192,6 +192,6 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
-@import '../../styles/main';
+@import '../../../styles/settings';
 @include settings
 </style>
