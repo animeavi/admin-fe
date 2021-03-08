@@ -38,7 +38,7 @@ const settings = {
   component: Layout,
   name: 'Settings',
   hasSubmenu: true,
-  meta: { title: 'settings', icon: 'settings', noCache: true },
+  meta: { title: 'settings', icon: 'el-icon-setting', noCache: true },
   children: settingsChildren()
 }
 const statusesDisabled = disabledFeatures.includes('statuses')
@@ -50,7 +50,7 @@ const statuses = {
       path: 'index',
       component: () => import('@/views/statuses/index'),
       name: 'Statuses',
-      meta: { title: 'statuses', icon: 'form', noCache: true }
+      meta: { title: 'statuses', icon: 'el-icon-chat-line-square', noCache: true }
     }
   ]
 }
@@ -64,7 +64,7 @@ const reports = {
       path: 'index',
       component: () => import('@/views/reports/index'),
       name: 'Reports',
-      meta: { title: 'reports', icon: 'documentation', noCache: true }
+      meta: { title: 'reports', icon: 'el-icon-receiving', noCache: true }
     }
   ]
 }
@@ -78,7 +78,21 @@ const invites = {
       path: 'index',
       component: () => import('@/views/invites/index'),
       name: 'Invites',
-      meta: { title: 'invites', icon: 'guide', noCache: true }
+      meta: { title: 'invites', icon: 'el-icon-postcard', noCache: true }
+    }
+  ]
+}
+
+const relaysDisabled = disabledFeatures.includes('relays')
+const relays = {
+  path: '/relays',
+  component: Layout,
+  children: [
+    {
+      path: 'index',
+      component: () => import('@/views/relays/index'),
+      name: 'Relays',
+      meta: { title: 'relays', icon: 'el-icon-connection', noCache: true }
     }
   ]
 }
@@ -92,7 +106,7 @@ const moderationLog = {
       path: 'index',
       component: () => import('@/views/moderation_log/index'),
       name: 'Moderation Log',
-      meta: { title: 'moderationLog', icon: 'list', noCache: true }
+      meta: { title: 'moderationLog', icon: 'el-icon-notebook-2', noCache: true }
     }
   ]
 }
@@ -106,7 +120,7 @@ const mediaProxyCache = {
       path: 'index',
       component: () => import('@/views/mediaProxyCache/index'),
       name: 'MediaProxy Cache',
-      meta: { title: 'mediaProxyCache', icon: 'example', noCache: true }
+      meta: { title: 'mediaProxyCache', icon: 'el-icon-coin', noCache: true }
     }
   ]
 }
@@ -171,7 +185,7 @@ export const asyncRouterMap = [
         path: 'index',
         component: () => import('@/views/users/index'),
         name: 'Users',
-        meta: { title: 'users', icon: 'peoples', noCache: true }
+        meta: { title: 'users', icon: 'el-icon-user', noCache: true }
       }
     ]
   },
@@ -179,6 +193,7 @@ export const asyncRouterMap = [
   ...(reportsDisabled ? [] : [reports]),
   ...(invitesDisabled ? [] : [invites]),
   ...(moderationLogDisabled ? [] : [moderationLog]),
+  ...(relaysDisabled ? [] : [relays]),
   ...(mediaProxyCacheDisabled ? [] : [mediaProxyCache]),
   ...(settingsDisabled ? [] : [settings]),
   {

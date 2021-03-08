@@ -1,6 +1,6 @@
 <template>
   <div>
-    <svg-icon v-if="icon" :icon-class="icon"/>
+    <i v-if="icon" :class="icon"/>
     <span slot="title">{{ title }}</span>
     <el-badge :value="count" type="primary" class="count-badge" />
   </div>

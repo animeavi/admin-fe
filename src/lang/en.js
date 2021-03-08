@@ -70,6 +70,7 @@ export default {
     chats: 'Chats',
     settings: 'Settings',
     moderationLog: 'Moderation Log',
+    relays: 'Relays',
     mediaProxyCache: 'MediaProxy Cache',
     'emoji-packs': 'Emoji packs'
   },
