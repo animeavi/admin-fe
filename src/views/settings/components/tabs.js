@@ -68,10 +68,6 @@ export const tabs = description => {
       label: 'settings.rateLimiters',
       settings: [':rate_limit']
     },
-    'relays': {
-      label: 'settings.relays',
-      settings: ['relays']
-    },
     'web-push': {
       label: 'settings.webPush',
       settings: [':vapid_details']

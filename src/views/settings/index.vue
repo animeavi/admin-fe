@@ -83,7 +83,6 @@ import {
   Mrf,
   Other,
   RateLimiters,
-  Relays,
   Upload,
   WebPush
 } from './components'
@@ -109,7 +108,6 @@ export default {
     Mrf,
     Other,
     RateLimiters,
-    Relays,
     RebootButton,
     Upload,
     WebPush
@@ -184,8 +182,6 @@ export default {
           return this.$store.state.settings.description.findIndex(el => el.group === setting) !== -1
         } else if (setting === 'Pleroma.Web.Auth.Authenticator' || setting === ':admin_token') {
           return this.$store.state.settings.description.findIndex(el => el.children[0].key === setting) !== -1
-        } else if (setting === 'relays') {
-          return [setting]
         } else {
           return this.$store.state.settings.description.findIndex(el => el.key === setting) !== -1
         }
@@ -197,6 +193,6 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss' scoped>
-@import './styles/main';
+@import '../styles/settings';
 @include settings
 </style>

@@ -61,13 +61,6 @@ describe('Form search object', () => {
         key: ':terms_of_services',
         label: 'Terms of Services',
         search: ['Terms of Services', ':terms_of_services']
-      },
-      {
-        groupKey: 'relays',
-        groupLabel: 'Relays',
-        key: ':relays',
-        label: 'Relays',
-        search: ['Relays', ':relays']
       }
     ]
     expect(_.isEqual(formSearchObject(description), expected)).toBeTruthy()
@@ -116,13 +109,6 @@ describe('Form search object', () => {
         key: ':terms_of_services',
         label: 'Terms of Services',
         search: ['Terms of Services', ':terms_of_services']
-      },
-      {
-        groupKey: 'relays',
-        groupLabel: 'Relays',
-        key: ':relays',
-        label: 'Relays',
-        search: ['Relays', ':relays']
       }
     ]
     expect(_.isEqual(formSearchObject(description), expected)).toBeTruthy()
@@ -171,13 +157,6 @@ describe('Form search object', () => {
         key: ':terms_of_services',
         label: 'Terms of Services',
         search: ['Terms of Services', ':terms_of_services']
-      },
-      {
-        groupKey: 'relays',
-        groupLabel: 'Relays',
-        key: ':relays',
-        label: 'Relays',
-        search: ['Relays', ':relays']
       }
     ]
     expect(_.isEqual(formSearchObject(description), expected)).toBeTruthy()
@@ -215,13 +194,6 @@ describe('Form search object', () => {
         key: ':terms_of_services',
         label: 'Terms of Services',
         search: ['Terms of Services', ':terms_of_services']
-      },
-      {
-        groupKey: 'relays',
-        groupLabel: 'Relays',
-        key: ':relays',
-        label: 'Relays',
-        search: ['Relays', ':relays']
       }
     ]
     expect(_.isEqual(formSearchObject(description), expected)).toBeTruthy()
@@ -306,13 +278,6 @@ describe('Form search object', () => {
         key: ':terms_of_services',
         label: 'Terms of Services',
         search: ['Terms of Services', ':terms_of_services']
-      },
-      {
-        groupKey: 'relays',
-        groupLabel: 'Relays',
-        key: ':relays',
-        label: 'Relays',
-        search: ['Relays', ':relays']
       }
     ]
     expect(_.isEqual(formSearchObject(description), expected)).toBeTruthy()
