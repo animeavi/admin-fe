@@ -1,15 +1,21 @@
 <template>
-  <div v-if="!loading" class="relays-container" data-search="relays">
+  <div v-if="!loading" class="relays-container">
+    <div class="relays-header-container">
+      <h1>
+        {{ $t('relays.relays') }}
+      </h1>
+      <reboot-button/>
+    </div>
     <div class="follow-relay-container">
-      <el-input v-model="newRelay" :placeholder="$t('settings.followRelay')" class="follow-relay" @keyup.enter.native="followRelay"/>
-      <el-button @click.native="followRelay">{{ $t('settings.follow') }}</el-button>
+      <el-input v-model="newRelay" :placeholder="$t('relays.followRelay')" class="follow-relay" @keyup.enter.native="followRelay"/>
+      <el-button @click.native="followRelay">{{ $t('relays.follow') }}</el-button>
     </div>
     <el-table :data="relays">
       <el-table-column
-        :label="$t('settings.instanceUrl')"
+        :label="$t('relays.instanceUrl')"
         prop="actor"/>
       <el-table-column
-        :label="$t('settings.followedBack')"
+        :label="$t('relays.followedBack')"
         :width="getLabelWidth"
         prop="followed_back"
         align="center">
@@ -32,8 +38,11 @@
 </template>
 
 <script>
+import RebootButton from '@/components/RebootButton'
+
 export default {
   name: 'Relays',
+  components: { RebootButton },
   data() {
     return {
       newRelay: ''
@@ -51,21 +60,10 @@ export default {
     },
     relays() {
       return this.$store.state.relays.fetchedRelays
-    },
-    searchQuery() {
-      return this.$store.state.settings.searchQuery
     }
   },
   mounted() {
     this.$store.dispatch('FetchRelays')
-
-    if (this.searchQuery.length > 0) {
-      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
-      if (selectedSetting) {
-        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
-      }
-      this.$store.dispatch('SetSearchQuery', '')
-    }
   },
   methods: {
     followRelay() {
@@ -80,6 +78,6 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
-@import '../styles/settings';
-@include settings
+@import '../styles/main';
+@include relays
 </style>

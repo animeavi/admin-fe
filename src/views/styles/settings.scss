@@ -69,10 +69,6 @@
       padding: 2px 3px;
     }
   }
-  .follow-relay {
-    width: 350px;
-    margin-right: 7px;
-  }
   .form-container {
     margin-bottom: 80px;
   }
@@ -254,9 +250,6 @@
     right: 0;
     z-index: 2000;
   }
-  .relays-container {
-    margin: 0 15px;
-  }
   .replacement-input {
     width: 80%;
     margin-left: 8px;
@@ -437,18 +430,6 @@
     .divider .thick-line {
       height: 2px;
     }
-    .follow-relay {
-      width: 75%;
-      margin-right: 5px;
-      input {
-        width: 100%;
-      }
-    }
-    .follow-relay-container {
-      display: flex;
-      justify-content: space-between;
-      margin: 0 5px;
-    }
     h1 {
       font-size: 24px;
     }
@@ -613,9 +594,6 @@
     .pattern-input {
       width: 40%;
       margin-right: 4px
-    }
-    .relays-container {
-      margin: 0 10px;
     }
     .replacement-input {
       width: 60%;

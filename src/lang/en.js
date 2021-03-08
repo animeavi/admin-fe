@@ -433,11 +433,6 @@ export default {
     esshd: 'BBS / SSH access',
     rateLimiters: 'Rate limiters',
     other: 'Other',
-    relays: 'Relays',
-    follow: 'Follow',
-    followRelay: 'Follow new relay',
-    followedBack: 'Followed Back',
-    instanceUrl: 'Instance URL',
     success: 'Settings changed successfully!',
     description: 'Description',
     removeFromDB: 'Remove setting from the DB',
@@ -458,6 +453,13 @@ export default {
     remove: 'Remove',
     instancePanel: 'Instance Panel Document',
     termsOfServices: 'Terms of Service'
+  },
+  relays: {
+    relays: 'Relays',
+    follow: 'Follow',
+    followRelay: 'Follow new relay',
+    followedBack: 'Followed Back',
+    instanceUrl: 'Instance URL'
   },
   invites: {
     inviteTokens: 'Invite tokens',
