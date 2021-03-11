@@ -73,6 +73,16 @@ export default {
     mediaProxyCache: 'MediaProxy Cache',
     'emoji-packs': 'Emoji packs'
   },
+  errLog: {
+    error401: 'Oops! 401 Error',
+    error404: 'Oops! 404 Error',
+    pageNotFound: 'Page not found',
+    correctUrl: 'Please make sure you URL is correct',
+    unauth: 'Unauthorized',
+    back: 'Back',
+    login: 'Login',
+    homePage: 'Home Page'
+  },
   navbar: {
     logOut: 'Log Out',
     dashboard: 'Dashboard',
@@ -157,11 +167,6 @@ export default {
     cancel: 'Cancel',
     confirm: 'Confirm',
     unfollow: 'Unfollow'
-  },
-  errorLog: {
-    tips: 'Please click the bug icon in the upper right corner',
-    description: 'Now the management system are basically the form of the spa, it enhances the user experience, but it also increases the possibility of page problems, a small negligence may lead to the entire page deadlock. Fortunately Vue provides a way to catch handling exceptions, where you can handle errors or report exceptions.',
-    documentation: 'Document introduction'
   },
   excel: {
     export: 'Export',
