@@ -96,7 +96,7 @@ export default {
     logInViaPleromaFE: 'Log in via PleromaFE',
     username: 'username@host',
     password: 'password',
-    omitHostname: 'omit hostname if Pleroma is located on this domain',
+    omitHostname: 'Omit hostname if Pleroma is located on this domain',
     errorMessage: 'Username must contain username and host, e.g. john@pleroma.social',
     any: 'any',
     thirdparty: 'Or connect with',
@@ -487,7 +487,8 @@ export default {
     invalidEmailError: 'Please input valid e-mail',
     emailSent: 'Invite was sent',
     submitFormError: 'There are invalid values in the form. Please fix them before continuing.',
-    inviteViaEmailAlert: 'To send invite via email make sure to enable `invites_enabled` and disable `registrations_open`'
+    inviteViaEmailAlert: 'To send invite via email make sure to enable `invites_enabled` and disable `registrations_open`',
+    copyLink: 'Copy link'
   },
   emoji: {
     emojiPacks: 'Emoji packs',
