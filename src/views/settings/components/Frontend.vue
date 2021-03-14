@@ -1,72 +1,6 @@
 <template>
   <div v-if="!loading" :class="isSidebarOpen" class="form-container">
-    <el-form :label-position="labelPosition" :label-width="labelWidth" class="frontend-container">
-      <el-form-item class="description-container">
-        <span class="setting-label">{{ $t('settings.availableFrontends') }}</span>
-        <span class="expl no-top-margin"><p>{{ $t('settings.installFrontends') }}</p></span>
-      </el-form-item>
-      <el-form-item>
-        <el-table
-          :data="availableFrontends"
-          class="frontends-table">
-          <el-table-column
-            :label="$t('settings.name')"
-            prop="name"
-            width="120"/>
-          <el-table-column
-            :label="$t('settings.git')"
-            prop="git"/>
-          <el-table-column
-            :label="$t('settings.installed')"
-            prop="installed">
-            <template slot-scope="scope">
-              <el-button
-                v-if="scope.row.installed"
-                disabled
-                type="text"
-                size="small">
-                {{ $t('settings.installed') }}
-              </el-button>
-              <el-button
-                v-else
-                type="text"
-                size="small"
-                @click="installFrontend(scope.row)">
-                {{ $t('settings.install') }}
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="frontends-button-container">
-          <el-button
-            :size="isDesktop ? 'medium' : 'mini'"
-            :icon="frontendInputOpen ? 'el-icon-minus' : 'el-icon-plus'"
-            circle
-            @click="toggleFrontendInput"/>
-          <span class="icons-button-desc">{{ $t('settings.installAnotherFrontend') }}</span>
-        </div>
-        <el-form v-if="frontendInputOpen" ref="frontendFormData" :rules="rules" :model="frontendFormData" label-width="130px">
-          <el-form-item :label="$t('settings.name')" class="frontend-form-input" prop="name">
-            <el-input v-model="frontendFormData.name"/>
-          </el-form-item>
-          <el-form-item :label="$t('settings.ref')" class="frontend-form-input">
-            <el-input v-model="frontendFormData.ref"/>
-          </el-form-item>
-          <el-form-item :label="$t('settings.file')" class="frontend-form-input">
-            <el-input v-model="frontendFormData.file"/>
-          </el-form-item>
-          <el-form-item :label="$t('settings.buildUrl')" class="frontend-form-input">
-            <el-input v-model="frontendFormData.buildUrl"/>
-          </el-form-item>
-          <el-form-item :label="$t('settings.buildDir')" class="frontend-form-input">
-            <el-input v-model="frontendFormData.buildDir"/>
-          </el-form-item>
-          <el-form-item class="install-frontend-button">
-            <el-button type="primary" @click="installNewFrontend">{{ $t('settings.install') }}</el-button>
-          </el-form-item>
-        </el-form>
-      </el-form-item>
-    </el-form>
+    <frontends-table />
     <el-divider v-if="frontend" class="divider thick-line"/>
     <el-form :model="frontendData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="frontend" :data="frontendData"/>
@@ -109,26 +43,12 @@
 import { mapGetters } from 'vuex'
 import i18n from '@/lang'
 import Setting from './Setting'
+import FrontendsTable from './inputComponents/FrontendsTable'
 import _ from 'lodash'
 
 export default {
   name: 'Frontend',
-  components: { Setting },
-  data() {
-    return {
-      frontendInputOpen: false,
-      frontendFormData: {
-        name: '',
-        ref: '',
-        file: '',
-        buildUrl: '',
-        buildDir: ''
-      },
-      rules: {
-        name: { required: true, message: 'Please input Name', trigger: 'blur' }
-      }
-    }
-  },
+  components: { FrontendsTable, Setting },
   computed: {
     ...mapGetters([
       'settings'
@@ -138,9 +58,6 @@ export default {
     },
     assetsData() {
       return _.get(this.settings.settings, [':pleroma', ':assets']) || {}
-    },
-    availableFrontends() {
-      return this.settings.frontends
     },
     chat() {
       return this.settings.description.find(setting => setting.key === ':chat')
@@ -212,45 +129,7 @@ export default {
       return _.get(this.settings.settings, [':pleroma', ':static_fe']) || {}
     }
   },
-  async mounted() {
-    await this.$store.dispatch('FetchFrontends')
-  },
   methods: {
-    installFrontend({ name }) {
-      try {
-        this.$store.dispatch('InstallFrontend', { name })
-        this.$message({
-          type: 'success',
-          message: i18n.t('settings.frontendStartedInstallation')
-        })
-      } catch (e) {
-        return
-      }
-    },
-    installNewFrontend() {
-      try {
-        this.$refs['frontendFormData'].validate((valid) => {
-          if (valid) {
-            this.$store.dispatch('InstallFrontend', this.frontendFormData)
-            this.frontendFormData = {
-              name: '',
-              ref: '',
-              file: '',
-              buildUrl: '',
-              buildDir: ''
-            }
-            this.$message({
-              type: 'success',
-              message: i18n.t('settings.frontendStartedInstallation')
-            })
-          } else {
-            return false
-          }
-        })
-      } catch (e) {
-        return
-      }
-    },
     async onSubmit() {
       try {
         await this.$store.dispatch('SubmitChanges')
@@ -261,9 +140,6 @@ export default {
         type: 'success',
         message: i18n.t('settings.success')
       })
-    },
-    toggleFrontendInput() {
-      this.frontendInputOpen = !this.frontendInputOpen
     }
   }
 }

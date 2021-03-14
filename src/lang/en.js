@@ -475,7 +475,8 @@ export default {
     buildUrl: 'Build URL',
     buildDir: 'Build Directory',
     frontendSuccess: 'Frontend installed successfully!',
-    frontendStartedInstallation: 'Installation started'
+    frontendStartedInstallation: 'Installation started',
+    inProcess: 'In process'
   },
   invites: {
     inviteTokens: 'Invite tokens',

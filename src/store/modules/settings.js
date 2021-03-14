@@ -10,8 +10,6 @@ import {
   updateSettings } from '@/api/settings'
 import { formSearchObject, parseNonTuples, parseTuples, valueHasTuples, wrapUpdatedSettings } from './normalizers'
 import _ from 'lodash'
-import { Message } from 'element-ui'
-import i18n from '@/lang'
 
 const settings = {
   state: {
@@ -125,17 +123,8 @@ const settings = {
       commit('SET_LOADING', false)
     },
     async InstallFrontend({ commit, getters }, { name, ref, file, buildUrl, buildDir }) {
-      try {
-        const { data } = await installFrontend({ name, ref, file, build_url: buildUrl, build_dir: buildDir }, getters.authHost, getters.token)
-        commit('SET_FRONTENDS', data)
-      } catch (_e) {
-        return
-      }
-      Message({
-        message: i18n.t('settings.frontendSuccess'),
-        type: 'success',
-        duration: 5 * 1000
-      })
+      const { data } = await installFrontend({ name, ref, file, build_url: buildUrl, build_dir: buildDir }, getters.authHost, getters.token)
+      commit('SET_FRONTENDS', data)
     },
     async RemoveInstanceDocument({ dispatch, getters }, name) {
       await deleteInstanceDocument(name, getters.authHost, getters.token)
