@@ -469,6 +469,15 @@
       justify-content: space-between;
       margin: 0 5px;
     }
+    .frontend-container {
+      margin: 0 15px 10px 15px;
+      .description-container {
+        margin: 0;
+      }
+    }
+    .frontend-form-input {
+      margin-top: 0;
+    }
     h1 {
       font-size: 24px;
     }
