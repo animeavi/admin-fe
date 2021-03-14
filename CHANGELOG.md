@@ -16,6 +16,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add ability to configure Media Preview Proxy, User Backup, Websocket based federation and Pleroma.Web.Endpoint.MetricsExporter settings
 - Mobile and Tablet UI for Single Report show page
 - Ability to set rules and conditions for rendering settings (e.g. `:proxy_remote` setting is hidden if `:uploader` setting is set to `Pleroma.Uploaders.Local`)
+- Ability to install new frontends from the Frontend tab in the Settings section
+
 ### Changed
 
 - **Breaking**: AdminAPI changed User field `confirmation_pending` to `is_confirmed`

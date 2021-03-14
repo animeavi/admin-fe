@@ -75,6 +75,20 @@
   .form-container {
     margin-bottom: 80px;
   }
+  .frontend-container {
+    margin-right: 30px;
+  }
+  .frontend-form-input {
+    margin-top: 20px;
+  }
+  .frontends-button-container {
+    width: 100%;
+    margin-top: 15px;
+  }
+  .frontends-table {
+    width: 100%;
+    margin-right: 30px;
+  }
   .grouped-settings-header {
     margin: 0 0 14px 0;
   }
@@ -125,6 +139,10 @@
     .el-select {
       width: 100%;
     }
+  }
+  .install-frontend-button {
+    margin-top: 15px;
+    float: right;
   }
   .keyword-container {
     width: 100%
@@ -450,6 +468,15 @@
       display: flex;
       justify-content: space-between;
       margin: 0 5px;
+    }
+    .frontend-container {
+      margin: 0 15px 10px 15px;
+      .description-container {
+        margin: 0;
+      }
+    }
+    .frontend-form-input {
+      margin-top: 0;
     }
     h1 {
       font-size: 24px;

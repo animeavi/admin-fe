@@ -416,6 +416,7 @@ export default {
     moderationLog: 'Moderation Log'
   },
   settings: {
+    submit: 'Submit',
     settings: 'Settings',
     instance: 'Instance',
     upload: 'Upload',
@@ -460,7 +461,27 @@ export default {
     uploadImage: 'Upload image',
     remove: 'Remove',
     instancePanel: 'Instance Panel Document',
-    termsOfServices: 'Terms of Service'
+    termsOfServices: 'Terms of Service',
+    availableFrontends: 'Available Frontends',
+    installFrontends: 'This is the list of available frontends. You can switch to one of the listed frontends or specify all the required options and install another frontend',
+    install: 'Install',
+    installed: 'Installed',
+    name: 'Name',
+    git: 'Git',
+    installAnotherFrontend: 'Install another frontend',
+    addKeyValuePair: 'Add another `key - value` pair to this icon',
+    addIconConfig: 'Add another icon configuration',
+    setLimits: 'Set different limits for unauthenticated and authenticated users',
+    unauthenticatedUsers: 'Unauthenticated users',
+    authenticatedUsers: 'Authenticated users',
+    setLimitsForAll: 'Set limit for all users',
+    ref: 'Ref',
+    file: 'File',
+    buildUrl: 'Build URL',
+    buildDir: 'Build Directory',
+    frontendSuccess: 'Frontend installed successfully!',
+    frontendStartedInstallation: 'Installation started',
+    inProcess: 'In process'
   },
   invites: {
     inviteTokens: 'Invite tokens',
@@ -546,6 +567,5 @@ export default {
     emptyPack: 'This emoji pack is empty',
     emojiWarning: 'Pack names cannot include any of the following characters: # / < > & +',
     image: 'Image'
-
   }
 }

@@ -1,8 +1,10 @@
 import {
   deleteInstanceDocument,
   fetchDescription,
+  fetchFrontends,
   fetchSettings,
   getInstanceDocument,
+  installFrontend,
   removeSettings,
   updateInstanceDocument,
   updateSettings } from '@/api/settings'
@@ -13,6 +15,7 @@ const settings = {
   state: {
     activeTab: 'instance',
     configDisabled: true,
+    frontends: [],
     db: {},
     description: [],
     instancePanel: '',
@@ -40,6 +43,9 @@ const settings = {
     },
     SET_DESCRIPTION: (state, data) => {
       state.description = data
+    },
+    SET_FRONTENDS: (state, data) => {
+      state.frontends = data
     },
     SET_LOADING: (state, status) => {
       state.loading = status
@@ -86,6 +92,10 @@ const settings = {
     }
   },
   actions: {
+    async FetchFrontends({ commit, getters }) {
+      const { data } = await fetchFrontends(getters.authHost, getters.token)
+      commit('SET_FRONTENDS', data)
+    },
     async FetchInstanceDocument({ commit, getters }, name) {
       const { data } = await getInstanceDocument(name, getters.authHost, getters.token)
       if (name === 'instance-panel') {
@@ -111,6 +121,10 @@ const settings = {
       }
       commit('TOGGLE_TABS', false)
       commit('SET_LOADING', false)
+    },
+    async InstallFrontend({ commit, getters }, { name, ref, file, buildUrl, buildDir }) {
+      const { data } = await installFrontend({ name, ref, file, build_url: buildUrl, build_dir: buildDir }, getters.authHost, getters.token)
+      commit('SET_FRONTENDS', data)
     },
     async RemoveInstanceDocument({ dispatch, getters }, name) {
       await deleteInstanceDocument(name, getters.authHost, getters.token)
