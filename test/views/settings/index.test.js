@@ -7,6 +7,7 @@ import app from '@/store/modules/app'
 import settings from '@/store/modules/settings'
 import user from '@/store/modules/user'
 import getters from '@/store/getters'
+import _ from 'lodash'
 
 config.mocks["$t"] = () => {}
 
@@ -22,6 +23,8 @@ describe('Settings search', () => {
   let store
   let actions
   let appActions
+  let $route
+  let $router
 
   beforeEach(() => {
     appActions = { ...app.actions, NeedReboot: jest.fn() }
@@ -34,11 +37,17 @@ describe('Settings search', () => {
       },
       getters
     })
+    $route = { path: '/settings/path' }
+    $router = { push: jest.fn(), currentRoute: {} }
   })
 
   it('shows search input', async (done) => {
     const wrapper = mount(Settings, {
       store,
+      mocks: {
+        $route,
+        $router
+      },
       localVue
     })
 
@@ -47,22 +56,31 @@ describe('Settings search', () => {
     expect(searchInput.exists()).toBe(true)
     done()
   })
+
   it('changes tab when search value was selected', async (done) => {
     const wrapper = mount(Settings, {
       store,
+      mocks: {
+        $route,
+        $router
+      },
       localVue
     })
     wrapper.vm.handleSearchSelect({ group: 'Pleroma.Upload', key: 'Pleroma.Upload' })
-    expect(store.state.settings.activeTab).toBe('upload')
+    expect(store.state.settings.searchQuery).toBe('Pleroma.Upload')
+    expect($router.push).toHaveBeenCalledWith({ path: '/settings/upload' })
 
     wrapper.vm.handleSearchSelect({ group: ':swoosh', key: ':serve_mailbox' })
-    expect(store.state.settings.activeTab).toBe('mailer')
+    expect(store.state.settings.searchQuery).toBe(':serve_mailbox')
+    expect($router.push).toHaveBeenCalledWith({ path: '/settings/mailer' })
 
     wrapper.vm.handleSearchSelect({ group: ':pleroma', key: ':admin_token' })
-    expect(store.state.settings.activeTab).toBe('instance')
+    expect(store.state.settings.searchQuery).toBe(':admin_token')
+    expect($router.push).toHaveBeenCalledWith({ path: '/settings/instance' })
 
     wrapper.vm.handleSearchSelect({ group: ':media_proxy', key: ':ssl_options' })
-    expect(store.state.settings.activeTab).toBe('media-proxy')
+    expect(store.state.settings.searchQuery).toBe(':ssl_options')
+    expect($router.push).toHaveBeenCalledWith({ path: '/settings/media-proxy' })
 
     done()
   })

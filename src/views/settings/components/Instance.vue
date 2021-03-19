@@ -146,6 +146,9 @@ export default {
     restrictUnauthenticatedData() {
       return _.get(this.settings.settings, [':pleroma', ':restrict_unauthenticated']) || {}
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     scheduledActivity() {
       return this.$store.state.settings.description.find(setting => setting.key === 'Pleroma.ScheduledActivity')
     },
@@ -172,6 +175,14 @@ export default {
     }
   },
   async mounted() {
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
+    }
+
     await this.$store.dispatch('FetchInstanceDocument', 'instance-panel')
   },
   methods: {
@@ -198,6 +209,6 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
-@import '../styles/main';
+@import '../../styles/settings';
 @include settings
 </style>

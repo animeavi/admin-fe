@@ -76,11 +76,23 @@ export default {
     mediaProxyData() {
       return _.get(this.settings.settings, [':pleroma', ':media_proxy']) || {}
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     scriptInvalidation() {
       return this.settings.description.find(setting => setting.key === 'Pleroma.Web.MediaProxy.Invalidation.Script')
     },
     scriptInvalidationData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Web.MediaProxy.Invalidation.Script']) || {}
+    }
+  },
+  mounted() {
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
     }
   },
   methods: {
@@ -100,6 +112,6 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
-@import '../styles/main';
+@import '../../styles/settings';
 @include settings
 </style>

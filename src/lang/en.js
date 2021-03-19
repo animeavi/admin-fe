@@ -70,6 +70,7 @@ export default {
     chats: 'Chats',
     settings: 'Settings',
     moderationLog: 'Moderation Log',
+    relays: 'Relays',
     mediaProxyCache: 'MediaProxy Cache',
     'emoji-packs': 'Emoji packs'
   },
@@ -426,6 +427,7 @@ export default {
     activityPub: 'ActivityPub',
     auth: 'Authentication',
     captcha: 'Captcha',
+    emoji: 'Emoji',
     frontend: 'Frontend',
     http: 'HTTP',
     mrf: 'MRF',
@@ -437,11 +439,6 @@ export default {
     esshd: 'BBS / SSH access',
     rateLimiters: 'Rate limiters',
     other: 'Other',
-    relays: 'Relays',
-    follow: 'Follow',
-    followRelay: 'Follow new relay',
-    followedBack: 'Followed Back',
-    instanceUrl: 'Instance URL',
     success: 'Settings changed successfully!',
     description: 'Description',
     removeFromDB: 'Remove setting from the DB',
@@ -482,6 +479,13 @@ export default {
     frontendSuccess: 'Frontend installed successfully!',
     frontendStartedInstallation: 'Installation started',
     inProcess: 'In process'
+  },
+  relays: {
+    relays: 'Relays',
+    follow: 'Follow',
+    followRelay: 'Follow new relay',
+    followedBack: 'Followed Back',
+    instanceUrl: 'Instance URL'
   },
   invites: {
     inviteTokens: 'Invite tokens',

@@ -1,9 +1,5 @@
 <template>
   <div class="emoji-packs">
-    <div class="emoji-packs-header">
-      <h1>{{ $t('emoji.emojiPacks') }}</h1>
-      <reboot-button/>
-    </div>
     <div class="emoji-header-container">
       <div class="emoji-packs-header-button-container">
         <el-button class="reload-emoji-button" @click="reloadEmoji">{{ $t('emoji.reloadEmoji') }}</el-button>
@@ -15,7 +11,7 @@
       </div>
     </div>
     <el-tabs v-model="activeTab" type="card" class="emoji-packs-tabs">
-      <el-tab-pane :label="$t('emoji.localPacks')" name="local">
+      <el-tab-pane v-if="!emojiPacksDisabled" :label="$t('emoji.localPacks')" name="local">
         <el-form :label-width="labelWidth" class="emoji-packs-form">
           <el-form-item :label="$t('emoji.localPacks')">
             <el-button @click="refreshLocalPacks">{{ $t('emoji.refreshLocalPacks') }}</el-button>
@@ -49,7 +45,7 @@
           />
         </div>
       </el-tab-pane>
-      <el-tab-pane :label="$t('emoji.remotePacks')" name="remote">
+      <el-tab-pane v-if="!emojiPacksDisabled" :label="$t('emoji.remotePacks')" name="remote">
         <el-form :label-width="labelWidth" class="emoji-packs-form">
           <el-form-item :label="$t('emoji.remotePacks')">
             <div class="create-pack">
@@ -82,18 +78,31 @@
           />
         </div>
       </el-tab-pane>
+      <el-tab-pane :label="$t('settings.settings')" name="settings">
+        <div v-if="!loading" :class="isSidebarOpen" class="form-container">
+          <el-form :model="emojiData" :label-position="labelPosition" :label-width="settingsLabelWidth">
+            <setting :setting-group="emoji" :data="emojiData"/>
+          </el-form>
+          <div class="submit-button-container">
+            <el-button class="submit-button" type="primary" @click="onSubmit">Submit</el-button>
+          </div>
+        </div>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-import LocalEmojiPack from './components/LocalEmojiPack'
-import RemoteEmojiPack from './components/RemoteEmojiPack'
+import { mapGetters } from 'vuex'
 import i18n from '@/lang'
-import RebootButton from '@/components/RebootButton'
+import LocalEmojiPack from '../../emojiPacks/LocalEmojiPack'
+import RemoteEmojiPack from '../../emojiPacks/RemoteEmojiPack'
+import Setting from './Setting'
+import _ from 'lodash'
 
 export default {
-  components: { LocalEmojiPack, RebootButton, RemoteEmojiPack },
+  name: 'Emoji',
+  components: { LocalEmojiPack, RemoteEmojiPack, Setting },
   data() {
     return {
       activeTab: 'local',
@@ -104,17 +113,36 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'settings'
+    ]),
     currentLocalPacksPage() {
       return this.$store.state.emojiPacks.currentLocalPacksPage
     },
     currentRemotePacksPage() {
       return this.$store.state.emojiPacks.currentRemotePacksPage
     },
+    emoji() {
+      return this.settings.description.find(setting => setting.key === ':emoji')
+    },
+    emojiData() {
+      return _.get(this.settings.settings, [':pleroma', ':emoji']) || {}
+    },
+    emojiPacksDisabled() {
+      const disabledFeatures = process.env.DISABLED_FEATURES || []
+      return disabledFeatures.includes('emoji-packs')
+    },
     isMobile() {
       return this.$store.state.app.device === 'mobile'
     },
+    isSidebarOpen() {
+      return this.$store.state.app.sidebar.opened ? 'sidebar-opened' : 'sidebar-closed'
+    },
     isTablet() {
       return this.$store.state.app.device === 'tablet'
+    },
+    labelPosition() {
+      return this.isMobile ? 'top' : 'right'
     },
     labelWidth() {
       if (this.isMobile) {
@@ -124,6 +152,9 @@ export default {
       } else {
         return '200px'
       }
+    },
+    loading() {
+      return this.settings.loading
     },
     localPacks() {
       return this.$store.state.emojiPacks.localPacks
@@ -147,12 +178,35 @@ export default {
     },
     remotePacksCount() {
       return this.$store.state.emojiPacks.remotePacksCount
+    },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
+    settingsLabelWidth() {
+      if (this.isMobile) {
+        return '120px'
+      } else if (this.isTablet) {
+        return '200px'
+      } else {
+        return '280px'
+      }
     }
   },
   mounted() {
     this.$store.dispatch('GetNodeInfo')
     this.$store.dispatch('NeedReboot')
     this.refreshLocalPacks()
+
+    if (this.searchQuery.length > 0) {
+      this.activeTab = 'settings'
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      console.log(selectedSetting)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+
+      this.$store.dispatch('SetSearchQuery', '')
+    }
   },
   methods: {
     closeLocalTabs() {
@@ -193,6 +247,17 @@ export default {
           this.$store.dispatch('ReloadEmoji')
         })
     },
+    async onSubmit() {
+      try {
+        await this.$store.dispatch('SubmitChanges')
+      } catch (e) {
+        return
+      }
+      this.$message({
+        type: 'success',
+        message: i18n.t('settings.success')
+      })
+    },
     refreshLocalPacks() {
       try {
         this.$store.dispatch('FetchLocalEmojiPacks', this.currentLocalPacksPage)
@@ -225,120 +290,7 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
-.create-pack {
-  display: flex;
-  justify-content: space-between
-}
-.create-pack-button {
-  margin-left: 10px;
-}
-.emoji-header-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 15px 22px 15px;
-}
-.emoji-name-warning {
-  color: #666666;
-  font-size: 13px;
-  line-height: 22px;
-  margin: 5px 0 0 0;
-  overflow-wrap: break-word;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.emoji-packs-header-button-container {
-  display: flex;
-}
-.emoji-packs-form {
-  margin-top: 15px;
-}
-.emoji-packs-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 10px 15px 15px 15px;
-}
-.emoji-packs-tabs {
-  margin: 0 15px 15px 15px;
-}
-.import-pack-button {
-  margin-left: 10px;
-  width: 30%;
-  max-width: 700px;
-}
-h1 {
-  margin: 0;
-}
-.line {
-  width: 100%;
-  height: 0;
-  border: 1px solid #eee;
-  margin-bottom: 22px;
-}
-.pagination {
-  margin: 25px 0;
-  text-align: center;
-}
-.reboot-button {
-  padding: 10px;
-  margin: 0;
-  width: 145px;
-}
-
-@media only screen and (min-width: 1824px) {
-  .emoji-packs {
-    max-width: 1824px;
-    margin: auto;
-  }
-}
-
-@media only screen and (max-width:480px) {
-  .create-pack {
-    height: 82px;
-    flex-direction: column;
-  }
-  .create-pack-button {
-    margin-left: 0;
-  }
-  .divider {
-    margin: 15px 0;
-  }
-  .el-message {
-    min-width: 80%;
-  }
-  .el-message-box {
-    width: 80%;
-  }
-  .emoji-header-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .emoji-packs-form {
-    margin: 0 7px;
-    label {
-      padding-right: 8px;
-    }
-    .el-form-item {
-      margin-bottom: 15px;
-    }
-  }
-  .emoji-packs-header {
-    margin: 15px;
-  }
-  .emoji-packs-header-button-container {
-    height: 82px;
-    flex-direction: column;
-    .el-button+.el-button {
-      margin: 7px 0 0 0;
-      width: fit-content;
-    }
-  }
-  .import-pack-button {
-    width: 90%;
-  }
-  .reload-emoji-button {
-    width: fit-content;
-  }
-}
+@import '../../styles/settings';
+@include settings;
+@include emoji;
 </style>

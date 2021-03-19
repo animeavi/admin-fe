@@ -56,11 +56,23 @@ export default {
     loading() {
       return this.$store.state.settings.loading
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     user() {
       return this.settings.description.find(setting => setting.key === ':user')
     },
     userData() {
       return _.get(this.settings.settings, [':pleroma', ':user']) || {}
+    }
+  },
+  mounted() {
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
     }
   },
   methods: {
@@ -80,6 +92,6 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
-@import '../styles/main';
+@import '../../styles/settings';
 @include settings
 </style>

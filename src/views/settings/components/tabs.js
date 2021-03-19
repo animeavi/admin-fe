@@ -16,9 +16,13 @@ export const tabs = description => {
       label: 'settings.captcha',
       settings: ['Pleroma.Captcha', 'Pleroma.Captcha.Kocaptcha']
     },
+    'emoji': {
+      label: 'settings.emoji',
+      settings: [':emoji']
+    },
     'frontend': {
       label: 'settings.frontend',
-      settings: [':assets', ':chat', ':frontends', ':emoji', ':frontend_configurations', ':markup', ':static_fe']
+      settings: [':assets', ':chat', ':frontends', ':emoji', ':frontend_configurations', ':markup', ':static_fe', 'Pleroma.Web.Preload']
     },
     'gopher': {
       label: 'settings.gopher',
@@ -63,10 +67,6 @@ export const tabs = description => {
     'rate-limiters': {
       label: 'settings.rateLimiters',
       settings: [':rate_limit']
-    },
-    'relays': {
-      label: 'settings.relays',
-      settings: ['relays']
     },
     'web-push': {
       label: 'settings.webPush',

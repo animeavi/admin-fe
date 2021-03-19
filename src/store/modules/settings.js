@@ -9,11 +9,11 @@ import {
   updateInstanceDocument,
   updateSettings } from '@/api/settings'
 import { formSearchObject, parseNonTuples, parseTuples, valueHasTuples, wrapUpdatedSettings } from './normalizers'
+import { tabs } from '../../utils/tabs'
 import _ from 'lodash'
 
 const settings = {
   state: {
-    activeTab: 'instance',
     configDisabled: true,
     frontends: [],
     db: {},
@@ -21,7 +21,9 @@ const settings = {
     instancePanel: '',
     loading: true,
     searchData: {},
+    searchQuery: '',
     settings: {},
+    tabs: [],
     termsOfServices: '',
     updatedSettings: {}
   },
@@ -38,9 +40,6 @@ const settings = {
         state.updatedSettings = updatedSettings
       }
     },
-    SET_ACTIVE_TAB: (state, tab) => {
-      state.activeTab = tab
-    },
     SET_DESCRIPTION: (state, data) => {
       state.description = data
     },
@@ -52,6 +51,9 @@ const settings = {
     },
     SET_SEARCH: (state, searchObject) => {
       state.searchData = searchObject
+    },
+    SET_SEARCH_QUERY: (state, query) => {
+      state.searchQuery = query
     },
     SET_SETTINGS: (state, data) => {
       const newSettings = data.reduce((acc, { group, key, value }) => {
@@ -71,6 +73,9 @@ const settings = {
 
       state.settings = newSettings
       state.db = newDbSettings
+    },
+    SET_TABS: (state, tabs) => {
+      state.tabs = tabs
     },
     SET_TERMS_OF_SERVICES: (state, data) => {
       state.termsOfServices = data
@@ -107,15 +112,16 @@ const settings = {
     async FetchSettings({ commit, getters }) {
       commit('SET_LOADING', true)
       try {
-        const response = await fetchSettings(getters.authHost, getters.token)
-        const description = await fetchDescription(getters.authHost, getters.token)
-        commit('SET_DESCRIPTION', description.data)
-        const searchObject = formSearchObject(description.data)
+        const settings = await fetchSettings(getters.authHost, getters.token)
+        commit('SET_SETTINGS', settings.data.configs)
+
+        const { data } = await fetchDescription(getters.authHost, getters.token)
+        commit('SET_DESCRIPTION', data)
+        const searchObject = formSearchObject(data)
         commit('SET_SEARCH', searchObject)
-        commit('SET_SETTINGS', response.data.configs)
+        commit('SET_TABS', tabs)
       } catch (_e) {
         commit('TOGGLE_TABS', true)
-        commit('SET_ACTIVE_TAB', 'relays')
         commit('SET_LOADING', false)
         return
       }
@@ -138,8 +144,8 @@ const settings = {
       commit('TOGGLE_REBOOT', response.data.need_reboot)
       commit('REMOVE_SETTING_FROM_UPDATED', { group, key, subkeys: subkeys || [] })
     },
-    SetActiveTab({ commit }, tab) {
-      commit('SET_ACTIVE_TAB', tab)
+    SetSearchQuery({ commit }, query) {
+      commit('SET_SEARCH_QUERY', query)
     },
     async SubmitChanges({ getters, commit, state }) {
       const configs = Object.keys(state.updatedSettings).reduce((acc, group) => {

@@ -197,9 +197,6 @@ h1 {
 .router-link {
   text-decoration: none;
 }
-.search-container {
-  text-align: right;
-}
 .pagination {
   text-align: center;
 }

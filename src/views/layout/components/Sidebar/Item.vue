@@ -1,9 +1,9 @@
 <template>
-  <span>
-    <svg-icon :icon-class="icon"/>
+  <div>
+    <i v-if="icon" :class="icon" class="menu-item-icon"/>
     <span slot="title">{{ title }}</span>
     <el-badge :value="count" type="primary" class="count-badge" />
-  </span>
+  </div>
 </template>
 
 <script>
@@ -30,5 +30,12 @@ export default {
 .count-badge {
   margin-left: 5px;
   height: 48px;
+}
+.menu-item-icon {
+    margin-right: 5px;
+    width: 18px;
+    text-align: center;
+    font-size: 18px;
+    vertical-align: middle;
 }
 </style>

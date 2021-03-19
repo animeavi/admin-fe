@@ -18,10 +18,6 @@
       <setting :setting-group="assets" :data="assetsData"/>
     </el-form>
     <el-divider v-if="assets" class="divider thick-line"/>
-    <el-form :model="emojiData" :label-position="labelPosition" :label-width="labelWidth">
-      <setting :setting-group="emoji" :data="emojiData"/>
-    </el-form>
-    <el-divider v-if="emoji" class="divider thick-line"/>
     <el-form :model="chatData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="chat" :data="chatData"/>
     </el-form>
@@ -64,12 +60,6 @@ export default {
     },
     chatData() {
       return _.get(this.settings.settings, [':pleroma', ':chat']) || {}
-    },
-    emoji() {
-      return this.settings.description.find(setting => setting.key === ':emoji')
-    },
-    emojiData() {
-      return _.get(this.settings.settings, [':pleroma', ':emoji']) || {}
     },
     frontend() {
       return this.settings.description.find(setting => setting.key === ':frontend_configurations')
@@ -122,11 +112,23 @@ export default {
     preloadData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Web.Preload']) || {}
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     staticFe() {
       return this.settings.description.find(setting => setting.key === ':static_fe')
     },
     staticFeData() {
       return _.get(this.settings.settings, [':pleroma', ':static_fe']) || {}
+    }
+  },
+  mounted() {
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
     }
   },
   methods: {
@@ -146,6 +148,6 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
-@import '../styles/main';
+@import '../../styles/settings';
 @include settings
 </style>

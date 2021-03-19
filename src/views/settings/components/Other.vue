@@ -110,6 +110,9 @@ export default {
     remoteIpData() {
       return _.get(this.settings.settings, [':pleroma', 'Pleroma.Web.Plugs.RemoteIp']) || {}
     },
+    searchQuery() {
+      return this.$store.state.settings.searchQuery
+    },
     termsOfServicesContent: {
       get() {
         return this.$store.state.settings.termsOfServices
@@ -120,6 +123,14 @@ export default {
     }
   },
   async mounted() {
+    if (this.searchQuery.length > 0) {
+      const selectedSetting = document.querySelector(`[data-search="${this.searchQuery}"]`)
+      if (selectedSetting) {
+        selectedSetting.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      }
+      this.$store.dispatch('SetSearchQuery', '')
+    }
+
     await this.$store.dispatch('FetchInstanceDocument', 'terms-of-service')
   },
   methods: {
@@ -146,6 +157,6 @@ export default {
 </script>
 
 <style rel='stylesheet/scss' lang='scss'>
-@import '../styles/main';
+@import '../../styles/settings';
 @include settings
 </style>
