@@ -87,7 +87,12 @@ export default {
       return this.$store.state.app.device === 'desktop'
     },
     keyPlaceholder() {
-      return this.setting.key === ':replace' ? 'pattern' : 'key'
+      /**
+       * We can get 'key_placeholder' from the Pleroma BE. This wasn't always the case.
+       * We check for the key ':replace' for backwards compatibility for older Pleroma instances who didn't send 'key_placeholder' yet.
+       * The ':replace' key was the only key where this was needed.
+       */
+      return this.setting.key_placeholder ? this.setting.key_placeholder : (this.setting.key === ':replace' ? 'pattern' : 'key')
     },
     settings() {
       return this.$store.state.settings.settings
@@ -96,7 +101,12 @@ export default {
       return this.$store.state.settings.updatedSettings
     },
     valuePlaceholder() {
-      return this.setting.key === ':replace' ? 'replacement' : 'value'
+      /**
+       * We can get 'value_placeholder' from the Pleroma BE. This wasn't always the case.
+       * We check for the key ':replace' for backwards compatibility for older Pleroma instances who didn't send 'value_placeholder' yet.
+       * The ':replace' key was the only key where this was needed.
+       */
+      return this.setting.value_placeholder ? this.setting.value_placeholder : (this.setting.key === ':replace' ? 'replacement' : 'value')
     }
   },
   methods: {

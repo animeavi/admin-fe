@@ -78,14 +78,25 @@ export const parseTuples = (tuples, key) => {
       item.tuple[0] === ':replace' ||
       item.tuple[0] === ':retries' ||
       (item.tuple[0] === ':headers' && key === 'Pleroma.Web.MediaProxy.Invalidation.Http') ||
-      item.tuple[0] === ':crontab')) {
+      item.tuple[0] === ':crontab' ||
+      item.tuple[0] === ':transparency_exclusions' ||
+      item.tuple[0] === ':quarantined_instances' ||
+      key === ':mrf_simple')) {
       if (item.tuple[0] === ':crontab') {
         accum[item.tuple[0]] = item.tuple[1].reduce((acc, group) => {
           return [...acc, { [group.tuple[1]]: { value: group.tuple[0], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
         }, [])
       } else {
         accum[item.tuple[0]] = item.tuple[1].reduce((acc, group) => {
-          return [...acc, { [group.tuple[0]]: { value: group.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
+          /**
+           * The ':quarantined_instances' and ':mrf_simple' settings have changed to a list of tuples instead of a list of strings.
+           * This is to have backwards compatibility for instances that still use strings.
+           */
+          if (typeof group === 'string') {
+            return [...acc, group]
+          } else {
+            return [...acc, { [group.tuple[0]]: { value: group.tuple[1], id: `f${(~~(Math.random() * 1e8)).toString(16)}` }}]
+          }
         }, [])
       }
     } else if (item.tuple[0] === ':icons') {
