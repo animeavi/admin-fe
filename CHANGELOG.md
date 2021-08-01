@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [2.4.0] - 2021-08-01
+
+### Added
+
 - Evicting and banning objects from the MediaProxy cache is disabled if MediaProxy is disabled on the Settings tab. Add ability to enable MediaProxy and Invalidation from MediaProxy tab.
 - Allow to upload the custom Terms of Service and Instance Panel HTML pages via Admin API
 - Add Report show page and link Moderation log references to the respective reports
