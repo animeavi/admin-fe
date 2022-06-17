@@ -4,7 +4,7 @@ pipeline:
       event:
       - push
       - pull_request
-    image: node:16
+    image: node:14
     commands:
     - git config --global url."https://github.com/".insteadOf git://github.com/
     - yarn
@@ -15,7 +15,7 @@ pipeline:
       event:
       - push
       - pull_request
-    image: node:16
+    image: node:14
     commands:
     - apt update
     - apt install firefox-esr -y --no-install-recommends
@@ -28,7 +28,7 @@ pipeline:
     when:
       event:
       - tag
-    image: node:16
+    image: node:14
     commands:
     - git config --global url."https://github.com/".insteadOf git://github.com/ 
     - yarn
@@ -38,7 +38,7 @@ pipeline:
     when:
       event:
       - tag
-    image: node:16
+    image: node:14
     secrets:
     - SCW_ACCESS_KEY
     - SCW_SECRET_KEY
