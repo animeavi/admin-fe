@@ -6,6 +6,7 @@ pipeline:
       - pull_request
     image: node:16
     commands:
+    - git config --global url."https://github.com/".insteadOf git://github.com/
     - yarn
     - yarn lint
 
@@ -18,6 +19,8 @@ pipeline:
     commands:
     - apt update
     - apt install firefox-esr -y --no-install-recommends
+    - git config --global url."https://github.com/".insteadOf git://github.com/
+
     - yarn 
     - yarn test
 
@@ -27,8 +30,8 @@ pipeline:
       - tag
     image: node:16
     commands:
-    - yarn
     - git config --global url."https://github.com/".insteadOf git://github.com/ 
+    - yarn
     - yarn build:prod
 
   release:
