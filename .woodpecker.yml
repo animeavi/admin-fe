@@ -28,6 +28,7 @@ pipeline:
     image: node:16
     commands:
     - yarn
+    - git config --global url."https://github.com/".insteadOf git://github.com/ 
     - yarn build:prod
 
   release:
