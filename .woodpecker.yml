@@ -38,7 +38,7 @@ pipeline:
     when:
       event:
       - tag
-    image: node:14
+    image: node:16
     secrets:
     - SCW_ACCESS_KEY
     - SCW_SECRET_KEY
