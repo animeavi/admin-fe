@@ -471,6 +471,8 @@ export default {
     setLimits: 'Set different limits for unauthenticated and authenticated users',
     unauthenticatedUsers: 'Unauthenticated users',
     authenticatedUsers: 'Authenticated users',
+    scale: 'Timespan (ms)',
+    limit: 'Requests',
     setLimitsForAll: 'Set limit for all users',
     ref: 'Ref',
     file: 'File',
