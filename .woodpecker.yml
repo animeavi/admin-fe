@@ -27,7 +27,9 @@ pipeline:
   build:
     when:
       event:
-      - tag
+      - push
+      branch:
+      - main
     image: node:14
     commands:
     - git config --global url."https://github.com/".insteadOf git://github.com/ 
@@ -37,7 +39,9 @@ pipeline:
   release:
     when:
       event:
-      - tag
+      - push
+      branch:
+      - main
     image: node:16
     secrets:
     - SCW_ACCESS_KEY

@@ -2,7 +2,6 @@ export const tabs = [
   { label: 'ActivityPub', path: 'activity-pub', tab: ':activity_pub' },
   { label: 'Authentication', path: 'authentication', tab: ':authentication' },
   { label: 'Captcha', path: 'captcha', tab: ':captcha' },
-  { label: 'BBS / SSH access', path: 'esshd', tab: ':esshd' },
   { label: 'Emoji', path: 'emoji', tab: ':emoji' },
   { label: 'Frontend', path: 'frontend', tab: ':frontend' },
   { label: 'Gopher', path: 'gopher', tab: ':gopher' },
