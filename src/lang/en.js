@@ -436,7 +436,6 @@ export default {
     gopher: 'Gopher',
     jobQueue: 'Job queue',
     webPush: 'Web push encryption',
-    esshd: 'BBS / SSH access',
     rateLimiters: 'Rate limiters',
     other: 'Other',
     success: 'Settings changed successfully!',
