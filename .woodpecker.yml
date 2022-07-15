@@ -2,7 +2,6 @@ pipeline:
   lint:
     when:
       event:
-      - push
       - pull_request
     image: node:14
     commands:
@@ -13,14 +12,12 @@ pipeline:
   test:
     when:
       event:
-      - push
       - pull_request
     image: node:14
     commands:
     - apt update
     - apt install firefox-esr -y --no-install-recommends
     - git config --global url."https://github.com/".insteadOf git://github.com/
-
     - yarn 
     - yarn test
 
@@ -29,7 +26,8 @@ pipeline:
       event:
       - push
       branch:
-      - main
+      - develop
+      - stable
     image: node:14
     commands:
     - git config --global url."https://github.com/".insteadOf git://github.com/ 
@@ -41,7 +39,8 @@ pipeline:
       event:
       - push
       branch:
-      - main
+      - develop
+      - stable
     image: node:16
     secrets:
     - SCW_ACCESS_KEY
