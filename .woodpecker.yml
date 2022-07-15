@@ -54,4 +54,4 @@ pipeline:
       - chmod +x scaleway-cli
       - ./scaleway-cli object config install type=rclone
       - zip admin-fe.zip -r dist
-      - rclone copyto admin-fe.zip scaleway:akkoma-updates/frontend/admin-fe.zip
+      - rclone copyto admin-fe.zip scaleway:akkoma-updates/frontend/$CI_COMMIT_BRANCH/admin-fe.zip
