@@ -2,6 +2,7 @@ pipeline:
   lint:
     when:
       event:
+      - push
       - pull_request
     image: node:14
     commands:
@@ -12,13 +13,14 @@ pipeline:
   test:
     when:
       event:
+      - push
       - pull_request
     image: node:14
     commands:
     - apt update
     - apt install firefox-esr -y --no-install-recommends
     - git config --global url."https://github.com/".insteadOf git://github.com/
-    - yarn 
+    - yarn
     - yarn test
 
   build:
