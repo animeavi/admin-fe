@@ -14,7 +14,9 @@
       <setting :setting-group="frontends" :data="frontendsData"/>
     </el-form>
     <el-divider v-if="frontends" class="divider thick-line"/>
-    <el-form :model="assetsData" :label-position="labelPosition" :label-width="labelWidth"/>
+    <el-form :model="assetsData" :label-position="labelPosition" :label-width="labelWidth">
+      <setting :setting-group="assets" :data="assetsData"/>
+    </el-form>
     <el-divider v-if="assets" class="divider thick-line"/>
     <el-form :model="chatData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="chat" :data="chatData"/>
