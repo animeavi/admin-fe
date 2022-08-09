@@ -32,7 +32,7 @@ export async function fetchUsers(filters, actorTypeFilters, authHost, token, pag
 }
 
 export async function fetchUserStatuses(id, authHost, godmode, token) {
-  return Promise.resolve({ data: userStatuses })
+  return Promise.resolve({ data: { activities: userStatuses }})
 }
 
 export async function getPasswordResetToken(nickname, authHost, token) {
