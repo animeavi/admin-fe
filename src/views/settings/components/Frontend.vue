@@ -18,6 +18,10 @@
       <setting :setting-group="assets" :data="assetsData"/>
     </el-form>
     <el-divider v-if="assets" class="divider thick-line"/>
+    <el-form :model="chatData" :label-position="labelPosition" :label-width="labelWidth">
+      <setting :setting-group="chat" :data="chatData"/>
+    </el-form>
+    <el-divider v-if="chat" class="divider thick-line"/>
     <el-form :model="markupData" :label-position="labelPosition" :label-width="labelWidth">
       <setting :setting-group="markup" :data="markupData"/>
     </el-form>
@@ -50,6 +54,12 @@ export default {
     },
     assetsData() {
       return _.get(this.settings.settings, [':pleroma', ':assets']) || {}
+    },
+    chat() {
+      return this.settings.description.find(setting => setting.key === ':chat')
+    },
+    chatData() {
+      return _.get(this.settings.settings, [':pleroma', ':chat']) || {}
     },
     frontend() {
       return this.settings.description.find(setting => setting.key === ':frontend_configurations')
