@@ -183,7 +183,7 @@ export async function fetchUserStatuses(id, authHost, godmode, token) {
 export async function fetchUserChats(id, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/users/${id}/chats`,
+    url: `/api/v1/pleroma/admin/users/${id}/chats`,
     method: 'get',
     headers: authHeaders(token)
   })

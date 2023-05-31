@@ -5,7 +5,7 @@ import { baseName } from './utils'
 export async function deleteChatMessage(chat_id, message_id, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/chats/${chat_id}/messages/${message_id}`,
+    url: `/api/v1/pleroma/admin/chats/${chat_id}/messages/${message_id}`,
     method: 'delete',
     headers: authHeaders(token)
   })
@@ -14,7 +14,7 @@ export async function deleteChatMessage(chat_id, message_id, authHost, token) {
 export async function fetchChat(id, authHost, token) {
   return await request({
     baseURL: baseName(authHost),
-    url: `/api/pleroma/admin/chats/${id}`,
+    url: `/api/v1/pleroma/admin/chats/${id}`,
     method: 'get',
     headers: authHeaders(token)
   })
@@ -22,8 +22,8 @@ export async function fetchChat(id, authHost, token) {
 
 export async function fetchChatMessages(id, maxId, authHost, token) {
   const url = maxId
-    ? `/api/pleroma/admin/chats/${id}/messages?max_id=${maxId}`
-    : `/api/pleroma/admin/chats/${id}/messages`
+    ? `/api/v1/pleroma/admin/chats/${id}/messages?max_id=${maxId}`
+    : `/api/v1/pleroma/admin/chats/${id}/messages`
   return await request({
     baseURL: baseName(authHost),
     url,
